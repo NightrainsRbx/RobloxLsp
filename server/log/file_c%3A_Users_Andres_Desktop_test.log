@@ -1,0 +1,544 @@
+[2020-08-09 15:12:44.001][info][main:15]: Lua Lsp startup, root: 	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 15:12:44.001][debug][main:16]: ROOT:	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 15:12:44.001][debug]: cannot open c:\Users\Andres\.vscode\extensions\sumneko.lua-0.20.3\server/debugger.lua: No such file or directory
+[2020-08-09 15:12:44.392][info][script.language:125]: VSC language: en
+[2020-08-09 15:12:44.392][info][script.language:126]: LS  language: en-us
+[2020-08-09 15:12:45.429][debug][script.async.async:55]: Create thread, id: 	1	task: 	proto
+[2020-08-09 15:12:45.446][debug][script.service:886]: collectgarbage: 	0.017
+[2020-08-09 15:12:45.446][debug][script.service:957]: 
+State
+Main Mem:  [21560.479]kb
+#001 Mem:  <Unknown>
+-------------------
+CachedVM:  [0]
+AlivedVM:  [0]
+DeadVM:    [0]
+-------------------
+CachedSrc: [0]
+AlivedSrc: [1]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[0]
+AlivedFunc:[0]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [0]
+DeadVal:   [0]
+-------------------
+TotalLoc:  [0]
+TotalEmmy: [467]
+
+[2020-08-09 15:12:45.446][debug][script.service:999]: test memory: 	0.000
+[2020-08-09 15:12:45.456][info][script.method.initialize:22]: {
+	capabilities = {
+		textDocument = {
+			callHierarchy = {
+				dynamicRegistration = true,
+			},
+			codeAction = {
+				codeActionLiteralSupport = {
+					codeActionKind = {
+						valueSet = {
+							[1] = "",
+							[2] = "quickfix",
+							[3] = "refactor",
+							[4] = "refactor.extract",
+							[5] = "refactor.inline",
+							[6] = "refactor.rewrite",
+							[7] = "source",
+							[8] = "source.organizeImports",
+						},
+					},
+				},
+				dynamicRegistration = true,
+				isPreferredSupport = true,
+			},
+			codeLens = {
+				dynamicRegistration = true,
+			},
+			colorProvider = {
+				dynamicRegistration = true,
+			},
+			completion = {
+				completionItem = {
+					commitCharactersSupport = true,
+					deprecatedSupport = true,
+					documentationFormat = {
+						[1] = "markdown",
+						[2] = "plaintext",
+					},
+					insertReplaceSupport = true,
+					preselectSupport = true,
+					snippetSupport = true,
+					tagSupport = {
+						valueSet = {
+							[1] = 1,
+						},
+					},
+				},
+				completionItemKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+					},
+				},
+				contextSupport = true,
+				dynamicRegistration = true,
+			},
+			declaration = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			definition = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			documentHighlight = {
+				dynamicRegistration = true,
+			},
+			documentLink = {
+				dynamicRegistration = true,
+				tooltipSupport = true,
+			},
+			documentSymbol = {
+				["hierarchicalDocumentSymbolSupport"] = true,
+				dynamicRegistration = true,
+				symbolKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+						[26] = 26,
+					},
+				},
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+					},
+				},
+			},
+			foldingRange = {
+				dynamicRegistration = true,
+				lineFoldingOnly = true,
+				rangeLimit = 5000,
+			},
+			formatting = {
+				dynamicRegistration = true,
+			},
+			hover = {
+				contentFormat = {
+					[1] = "markdown",
+					[2] = "plaintext",
+				},
+				dynamicRegistration = true,
+			},
+			implementation = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			onTypeFormatting = {
+				dynamicRegistration = true,
+			},
+			publishDiagnostics = {
+				complexDiagnosticCodeSupport = true,
+				relatedInformation = true,
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+						[2] = 2,
+					},
+				},
+				versionSupport = false,
+			},
+			rangeFormatting = {
+				dynamicRegistration = true,
+			},
+			references = {
+				dynamicRegistration = true,
+			},
+			rename = {
+				dynamicRegistration = true,
+				prepareSupport = true,
+			},
+			selectionRange = {
+				dynamicRegistration = true,
+			},
+			semanticTokens = {
+				dynamicRegistration = true,
+				tokenModifiers = {
+					[10] = "defaultLibrary",
+					[1] = "declaration",
+					[2] = "definition",
+					[3] = "readonly",
+					[4] = "static",
+					[5] = "deprecated",
+					[6] = "abstract",
+					[7] = "async",
+					[8] = "modification",
+					[9] = "documentation",
+				},
+				tokenTypes = {
+					[01] = "namespace",
+					[02] = "type",
+					[03] = "class",
+					[04] = "enum",
+					[05] = "interface",
+					[06] = "struct",
+					[07] = "typeParameter",
+					[08] = "parameter",
+					[09] = "variable",
+					[10] = "property",
+					[11] = "enumMember",
+					[12] = "event",
+					[13] = "function",
+					[14] = "member",
+					[15] = "macro",
+					[16] = "keyword",
+					[17] = "modifier",
+					[18] = "comment",
+					[19] = "string",
+					[20] = "number",
+					[21] = "regexp",
+					[22] = "operator",
+				},
+			},
+			signatureHelp = {
+				contextSupport = true,
+				dynamicRegistration = true,
+				signatureInformation = {
+					activeParameterSupport = true,
+					documentationFormat = {
+						[1] = "markdown",
+						[2] = "plaintext",
+					},
+					parameterInformation = {
+						labelOffsetSupport = true,
+					},
+				},
+			},
+			synchronization = {
+				didSave = true,
+				dynamicRegistration = true,
+				willSave = true,
+				willSaveWaitUntil = true,
+			},
+			typeDefinition = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+		},
+		window = {
+			workDoneProgress = true,
+		},
+		workspace = {
+			applyEdit = true,
+			configuration = true,
+			didChangeConfiguration = {
+				dynamicRegistration = true,
+			},
+			didChangeWatchedFiles = {
+				dynamicRegistration = true,
+			},
+			executeCommand = {
+				dynamicRegistration = true,
+			},
+			symbol = {
+				dynamicRegistration = true,
+				symbolKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+						[26] = 26,
+					},
+				},
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+					},
+				},
+			},
+			workspaceEdit = {
+				documentChanges = true,
+				failureHandling = "textOnlyTransactional",
+				resourceOperations = {
+					[1] = "create",
+					[2] = "rename",
+					[3] = "delete",
+				},
+			},
+			workspaceFolders = true,
+		},
+	},
+	clientInfo = {
+		name = "vscode",
+		version = "1.47.3",
+	},
+	processId = 3544,
+	rootPath = "c:\\Users\\Andres\\Desktop\\test",
+	rootUri = "file:///c%3A/Users/Andres/Desktop/test",
+	trace = "off",
+	workspaceFolders = {
+		[1] = {
+			name = "test",
+			uri = "file:///c%3A/Users/Andres/Desktop/test",
+		},
+	},
+}
+[2020-08-09 15:12:45.456][info][script.service:181]: Add workspace	test	file:///c%3A/Users/Andres/Desktop/test
+[2020-08-09 15:12:45.460][debug][script.async.async:55]: Create thread, id: 	2	task: 	loadfile
+[2020-08-09 15:12:45.460][info][script.workspace:145]: Workspace inited, root: 	c:/Users/Andres/Desktop/test
+[2020-08-09 15:12:45.460][info][script.workspace:146]: Workspace inited, uri: 	file:///c%3A/Users/Andres/Desktop/test
+[2020-08-09 15:12:45.460][info][script.workspace:148]: Log path: 	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server/log/file_c%3A_Users_Andres_Desktop_test.log
+[2020-08-09 15:12:45.475][debug][script.config:204]: Config update: 	{
+	color = {
+		mode = "Semantic",
+	},
+	completion = {
+		callSnippet = "Disable",
+		displayContext = 1,
+		enable = true,
+		fastAutocompletion = false,
+		keywordSnippet = "Replace",
+		private = false,
+	},
+	diagnostics = {
+		datamodelAsIgnore = true,
+		disable = {
+		},
+		enable = true,
+		globals = {
+		},
+		ignore = {
+		},
+		severity = {
+			["ambiguity-1"] = "Warning",
+			["deprecated-rbx-member"] = "Information",
+			["duplicate-index"] = "Warning",
+			["duplicate-method"] = "Warning",
+			["emmy-lua"] = "Warning",
+			["empty-block"] = "Hint",
+			["global-in-nil-env"] = "Warning",
+			["incorrect-call-arguments"] = "Warning",
+			["invalid-rbx-classname"] = "Warning",
+			["lowercase-global"] = "Information",
+			["newfield-call"] = "Warning",
+			["newline-call"] = "Information",
+			["redefined-local"] = "Information",
+			["redundant-parameter"] = "Information",
+			["redundant-value"] = "Warning",
+			["set-const"] = "Error",
+			["set-for-state"] = "Warning",
+			["trailing-space"] = "Hint",
+			["undefined-env-child"] = "Information",
+			["undefined-global"] = "Warning",
+			["undefined-rbx-member"] = "Warning",
+			["unused-function"] = "Hint",
+			["unused-label"] = "Hint",
+			["unused-local"] = "Hint",
+			["unused-vararg"] = "Hint",
+		},
+		syntax = true,
+	},
+	hover = {
+		enable = true,
+		viewNumber = true,
+		viewString = true,
+		viewStringMax = 1000,
+	},
+	plugin = {
+		enable = false,
+		path = ".vscode/lua-plugin/*.lua",
+	},
+	runtime = {
+		library = {
+		},
+		path = {
+			[1] = "?.lua",
+			[2] = "?/init.lua",
+			[3] = "?/?.lua",
+		},
+		version = "Luau",
+	},
+	signatureHelp = {
+		enable = true,
+	},
+	workspace = {
+		ignoreDir = {
+			["*.spec.lua"] = true,
+			[".vscode"] = true,
+		},
+		ignoreSubmodules = true,
+		library = {
+		},
+		loadMode = "Rojo Project",
+		maxPreload = 300,
+		preloadFileSize = 100,
+		rojoProjectFile = "default",
+		useGitIgnore = true,
+	},
+}	{
+	associations = {
+	},
+	exclude = {
+		["**/.DS_Store"] = true,
+		["**/.git"] = true,
+		["**/.hg"] = true,
+		["**/.svn"] = true,
+		["**/CVS"] = true,
+	},
+}
+[2020-08-09 15:12:45.475][debug][script.capability.completion:27]: Enable completion.
+[2020-08-09 15:12:45.476][debug][script.capability.semantic:26]: Enable semantic.
+[2020-08-09 15:12:45.476][debug][script.service:828]: reScanFiles
+[2020-08-09 15:12:45.476][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/test/test.lua
+[2020-08-09 15:12:45.482][debug][script.async.async:55]: Create thread, id: 	3	task: 	scanfiles
+[2020-08-09 15:12:45.484][debug][script.method.initialized:77]: client/registerCapability Success!
+[2020-08-09 15:12:45.484][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/test/test.lua
+[2020-08-09 15:12:45.550][debug][script.workspace:117]: Scanning:	c:/Users/Andres/Desktop/test
+[2020-08-09 15:12:45.550][debug][script.workspace:117]: Scan pattern:	{
+	[1] = ".vscode",
+	[2] = "*.spec.lua",
+	[3] = "**/CVS",
+	[4] = "**/.git",
+	[5] = "**/.svn",
+	[6] = "**/.hg",
+	[7] = "**/.DS_Store",
+}
+[2020-08-09 15:12:45.550][debug][script.workspace:117]: Scan options:	{
+	ignoreCase = true,
+}
+[2020-08-09 15:12:45.550][info][script.workspace:111]: Scan finish, got	3	files.
+[2020-08-09 15:12:45.553][debug][script.service:413]: reCompile:	1	1
+[2020-08-09 15:12:45.580][debug][script.service:886]: collectgarbage: 	0.027
+[2020-08-09 15:12:45.580][debug][script.service:957]: 
+State
+Main Mem:  [22699.408]kb
+#001 Mem:  [110.200]kb
+#002 Mem:  <Unknown>
+#003 Mem:  <Unknown>
+-------------------
+CachedVM:  [0]
+AlivedVM:  [0]
+DeadVM:    [0]
+-------------------
+CachedSrc: [0]
+AlivedSrc: [1]
+DeadSrc:   [1]
+-------------------
+CachedFunc:[0]
+AlivedFunc:[0]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [430]
+DeadVal:   [430]
+-------------------
+TotalLoc:  [0]
+TotalEmmy: [467]
+
+[2020-08-09 15:12:45.580][debug][script.service:999]: test memory: 	0.000
+[2020-08-09 15:12:45.581][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/test/test.lua
+[2020-08-09 15:12:45.698][debug][script.service:331]: Read failed due to duplicate:	file:///c%3A/Users/Andres/Desktop/test/test.lua
+[2020-08-09 15:13:03.203][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/test/test.lua
+[2020-08-09 15:13:08.174][info][script.service:224]: No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/snippets/bat.json
+[2020-08-09 15:13:08.175][info][script.service:224]: No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/snippets/bat.json
+[2020-08-09 15:13:11.236][info][script.service:224]: No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/workspaceStorage
+[2020-08-09 15:13:11.236][info][script.service:224]: No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/workspaceStorage
+[2020-08-09 15:13:11.732][info][script.service:224]: No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/workspaceStorage
+[2020-08-09 15:13:11.732][info][script.service:224]: No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/workspaceStorage
+[2020-08-09 15:13:45.468][debug][script.service:886]: collectgarbage: 	0.027
+[2020-08-09 15:13:45.472][debug][script.service:957]: 
+State
+Main Mem:  [32885.349]kb
+#001 Mem:  [78.875]kb
+#002 Mem:  [88.471]kb
+#003 Mem:  [114.170]kb
+-------------------
+CachedVM:  [2]
+AlivedVM:  [2]
+DeadVM:    [0]
+-------------------
+CachedSrc: [17]
+AlivedSrc: [24554]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[3]
+AlivedFunc:[519]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [3832]
+DeadVal:   [14]
+-------------------
+TotalLoc:  [891]
+TotalEmmy: [467]
+
+[2020-08-09 15:13:45.472][debug][script.service:999]: test memory: 	0.004
+[2020-08-09 15:14:15.445][info][script.method.shutdown:2]: Server shutdown.
+[2020-08-09 15:14:15.460][info][script.method.exit:2]: Server exited.

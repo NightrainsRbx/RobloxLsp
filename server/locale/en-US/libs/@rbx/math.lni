@@ -1,0 +1,8 @@
+[clamp]
+description = 'Returns a number between ``min`` and ``max``, inclusive.'
+
+[noise]
+description = 'Returns a value between -0.5 and 0.5 generated from its arguments.'
+
+[sign]
+description = 'Returns -1 if ``x < 0``, 0 if ``x == 0``, or 1 if ``x > 0``.'

@@ -1,0 +1,678 @@
+[2020-08-09 01:41:18.001][info][main:15]: Lua Lsp startup, root: 	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 01:41:18.001][debug][main:16]: ROOT:	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 01:41:18.001][debug]: cannot open c:\Users\Andres\.vscode\extensions\sumneko.lua-0.20.3\server/debugger.lua: No such file or directory
+[2020-08-09 01:41:18.129][info][script.language:125]: VSC language: en
+[2020-08-09 01:41:18.129][info][script.language:126]: LS  language: en-us
+[2020-08-09 01:41:18.488][debug][script.async.async:55]: Create thread, id: 	1	task: 	proto
+[2020-08-09 01:41:18.511][debug][script.service:886]: collectgarbage: 	0.022
+[2020-08-09 01:41:18.511][debug][script.service:957]: 
+State
+Main Mem:  [20756.294]kb
+#001 Mem:  <Unknown>
+-------------------
+CachedVM:  [0]
+AlivedVM:  [0]
+DeadVM:    [0]
+-------------------
+CachedSrc: [0]
+AlivedSrc: [1]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[0]
+AlivedFunc:[0]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [0]
+DeadVal:   [0]
+-------------------
+TotalLoc:  [0]
+TotalEmmy: [458]
+
+[2020-08-09 01:41:18.511][debug][script.service:999]: test memory: 	0.000
+[2020-08-09 01:41:18.515][info][script.method.initialize:22]: {
+	capabilities = {
+		textDocument = {
+			callHierarchy = {
+				dynamicRegistration = true,
+			},
+			codeAction = {
+				codeActionLiteralSupport = {
+					codeActionKind = {
+						valueSet = {
+							[1] = "",
+							[2] = "quickfix",
+							[3] = "refactor",
+							[4] = "refactor.extract",
+							[5] = "refactor.inline",
+							[6] = "refactor.rewrite",
+							[7] = "source",
+							[8] = "source.organizeImports",
+						},
+					},
+				},
+				dynamicRegistration = true,
+				isPreferredSupport = true,
+			},
+			codeLens = {
+				dynamicRegistration = true,
+			},
+			colorProvider = {
+				dynamicRegistration = true,
+			},
+			completion = {
+				completionItem = {
+					commitCharactersSupport = true,
+					deprecatedSupport = true,
+					documentationFormat = {
+						[1] = "markdown",
+						[2] = "plaintext",
+					},
+					insertReplaceSupport = true,
+					preselectSupport = true,
+					snippetSupport = true,
+					tagSupport = {
+						valueSet = {
+							[1] = 1,
+						},
+					},
+				},
+				completionItemKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+					},
+				},
+				contextSupport = true,
+				dynamicRegistration = true,
+			},
+			declaration = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			definition = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			documentHighlight = {
+				dynamicRegistration = true,
+			},
+			documentLink = {
+				dynamicRegistration = true,
+				tooltipSupport = true,
+			},
+			documentSymbol = {
+				["hierarchicalDocumentSymbolSupport"] = true,
+				dynamicRegistration = true,
+				symbolKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+						[26] = 26,
+					},
+				},
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+					},
+				},
+			},
+			foldingRange = {
+				dynamicRegistration = true,
+				lineFoldingOnly = true,
+				rangeLimit = 5000,
+			},
+			formatting = {
+				dynamicRegistration = true,
+			},
+			hover = {
+				contentFormat = {
+					[1] = "markdown",
+					[2] = "plaintext",
+				},
+				dynamicRegistration = true,
+			},
+			implementation = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			onTypeFormatting = {
+				dynamicRegistration = true,
+			},
+			publishDiagnostics = {
+				complexDiagnosticCodeSupport = true,
+				relatedInformation = true,
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+						[2] = 2,
+					},
+				},
+				versionSupport = false,
+			},
+			rangeFormatting = {
+				dynamicRegistration = true,
+			},
+			references = {
+				dynamicRegistration = true,
+			},
+			rename = {
+				dynamicRegistration = true,
+				prepareSupport = true,
+			},
+			selectionRange = {
+				dynamicRegistration = true,
+			},
+			semanticTokens = {
+				dynamicRegistration = true,
+				tokenModifiers = {
+					[10] = "defaultLibrary",
+					[1] = "declaration",
+					[2] = "definition",
+					[3] = "readonly",
+					[4] = "static",
+					[5] = "deprecated",
+					[6] = "abstract",
+					[7] = "async",
+					[8] = "modification",
+					[9] = "documentation",
+				},
+				tokenTypes = {
+					[01] = "namespace",
+					[02] = "type",
+					[03] = "class",
+					[04] = "enum",
+					[05] = "interface",
+					[06] = "struct",
+					[07] = "typeParameter",
+					[08] = "parameter",
+					[09] = "variable",
+					[10] = "property",
+					[11] = "enumMember",
+					[12] = "event",
+					[13] = "function",
+					[14] = "member",
+					[15] = "macro",
+					[16] = "keyword",
+					[17] = "modifier",
+					[18] = "comment",
+					[19] = "string",
+					[20] = "number",
+					[21] = "regexp",
+					[22] = "operator",
+				},
+			},
+			signatureHelp = {
+				contextSupport = true,
+				dynamicRegistration = true,
+				signatureInformation = {
+					activeParameterSupport = true,
+					documentationFormat = {
+						[1] = "markdown",
+						[2] = "plaintext",
+					},
+					parameterInformation = {
+						labelOffsetSupport = true,
+					},
+				},
+			},
+			synchronization = {
+				didSave = true,
+				dynamicRegistration = true,
+				willSave = true,
+				willSaveWaitUntil = true,
+			},
+			typeDefinition = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+		},
+		window = {
+			workDoneProgress = true,
+		},
+		workspace = {
+			applyEdit = true,
+			configuration = true,
+			didChangeConfiguration = {
+				dynamicRegistration = true,
+			},
+			didChangeWatchedFiles = {
+				dynamicRegistration = true,
+			},
+			executeCommand = {
+				dynamicRegistration = true,
+			},
+			symbol = {
+				dynamicRegistration = true,
+				symbolKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+						[26] = 26,
+					},
+				},
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+					},
+				},
+			},
+			workspaceEdit = {
+				documentChanges = true,
+				failureHandling = "textOnlyTransactional",
+				resourceOperations = {
+					[1] = "create",
+					[2] = "rename",
+					[3] = "delete",
+				},
+			},
+			workspaceFolders = true,
+		},
+	},
+	clientInfo = {
+		name = "vscode",
+		version = "1.47.3",
+	},
+	processId = 9808,
+	rootPath = "c:\\Users\\Andres\\.vscode\\extensions\\sumneko.lua-0.20.3\\server",
+	rootUri = "file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server",
+	trace = "off",
+	workspaceFolders = {
+		[1] = {
+			name = "server",
+			uri = "file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server",
+		},
+	},
+}
+[2020-08-09 01:41:18.515][info][script.service:181]: Add workspace	server	file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 01:41:18.515][debug][script.async.async:55]: Create thread, id: 	2	task: 	loadfile
+[2020-08-09 01:41:18.515][info][script.workspace:145]: Workspace inited, root: 	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 01:41:18.515][info][script.workspace:146]: Workspace inited, uri: 	file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 01:41:18.515][info][script.workspace:148]: Log path: 	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server/log/file_c%3A_Users_Andres_.vscode_extensions_sumneko.lua-0.20.3_server.log
+[2020-08-09 01:41:18.532][debug][script.config:204]: Config update: 	{
+	color = {
+		mode = "Semantic",
+	},
+	completion = {
+		callSnippet = "Disable",
+		displayContext = 6,
+		enable = true,
+		fastAutocompletion = true,
+		keywordSnippet = "Replace",
+		private = false,
+	},
+	diagnostics = {
+		datamodelAsIgnore = true,
+		disable = {
+		},
+		enable = true,
+		globals = {
+		},
+		ignore = {
+		},
+		severity = {
+			["ambiguity-1"] = "Warning",
+			["deprecated-rbx-member"] = "Information",
+			["duplicate-index"] = "Warning",
+			["duplicate-method"] = "Warning",
+			["emmy-lua"] = "Warning",
+			["empty-block"] = "Hint",
+			["global-in-nil-env"] = "Warning",
+			["incorrect-call-arguments"] = "Warning",
+			["invalid-rbx-classname"] = "Warning",
+			["lowercase-global"] = "Information",
+			["newfield-call"] = "Warning",
+			["newline-call"] = "Information",
+			["redefined-local"] = "Information",
+			["redundant-parameter"] = "Information",
+			["redundant-value"] = "Warning",
+			["set-const"] = "Error",
+			["set-for-state"] = "Warning",
+			["trailing-space"] = "Hint",
+			["undefined-env-child"] = "Information",
+			["undefined-global"] = "Warning",
+			["undefined-rbx-member"] = "Warning",
+			["unused-function"] = "Hint",
+			["unused-label"] = "Hint",
+			["unused-local"] = "Hint",
+			["unused-vararg"] = "Hint",
+		},
+		syntax = true,
+	},
+	hover = {
+		enable = true,
+		viewNumber = true,
+		viewString = true,
+		viewStringMax = 1000,
+	},
+	plugin = {
+		enable = false,
+		path = ".vscode/lua-plugin/*.lua",
+	},
+	runtime = {
+		library = {
+		},
+		path = {
+			[1] = "?.lua",
+			[2] = "?/init.lua",
+			[3] = "?/?.lua",
+		},
+		version = "Lua 5.4",
+	},
+	signatureHelp = {
+		enable = true,
+	},
+	workspace = {
+		ignoreDir = {
+			["*.spec.lua"] = true,
+			[".vscode"] = true,
+		},
+		ignoreSubmodules = true,
+		library = {
+		},
+		loadMode = "All Files",
+		maxPreload = 300,
+		preloadFileSize = 100,
+		rojoProjectFile = "default",
+		useGitIgnore = true,
+	},
+}	{
+	associations = {
+	},
+	exclude = {
+		["**/.DS_Store"] = true,
+		["**/.git"] = true,
+		["**/.hg"] = true,
+		["**/.svn"] = true,
+		["**/CVS"] = true,
+	},
+}
+[2020-08-09 01:41:18.598][debug][script.service:413]: reCompile:	1	1
+[2020-08-09 01:41:18.626][debug][script.service:886]: collectgarbage: 	0.027
+[2020-08-09 01:41:18.626][debug][script.service:957]: 
+State
+Main Mem:  [12029.312]kb
+#001 Mem:  [94.303]kb
+#002 Mem:  <Unknown>
+-------------------
+CachedVM:  [0]
+AlivedVM:  [0]
+DeadVM:    [0]
+-------------------
+CachedSrc: [0]
+AlivedSrc: [1]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[0]
+AlivedFunc:[0]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [0]
+DeadVal:   [0]
+-------------------
+TotalLoc:  [0]
+TotalEmmy: [10]
+
+[2020-08-09 01:41:18.626][debug][script.service:999]: test memory: 	0.000
+[2020-08-09 01:41:18.626][debug][script.capability.completion:27]: Enable completion.
+[2020-08-09 01:41:18.626][debug][script.capability.semantic:26]: Enable semantic.
+[2020-08-09 01:41:18.626][debug][script.service:828]: reScanFiles
+[2020-08-09 01:41:18.626][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server/script/service.lua
+[2020-08-09 01:41:18.626][debug][script.async.async:55]: Create thread, id: 	3	task: 	scanfiles
+[2020-08-09 01:41:18.627][debug][script.method.initialized:77]: client/registerCapability Success!
+[2020-08-09 01:41:18.627][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server/script/service.lua
+[2020-08-09 01:41:18.690][debug][script.workspace:117]: Scanning:	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 01:41:18.690][debug][script.workspace:117]: Scan pattern:	{
+	[1] = ".vscode",
+	[2] = "*.spec.lua",
+	[3] = "**/CVS",
+	[4] = "**/.git",
+	[5] = "**/.svn",
+	[6] = "**/.hg",
+	[7] = "**/.DS_Store",
+}
+[2020-08-09 01:41:18.690][debug][script.workspace:117]: Scan options:	{
+	ignoreCase = true,
+}
+[2020-08-09 01:41:18.691][info][script.workspace:111]: Scan finish, got	141	files.
+[2020-08-09 01:41:18.693][debug][script.service:413]: reCompile:	1	1
+[2020-08-09 01:41:18.717][debug][script.service:886]: collectgarbage: 	0.024
+[2020-08-09 01:41:18.717][debug][script.service:957]: 
+State
+Main Mem:  [13588.223]kb
+#001 Mem:  [94.303]kb
+#002 Mem:  <Unknown>
+#003 Mem:  <Unknown>
+-------------------
+CachedVM:  [0]
+AlivedVM:  [0]
+DeadVM:    [0]
+-------------------
+CachedSrc: [0]
+AlivedSrc: [1]
+DeadSrc:   [1]
+-------------------
+CachedFunc:[0]
+AlivedFunc:[0]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [343]
+DeadVal:   [343]
+-------------------
+TotalLoc:  [0]
+TotalEmmy: [10]
+
+[2020-08-09 01:41:18.717][debug][script.service:999]: test memory: 	0.000
+[2020-08-09 01:41:18.717][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server/script/service.lua
+[2020-08-09 01:41:18.788][debug][script.service:331]: Read failed due to duplicate:	file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server/script/service.lua
+[2020-08-09 01:41:30.784][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server/script/service.lua
+[2020-08-09 01:41:35.090][warn][script.service:560]: Compile Ast[file:///c%3A/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server/script/core/completion.lua] takes [0.164] sec, size [40.371]kb
+[2020-08-09 01:42:18.633][debug][script.service:886]: collectgarbage: 	0.130
+[2020-08-09 01:42:18.654][debug][script.service:957]: 
+State
+Main Mem:  [98595.976]kb
+#001 Mem:  [126.878]kb
+#002 Mem:  [115.060]kb
+#003 Mem:  [91.373]kb
+-------------------
+CachedVM:  [141]
+AlivedVM:  [141]
+DeadVM:    [0]
+-------------------
+CachedSrc: [106232]
+AlivedSrc: [107152]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[1608]
+AlivedFunc:[1766]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [24517]
+DeadVal:   [1542]
+-------------------
+TotalLoc:  [7104]
+TotalEmmy: [290]
+
+[2020-08-09 01:42:18.654][debug][script.service:999]: test memory: 	0.021
+[2020-08-09 01:43:18.607][debug][script.service:886]: collectgarbage: 	0.089
+[2020-08-09 01:43:18.627][debug][script.service:957]: 
+State
+Main Mem:  [98637.663]kb
+#001 Mem:  [126.878]kb
+#002 Mem:  [115.060]kb
+#003 Mem:  [91.373]kb
+-------------------
+CachedVM:  [141]
+AlivedVM:  [141]
+DeadVM:    [0]
+-------------------
+CachedSrc: [106232]
+AlivedSrc: [107152]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[1608]
+AlivedFunc:[1766]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [24517]
+DeadVal:   [1542]
+-------------------
+TotalLoc:  [7104]
+TotalEmmy: [290]
+
+[2020-08-09 01:43:18.627][debug][script.service:999]: test memory: 	0.020
+[2020-08-09 01:44:02.032][info][script.service:224]: No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-09 01:44:02.032][info][script.service:224]: No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-09 01:44:03.217][info][script.service:224]: No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-09 01:44:03.217][info][script.service:224]: No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-09 01:44:18.624][debug][script.service:886]: collectgarbage: 	0.098
+[2020-08-09 01:44:18.645][debug][script.service:957]: 
+State
+Main Mem:  [98639.485]kb
+#001 Mem:  [128.056]kb
+#002 Mem:  [115.060]kb
+#003 Mem:  [91.373]kb
+-------------------
+CachedVM:  [141]
+AlivedVM:  [141]
+DeadVM:    [0]
+-------------------
+CachedSrc: [106232]
+AlivedSrc: [107152]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[1608]
+AlivedFunc:[1766]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [24517]
+DeadVal:   [1542]
+-------------------
+TotalLoc:  [7104]
+TotalEmmy: [290]
+
+[2020-08-09 01:44:18.645][debug][script.service:999]: test memory: 	0.021
+[2020-08-09 01:45:18.630][debug][script.service:886]: collectgarbage: 	0.103
+[2020-08-09 01:45:18.656][debug][script.service:957]: 
+State
+Main Mem:  [98639.162]kb
+#001 Mem:  [128.998]kb
+#002 Mem:  [115.060]kb
+#003 Mem:  [91.373]kb
+-------------------
+CachedVM:  [141]
+AlivedVM:  [141]
+DeadVM:    [0]
+-------------------
+CachedSrc: [106232]
+AlivedSrc: [107152]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[1608]
+AlivedFunc:[1766]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [24517]
+DeadVal:   [1542]
+-------------------
+TotalLoc:  [7104]
+TotalEmmy: [290]
+
+[2020-08-09 01:45:18.656][debug][script.service:999]: test memory: 	0.026
+[2020-08-09 01:46:18.616][debug][script.service:886]: collectgarbage: 	0.088
+[2020-08-09 01:46:18.637][debug][script.service:957]: 
+State
+Main Mem:  [98635.246]kb
+#001 Mem:  [129.386]kb
+#002 Mem:  [115.060]kb
+#003 Mem:  [91.373]kb
+-------------------
+CachedVM:  [141]
+AlivedVM:  [141]
+DeadVM:    [0]
+-------------------
+CachedSrc: [106232]
+AlivedSrc: [107152]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[1608]
+AlivedFunc:[1766]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [24517]
+DeadVal:   [1542]
+-------------------
+TotalLoc:  [7104]
+TotalEmmy: [290]
+
+[2020-08-09 01:46:18.637][debug][script.service:999]: test memory: 	0.021
+[2020-08-09 01:46:23.068][info][script.method.shutdown:2]: Server shutdown.
+[2020-08-09 01:46:23.084][info][script.method.exit:2]: Server exited.

@@ -1,0 +1,2248 @@
+[2020-08-08 20:30:49.001][info]: [main:15]Lua Lsp startup, root: 	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.19.2/server
+[2020-08-08 20:30:49.001][debug]: [main:16]ROOT:	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.19.2/server
+[2020-08-08 20:30:49.001][debug]: cannot open c:\Users\Andres\.vscode\extensions\sumneko.lua-0.19.2\server/debugger.lua: No such file or directory
+[2020-08-08 20:30:49.053][info]: [script.language:125]VSC language: en
+[2020-08-08 20:30:49.053][info]: [script.language:126]LS  language: en-us
+[2020-08-08 20:30:49.347][debug]: [script.async.async:55]Create thread, id: 	1	task: 	proto
+[2020-08-08 20:30:49.368][debug]: [script.service:891]collectgarbage: 	0.021
+[2020-08-08 20:30:49.368][debug]: [script.service:962]
+State
+Main Mem:  [21791.232]kb
+#001 Mem:  <Unknown>
+-------------------
+CachedVM:  [0]
+AlivedVM:  [0]
+DeadVM:    [0]
+-------------------
+CachedSrc: [0]
+AlivedSrc: [1]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[0]
+AlivedFunc:[0]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [0]
+DeadVal:   [0]
+-------------------
+TotalLoc:  [0]
+TotalEmmy: [458]
+
+[2020-08-08 20:30:49.368][debug]: [script.service:1004]test memory: 	0.000
+[2020-08-08 20:30:49.377][info]: [script.method.initialize:21]{
+	capabilities = {
+		textDocument = {
+			callHierarchy = {
+				dynamicRegistration = true,
+			},
+			codeAction = {
+				codeActionLiteralSupport = {
+					codeActionKind = {
+						valueSet = {
+							[1] = "",
+							[2] = "quickfix",
+							[3] = "refactor",
+							[4] = "refactor.extract",
+							[5] = "refactor.inline",
+							[6] = "refactor.rewrite",
+							[7] = "source",
+							[8] = "source.organizeImports",
+						},
+					},
+				},
+				dynamicRegistration = true,
+				isPreferredSupport = true,
+			},
+			codeLens = {
+				dynamicRegistration = true,
+			},
+			colorProvider = {
+				dynamicRegistration = true,
+			},
+			completion = {
+				completionItem = {
+					commitCharactersSupport = true,
+					deprecatedSupport = true,
+					documentationFormat = {
+						[1] = "markdown",
+						[2] = "plaintext",
+					},
+					insertReplaceSupport = true,
+					preselectSupport = true,
+					snippetSupport = true,
+					tagSupport = {
+						valueSet = {
+							[1] = 1,
+						},
+					},
+				},
+				completionItemKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+					},
+				},
+				contextSupport = true,
+				dynamicRegistration = true,
+			},
+			declaration = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			definition = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			documentHighlight = {
+				dynamicRegistration = true,
+			},
+			documentLink = {
+				dynamicRegistration = true,
+				tooltipSupport = true,
+			},
+			documentSymbol = {
+				["hierarchicalDocumentSymbolSupport"] = true,
+				dynamicRegistration = true,
+				symbolKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+						[26] = 26,
+					},
+				},
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+					},
+				},
+			},
+			foldingRange = {
+				dynamicRegistration = true,
+				lineFoldingOnly = true,
+				rangeLimit = 5000,
+			},
+			formatting = {
+				dynamicRegistration = true,
+			},
+			hover = {
+				contentFormat = {
+					[1] = "markdown",
+					[2] = "plaintext",
+				},
+				dynamicRegistration = true,
+			},
+			implementation = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			onTypeFormatting = {
+				dynamicRegistration = true,
+			},
+			publishDiagnostics = {
+				complexDiagnosticCodeSupport = true,
+				relatedInformation = true,
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+						[2] = 2,
+					},
+				},
+				versionSupport = false,
+			},
+			rangeFormatting = {
+				dynamicRegistration = true,
+			},
+			references = {
+				dynamicRegistration = true,
+			},
+			rename = {
+				dynamicRegistration = true,
+				prepareSupport = true,
+			},
+			selectionRange = {
+				dynamicRegistration = true,
+			},
+			semanticTokens = {
+				dynamicRegistration = true,
+				tokenModifiers = {
+					[10] = "defaultLibrary",
+					[1] = "declaration",
+					[2] = "definition",
+					[3] = "readonly",
+					[4] = "static",
+					[5] = "deprecated",
+					[6] = "abstract",
+					[7] = "async",
+					[8] = "modification",
+					[9] = "documentation",
+				},
+				tokenTypes = {
+					[01] = "namespace",
+					[02] = "type",
+					[03] = "class",
+					[04] = "enum",
+					[05] = "interface",
+					[06] = "struct",
+					[07] = "typeParameter",
+					[08] = "parameter",
+					[09] = "variable",
+					[10] = "property",
+					[11] = "enumMember",
+					[12] = "event",
+					[13] = "function",
+					[14] = "member",
+					[15] = "macro",
+					[16] = "keyword",
+					[17] = "modifier",
+					[18] = "comment",
+					[19] = "string",
+					[20] = "number",
+					[21] = "regexp",
+					[22] = "operator",
+				},
+			},
+			signatureHelp = {
+				contextSupport = true,
+				dynamicRegistration = true,
+				signatureInformation = {
+					activeParameterSupport = true,
+					documentationFormat = {
+						[1] = "markdown",
+						[2] = "plaintext",
+					},
+					parameterInformation = {
+						labelOffsetSupport = true,
+					},
+				},
+			},
+			synchronization = {
+				didSave = true,
+				dynamicRegistration = true,
+				willSave = true,
+				willSaveWaitUntil = true,
+			},
+			typeDefinition = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+		},
+		window = {
+			workDoneProgress = true,
+		},
+		workspace = {
+			applyEdit = true,
+			configuration = true,
+			didChangeConfiguration = {
+				dynamicRegistration = true,
+			},
+			didChangeWatchedFiles = {
+				dynamicRegistration = true,
+			},
+			executeCommand = {
+				dynamicRegistration = true,
+			},
+			symbol = {
+				dynamicRegistration = true,
+				symbolKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+						[26] = 26,
+					},
+				},
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+					},
+				},
+			},
+			workspaceEdit = {
+				documentChanges = true,
+				failureHandling = "textOnlyTransactional",
+				resourceOperations = {
+					[1] = "create",
+					[2] = "rename",
+					[3] = "delete",
+				},
+			},
+			workspaceFolders = true,
+		},
+	},
+	clientInfo = {
+		name = "vscode",
+		version = "1.47.3",
+	},
+	processId = 1452,
+	rootPath = "c:\\Users\\Andres\\Desktop\\sumneko.lua-0.20.3",
+	rootUri = "file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3",
+	trace = "off",
+	workspaceFolders = {
+		[1] = {
+			name = "sumneko.lua-0.20.3",
+			uri = "file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3",
+		},
+	},
+}
+[2020-08-08 20:30:49.378][info]: [script.service:185]Add workspace	sumneko.lua-0.20.3	file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3
+[2020-08-08 20:30:49.378][debug]: [script.async.async:55]Create thread, id: 	2	task: 	loadfile
+[2020-08-08 20:30:49.378][info]: [script.workspace:189]Workspace inited, root: 	c:/Users/Andres/Desktop/sumneko.lua-0.20.3
+[2020-08-08 20:30:49.378][info]: [script.workspace:190]Workspace inited, uri: 	file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3
+[2020-08-08 20:30:49.378][info]: [script.workspace:192]Log path: 	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.19.2/server/log/file_c%3A_Users_Andres_Desktop_sumneko.lua-0.20.3.log
+[2020-08-08 20:30:49.393][debug]: [script.service:126]clearDiagnostics	file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3/server/script/core/hover/hover.lua
+[2020-08-08 20:30:49.421][debug]: [script.config:198]Config update: 	{
+	color = {
+		mode = "Semantic",
+	},
+	completion = {
+		callSnippet = "Disable",
+		enable = true,
+		fastAutocompletion = false,
+		keywordSnippet = "Replace",
+		private = false,
+		showReferences = false,
+	},
+	diagnostics = {
+		datamodelAsIgnore = true,
+		disable = {
+		},
+		enable = true,
+		globals = {
+		},
+		ignore = {
+		},
+		severity = {
+			["ambiguity-1"] = "Warning",
+			["deprecated-rbx-member"] = "Information",
+			["duplicate-index"] = "Warning",
+			["duplicate-method"] = "Warning",
+			["emmy-lua"] = "Warning",
+			["empty-block"] = "Hint",
+			["global-in-nil-env"] = "Warning",
+			["incorrect-call-arguments"] = "Warning",
+			["invalid-rbx-classname"] = "Warning",
+			["lowercase-global"] = "Information",
+			["newfield-call"] = "Warning",
+			["newline-call"] = "Information",
+			["redefined-local"] = "Information",
+			["redundant-parameter"] = "Information",
+			["redundant-value"] = "Warning",
+			["set-const"] = "Error",
+			["trailing-space"] = "Hint",
+			["undefined-env-child"] = "Information",
+			["undefined-global"] = "Warning",
+			["undefined-rbx-member"] = "Warning",
+			["unused-function"] = "Hint",
+			["unused-label"] = "Hint",
+			["unused-local"] = "Hint",
+			["unused-vararg"] = "Hint",
+		},
+		syntax = true,
+	},
+	plugin = {
+		enable = false,
+		path = ".vscode/lua-plugin/*.lua",
+	},
+	runtime = {
+		library = {
+		},
+		path = {
+			[1] = "?.lua",
+			[2] = "?/init.lua",
+			[3] = "?/?.lua",
+		},
+		version = "Luau",
+	},
+	signatureHelp = {
+		enable = true,
+	},
+	workspace = {
+		ignoreDir = {
+			["*.spec.lua"] = true,
+			[".vscode"] = true,
+		},
+		ignoreSubmodules = true,
+		library = {
+		},
+		loadMode = "All Files",
+		maxPreload = 300,
+		preloadFileSize = 100,
+		rojoProjectFile = "default",
+		useGitIgnore = true,
+	},
+}	{
+	associations = {
+	},
+	exclude = {
+		["**/.DS_Store"] = true,
+		["**/.git"] = true,
+		["**/.hg"] = true,
+		["**/.svn"] = true,
+		["**/CVS"] = true,
+	},
+}
+[2020-08-08 20:30:49.421][debug]: [script.capability.completion:27]Enable completion.
+[2020-08-08 20:30:49.421][debug]: [script.capability.semantic:26]Enable semantic.
+[2020-08-08 20:30:49.421][debug]: [script.service:833]reScanFiles
+[2020-08-08 20:30:49.421][debug]: [script.service:126]clearDiagnostics	file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3/server/script/core/hover/hover.lua
+[2020-08-08 20:30:49.422][debug]: [script.async.async:55]Create thread, id: 	3	task: 	scanfiles
+[2020-08-08 20:30:49.423][debug]: [script.method.initialized:77]client/registerCapability Success!
+[2020-08-08 20:30:49.437][debug]: [script.workspace:161]Scanning:	c:/Users/Andres/Desktop/sumneko.lua-0.20.3
+[2020-08-08 20:30:49.437][debug]: [script.workspace:161]Scan pattern:	{
+	[1] = ".vscode",
+	[2] = "*.spec.lua",
+	[3] = "**/CVS",
+	[4] = "**/.git",
+	[5] = "**/.svn",
+	[6] = "**/.DS_Store",
+	[7] = "**/.hg",
+}
+[2020-08-08 20:30:49.437][debug]: [script.workspace:161]Scan options:	{
+	ignoreCase = true,
+}
+[2020-08-08 20:30:49.438][debug]: [script.service:126]clearDiagnostics	file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3/server/script/core/hover/hover.lua
+[2020-08-08 20:30:49.500][info]: [script.workspace:155]Scan finish, got	235	files.
+[2020-08-08 20:30:49.507][debug]: [script.service:422]reCompile:	10	10
+[2020-08-08 20:30:49.531][debug]: [script.service:891]collectgarbage: 	0.024
+[2020-08-08 20:30:49.531][debug]: [script.service:962]
+State
+Main Mem:  [23038.941]kb
+#001 Mem:  [242.222]kb
+#002 Mem:  [74.852]kb
+#003 Mem:  <Unknown>
+-------------------
+CachedVM:  [0]
+AlivedVM:  [0]
+DeadVM:    [0]
+-------------------
+CachedSrc: [0]
+AlivedSrc: [1]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[0]
+AlivedFunc:[0]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [419]
+DeadVal:   [419]
+-------------------
+TotalLoc:  [0]
+TotalEmmy: [458]
+
+[2020-08-08 20:30:49.531][debug]: [script.service:1004]test memory: 	0.000
+[2020-08-08 20:30:49.531][debug]: [script.service:126]clearDiagnostics	file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3/server/script/core/hover/hover.lua
+[2020-08-08 20:30:49.962][debug]: [script.service:339]Read failed due to duplicate:	file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3/server/script/core/hover/hover.lua
+[2020-08-08 20:30:54.893][warn]: [script.service:569]Compile Ast[file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3/server/script-beta/files.lua] takes [0.211] sec, size [6.755]kb
+[2020-08-08 20:31:05.254][info]: [script.service:228]No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/workspaceStorage
+[2020-08-08 20:31:05.255][info]: [script.service:228]No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/workspaceStorage
+[2020-08-08 20:31:49.534][debug]: [script.service:891]collectgarbage: 	0.177
+[2020-08-08 20:31:49.563][debug]: [script.service:962]
+State
+Main Mem:  [139175.649]kb
+#001 Mem:  [255.359]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:31:49.563][debug]: [script.service:1004]test memory: 	0.029
+[2020-08-08 20:32:49.479][debug]: [script.service:891]collectgarbage: 	0.117
+[2020-08-08 20:32:49.508][debug]: [script.service:962]
+State
+Main Mem:  [139190.357]kb
+#001 Mem:  [124.727]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:32:49.508][debug]: [script.service:1004]test memory: 	0.029
+[2020-08-08 20:33:49.502][debug]: [script.service:891]collectgarbage: 	0.128
+[2020-08-08 20:33:49.536][debug]: [script.service:962]
+State
+Main Mem:  [139189.139]kb
+#001 Mem:  [124.727]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:33:49.536][debug]: [script.service:1004]test memory: 	0.034
+[2020-08-08 20:34:49.486][debug]: [script.service:891]collectgarbage: 	0.110
+[2020-08-08 20:34:49.518][debug]: [script.service:962]
+State
+Main Mem:  [139189.139]kb
+#001 Mem:  [124.727]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:34:49.518][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 20:35:49.491][debug]: [script.service:891]collectgarbage: 	0.111
+[2020-08-08 20:35:49.521][debug]: [script.service:962]
+State
+Main Mem:  [139189.139]kb
+#001 Mem:  [124.727]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:35:49.521][debug]: [script.service:1004]test memory: 	0.030
+[2020-08-08 20:36:49.530][debug]: [script.service:891]collectgarbage: 	0.149
+[2020-08-08 20:36:49.568][debug]: [script.service:962]
+State
+Main Mem:  [139171.729]kb
+#001 Mem:  [276.009]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:36:49.568][debug]: [script.service:1004]test memory: 	0.038
+[2020-08-08 20:37:49.515][debug]: [script.service:891]collectgarbage: 	0.122
+[2020-08-08 20:37:49.549][debug]: [script.service:962]
+State
+Main Mem:  [139169.120]kb
+#001 Mem:  [277.608]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:37:49.549][debug]: [script.service:1004]test memory: 	0.034
+[2020-08-08 20:38:49.513][debug]: [script.service:891]collectgarbage: 	0.120
+[2020-08-08 20:38:49.544][debug]: [script.service:962]
+State
+Main Mem:  [139168.589]kb
+#001 Mem:  [277.608]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:38:49.544][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 20:39:49.518][debug]: [script.service:891]collectgarbage: 	0.112
+[2020-08-08 20:39:49.546][debug]: [script.service:962]
+State
+Main Mem:  [139168.776]kb
+#001 Mem:  [277.608]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:39:49.546][debug]: [script.service:1004]test memory: 	0.028
+[2020-08-08 20:40:49.517][debug]: [script.service:891]collectgarbage: 	0.111
+[2020-08-08 20:40:49.545][debug]: [script.service:962]
+State
+Main Mem:  [139168.683]kb
+#001 Mem:  [277.608]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:40:49.545][debug]: [script.service:1004]test memory: 	0.028
+[2020-08-08 20:41:49.538][debug]: [script.service:891]collectgarbage: 	0.119
+[2020-08-08 20:41:49.567][debug]: [script.service:962]
+State
+Main Mem:  [139169.354]kb
+#001 Mem:  [279.012]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33878]
+DeadVal:   [747]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:41:49.567][debug]: [script.service:1004]test memory: 	0.029
+[2020-08-08 20:42:49.554][debug]: [script.service:891]collectgarbage: 	0.130
+[2020-08-08 20:42:49.584][debug]: [script.service:962]
+State
+Main Mem:  [139567.104]kb
+#001 Mem:  [447.708]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155573]
+AlivedSrc: [157083]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2752]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [33886]
+DeadVal:   [748]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:42:49.584][debug]: [script.service:1004]test memory: 	0.030
+[2020-08-08 20:43:49.636][debug]: [script.service:891]collectgarbage: 	0.201
+[2020-08-08 20:43:49.667][debug]: [script.service:962]
+State
+Main Mem:  [149511.892]kb
+#001 Mem:  [331.418]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155579]
+AlivedSrc: [157106]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2753]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34217]
+DeadVal:   [1084]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:43:49.667][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 20:44:49.584][debug]: [script.service:891]collectgarbage: 	0.141
+[2020-08-08 20:44:49.624][debug]: [script.service:962]
+State
+Main Mem:  [149601.595]kb
+#001 Mem:  [335.195]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155579]
+AlivedSrc: [157106]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2753]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34217]
+DeadVal:   [1084]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:44:49.624][debug]: [script.service:1004]test memory: 	0.040
+[2020-08-08 20:45:49.657][debug]: [script.service:891]collectgarbage: 	0.212
+[2020-08-08 20:45:49.688][debug]: [script.service:962]
+State
+Main Mem:  [150297.507]kb
+#001 Mem:  [343.466]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155601]
+AlivedSrc: [157128]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2754]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34470]
+DeadVal:   [1352]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:45:49.688][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 20:46:49.647][debug]: [script.service:891]collectgarbage: 	0.199
+[2020-08-08 20:46:49.679][debug]: [script.service:962]
+State
+Main Mem:  [150598.743]kb
+#001 Mem:  [336.151]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34594]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:46:49.679][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 20:47:49.603][debug]: [script.service:891]collectgarbage: 	0.142
+[2020-08-08 20:47:49.637][debug]: [script.service:962]
+State
+Main Mem:  [150644.024]kb
+#001 Mem:  [336.151]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34594]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:47:49.637][debug]: [script.service:1004]test memory: 	0.034
+[2020-08-08 20:48:49.595][debug]: [script.service:891]collectgarbage: 	0.120
+[2020-08-08 20:48:49.626][debug]: [script.service:962]
+State
+Main Mem:  [150645.190]kb
+#001 Mem:  [338.986]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34594]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:48:49.627][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 20:49:49.611][debug]: [script.service:891]collectgarbage: 	0.125
+[2020-08-08 20:49:49.644][debug]: [script.service:962]
+State
+Main Mem:  [150644.081]kb
+#001 Mem:  [338.986]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34594]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:49:49.644][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 20:50:49.645][debug]: [script.service:891]collectgarbage: 	0.157
+[2020-08-08 20:50:49.679][debug]: [script.service:962]
+State
+Main Mem:  [150635.791]kb
+#001 Mem:  [323.774]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:50:49.679][debug]: [script.service:1004]test memory: 	0.034
+[2020-08-08 20:51:49.622][debug]: [script.service:891]collectgarbage: 	0.122
+[2020-08-08 20:51:49.653][debug]: [script.service:962]
+State
+Main Mem:  [150633.697]kb
+#001 Mem:  [323.774]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:51:49.653][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 20:52:05.976][info]: [script.service:228]No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/snippets/bat.json
+[2020-08-08 20:52:05.977][info]: [script.service:228]No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/snippets/bat.json
+[2020-08-08 20:52:49.640][debug]: [script.service:891]collectgarbage: 	0.125
+[2020-08-08 20:52:49.680][debug]: [script.service:962]
+State
+Main Mem:  [150634.447]kb
+#001 Mem:  [327.066]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:52:49.680][debug]: [script.service:1004]test memory: 	0.039
+[2020-08-08 20:53:49.642][debug]: [script.service:891]collectgarbage: 	0.127
+[2020-08-08 20:53:49.675][debug]: [script.service:962]
+State
+Main Mem:  [150633.791]kb
+#001 Mem:  [327.066]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:53:49.675][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 20:54:49.667][debug]: [script.service:891]collectgarbage: 	0.140
+[2020-08-08 20:54:49.700][debug]: [script.service:962]
+State
+Main Mem:  [150634.025]kb
+#001 Mem:  [327.066]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:54:49.700][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 20:55:49.669][debug]: [script.service:891]collectgarbage: 	0.138
+[2020-08-08 20:55:49.702][debug]: [script.service:962]
+State
+Main Mem:  [150633.791]kb
+#001 Mem:  [327.066]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:55:49.702][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 20:56:49.657][debug]: [script.service:891]collectgarbage: 	0.120
+[2020-08-08 20:56:49.688][debug]: [script.service:962]
+State
+Main Mem:  [150634.072]kb
+#001 Mem:  [327.066]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:56:49.688][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 20:57:49.670][debug]: [script.service:891]collectgarbage: 	0.128
+[2020-08-08 20:57:49.705][debug]: [script.service:962]
+State
+Main Mem:  [150634.025]kb
+#001 Mem:  [327.066]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:57:49.705][debug]: [script.service:1004]test memory: 	0.035
+[2020-08-08 20:58:49.675][debug]: [script.service:891]collectgarbage: 	0.119
+[2020-08-08 20:58:49.705][debug]: [script.service:962]
+State
+Main Mem:  [150633.885]kb
+#001 Mem:  [327.066]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:58:49.705][debug]: [script.service:1004]test memory: 	0.030
+[2020-08-08 20:59:49.687][debug]: [script.service:891]collectgarbage: 	0.125
+[2020-08-08 20:59:49.724][debug]: [script.service:962]
+State
+Main Mem:  [150633.932]kb
+#001 Mem:  [327.066]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 20:59:49.724][debug]: [script.service:1004]test memory: 	0.037
+[2020-08-08 21:00:49.689][debug]: [script.service:891]collectgarbage: 	0.121
+[2020-08-08 21:00:49.720][debug]: [script.service:962]
+State
+Main Mem:  [150634.072]kb
+#001 Mem:  [327.066]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1438]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:00:49.720][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 21:01:49.725][debug]: [script.service:891]collectgarbage: 	0.150
+[2020-08-08 21:01:49.758][debug]: [script.service:962]
+State
+Main Mem:  [150646.590]kb
+#001 Mem:  [489.938]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:01:49.758][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 21:02:49.707][debug]: [script.service:891]collectgarbage: 	0.120
+[2020-08-08 21:02:49.739][debug]: [script.service:962]
+State
+Main Mem:  [150642.090]kb
+#001 Mem:  [489.938]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:02:49.739][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 21:03:49.712][debug]: [script.service:891]collectgarbage: 	0.123
+[2020-08-08 21:03:49.745][debug]: [script.service:962]
+State
+Main Mem:  [150642.324]kb
+#001 Mem:  [489.938]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34597]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:03:49.745][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 21:04:49.722][debug]: [script.service:891]collectgarbage: 	0.129
+[2020-08-08 21:04:49.752][debug]: [script.service:962]
+State
+Main Mem:  [150645.788]kb
+#001 Mem:  [396.615]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34596]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:04:49.752][debug]: [script.service:1004]test memory: 	0.030
+[2020-08-08 21:05:49.731][debug]: [script.service:891]collectgarbage: 	0.131
+[2020-08-08 21:05:49.772][debug]: [script.service:962]
+State
+Main Mem:  [150644.147]kb
+#001 Mem:  [396.615]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34596]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:05:49.772][debug]: [script.service:1004]test memory: 	0.041
+[2020-08-08 21:06:49.731][debug]: [script.service:891]collectgarbage: 	0.131
+[2020-08-08 21:06:49.766][debug]: [script.service:962]
+State
+Main Mem:  [150643.960]kb
+#001 Mem:  [396.615]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34596]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:06:49.766][debug]: [script.service:1004]test memory: 	0.035
+[2020-08-08 21:07:49.748][debug]: [script.service:891]collectgarbage: 	0.141
+[2020-08-08 21:07:49.785][debug]: [script.service:962]
+State
+Main Mem:  [150644.054]kb
+#001 Mem:  [396.615]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34596]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:07:49.785][debug]: [script.service:1004]test memory: 	0.037
+[2020-08-08 21:08:49.729][debug]: [script.service:891]collectgarbage: 	0.118
+[2020-08-08 21:08:49.760][debug]: [script.service:962]
+State
+Main Mem:  [150643.866]kb
+#001 Mem:  [396.615]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34596]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:08:49.760][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 21:09:49.755][debug]: [script.service:891]collectgarbage: 	0.131
+[2020-08-08 21:09:49.789][debug]: [script.service:962]
+State
+Main Mem:  [150706.079]kb
+#001 Mem:  [423.164]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:09:49.789][debug]: [script.service:1004]test memory: 	0.034
+[2020-08-08 21:10:49.752][debug]: [script.service:891]collectgarbage: 	0.123
+[2020-08-08 21:10:49.785][debug]: [script.service:962]
+State
+Main Mem:  [150704.204]kb
+#001 Mem:  [423.164]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:10:49.785][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 21:11:49.765][debug]: [script.service:891]collectgarbage: 	0.126
+[2020-08-08 21:11:49.797][debug]: [script.service:962]
+State
+Main Mem:  [150704.345]kb
+#001 Mem:  [423.164]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:11:49.797][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 21:12:49.788][debug]: [script.service:891]collectgarbage: 	0.145
+[2020-08-08 21:12:49.821][debug]: [script.service:962]
+State
+Main Mem:  [150704.157]kb
+#001 Mem:  [423.164]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:12:49.821][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 21:13:49.778][debug]: [script.service:891]collectgarbage: 	0.126
+[2020-08-08 21:13:49.811][debug]: [script.service:962]
+State
+Main Mem:  [150704.204]kb
+#001 Mem:  [423.164]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:13:49.811][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 21:14:49.791][debug]: [script.service:891]collectgarbage: 	0.130
+[2020-08-08 21:14:49.822][debug]: [script.service:962]
+State
+Main Mem:  [150704.122]kb
+#001 Mem:  [428.648]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:14:49.823][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 21:15:49.794][debug]: [script.service:891]collectgarbage: 	0.124
+[2020-08-08 21:15:49.826][debug]: [script.service:962]
+State
+Main Mem:  [150703.638]kb
+#001 Mem:  [428.648]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:15:49.826][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 21:16:49.234][info]: [script.service:228]No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:16:49.235][info]: [script.service:228]No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:16:49.816][debug]: [script.service:891]collectgarbage: 	0.135
+[2020-08-08 21:16:49.850][debug]: [script.service:962]
+State
+Main Mem:  [150703.872]kb
+#001 Mem:  [431.790]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:16:49.850][debug]: [script.service:1004]test memory: 	0.034
+[2020-08-08 21:16:49.850][info]: [script.service:228]No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:16:49.850][info]: [script.service:228]No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:17:49.823][debug]: [script.service:891]collectgarbage: 	0.127
+[2020-08-08 21:17:49.855][debug]: [script.service:962]
+State
+Main Mem:  [150703.825]kb
+#001 Mem:  [434.859]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:17:49.855][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 21:18:49.820][debug]: [script.service:891]collectgarbage: 	0.119
+[2020-08-08 21:18:49.858][debug]: [script.service:962]
+State
+Main Mem:  [150703.544]kb
+#001 Mem:  [434.859]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155608]
+AlivedSrc: [157135]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2755]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34599]
+DeadVal:   [1439]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:18:49.858][debug]: [script.service:1004]test memory: 	0.038
+[2020-08-08 21:19:24.857][warn]: [script.service:569]Compile Ast[file:///c%3A/Users/Andres/Desktop/sumneko.lua-0.20.3/server/script-beta/parser/ast.lua] takes [0.101] sec, size [49.064]kb
+[2020-08-08 21:19:49.911][debug]: [script.service:891]collectgarbage: 	0.203
+[2020-08-08 21:19:49.941][debug]: [script.service:962]
+State
+Main Mem:  [150754.066]kb
+#001 Mem:  [365.499]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:19:49.942][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 21:20:49.831][debug]: [script.service:891]collectgarbage: 	0.118
+[2020-08-08 21:20:49.862][debug]: [script.service:962]
+State
+Main Mem:  [150864.832]kb
+#001 Mem:  [365.499]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:20:49.862][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 21:21:49.833][debug]: [script.service:891]collectgarbage: 	0.117
+[2020-08-08 21:21:49.864][debug]: [script.service:962]
+State
+Main Mem:  [150865.020]kb
+#001 Mem:  [365.499]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:21:49.864][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 21:22:49.844][debug]: [script.service:891]collectgarbage: 	0.126
+[2020-08-08 21:22:49.880][debug]: [script.service:962]
+State
+Main Mem:  [150865.020]kb
+#001 Mem:  [365.499]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:22:49.880][debug]: [script.service:1004]test memory: 	0.036
+[2020-08-08 21:23:49.846][debug]: [script.service:891]collectgarbage: 	0.120
+[2020-08-08 21:23:49.879][debug]: [script.service:962]
+State
+Main Mem:  [150865.160]kb
+#001 Mem:  [365.499]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:23:49.879][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 21:24:49.850][debug]: [script.service:891]collectgarbage: 	0.123
+[2020-08-08 21:24:49.884][debug]: [script.service:962]
+State
+Main Mem:  [150865.160]kb
+#001 Mem:  [365.499]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:24:49.884][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 21:25:49.856][debug]: [script.service:891]collectgarbage: 	0.129
+[2020-08-08 21:25:49.888][debug]: [script.service:962]
+State
+Main Mem:  [150865.160]kb
+#001 Mem:  [365.499]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:25:49.888][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 21:26:49.851][debug]: [script.service:891]collectgarbage: 	0.117
+[2020-08-08 21:26:49.882][debug]: [script.service:962]
+State
+Main Mem:  [150865.066]kb
+#001 Mem:  [365.499]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:26:49.882][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 21:27:41.916][info]: [script.service:228]No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:27:41.916][info]: [script.service:228]No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:27:49.865][debug]: [script.service:891]collectgarbage: 	0.116
+[2020-08-08 21:27:49.895][debug]: [script.service:962]
+State
+Main Mem:  [150867.176]kb
+#001 Mem:  [372.958]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:27:49.895][debug]: [script.service:1004]test memory: 	0.030
+[2020-08-08 21:28:49.879][debug]: [script.service:891]collectgarbage: 	0.121
+[2020-08-08 21:28:49.912][debug]: [script.service:962]
+State
+Main Mem:  [150864.973]kb
+#001 Mem:  [372.958]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:28:49.912][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 21:29:49.886][debug]: [script.service:891]collectgarbage: 	0.117
+[2020-08-08 21:29:49.917][debug]: [script.service:962]
+State
+Main Mem:  [150865.066]kb
+#001 Mem:  [372.958]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:29:49.917][debug]: [script.service:1004]test memory: 	0.030
+[2020-08-08 21:30:49.895][debug]: [script.service:891]collectgarbage: 	0.118
+[2020-08-08 21:30:49.927][debug]: [script.service:962]
+State
+Main Mem:  [150865.254]kb
+#001 Mem:  [372.958]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:30:49.927][debug]: [script.service:1004]test memory: 	0.032
+[2020-08-08 21:31:49.904][debug]: [script.service:891]collectgarbage: 	0.115
+[2020-08-08 21:31:49.934][debug]: [script.service:962]
+State
+Main Mem:  [150865.301]kb
+#001 Mem:  [372.958]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:31:49.934][debug]: [script.service:1004]test memory: 	0.030
+[2020-08-08 21:32:49.922][debug]: [script.service:891]collectgarbage: 	0.130
+[2020-08-08 21:32:49.955][debug]: [script.service:962]
+State
+Main Mem:  [150864.926]kb
+#001 Mem:  [372.958]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155616]
+AlivedSrc: [157143]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2756]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34732]
+DeadVal:   [1581]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:32:49.955][debug]: [script.service:1004]test memory: 	0.033
+[2020-08-08 21:33:50.023][debug]: [script.service:891]collectgarbage: 	0.228
+[2020-08-08 21:33:50.057][debug]: [script.service:962]
+State
+Main Mem:  [151212.554]kb
+#001 Mem:  [358.634]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155711]
+AlivedSrc: [157238]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2757]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34811]
+DeadVal:   [1658]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:33:50.057][debug]: [script.service:1004]test memory: 	0.034
+[2020-08-08 21:34:49.929][debug]: [script.service:891]collectgarbage: 	0.121
+[2020-08-08 21:34:49.960][debug]: [script.service:962]
+State
+Main Mem:  [151230.272]kb
+#001 Mem:  [358.634]kb
+#002 Mem:  [104.140]kb
+#003 Mem:  [97.658]kb
+-------------------
+CachedVM:  [235]
+AlivedVM:  [235]
+DeadVM:    [0]
+-------------------
+CachedSrc: [155711]
+AlivedSrc: [157238]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[2480]
+AlivedFunc:[2757]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [34811]
+DeadVal:   [1658]
+-------------------
+TotalLoc:  [10784]
+TotalEmmy: [857]
+
+[2020-08-08 21:34:49.960][debug]: [script.service:1004]test memory: 	0.031
+[2020-08-08 21:35:40.794][info]: [script.service:228]No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:35:40.794][info]: [script.service:228]No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:35:41.274][info]: [script.service:228]No workspace for	file:///c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:35:41.275][info]: [script.service:228]No workspace for	vscode-userdata:/c%3A/Users/Andres/AppData/Roaming/Code/User/globalStorage
+[2020-08-08 21:35:42.677][info]: [script.method.shutdown:2]Server shutdown.
+[2020-08-08 21:35:42.693][info]: [script.method.exit:2]Server exited.

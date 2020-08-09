@@ -1,0 +1,577 @@
+[2020-08-09 01:44:20.000][info][main:15]: Lua Lsp startup, root: 	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 01:44:20.000][debug][main:16]: ROOT:	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server
+[2020-08-09 01:44:20.000][debug]: cannot open c:\Users\Andres\.vscode\extensions\sumneko.lua-0.20.3\server/debugger.lua: No such file or directory
+[2020-08-09 01:44:20.050][info][script.language:125]: VSC language: en
+[2020-08-09 01:44:20.050][info][script.language:126]: LS  language: en-us
+[2020-08-09 01:44:20.471][debug][script.async.async:55]: Create thread, id: 	1	task: 	proto
+[2020-08-09 01:44:20.489][debug][script.service:886]: collectgarbage: 	0.018
+[2020-08-09 01:44:20.490][debug][script.service:957]: 
+State
+Main Mem:  [20998.147]kb
+#001 Mem:  <Unknown>
+-------------------
+CachedVM:  [0]
+AlivedVM:  [0]
+DeadVM:    [0]
+-------------------
+CachedSrc: [0]
+AlivedSrc: [1]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[0]
+AlivedFunc:[0]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [0]
+DeadVal:   [0]
+-------------------
+TotalLoc:  [0]
+TotalEmmy: [465]
+
+[2020-08-09 01:44:20.490][debug][script.service:999]: test memory: 	0.000
+[2020-08-09 01:44:20.493][info][script.method.initialize:22]: {
+	capabilities = {
+		textDocument = {
+			callHierarchy = {
+				dynamicRegistration = true,
+			},
+			codeAction = {
+				codeActionLiteralSupport = {
+					codeActionKind = {
+						valueSet = {
+							[1] = "",
+							[2] = "quickfix",
+							[3] = "refactor",
+							[4] = "refactor.extract",
+							[5] = "refactor.inline",
+							[6] = "refactor.rewrite",
+							[7] = "source",
+							[8] = "source.organizeImports",
+						},
+					},
+				},
+				dynamicRegistration = true,
+				isPreferredSupport = true,
+			},
+			codeLens = {
+				dynamicRegistration = true,
+			},
+			colorProvider = {
+				dynamicRegistration = true,
+			},
+			completion = {
+				completionItem = {
+					commitCharactersSupport = true,
+					deprecatedSupport = true,
+					documentationFormat = {
+						[1] = "markdown",
+						[2] = "plaintext",
+					},
+					insertReplaceSupport = true,
+					preselectSupport = true,
+					snippetSupport = true,
+					tagSupport = {
+						valueSet = {
+							[1] = 1,
+						},
+					},
+				},
+				completionItemKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+					},
+				},
+				contextSupport = true,
+				dynamicRegistration = true,
+			},
+			declaration = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			definition = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			documentHighlight = {
+				dynamicRegistration = true,
+			},
+			documentLink = {
+				dynamicRegistration = true,
+				tooltipSupport = true,
+			},
+			documentSymbol = {
+				["hierarchicalDocumentSymbolSupport"] = true,
+				dynamicRegistration = true,
+				symbolKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+						[26] = 26,
+					},
+				},
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+					},
+				},
+			},
+			foldingRange = {
+				dynamicRegistration = true,
+				lineFoldingOnly = true,
+				rangeLimit = 5000,
+			},
+			formatting = {
+				dynamicRegistration = true,
+			},
+			hover = {
+				contentFormat = {
+					[1] = "markdown",
+					[2] = "plaintext",
+				},
+				dynamicRegistration = true,
+			},
+			implementation = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+			onTypeFormatting = {
+				dynamicRegistration = true,
+			},
+			publishDiagnostics = {
+				complexDiagnosticCodeSupport = true,
+				relatedInformation = true,
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+						[2] = 2,
+					},
+				},
+				versionSupport = false,
+			},
+			rangeFormatting = {
+				dynamicRegistration = true,
+			},
+			references = {
+				dynamicRegistration = true,
+			},
+			rename = {
+				dynamicRegistration = true,
+				prepareSupport = true,
+			},
+			selectionRange = {
+				dynamicRegistration = true,
+			},
+			semanticTokens = {
+				dynamicRegistration = true,
+				tokenModifiers = {
+					[10] = "defaultLibrary",
+					[1] = "declaration",
+					[2] = "definition",
+					[3] = "readonly",
+					[4] = "static",
+					[5] = "deprecated",
+					[6] = "abstract",
+					[7] = "async",
+					[8] = "modification",
+					[9] = "documentation",
+				},
+				tokenTypes = {
+					[01] = "namespace",
+					[02] = "type",
+					[03] = "class",
+					[04] = "enum",
+					[05] = "interface",
+					[06] = "struct",
+					[07] = "typeParameter",
+					[08] = "parameter",
+					[09] = "variable",
+					[10] = "property",
+					[11] = "enumMember",
+					[12] = "event",
+					[13] = "function",
+					[14] = "member",
+					[15] = "macro",
+					[16] = "keyword",
+					[17] = "modifier",
+					[18] = "comment",
+					[19] = "string",
+					[20] = "number",
+					[21] = "regexp",
+					[22] = "operator",
+				},
+			},
+			signatureHelp = {
+				contextSupport = true,
+				dynamicRegistration = true,
+				signatureInformation = {
+					activeParameterSupport = true,
+					documentationFormat = {
+						[1] = "markdown",
+						[2] = "plaintext",
+					},
+					parameterInformation = {
+						labelOffsetSupport = true,
+					},
+				},
+			},
+			synchronization = {
+				didSave = true,
+				dynamicRegistration = true,
+				willSave = true,
+				willSaveWaitUntil = true,
+			},
+			typeDefinition = {
+				dynamicRegistration = true,
+				linkSupport = true,
+			},
+		},
+		window = {
+			workDoneProgress = true,
+		},
+		workspace = {
+			applyEdit = true,
+			configuration = true,
+			didChangeConfiguration = {
+				dynamicRegistration = true,
+			},
+			didChangeWatchedFiles = {
+				dynamicRegistration = true,
+			},
+			executeCommand = {
+				dynamicRegistration = true,
+			},
+			symbol = {
+				dynamicRegistration = true,
+				symbolKind = {
+					valueSet = {
+						[01] = 1,
+						[02] = 2,
+						[03] = 3,
+						[04] = 4,
+						[05] = 5,
+						[06] = 6,
+						[07] = 7,
+						[08] = 8,
+						[09] = 9,
+						[10] = 10,
+						[11] = 11,
+						[12] = 12,
+						[13] = 13,
+						[14] = 14,
+						[15] = 15,
+						[16] = 16,
+						[17] = 17,
+						[18] = 18,
+						[19] = 19,
+						[20] = 20,
+						[21] = 21,
+						[22] = 22,
+						[23] = 23,
+						[24] = 24,
+						[25] = 25,
+						[26] = 26,
+					},
+				},
+				tagSupport = {
+					valueSet = {
+						[1] = 1,
+					},
+				},
+			},
+			workspaceEdit = {
+				documentChanges = true,
+				failureHandling = "textOnlyTransactional",
+				resourceOperations = {
+					[1] = "create",
+					[2] = "rename",
+					[3] = "delete",
+				},
+			},
+			workspaceFolders = true,
+		},
+	},
+	clientInfo = {
+		name = "vscode",
+		version = "1.47.3",
+	},
+	processId = 11888,
+	rootPath = "c:\\Users\\Andres\\Desktop\\rbr",
+	rootUri = "file:///c%3A/Users/Andres/Desktop/rbr",
+	trace = "off",
+	workspaceFolders = {
+		[1] = {
+			name = "rbr",
+			uri = "file:///c%3A/Users/Andres/Desktop/rbr",
+		},
+	},
+}
+[2020-08-09 01:44:20.493][info][script.service:181]: Add workspace	rbr	file:///c%3A/Users/Andres/Desktop/rbr
+[2020-08-09 01:44:20.494][debug][script.async.async:55]: Create thread, id: 	2	task: 	loadfile
+[2020-08-09 01:44:20.494][info][script.workspace:145]: Workspace inited, root: 	c:/Users/Andres/Desktop/rbr
+[2020-08-09 01:44:20.494][info][script.workspace:146]: Workspace inited, uri: 	file:///c%3A/Users/Andres/Desktop/rbr
+[2020-08-09 01:44:20.494][info][script.workspace:148]: Log path: 	c:/Users/Andres/.vscode/extensions/sumneko.lua-0.20.3/server/log/file_c%3A_Users_Andres_Desktop_rbr.log
+[2020-08-09 01:44:20.511][debug][script.config:204]: Config update: 	{
+	color = {
+		mode = "Semantic",
+	},
+	completion = {
+		callSnippet = "Disable",
+		displayContext = 6,
+		enable = true,
+		fastAutocompletion = true,
+		keywordSnippet = "Replace",
+		private = false,
+	},
+	diagnostics = {
+		datamodelAsIgnore = true,
+		disable = {
+			["deprecated-rbx-member"] = true,
+			["lowercase-global"] = true,
+		},
+		enable = true,
+		globals = {
+			self = true,
+		},
+		ignore = {
+			ChildValue = true,
+			Disabled = true,
+			Field = true,
+			GameSettings = true,
+			HumanoidRootPart = true,
+			Label = true,
+			LowerAngle = true,
+			Resources = true,
+			Suggest = true,
+			TextBox = true,
+			Typed = true,
+		},
+		severity = {
+			["ambiguity-1"] = "Warning",
+			["deprecated-rbx-member"] = "Information",
+			["duplicate-index"] = "Warning",
+			["duplicate-method"] = "Warning",
+			["emmy-lua"] = "Warning",
+			["empty-block"] = "Hint",
+			["global-in-nil-env"] = "Warning",
+			["incorrect-call-arguments"] = "Warning",
+			["invalid-rbx-classname"] = "Warning",
+			["lowercase-global"] = "Information",
+			["newfield-call"] = "Warning",
+			["newline-call"] = "Information",
+			["redefined-local"] = "Information",
+			["redundant-parameter"] = "Information",
+			["redundant-value"] = "Warning",
+			["set-const"] = "Error",
+			["set-for-state"] = "Warning",
+			["trailing-space"] = "Hint",
+			["undefined-env-child"] = "Information",
+			["undefined-global"] = "Warning",
+			["undefined-rbx-member"] = "Warning",
+			["unused-function"] = "Hint",
+			["unused-label"] = "Hint",
+			["unused-local"] = "Hint",
+			["unused-vararg"] = "Hint",
+		},
+		syntax = true,
+	},
+	hover = {
+		enable = true,
+		viewNumber = true,
+		viewString = true,
+		viewStringMax = 1000,
+	},
+	plugin = {
+		enable = false,
+		path = ".vscode/lua-plugin/*.lua",
+	},
+	runtime = {
+		library = {
+		},
+		path = {
+			[1] = "?.lua",
+			[2] = "?/init.lua",
+			[3] = "?/?.lua",
+		},
+		version = "Luau",
+	},
+	signatureHelp = {
+		enable = true,
+	},
+	workspace = {
+		ignoreDir = {
+			["*.spec.lua"] = true,
+			[".vscode"] = true,
+			["src/ReplicatedStorage/Packages"] = true,
+		},
+		ignoreSubmodules = true,
+		library = {
+		},
+		loadMode = "All Files",
+		maxPreload = 1000,
+		preloadFileSize = 100,
+		rojoProjectFile = "default",
+		useGitIgnore = true,
+	},
+}	{
+	associations = {
+	},
+	exclude = {
+		["**/.DS_Store"] = true,
+		["**/.git"] = true,
+		["**/.hg"] = true,
+		["**/.svn"] = true,
+		["**/CVS"] = true,
+	},
+}
+[2020-08-09 01:44:20.511][debug][script.service:856]: reDiagnostic
+[2020-08-09 01:44:20.511][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:20.511][debug][script.capability.completion:27]: Enable completion.
+[2020-08-09 01:44:20.511][debug][script.capability.semantic:26]: Enable semantic.
+[2020-08-09 01:44:20.512][debug][script.service:828]: reScanFiles
+[2020-08-09 01:44:20.512][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:20.512][debug][script.async.async:55]: Create thread, id: 	3	task: 	scanfiles
+[2020-08-09 01:44:20.513][debug][script.method.initialized:77]: client/registerCapability Success!
+[2020-08-09 01:44:20.513][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:20.622][debug][script.workspace:117]: Scanning:	c:/Users/Andres/Desktop/rbr
+[2020-08-09 01:44:20.622][debug][script.workspace:117]: Scan pattern:	{
+	[1] = ".vscode",
+	[2] = "src/ReplicatedStorage/Packages",
+	[3] = "*.spec.lua",
+	[4] = "**/CVS",
+	[5] = "**/.git",
+	[6] = "**/.svn",
+	[7] = "**/.hg",
+	[8] = "**/.DS_Store",
+}
+[2020-08-09 01:44:20.622][debug][script.workspace:117]: Scan options:	{
+	ignoreCase = true,
+}
+[2020-08-09 01:44:20.623][info][script.workspace:111]: Scan finish, got	163	files.
+[2020-08-09 01:44:20.631][debug][script.service:413]: reCompile:	1	1
+[2020-08-09 01:44:20.673][debug][script.service:886]: collectgarbage: 	0.042
+[2020-08-09 01:44:20.675][debug][script.service:957]: 
+State
+Main Mem:  [28049.838]kb
+#001 Mem:  [109.131]kb
+#002 Mem:  <Unknown>
+#003 Mem:  <Unknown>
+-------------------
+CachedVM:  [0]
+AlivedVM:  [0]
+DeadVM:    [0]
+-------------------
+CachedSrc: [0]
+AlivedSrc: [1]
+DeadSrc:   [1]
+-------------------
+CachedFunc:[0]
+AlivedFunc:[0]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [4403]
+DeadVal:   [4403]
+-------------------
+TotalLoc:  [0]
+TotalEmmy: [465]
+
+[2020-08-09 01:44:20.675][debug][script.service:999]: test memory: 	0.002
+[2020-08-09 01:44:20.675][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:20.798][debug][script.service:331]: Read failed due to duplicate:	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:50.793][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:53.579][debug][script.service:65]: Task [textDocument/completion] takes [0.201]sec.
+[2020-08-09 01:44:54.293][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:54.867][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:55.064][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:55.793][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:44:55.903][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:00.130][debug][script.service:598]: Compile VM[file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/Libraries/Roblox.lua] takes: 0.373 sec
+[2020-08-09 01:45:10.186][debug][script.service:598]: Compile VM[file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/Libraries/BaseWeapon.lua] takes: 0.349 sec
+[2020-08-09 01:45:14.078][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:14.138][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:15.442][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:17.415][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:17.812][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:18.259][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:18.339][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:19.109][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:20.423][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:20.641][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:21.211][debug][script.service:886]: collectgarbage: 	0.193
+[2020-08-09 01:45:21.246][debug][script.service:957]: 
+State
+Main Mem:  [137874.601]kb
+#001 Mem:  [162.263]kb
+#002 Mem:  [79.209]kb
+#003 Mem:  [84.826]kb
+-------------------
+CachedVM:  [163]
+AlivedVM:  [163]
+DeadVM:    [0]
+-------------------
+CachedSrc: [117056]
+AlivedSrc: [144599]
+DeadSrc:   [0]
+-------------------
+CachedFunc:[1550]
+AlivedFunc:[4679]
+DeadFunc:  [0]
+-------------------
+TotalVal:  [37435]
+DeadVal:   [5598]
+-------------------
+TotalLoc:  [11679]
+TotalEmmy: [466]
+
+[2020-08-09 01:45:21.246][debug][script.service:999]: test memory: 	0.034
+[2020-08-09 01:45:25.252][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:38.204][debug][script.service:125]: clearDiagnostics	file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/WeaponsSystem/WeaponTypes/BulletWeapon.lua
+[2020-08-09 01:45:48.283][warn][script.service:560]: Compile Ast[file:///c%3A/Users/Andres/Desktop/rbr/src/ReplicatedStorage/BuildingSystem/Libraries/Input.lua] takes [0.214] sec, size [10.176]kb
+[2020-08-09 01:46:05.978][info][script.method.shutdown:2]: Server shutdown.
+[2020-08-09 01:46:05.991][info][script.method.exit:2]: Server exited.

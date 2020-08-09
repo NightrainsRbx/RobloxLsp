@@ -1,0 +1,5 @@
+[profilebegin]
+description = 'Opens a microprofiler label.'
+
+[profileend]
+description = 'Closes the top microprofiler label.'
