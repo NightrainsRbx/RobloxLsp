@@ -31,7 +31,8 @@
 - [x] Multi Workspace
 - [x] Semantic Tokens
 
-## More Info: [https://devforum.roblox.com/](https://devforum.roblox.com/)
+## More Info
+https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745
 
 ### Preview
 
