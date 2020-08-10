@@ -2,6 +2,8 @@
 
 [Original Project](https://github.com/sumneko/lua-language-server) by [sumneko](https://github.com/sumneko)
 
+[VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Nightrains.robloxlsp)
+
 ## Feature
 
 - [x] Full Roblox Environment
