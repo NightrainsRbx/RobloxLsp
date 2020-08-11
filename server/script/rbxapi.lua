@@ -80,6 +80,13 @@ rbxApi.CorrectReturns = {
     },
     Workspace = {
         Terrain = "Terrain"
+    },
+    Plugin = {
+        CreateDockWidgetPluginGui = "DockWidgetPluginGui",
+        CreatePluginAction = "PluginAction",
+        CreatePluginMenu = "PluginMenu",
+        CreateToolbar = "PluginToolbar",
+        GetMouse = "PluginMouse"
     }
 }
 
@@ -874,6 +881,11 @@ local function getCorrectParam(className, memberName, paramName)
     end
 end
 
+local MemberSecurity = {
+    None = true,
+    PluginSecurity = true
+}
+
 function rbxApi:getMembers(members, methods, className)
     local data = {}
     for _, member in pairs(members) do
@@ -899,10 +911,10 @@ function rbxApi:getMembers(members, methods, className)
             end
         end
         if member.Security then
-            if type(member.Security) == "string" and member.Security ~= "None" then
+            if type(member.Security) == "string" and not MemberSecurity[member.Security] then
                 goto CONTINUE
             elseif type(member.Security) == "table" then
-                if member.Security.Read ~= "None" then
+                if not MemberSecurity[member.Security.Read] then
                     goto CONTINUE
                 end
             end
