@@ -50,11 +50,11 @@
 					"type": "boolean"
 				},
 				"Lua.completion.displayContext": {
-                    "default": 6,
-                    "markdownDescription": "%config.completion.displayContext%",
-                    "scope": "resource",
-                    "type": "integer"
-                },
+					"default": 6,
+					"markdownDescription": "%config.completion.displayContext%",
+					"scope": "resource",
+					"type": "integer"
+				},
 				"Lua.completion.private": {
 					"default": false,
 					"markdownDescription": "%config.completion.private%",
@@ -290,16 +290,16 @@
 							"type": "string"
 						},
 						"set-for-state": {
-                            "default": "Warning",
-                            "enum": [
-                                "Error",
-                                "Warning",
-                                "Information",
-                                "Hint"
-                            ],
-                            "scope": "resource",
-                            "type": "string"
-                        },
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
 						"trailing-space": {
 							"default": "Hint",
 							"enum": [
@@ -427,34 +427,34 @@
 					"type": "object"
 				},
 				"Lua.hover.enable": {
-                    "default": true,
-                    "markdownDescription": "%config.hover.enable%",
-                    "scope": "resource",
-                    "type": "boolean"
-                },
-                "Lua.hover.viewNumber": {
-                    "default": true,
-                    "markdownDescription": "%config.hover.viewNumber%",
-                    "scope": "resource",
-                    "type": "boolean"
-                },
-                "Lua.hover.viewString": {
-                    "default": true,
-                    "markdownDescription": "%config.hover.viewString%",
-                    "scope": "resource",
-                    "type": "boolean"
-                },
-                "Lua.hover.viewStringMax": {
-                    "default": 1000,
-                    "markdownDescription": "%config.hover.viewStringMax%",
-                    "scope": "resource",
-                    "type": "integer"
-                },
+					"default": true,
+					"markdownDescription": "%config.hover.enable%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.hover.viewNumber": {
+					"default": true,
+					"markdownDescription": "%config.hover.viewNumber%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.hover.viewString": {
+					"default": true,
+					"markdownDescription": "%config.hover.viewString%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.hover.viewStringMax": {
+					"default": 1000,
+					"markdownDescription": "%config.hover.viewStringMax%",
+					"scope": "resource",
+					"type": "integer"
+				},
 				"Lua.runtime.path": {
 					"default": [
 						"?.lua",
-                        "?/init.lua",
-                        "?/?.lua"
+						"?/init.lua",
+						"?/?.lua"
 					],
 					"items": {
 						"type": "string"
@@ -611,5 +611,10 @@
 		"type": "git",
 		"url": "https://github.com/NightrainsRbx/RobloxLsp"
 	},
-	"version": "0.10.0"
+	"version": "0.10.1",
+	"__metadata": {
+		"id": "169d2b9c-69d2-482a-aee2-ea6c33ed4e89",
+		"publisherDisplayName": "Nightrains",
+		"publisherId": "e1e7384e-2406-4940-a937-5fad58f8815e"
+	}
 }
