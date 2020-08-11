@@ -609,7 +609,7 @@
 	"publisher": "Nightrains",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/sumneko/lua-language-server"
+		"url": "https://github.com/NightrainsRbx/RobloxLsp"
 	},
 	"version": "0.10.0"
 }

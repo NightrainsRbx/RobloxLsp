@@ -1,6 +1,18 @@
-# lua-language-server
+# Roblox Luau Language Server
+
+[Original Project](https://github.com/sumneko/lua-language-server) by [sumneko](https://github.com/sumneko)
+
+[VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Nightrains.robloxlsp)
 
 ## Feature
+
+- [x] Full Roblox Environment
+- [x] Basic Luau Syntax
+- [x] Roblox Classes and Datatypes
+- [x] Support for [Rojo](https://github.com/Roblox/rojo)
+- [x] Intellisense for Modules
+- [x] Import Instance Tree
+- [x] Custom Diagnostics for Roblox Classes
 
 - [x] Goto Definition
 - [x] Find All References
@@ -11,83 +23,25 @@
 - [x] IntelliSense
 - [x] Signature Help
 - [x] Document Symbols
+- [x] Workspace Symbols
 - [x] Syntax Check
 - [x] Highlight
 - [x] Code Action
 - [x] EmmyLua Annotation
 - [x] Multi Workspace
-- [ ] Type Format
+- [x] Semantic Tokens
 
-## Preview
+## More Info
+https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745
 
-### Goto Definition
+### Preview
 
-![avatar](https://github.com/sumneko/vscode-lua/raw/master/images//Goto%20Definition.gif)
-
-### Find All References
-
-![avatar](https://github.com/sumneko/vscode-lua/raw/master/images//Find%20All%20References.gif)
-
-### Hover
-
-![avatar](https://github.com/sumneko/vscode-lua/raw/master/images/Hover.gif)
-
-### Diagnostics
-
-![avatar](https://github.com/sumneko/vscode-lua/raw/master/images/Diagnostics.gif)
-
-### Rename
-
-![avatar](https://github.com/sumneko/vscode-lua/raw/master/images/Rename.gif)
-
-### Auto Completion
-
-![avatar](https://github.com/sumneko/vscode-lua/raw/master/images/Auto%20Completion.gif)
-
-### Signature Help
-
-![avatar](https://github.com/sumneko/vscode-lua/raw/master/images/Signature%20Help.gif)
-
-### Emmy Annotation
-
-![avatar](https://github.com/sumneko/vscode-lua/raw/master/images/Emmy%20Annotation.gif)
-
-## Version
-
-- [x] Lua 5.1
-- [x] Lua 5.2
-- [x] Lua 5.3
-- [x] Lua 5.4
-- [x] LuaJIT
-
-If you find any mistakes, please [tell me][issues] or use [Pull Requests][@lua] to fix them directly.
-
-如果你发现了任何错误，请[告诉我][issues]或使用[Pull Requests][@lua]来直接修复。
-
-[issues]: https://github.com/sumneko/lua-language-server/issues
-[@lua]: https://github.com/sumneko/lua-language-server/tree/master/libs/%40lua
-
-## Locale
-
-- [x] en-US
-- [x] zh-CN
-
-Please [help me][en-US] improve the quality of `en-US`.
-
-[en-US]: https://github.com/sumneko/lua-language-server/tree/master/locale/en-US
-
-## Build
-
-* [Build and Run (In VSCode)](https://github.com/sumneko/lua-language-server/wiki/Build-and-Run-(In-VSCode))
-* [Build and Run (Standalone)](https://github.com/sumneko/lua-language-server/wiki/Build-and-Run-(Standalone))
-
-## Setting
-
-* In VSCode: Just use the setting of VSCode.
-* Standalone: See https://github.com/sumneko/lua-language-server/wiki/Setting-without-VSCode
+![avatar](https://i.imgur.com/4sgYDii.gif)
+![avatar](https://i.imgur.com/vHbKIJ0.gif)
 
 ## Credit
 
+* [lua-language-server](https://github.com/sumneko/lua-language-server)
 * [bee.lua](https://github.com/actboy168/bee.lua)
 * [luamake](https://github.com/actboy168/luamake)
 * [lni](https://github.com/actboy168/lni)
@@ -105,6 +59,7 @@ Please [help me][en-US] improve the quality of `en-US`.
 
 ## Acknowledgement
 
+* [sumneko](https://github.com/sumneko)
 * [actboy168](https://github.com/actboy168)
 * [Dmitry Sannikov](https://github.com/dasannikov)
 * [Jayden Charbonneau](https://github.com/Reshiram110)
