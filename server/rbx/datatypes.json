@@ -1470,6 +1470,91 @@
                 }
             ],
             "Name": "RaycastParams"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {   
+                            "Name": "initDockState",
+                            "Default": "Right",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": [
+                                    "InitialDockState"
+                                ]
+                            }
+                        },
+                        {   
+                            "Name": "initEnabled",
+                            "Default": "false",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "boolean"
+                                ]
+                            }
+                        },
+                        {   
+                            "Name": "overrideEnabledRestore",
+                            "Default": "false",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "boolean"
+                                ]
+                            }
+                        },
+                        {   
+                            "Name": "floatXSize",
+                            "Default": "0",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "integer"
+                                ]
+                            }
+                        },
+                        {   
+                            "Name": "floatYSize",
+                            "Default": "0",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "integer"
+                                ]
+                            }
+                        },
+                        {   
+                            "Name": "minWidth",
+                            "Default": "0",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "integer"
+                                ]
+                            }
+                        },
+                        {   
+                            "Name": "minHeight",
+                            "Default": "0",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "integer"
+                                ]
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "",
+                        "Name": "DockWidgetPluginGuiInfo"
+                    }
+                }
+            ],
+            "Name": "DockWidgetPluginGuiInfo"
         }
     ],
     "DataTypes": [
@@ -3871,8 +3956,8 @@
                     "MemberType": "Property",
                     "Name": "Material",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "Enum.Material"
+                        "Category": "Enum",
+                        "Name": "Material"
                     }
                 },
                 {
@@ -3885,6 +3970,59 @@
                 }
             ],
             "Name": "RaycastResult"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Property",
+                    "Name": "InitialEnabled",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "boolean"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "InitialEnabledShouldOverrideRestore",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "boolean"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "FloatingXSize",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "integer"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "FloatingYSize",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "integer"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "MinWidth",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "integer"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "MinHeight",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "integer"
+                    }
+                }
+            ],
+            "Name": "DockWidgetPluginGuiInfo"
         }
     ]
 }
