@@ -114,7 +114,7 @@ type = 'table'
 version = {'Lua 5.1', 'LuaJIT', 'Luau'}
 [[.args]]
 name = f
-type = function
+type = 'any'
 optional = after
 default = 1
 [[.returns]]
@@ -503,9 +503,6 @@ value = 'Lua 5.4'
 [warn]
 version = {'Lua 5.4', 'Luau'}
 [[.args]]
-name = 'message'
-type = 'string'
-``````````
 type = '...'
 
 [xpcall]

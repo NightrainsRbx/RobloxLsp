@@ -270,7 +270,8 @@ local function buildEmmy(keys, type, emmy)
                 start = type.start,
                 finish = type.finish,
                 [1] = type[1]
-            }
+            },
+            temp = true
         }
     elseif emmy == "emmyParam" and keys.type == "name" then
         return {
@@ -293,7 +294,8 @@ local function buildEmmy(keys, type, emmy)
                     finish = type.finish,
                     [1] = type[1]
                 }
-            }
+            },
+            temp = true
         }
     elseif emmy == "emmyReturn" then
         return {
@@ -310,7 +312,8 @@ local function buildEmmy(keys, type, emmy)
                     finish = type.finish,
                     [1] = type[1]
                 }
-            }
+            },
+            temp = true
         }
     end
 end

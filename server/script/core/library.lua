@@ -271,6 +271,15 @@ local function initRbxTypes(rbxLibs)
     end
 end
 
+local function findLibFolder()
+    if fs.exists(fs.current_path() / 'lib') then
+        return fs.current_path() / 'lib'
+    end
+    if fs.exists(fs.current_path() / '.lib') then
+        return fs.current_path() / '.lib'
+    end
+end
+
 local function init()
     local lang = require 'language'
     local id = lang.id
@@ -304,8 +313,9 @@ local function init()
             mergeLibs(Library, libs, libName)
         end
     end
-    if fs.exists(fs.current_path() / 'lib') then
-        for path in scan(fs.current_path() / 'lib') do
+    local libFolderPath = findLibFolder()
+    if libFolderPath then
+        for path in scan(libFolderPath) do
             if tostring(path):match("%.lni$") then
                 local libs
                 local buf = io.load(path)
