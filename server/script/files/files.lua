@@ -8,20 +8,18 @@ mt._fileCount = 0
 ---@type table<uri, file>
 mt._files = nil
 
-LUA_NAMES = {}
-
 local function findNames(uri, text)
     local names = {}
     for name in text:gmatch("[%w_]+") do
         names[name] = names[name] and names[name] + 1 or 1
     end
-    LUA_NAMES[uri] = names
+    -- LUA_NAMES[uri] = names
 end
 
 ---@param uri uri
 ---@param text string
 function mt:save(uri, text, version)
-    findNames(uri, text)
+    -- findNames(uri, text)
     local f = self._files[uri]
     if not f then
         f = file(uri)

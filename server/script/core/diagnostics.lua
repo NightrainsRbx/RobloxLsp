@@ -37,15 +37,15 @@ local function isDeprecated(member, className)
 end
 
 local function isDoubleIndexed(index)
-    local amount = 0
-    for _, names in pairs(LUA_NAMES) do
-        if names[index] then
-            amount = amount + names[index]
-        end
-    end
-    if amount > 1 then
-        return true
-    end
+    -- local amount = 0
+    -- for _, names in pairs(LUA_NAMES) do
+    --     if names[index] then
+    --         amount = amount + names[index]
+    --     end
+    -- end
+    -- if amount > 1 then
+    --     return true
+    -- end
 end
 
 function mt:searchInvalidRbxClass(callback)
