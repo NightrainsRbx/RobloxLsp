@@ -120,7 +120,7 @@ local Care = {
             --     }
             --     return
             -- end
-            if value:getType():sub(1, 4) == "Enum" then
+            if value:getType():sub(1, 4) == "Enum" and source:get("simple")[1][1] == "Enum" then
                 sources[#sources+1] = {
                     start      = source.start,
                     finish     = source.finish,
