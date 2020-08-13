@@ -287,9 +287,11 @@ FreeName    <-  Sp ({} {NameBody=>NotReserved} {})
 MustName    <-  Name / DirtyName
 DirtyName   <-  {} -> DirtyName
 
-VarType     <-  (COLON %s+ Name Cut)
+VarType     <-  (COLON Sp Name '?'? Cut)
             ->  VarType
-ReturnType  <-  (COLON %s+ (LineName / BAR Sp)* (SEMICOLON /%nl))
+ReturnType  <-  (COLON Sp LineName* '?'? %s* (SEMICOLON / %nl))
+            ->  ReturnType
+MultiReturnType  <-  (COLON Sp PL (LineName '?'? / COMMA Sp)* PR (SEMICOLON /%nl))
             ->  ReturnType
 ]]
 
@@ -357,7 +359,7 @@ Function    <-  Sp ({} FunctionBody {})
             ->  Function
 FuncArg     <-  PL {} ArgList {} NeedPR
             /   {} {} -> MissPL Nothing {}
-FunctionBody<-  FUNCTION BlockStart FuncArg ReturnType?
+FunctionBody<-  FUNCTION BlockStart FuncArg (MultiReturnType / ReturnType)?
                     (Emmy / !END Action)*
                     BlockEnd
                 NeedEnd
@@ -520,7 +522,7 @@ NamedFunction
             <-  Sp ({} FunctionNamedBody {})
             ->  NamedFunction
 FunctionNamedBody
-            <-  FUNCTION FuncName BlockStart FuncArg ReturnType?
+            <-  FUNCTION FuncName BlockStart FuncArg (MultiReturnType / ReturnType)?
                     (Emmy / !END Action)*
                     BlockEnd
                 NeedEnd
