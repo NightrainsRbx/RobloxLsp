@@ -120,14 +120,16 @@ local Care = {
             --     }
             --     return
             -- end
-            if value:getType():sub(1, 4) == "Enum" and source:get("simple")[1][1] == "Enum" then
-                sources[#sources+1] = {
-                    start      = source.start,
-                    finish     = source.finish,
-                    type       = TokenTypes.enum,
-                    modifieres = TokenModifiers.static,
-                }
-                return
+            if value:getType():sub(1, 4) == "Enum" then
+                local simple = source:get("simple")
+                if simple and simple[1] and simple[1][1] == "Enum" then
+                    sources[#sources+1] = {
+                        start      = source.start,
+                        finish     = source.finish,
+                        type       = TokenTypes.enum,
+                        modifieres = TokenModifiers.static,
+                    }
+                end
             end
         end
     end,

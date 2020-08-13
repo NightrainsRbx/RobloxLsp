@@ -87,6 +87,12 @@ rbxApi.CorrectReturns = {
         CreatePluginMenu = "PluginMenu",
         CreateToolbar = "PluginToolbar",
         GetMouse = "PluginMouse"
+    },
+    PluginToolbar = {
+        CreateButton = "PluginToolbarButton"
+    },
+    PluginMenu = {
+        AddNewAction = "PluginAction"
     }
 }
 
