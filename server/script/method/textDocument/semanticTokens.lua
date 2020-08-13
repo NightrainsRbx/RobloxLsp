@@ -31,7 +31,7 @@ local constLib = {
     -- ['Enum']              = true,
 }
 local Care = {
-    ['name'] = function (source, sources)
+    ['name'] = function(source, sources)
         if source[1] == '' then
             return
         end
@@ -133,6 +133,17 @@ local Care = {
             end
         end
     end,
+    ['emmyName'] = function(source, sources)
+        if source[1] == '' or not source.syntax then
+            return
+        end
+        sources[#sources+1] = {
+            start      = source.start,
+            finish     = source.finish,
+            type       = TokenTypes.type,
+            modifieres = TokenModifiers.static,
+        }
+    end
 }
 
 local function buildTokens(sources, lines)

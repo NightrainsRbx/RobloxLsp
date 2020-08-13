@@ -269,6 +269,7 @@ local function buildEmmy(keys, type, emmy)
                 type = "emmyName",
                 start = type.start,
                 finish = type.finish,
+                syntax = true,
                 [1] = type[1]
             },
             temp = true
@@ -292,6 +293,7 @@ local function buildEmmy(keys, type, emmy)
                     type = "emmyName",
                     start = type.start,
                     finish = type.finish,
+                    syntax = true,
                     [1] = type[1]
                 }
             },
@@ -310,6 +312,7 @@ local function buildEmmy(keys, type, emmy)
                     type = "emmyName",
                     start = type.start,
                     finish = type.finish,
+                    syntax = true,
                     [1] = type[1]
                 }
             },

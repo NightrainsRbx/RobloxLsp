@@ -27,7 +27,7 @@
                     "name": "punctuation.definition.parameters.begin.lua"
                 }
             },
-            "end": "\\)(: *([\\w ,]+))?",
+            "end": "\\)(: +([\\w ,]+))?",
             "endCaptures": {
                 "0": {
                     "name": "punctuation.definition.parameters.end.lua"
@@ -48,7 +48,7 @@
 							"name": "support.type"
 						}
 					},
-					"match": "(: *(\\w+))"
+					"match": "(: +(\\w+))"
 				},
                 {
                     "match": ",",
@@ -326,7 +326,7 @@
 					"name": "support.type"
 				}
 			},
-			"match": "(\\w+)(: *(\\w+)[), =]?)?"
+			"match": "(\\w+)(: +(\\w+)[), =]?)?"
 		}
     ],
     "repository": {
