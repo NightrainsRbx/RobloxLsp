@@ -289,9 +289,9 @@ DirtyName   <-  {} -> DirtyName
 
 VarType     <-  (COLON Sp Name '?'? Cut)
             ->  VarType
-ReturnType  <-  (COLON Sp LineName* '?'? %s* (SEMICOLON / %nl))
+ReturnType  <-  (COLON Sp LineName* '?'?)
             ->  ReturnType
-MultiReturnType  <-  (COLON Sp PL (LineName '?'? / COMMA Sp)* PR (SEMICOLON /%nl))
+MultiReturnType  <-  (COLON Sp PL (LineName '?'? / COMMA Sp)* PR)
             ->  ReturnType
 ]]
 
