@@ -2,6 +2,7 @@ local libraryBuilder = require 'vm.library'
 local library = require 'core.library'
 local listMgr = require 'vm.list'
 local config = require 'config'
+local rbxApi = require 'rbxapi'
 
 local Sort = 0
 local Watch = setmetatable({}, {__mode = 'kv'})
@@ -245,7 +246,11 @@ function mt:getChild(index, source, uri)
             end
         end
         if not value then
-            value = create('any', source)
+            if rbxApi:isInstance(parent:getType()) and not rbxApi.AllMembers[index] then
+                value = create('Instance', source)
+            else
+                value = create('any', source)
+            end
         end
         self:setChild(index, value)
         value.uri = self.uri
