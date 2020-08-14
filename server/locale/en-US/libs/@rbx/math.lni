@@ -6,3 +6,6 @@ description = 'Returns a value between -0.5 and 0.5 generated from its arguments
 
 [sign]
 description = 'Returns -1 if ``x < 0``, 0 if ``x == 0``, or 1 if ``x > 0``.'
+
+[round]
+description = "Rounds ``x`` to the nearest integer; rounds away from zero if we're midway between two integers."

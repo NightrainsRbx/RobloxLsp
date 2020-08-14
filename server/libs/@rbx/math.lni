@@ -53,3 +53,11 @@ name = 'x'
 type = 'number'
 [[.returns]]
 type = 'number'
+
+[round]
+[[.args]]
+name = 'x'
+type = 'number'
+[[.returns]]
+type = 'integer'
+

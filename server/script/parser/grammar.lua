@@ -108,7 +108,7 @@ Rest        <-  (!%nl .)*
 
 AND         <-  Sp {'and'}    Cut
 BREAK       <-  Sp 'break'    Cut
-CONTINUE    <-  Sp 'continue' Cut
+CONTINUE    <-  Sp 'continue' Cut Sp ';'? !%p
 DO          <-  Sp 'do'       Cut
             /   Sp ({} 'then' Cut {}) -> ErrDo
 ELSE        <-  Sp 'else'     Cut

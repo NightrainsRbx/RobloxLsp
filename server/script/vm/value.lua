@@ -499,6 +499,9 @@ function mt:addInfo(tp, source, ...)
     end
 
     local infos = self._info
+    if not infos then
+        return
+    end
     if infos[id] then
         return
     end
