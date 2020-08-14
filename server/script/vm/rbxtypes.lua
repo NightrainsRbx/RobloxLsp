@@ -193,7 +193,7 @@ function mt:doTypedFunction(source)
             if not childName then
                 return
             end
-            local child = object:getChild(childName, source)
+            local child = object:getChild(childName, source, source.uri)
             if child and child:getLib() and child:getLib().obj then
                 local returns = createMulti()
                 returns:push(child)
@@ -247,7 +247,7 @@ function mt:doTypedFunction(source)
             if not parentInstance then
                 return
             end
-            value:setChild("Parent", parentInstance, source)
+            value:setChild("Parent", parentInstance, source, source.uri)
         end
         local returns = createMulti()
         returns:push(value)
@@ -382,18 +382,18 @@ function mt:findScriptByPath(uri)
     if not ENV then
         return
     end
-    local current = ENV:getValue():getChild("game")
+    local current = ENV:getValue():getChild("game", nil, "@global")
     if not current:getType() == "DataModel" then
         return
     end
     for _, name in pairs(split(path,'[\\/]+')) do
-        local child = current:getChild(name)
+        local child = current:getChild(name, nil, uri)
         if child and rbxApi:isInstance(child:getType()) then
             current = child
         end
     end
     if current then
-        local script = current:getChild(fileName)
+        local script = current:getChild(fileName, nil, uri)
         if script and rbxApi:isA(script:getType(), "LuaSourceContainer") then
             return script
         end
@@ -468,7 +468,7 @@ function mt:searchAeroModules(value)
             self.lsp:compileChain(self:getUri(), moduleUri)
             local module = self.lsp.chain:get(moduleUri)
             if module then
-                value:setChild(removeLuaExtension(fileName), module, self:getDefaultSource())
+                value:setChild(removeLuaExtension(fileName), module, self:getDefaultSource(), self:getUri())
             end
         end
         ::CONTINUE::

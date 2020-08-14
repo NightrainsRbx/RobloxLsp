@@ -404,11 +404,6 @@ function mt:searchUndefinedGlobal(callback)
     local envValue = buildGlobal(self.vm.lsp)
     envValue:eachInfo(function (info)
         if info.type == 'set child' then
-            if config.isLuau() then
-                if info[2].uri and #info[2].uri > 0 and info[2].uri ~= self.uri then
-                    return
-                end
-            end
             local name = info[1]
             definedGlobal[name] = true
         end

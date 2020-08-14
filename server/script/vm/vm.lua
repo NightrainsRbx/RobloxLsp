@@ -494,7 +494,7 @@ function mt:setName(name, source, value)
     end
     local ENVValue = ENV:getValue()
     source:bindValue(value, 'set')
-    ENVValue:setChild(name, value, source)
+    ENVValue:setChild(name, value, source, source.uri)
     source:set('global', true)
     source:set('parent', ENVValue)
     if self.lsp then
@@ -1067,10 +1067,10 @@ function mt:doFunction(action)
                 source:set('object', parent)
                 if source.type == 'index' then
                     local index = self:getIndex(source)
-                    parent:setChild(index, value, source[1])
+                    parent:setChild(index, value, source[1], source.uri)
                 elseif source.type == 'name' then
                     local index = source[1]
-                    parent:setChild(index, value, source)
+                    parent:setChild(index, value, source, source.uri)
                 end
                 source:bindValue(value, 'set')
 
@@ -1096,10 +1096,10 @@ function mt:doFunction(action)
                 source:set('parent', parent)
                 if source.type == 'index' then
                     local index = self:getIndex(source)
-                    parent:setChild(index, value, source[1])
+                    parent:setChild(index, value, source[1], source.uri)
                 elseif source.type == 'name' then
                     local index = source[1]
-                    parent:setChild(index, value, source)
+                    parent:setChild(index, value, source, source.uri)
                 end
                 source:bindValue(value, 'set')
             end

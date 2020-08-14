@@ -112,7 +112,7 @@ function mt:isDead()
     return self._dead
 end
 
-function mt:findValue()
+function mt:findValue(uri)
     local value = self:bindValue()
     if not value then
         return nil
@@ -131,7 +131,7 @@ function mt:findValue()
     if type(name) ~= 'string' then
         return value
     end
-    return parent:getChild(name) or value
+    return parent:getChild(name, nil, uri) or value
 end
 
 function mt:findCallFunction()
@@ -152,7 +152,7 @@ function mt:findCallFunction()
     if value and value:getFunction() then
         return value
     end
-    value = source:findValue()
+    value = source:findValue(source.uri)
     if value and value:getFunction() then
         return value
     end

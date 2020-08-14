@@ -16,7 +16,7 @@ return function (lsp)
         global:markGlobal()
         global:set('ENV', true)
         for k, v in pairs(t) do
-            global:setChild(k, v, sourceMgr.dummy())
+            global:setChild(k, v, sourceMgr.dummy(), "@global")
         end
     end
     if lsp then

@@ -352,13 +352,6 @@ local function searchFieldsByInfo(parent, word, source, map, srcMap)
         if source:get 'object' and v:getType() ~= 'function' then
             return
         end
-        if config.isLuau() then
-            if v._global and (not v.uri) or #v.uri == 0 then
-                if parent:get 'ENV' then
-                    return
-                end
-            end
-        end
         if matchKey(word, k) then
             map[k] = v
             srcMap[k] = src
@@ -410,7 +403,7 @@ local function searchFieldsByChild(parent, word, source, map, srcMap)
             map[k] = v
             srcMap[k] = src
         end
-    end)
+    end, source.uri)
 end
 
 ---@param vm VM

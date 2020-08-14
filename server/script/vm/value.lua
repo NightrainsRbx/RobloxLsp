@@ -60,7 +60,7 @@ local function addAeroService(value)
             local childs = libraryBuilder.child(lib)
             local services = childs.Services
             if services then
-                services:setChild(source[1], value, source)
+                services:setChild(source[1], value, source, source.uri)
             end
         end
     end
@@ -76,7 +76,7 @@ local function addAeroController(value)
         local childs = libraryBuilder.child(lib)
         local controllers = childs.Controllers
         if controllers then
-            controllers:setChild(source[1], value, source)
+            controllers:setChild(source[1], value, source, source.uri)
         end
     end
 end
@@ -141,30 +141,40 @@ function mt:getType()
     return mType or 'any', mRate
 end
 
-function mt:rawSet(index, value, source)
+function mt:rawSet(index, value, source, uri)
     if index == nil then
         return
     end
     if not self._child then
         self._child = {}
     end
-    if self._child[index] then
-        if self._child[index]._emmy and self._child[index]._emmy.temp then
-            self._child[index]._emmy = nil
+    local _child = self._child
+    if self:get 'ENV' and config.isLuau() then
+        if not uri or uri == "" then
+            return
+        end
+        if not self._child[uri] then
+            self._child[uri] = {}
+        end
+        _child = self._child[uri]
+    end
+    if _child[index] then
+        if _child[index]._emmy and _child[index]._emmy.temp then
+            _child[index]._emmy = nil
         end
         if self._global then
-            self._child[index]:mergeValue(value)
+            _child[index]:mergeValue(value)
         else
-            self._child[index]:mergeType(value)
-            self._child[index]:mergeInfo(value)
+            _child[index]:mergeType(value)
+            _child[index]:mergeInfo(value)
         end
-        self._child[index] = value
+        _child[index] = value
     else
-        self._child[index] = value
+        _child[index] = value
     end
-    self:addInfo('set child', source, index, self._child[index])
+    self:addInfo('set child', source, index, _child[index])
     if self._global then
-        self._child[index]:markGlobal()
+        _child[index]:markGlobal()
     end
 end
 
@@ -173,26 +183,24 @@ function mt:rawGet(index, uri)
         return nil
     end
     self:flushChild()
-    local child = self._child[index]
-    if not child then
-        return nil
-    end
-    if config.isLuau() then
-        if uri and child.uri and #child.uri > 1 and child._global and self:get 'ENV' then
-            if uri ~= child.uri then
-                return nil
-            end
+    if self:get 'ENV' and config.isLuau() then
+        if not uri or uri == "" then
+            return
         end
+        if not self._child[uri] or not self._child[uri][index] then
+            return self._child["@global"][index]
+        end
+        return self._child[uri][index]
     end
-    return child
+    return self._child[index]
 end
 
-function mt:setChild(index, value, source)
+function mt:setChild(index, value, source, uri)
     if index == nil then
         return
     end
     -- self:setType('table', 0.5)
-    self:rawSet(index, value, source)
+    self:rawSet(index, value, source, uri)
     return value
 end
 
@@ -252,8 +260,8 @@ function mt:getChild(index, source, uri)
                 value = create('any', source)
             end
         end
-        self:setChild(index, value)
         value.uri = self.uri
+        self:setChild(index, value, nil, uri)
     end
     return value
 end
@@ -303,56 +311,67 @@ function mt:flushChild()
     local alived = {}
     local infos = self._info
     local count = 0
-    for srcId, info in pairs(infos) do
-        local src = listMgr.get(srcId)
-        if  src then
-            if info.type == 'set child' or info.type == 'get child' then
-                if info[1] then
-                    alived[info[1]] = true
+    for uri, _child in pairs(self._child["@global"] and self._child or {self._child}) do
+        for srcId, info in pairs(infos) do
+            local src = listMgr.get(srcId)
+            if src then
+                if info.type == 'set child' or info.type == 'get child' then
+                    if info[1] then
+                        alived[info[1]] = true
+                    end
                 end
+                count = count + 1
+            else
+                infos[srcId] = nil
             end
-            count = count + 1
-        else
-            infos[srcId] = nil
         end
-    end
-    infos._count = count
-    infos._limit = count * 1.1 + 10
-    infos._version = listMgr.getVersion()
-    for index in pairs(self._child) do
-        if not alived[index] then
-            self._child[index] = nil
+        infos._count = count
+        infos._limit = count * 1.1 + 10
+        infos._version = listMgr.getVersion()
+        for index in pairs(_child) do
+            if not alived[index] then
+                _child[index] = nil
+            end
         end
     end
 end
 
-function mt:rawEach(callback, mark)
+function mt:rawEach(callback, mark, uri)
     if not self._child then
         return nil
     end
     self:flushChild()
-    for index, value in pairs(self._child) do
-        if mark then
-            if mark[index] then
-                goto CONTINUE
+    local _childs = {self._child}
+    if self:get 'ENV' and config.isLuau() then
+        _childs = {self._child["@global"]}
+        if uri then
+            _childs[#_childs+1] = self._child[uri]
+        end
+    end
+    for _, _child in pairs(_childs) do
+        for index, value in pairs(_child) do
+            if mark then
+                if mark[index] then
+                    goto CONTINUE
+                end
+                mark[index] = true
             end
-            mark[index] = true
+            local res = callback(index, value)
+            if res ~= nil then
+                return res
+            end
+            ::CONTINUE::
         end
-        local res = callback(index, value)
-        if res ~= nil then
-            return res
-        end
-        ::CONTINUE::
     end
     return nil
 end
 
-function mt:eachChild(callback)
+function mt:eachChild(callback, uri)
     local mark = {}
     local parent = self
     -- 最多检查3层 __index
     for _ = 1, 3 do
-        local res = parent:rawEach(callback, mark)
+        local res = parent:rawEach(callback, mark, uri)
         if res ~= nil then
             return res
         end
@@ -632,7 +651,8 @@ function mt:setEmmy(emmy)
         emmyClass:eachField(function (field)
             local name = field:getName()
             local value = field:bindValue()
-            self:setChild(name, value, field:getSource())
+            local source = field:getSource()
+            self:setChild(name, value, source, source.uri)
         end)
     elseif emmy.type == 'emmy.type' then
         ---@type EmmyType

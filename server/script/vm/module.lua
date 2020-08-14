@@ -51,6 +51,6 @@ function mt:callSeeAll(func, values)
     end
     local source = self:getDefaultSource()
     local meta = self:createValue('table', source)
-    meta:setChild('__index', oldEnv, source)
+    meta:setChild('__index', oldEnv, source, source.uri)
     newEnv:setMetaTable(meta)
 end
