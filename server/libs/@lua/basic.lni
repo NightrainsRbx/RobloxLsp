@@ -106,7 +106,7 @@ optional = 'self'
 [_G]
 type = 'table'
 
-[_E]
+[@E]
 version = {'Luau'}
 type = 'table'
 

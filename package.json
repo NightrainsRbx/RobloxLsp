@@ -55,12 +55,6 @@
 					"scope": "resource",
 					"type": "integer"
 				},
-				"Lua.completion.private": {
-					"default": false,
-					"markdownDescription": "%config.completion.private%",
-					"scope": "resource",
-					"type": "boolean"
-				},
 				"Lua.completion.fastAutocompletion": {
 					"default": false,
 					"markdownDescription": "%config.completion.fastAutocompletion%",

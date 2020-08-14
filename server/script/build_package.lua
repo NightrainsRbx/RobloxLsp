@@ -180,12 +180,6 @@ local package = {
                     default = true,
                     markdownDescription = "%config.completion.enable%"
                 },
-                ["Lua.completion.private"] = {
-                    scope = "resource",
-                    type = "boolean",
-                    default = false,
-                    markdownDescription = "%config.completion.private%"
-                },
                 ["Lua.completion.fastAutocompletion"] = {
                     scope = "resource",
                     type = "boolean",
@@ -356,7 +350,6 @@ This feature can load external Lua files, which can be used for definition, auto
 The following example shows loaded files in `C:/lua` and `../lib` ,exclude `../lib/temp`.
 ]] .. example.library,
     ['config.completion.enable']          = 'Enable completion.',
-    ['config.completion.private']          = 'Enable completion of private members.',
     ['config.completion.fastAutocompletion']          = 'EXPERIMENTAL. Enable it only if Auto-Completion is too slow.',
     ['config.completion.callSnippet']     = 'Shows function call snippets.',
     ['config.completion.callSnippet.Disable'] = "Only shows `function name`.",
@@ -394,7 +387,6 @@ io.save(ROOT:parent_path() / 'package.nls.zh-cn.json', json.encode {
 下面这个例子表示加载`C:/lua`与`../lib`中的所有文件，但不加载`../lib/temp`中的文件。
 ]] .. example.library,
     ['config.completion.enable']          = '启用自动完成。',
-    ['config.completion.private']          = 'Enable completion of private members.',
     ['config.completion.fastAutocompletion']          = 'EXPERIMENTAL. Enable it only if Auto-Completion is too slow.',
     ['config.completion.callSnippet']     = '显示函数调用片段。',
     ['config.completion.callSnippet.Disable'] = "只显示 `函数名`。",

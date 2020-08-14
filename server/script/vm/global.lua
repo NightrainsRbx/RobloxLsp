@@ -12,7 +12,7 @@ return function (lsp)
             t[name] = libraryBuilder.value(lib)
         end
 
-        global = config.isLuau() and t._E or t._G
+        global = config.isLuau() and t["@E"] or t._G
         global:markGlobal()
         global:set('ENV', true)
         for k, v in pairs(t) do

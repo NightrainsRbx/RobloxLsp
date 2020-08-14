@@ -319,13 +319,10 @@ local function searchFieldsByInfo(parent, word, source, map, srcMap)
         if info.type ~= 'set child' and info.type ~= 'get child' then
             return
         end
-        if type(k) ~= 'string' then
+        if type(k) ~= 'string' or k:sub(1, 1) == "@" then
             return
         end
-        if k == "_E" then
-            return
-        end
-        if k ~= "_G" and k:sub(1, 1) == "_" and not config.config.completion.private then
+        if k:sub(1, 1) == "_" and word:sub(1, 1) ~= "_" then
             return
         end
         local v = parent:getChild(k, nil, source.uri)
@@ -373,13 +370,10 @@ local function searchFieldsByChild(parent, word, source, map, srcMap)
         if v:getLib().hidden then
             return
         end
-        if type(k) ~= 'string' then
+        if type(k) ~= 'string' or k:sub(1, 1) == "@" then
             return
         end
-        if k == "_E" then
-            return
-        end
-        if k ~= "_G" and k:sub(1, 1) == "_" and not config.config.completion.private then
+        if k:sub(1, 1) == "_" and word:sub(1, 1) ~= "_" then
             return
         end
         if source.type == ':' or source.type == '.' then

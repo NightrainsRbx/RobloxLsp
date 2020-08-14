@@ -8,7 +8,6 @@
     "config.completion.callSnippet.Replace": "只显示 `调用片段`。",
     "config.completion.displayContext": "预览建议的相关代码片段，可能可以帮助你了解这项建议的用法。设置的数字表示代码片段的截取行数，设置为`0`可以禁用此功能。",
     "config.completion.enable": "启用自动完成。",
-    "config.completion.private": "Enable completion of private members.",
     "config.completion.fastAutocompletion": "EXPERIMENTAL. Enable it only if Auto-Completion is too slow.",
     "config.completion.keywordSnippet": "显示关键字语法片段",
     "config.completion.keywordSnippet.Both": "显示 `关键字` 与 `语法片段`。",

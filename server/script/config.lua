@@ -126,7 +126,6 @@ local ConfigTemplate = {
     },
     completion = {
         enable             = {true,      Boolean},
-        private            = {false,     Boolean},
         fastAutocompletion = {false,     Boolean},
         callSnippet        = {'Disable', String},
         keywordSnippet     = {'Replace', String},
@@ -183,6 +182,9 @@ local function setConfig(self, config, other)
                 local region = ConfigTemplate[c]
                 if region then
                     local info = region[k]
+                    if not info then
+                        return
+                    end
                     local suc, v = info[2](v)
                     if suc then
                         Config[c][k] = v
@@ -194,6 +196,9 @@ local function setConfig(self, config, other)
         end
         for k, v in pairs(other) do
             local info = OtherTemplate[k]
+            if not info then
+                return
+            end
             local suc, v = info[2](v)
             if suc then
                 Other[k] = v
