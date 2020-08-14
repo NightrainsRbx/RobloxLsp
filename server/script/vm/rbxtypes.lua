@@ -367,6 +367,9 @@ function mt:findScriptByPath(uri)
     for str in path:gmatch(".+/(.+%.lua)$") do
         fileName = str
     end
+    if not fileName then
+        return
+    end
     path = path:sub(1, (#path - #fileName) - 1)
     fileName = removeLuaExtension(fileName)
     if fileName == "init" then
@@ -455,6 +458,9 @@ function mt:searchAeroModules(value)
         for str in path:gmatch(".+/(.+)$") do
             fileName = str
         end
+        if not fileName then
+            goto CONTINUE
+        end
         path = path:gsub(tostring(fs.current_path()), ""):gsub("%/", "."):sub(2)
         path = removeLuaExtension(path)
         local moduleUri = ws:searchPath(self:getUri(), path)
@@ -465,5 +471,6 @@ function mt:searchAeroModules(value)
                 value:setChild(removeLuaExtension(fileName), module, self:getDefaultSource())
             end
         end
+        ::CONTINUE::
     end
 end
