@@ -27,6 +27,20 @@ type = 'number'
 [[.returns]]
 type = 'number'
 
+["require Luau"]
+version = 'Luau'
+name = 'require'
+special = 'require'
+[[.args]]
+name = 'module'
+type = {'ModuleScript', 'integer'}
+``````````
+name = 'path'
+type = 'string'
+optional = 'self'
+[[.returns]]
+type = any
+
 [settings]
 [[.returns]]
 type = 'GlobalSettings'

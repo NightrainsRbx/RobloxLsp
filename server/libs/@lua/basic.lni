@@ -551,20 +551,6 @@ name = 'modname'
 type = 'string'
 [[.returns]]
 
-["require Luau"]
-version = 'Luau'
-name = 'require'
-special = 'require'
-[[.args]]
-name = 'module'
-type = 'ModuleScript'
-``````````
-name = 'path'
-type = 'string'
-optional = 'self'
-[[.returns]]
-type = any
-
 ["require Lua 5.4"]
 version = 'Lua 5.4'
 name = 'require'
