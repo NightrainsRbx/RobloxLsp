@@ -8,7 +8,7 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 ## Feature
 
 - [x] Full Roblox Environment
-- [x] Basic Luau Syntax
+- [x] Support for Luau Syntax
 - [x] Roblox Classes and Datatypes
 - [x] Support for [Rojo](https://github.com/Roblox/rojo)
 - [x] Intellisense for Modules
