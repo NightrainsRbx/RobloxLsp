@@ -279,7 +279,7 @@
 					"name": "keyword.control.lua"
                 },
                 "3": {
-					"name": "support.variable.lua"
+					"name": "support.type.lua"
 				}
 			},
 			"match": "(\\bexport\\b\\s+)?(\\btype\\b)\\s+([\\w_]+)"

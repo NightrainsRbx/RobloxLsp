@@ -405,7 +405,7 @@ code = 'integer'
 version = {'Lua 5.1', 'LuaJIT', 'Luau'}
 [[.args]]
 name = f
-type = function/integer
+type = {'function', 'integer'}
 `````````
 type = table
 [[.returns]]
