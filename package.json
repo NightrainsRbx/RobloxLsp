@@ -414,6 +414,17 @@
 							],
 							"scope": "resource",
 							"type": "string"
+						},
+						"unknown-symbol": {
+							"default": "Information",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
 						}
 					},
 					"scope": "resource",

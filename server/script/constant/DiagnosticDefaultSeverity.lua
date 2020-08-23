@@ -24,4 +24,5 @@ return {
     ['deprecated-rbx-member']    = 'Information',
     ['incorrect-call-arguments'] = 'Warning',
     ['invalid-rbx-classname']    = 'Warning',
+    ['unknown-symbol']           = 'Warning',
 }

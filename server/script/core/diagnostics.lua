@@ -48,6 +48,23 @@ local function isDoubleIndexed(index)
     -- end
 end
 
+function mt:searchUnknownSymbol(callback)
+    if not config.isLuau() then
+        return
+    end
+    self.vm:eachSource(function (source)
+        if source._action ~= "set" and source.type == "name" then
+            return
+        end
+        if source:get 'global' then
+            if source._bindValue and source._bindValue:getType() == "function" then
+                return
+            end
+            callback(source.start, source.finish, source[1])
+        end
+    end)
+end
+
 function mt:searchInvalidRbxClass(callback)
     if not config.isLuau() then
         return
@@ -1261,6 +1278,12 @@ return function (vm, lines, uri, errs)
     session:doDiagnostics(session.searchInvalidRbxClass, 'invalid-rbx-classname', function (class, tp)
         return {
             message = lang.script('DIAG_INVALID_RBX_CLASSNAME', class, tp),
+        }
+    end)
+
+    session:doDiagnostics(session.searchUnknownSymbol, 'unknown-symbol', function (name)
+        return {
+            message = lang.script('DIAG_UNKNOWN_SYMBOL', name),
         }
     end)
 
