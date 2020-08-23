@@ -5,6 +5,8 @@
 ## More Info
 https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745
 
+[VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Nightrains.robloxlsp)
+
 ## Feature
 
 - [x] Full Roblox Environment
