@@ -104,22 +104,13 @@ local Care = {
                 }
                 return
             end
-            sources[#sources+1] = {
-                start      = source.start,
-                finish     = source.finish,
-                type       = TokenTypes.variable,
-            }
+            -- sources[#sources+1] = {
+            --     start      = source.start,
+            --     finish     = source.finish,
+            --     type       = TokenTypes.variable,
+            -- }
         elseif source:bindValue() then
             local value = source:bindValue()
-            -- if value:getType() == "RBXScriptSignal" then
-            --     sources[#sources+1] = {
-            --         start      = source.start,
-            --         finish     = source.finish,
-            --         type       = TokenTypes.member,
-            --         modifieres = TokenModifiers.static,
-            --     }
-            --     return
-            -- end
             if value:getType():sub(1, 4) == "Enum" then
                 local simple = source:get("simple")
                 if simple and simple[1] and simple[1][1] == "Enum" then
@@ -173,9 +164,39 @@ local function buildTokens(sources, lines)
     return tokens
 end
 
+local function findNameTypes(info, ret)
+    ret = ret or {}
+    for _, v in pairs(info) do
+        if type(v) == "table" then
+            if v.type == "nameType" then
+                ret[#ret+1] = v
+            else
+                findNameTypes(v, ret)
+            end
+        elseif v == "nameType" then
+            ret[#ret+1] = info
+        end
+    end
+    return ret
+end
+
 local function resolveTokens(vm, lines)
     local sources = {}
     for _, source in ipairs(vm.sources) do
+        if source.type == "varType"
+        or source.type == "paramType"
+        or source.type == "returnType"
+        or source.type == "typeDef"
+        then
+            for _, nameType in pairs(findNameTypes(source.info)) do
+                sources[#sources+1] = {
+                    start      = nameType.start,
+                    finish     = nameType.finish,
+                    type       = TokenTypes.type,
+                    modifieres = TokenModifiers.static,
+                }
+            end
+        end
         if Care[source.type] then
             Care[source.type](source, sources)
         end

@@ -36,7 +36,7 @@ local RESERVED = {
     ['if']       = true,
     ['in']       = true,
     ['local']    = true,
-    -- ['nil']      = true,
+    ['nil']      = true,
     ['not']      = true,
     ['or']       = true,
     ['repeat']   = true,
@@ -48,9 +48,9 @@ local RESERVED = {
 }
 
 local VersionOp = {
-    ['&']  = {'Lua 5.3', 'Lua 5.4'},
+    ['&']  = {'Lua 5.3', 'Lua 5.4', 'Luau'},
     ['~']  = {'Lua 5.3', 'Lua 5.4'},
-    ['|']  = {'Lua 5.3', 'Lua 5.4'},
+    ['|']  = {'Lua 5.3', 'Lua 5.4', 'Luau'},
     ['<<'] = {'Lua 5.3', 'Lua 5.4'},
     ['>>'] = {'Lua 5.3', 'Lua 5.4'},
     ['//'] = {'Lua 5.3', 'Lua 5.4'},
@@ -248,41 +248,35 @@ Exp = {
     },
 }
 
-local function buildEmmy(keys, type, emmy)
-    if State.Version ~= "Luau" then
-        pushError {
-            type = 'UNSUPPORT_SYMBOL',
-            start = type.start,
-            finish = type.finish,
-            version = 'Luau',
-            info = {
-                version = State.Version,
-            }
-        }
-    end
-    if emmy == "emmyType" and keys.type == "name" then
+local function buildEmmy(obj, keys)
+    if obj.type == "varType" and keys.type == "name" then
+        if obj.info.type ~= "nameType" then
+            return obj
+        end
         return {
             type = "emmyType",
             start = keys.start,
             finish = keys.finish,
             [1] = {
                 type = "emmyName",
-                start = type.start,
-                finish = type.finish,
+                start = obj.info.start,
+                finish = obj.info.finish,
                 syntax = true,
-                [1] = type[1]
+                [1] = obj.info[1]
             },
-            temp = true
         }
-    elseif emmy == "emmyParam" and keys.type == "name" then
+    elseif obj.type == "paramType" and keys.type == "name" then
+        if obj.info.type ~= "nameType" then
+            return obj
+        end
         return {
             type = "emmyParam",
             start = keys.start,
             finish = keys.finish,
             [1] = {
                 type = "emmyName",
-                start = type.start,
-                finish = type.finish,
+                start = obj.info.start,
+                finish = obj.info.finish,
                 [1] = keys[1]
             },
             [2] = {
@@ -291,34 +285,65 @@ local function buildEmmy(keys, type, emmy)
                 finish = keys.finish,
                 [1] = {
                     type = "emmyName",
-                    start = type.start,
-                    finish = type.finish,
+                    start = obj.info.start,
+                    finish = obj.info.finish,
                     syntax = true,
-                    [1] = type[1]
+                    [1] = obj.info[1]
                 }
             },
-            temp = true
         }
-    elseif emmy == "emmyReturn" then
-        return {
-            type = "emmyReturn",
-            start = type.start,
-            finish = type.finish,
-            [1] = {
-                type = "emmyType",
-                start = type.start,
-                finish = type.finish,
+    elseif obj.type == "returnType" then
+        if obj.info.type == "nameType" then
+            return {{
+                type = "emmyReturn",
+                start = obj.info.start,
+                finish = obj.info.finish,
                 [1] = {
-                    type = "emmyName",
-                    start = type.start,
-                    finish = type.finish,
-                    syntax = true,
-                    [1] = type[1]
-                }
-            },
-            temp = true
-        }
+                    type = "emmyType",
+                    start = obj.info.start,
+                    finish = obj.info.finish,
+                    [1] = {
+                        type = "emmyName",
+                        start = obj.info.start,
+                        finish = obj.info.finish,
+                        syntax = true,
+                        [1] = obj.info[1]
+                    }
+                },
+            }}
+        elseif obj.info.type == "typeList" then
+            local types = obj.info.types
+            for i, v in pairs(types) do
+                if v.type == "nameType" then
+                    types[i] = {
+                        type = "emmyReturn",
+                        start = v.start,
+                        finish = v.finish,
+                        [1] = {
+                            type = "emmyType",
+                            start = v.start,
+                            finish = v.finish,
+                            [1] = {
+                                type = "emmyName",
+                                start = v.start,
+                                finish = v.finish,
+                                syntax = true,
+                                [1] = v[1]
+                            }
+                        },
+                    }
+                else
+                    types[i] = {
+                        type = "returnType",
+                        info = v
+                    }
+                end
+            end
+            return types
+        end
+        return {obj}
     end
+    return obj
 end
 
 local Defs = {
@@ -483,7 +508,7 @@ local Defs = {
         return string_char(char)
     end,
     Char16 = function (pos, char)
-        if State.Version == 'Lua 5.1' or State.Version == "Luau" then
+        if State.Version == 'Lua 5.1' then
             pushError {
                 type = 'ERR_ESC',
                 start = pos-1,
@@ -501,6 +526,7 @@ local Defs = {
         if  State.Version ~= 'Lua 5.3'
         and State.Version ~= 'Lua 5.4'
         and State.Version ~= 'LuaJIT'
+        and State.Version ~= "Luau"
         then
             pushError {
                 type = 'ERR_ESC',
@@ -566,6 +592,9 @@ local Defs = {
         return ''
     end,
     Number = function (start, number, finish)
+        if State.Version == 'Luau' then
+            number = number:gsub("_", "")
+        end
         local n = tonumber(number)
         if n then
             State.LastNumber = {
@@ -793,9 +822,8 @@ local Defs = {
         checkMissEnd(start)
         if type(obj[1]) == "table" and obj[1].type == "returnType" then
             obj.emmys = obj.emmys or {}
-            obj[1].type = "nil"
-            for _, tp in pairs(obj[1].types) do
-                obj.emmys[#obj.emmys + 1] = buildEmmy(nil, tp, "emmyReturn")
+            for _, tp in pairs(buildEmmy(table.pick(obj, 1))) do
+                obj.emmys[#obj.emmys+1] = tp
             end
         end
         return obj
@@ -819,9 +847,8 @@ local Defs = {
         checkMissEnd(start)
         local ret = (arg and arg[2] or {})
         if type(obj[1]) == "table" and obj[1].type == "returnType" then
-            obj[1].type = "nil"
-            for _, tp in pairs(obj[1].types) do
-                ret[#ret+1] = buildEmmy(nil, tp, "emmyReturn")
+            for _, tp in pairs(buildEmmy(table.pick(obj, 1))) do
+                ret[#ret+1] = tp
             end
         end
         ret[#ret + 1] = obj
@@ -837,7 +864,7 @@ local Defs = {
             argFinish  = argFinish,
             ...
         }
-        
+
         local max = #obj
         obj.finish = obj[max] - 1
         obj[max]   = nil
@@ -855,9 +882,8 @@ local Defs = {
         checkMissEnd(start)
         local ret = (arg and arg[2] or {})
         if type(obj[1]) == "table" and obj[1].type == "returnType" then
-            obj[1].type = "nil"
-            for _, tp in pairs(obj[1].types) do
-                ret[#ret+1] = buildEmmy(nil, tp, "emmyReturn")
+            for _, tp in pairs(buildEmmy(table.pick(obj, 1))) do
+                ret[#ret+1] = tp
             end
         end
         ret[#ret + 1] = obj
@@ -945,7 +971,7 @@ local Defs = {
         local max = args.n
         args.n = nil
         local wantName = true
-        local emmyParams = nil
+        local paramTypes = nil
         for i = 1, max do
             local obj = args[i]
             if type(obj) == 'number' then
@@ -957,9 +983,9 @@ local Defs = {
                     }
                 end
                 wantName = true
-            elseif obj.type == "varType" then
-                emmyParams = emmyParams or {}
-                emmyParams[#emmyParams + 1] = buildEmmy(args[i - 1], obj, "emmyParam")
+            elseif obj.type == "paramType" then
+                paramTypes = paramTypes or {}
+                paramTypes[#paramTypes+1] = buildEmmy(obj, args[i - 1])
                 args[i] = nil
             else
                 if not wantName then
@@ -999,12 +1025,12 @@ local Defs = {
         if #list == 0 then
             return {nil, nil}
         elseif #list == 1 then
-            return {list[1], emmyParams}
+            return {list[1], paramTypes}
         else
             list.type = 'list'
             list.start = list[1].start
             list.finish = list[#list].finish
-            return {list, emmyParams}
+            return {list, paramTypes}
         end
     end,
     CallArgList = function (start, ...)
@@ -1146,28 +1172,202 @@ local Defs = {
         name.tags = tags
         return name
     end,
-    Local = function (keys, ...)
-        local info = {...}
-        if info[1] and info[1].type == "varType" then
-            return buildEmmy(keys, info[1], "emmyType"), {
-                type = 'local',
-                keys, info[2]
+    Local = function (keys, values)
+        local ret = {}
+        for i, v in ipairs(keys) do
+            if v.type == "varType" then
+                ret[#ret+1] = buildEmmy(v, keys[i - 1])
+                table.remove(keys, i)
+            end
+        end
+        ret[#ret+1] = {
+            type = 'local',
+            keys, values
+        }
+        return table.unpack(ret)
+    end,
+    NameType = function (start, str, finish)
+        return {
+            type   = 'nameType',
+            start  = start,
+            finish = finish - 1,
+            [1]    = str,
+        }
+    end,
+    IndexType = function (start, str1, _, str2, finish)
+        return {
+            type   = 'indexType',
+            start  = start,
+            finish = finish - 1,
+            [1]    = str1,
+            [2]    = str2
+        }
+    end,
+    FuncType = function (start, args, returns, finish)
+        local obj = {
+            type = "funcType",
+            start = start,
+            finish = finish,
+            args = args,
+            returns = returns
+        }
+        return obj
+    end,
+    TableType = function (start, fields, finish)
+        local obj = {
+            type = "tableType",
+            start = start,
+            fields = fields,
+            finish = finish
+        }
+        return obj
+    end,
+    FieldType1 = function (start, key, _, value, finish)
+        return {
+            type = "fieldType1",
+            start = start,
+            finish = finish,
+            key = key,
+            value = value
+        }
+    end,
+    FieldType2 = function (start, key, _, _, value, finish)
+        return {
+            type = "fieldType2",
+            start = start,
+            finish = finish,
+            key = key,
+            value = value
+        }
+    end,
+    FieldTypeList = function (...)
+        local list = {...}
+        local hasIndexer = false
+        for _, field in pairs(list) do
+            if field.type == "fieldType2" then
+                if hasIndexer then
+                    pushError {
+                        type = 'MULTIPLE_TABLE_INDEXER',
+                        start = field.start,
+                        finish = field.finish,
+                    }
+                else
+                    hasIndexer = true
+                end
+            end
+        end
+        return list
+    end,
+    TypeList = function(...)
+        local types = {...}
+        return {
+            type = "typeList",
+            start = table.pick(types, 1),
+            finish = table.pick(types, #types),
+            types = types
+        }
+    end,
+    VarType = function(colon, ...)
+        if State.Version ~= "Luau" then
+            pushError {
+                type = 'UNSUPPORT_SYMBOL',
+                start = colon.start,
+                finish = colon.finish,
+                version = 'Luau',
+                info = {
+                    version = State.Version,
+                }
             }
         end
         return {
-            type = 'local',
-            keys, info[1]
+            type = "varType",
+            info = ...
         }
     end,
-    VarType = function(_, key)
-        key.type = "varType"
-        return key
+    ParamType = function(colon, ...)
+        if State.Version ~= "Luau" then
+            pushError {
+                type = 'UNSUPPORT_SYMBOL',
+                start = colon.start,
+                finish = colon.finish,
+                version = 'Luau',
+                info = {
+                    version = State.Version,
+                }
+            }
+        end
+        return {
+            type = "paramType",
+            info = ...
+        }
     end,
-    ReturnType = function(...)
+    ReturnType = function(colon, ...)
+        if State.Version ~= "Luau" then
+            pushError {
+                type = 'UNSUPPORT_SYMBOL',
+                start = colon.start,
+                finish = colon.finish,
+                version = 'Luau',
+                info = {
+                    version = State.Version,
+                }
+            }
+        end
         return {
             type = "returnType",
-            types = {select(2, ...)}
+            info = ...
         }
+    end,
+    Generics = function()
+    end,
+    TypeDef = function (start, name, value, finish)
+        if State.Version ~= "Luau" then
+            pushError {
+                type = 'UNSUPPORT_SYMBOL',
+                start = start,
+                finish = finish,
+                version = 'Luau',
+                info = {
+                    version = State.Version,
+                }
+            }
+        end
+        local obj = {
+            type = "typeDef",
+            start = start,
+            finish = finish,
+            name = name,
+            info = value,
+        }
+        local tp = value.type
+        if  tp ~= "tableType"
+        and tp ~= "funcType"
+        and tp ~= "nameType"
+        and tp ~= "indexType"
+        and tp ~= "binary"
+        then
+            if tp == "simple" then
+                if not (value[1]
+                    and value[1].type == "name"
+                    and value[1][1] == "typeof"
+                    and value[2]
+                    and value[2].type == "call")
+                then
+                    pushError {
+                        type = 'EXP_IDENTIFIER',
+                        start = start,
+                        finish = finish,
+                    }
+                end
+            else
+                pushError {
+                    type = 'EXP_TYPE',
+                    start = start,
+                    finish = finish,
+                }
+            end
+        end
+        return obj
     end,
     DoBody = function (...)
         if ... == '' then
@@ -1449,8 +1649,8 @@ local Defs = {
         checkMissEnd(start)
         local ret = {}
         for i, tp in ipairs(arg) do
-            if tp.type == "varType" then
-                ret[#ret+1] = buildEmmy(arg[i - 1], tp, "emmyParam")
+            if tp.type == "paramType" then
+                ret[#ret+1] = buildEmmy(tp, arg[i - 1])
                 table.remove(arg, i)
             end
         end

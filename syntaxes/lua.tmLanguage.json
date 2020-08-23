@@ -65,11 +65,11 @@
             "name": "constant.numeric.float.hexadecimal.lua"
         },
         {
-            "match": "(?<![\\w\\d.])\\d+(?![pPeE.0-9])",
+            "match": "(?<![\\w\\d.])[\\d_]+(?![pPeE.0-9_])",
             "name": "constant.numeric.integer.lua"
         },
         {
-            "match": "(?<![\\w\\d.])\\d+(\\.\\d+)?([eE]-?\\d*)?",
+            "match": "(?<![\\w\\d.])[\\d_]+(\\.[\\d_]+)?([eE]-?\\d_*)?",
             "name": "constant.numeric.float.lua"
         },
         {
@@ -260,9 +260,29 @@
 			"captures": {
 				"1": {
 					"name": "constant.language"
+                },
+                "3": {
+					"name": "support.variable"
+                },
+                "4": {
+					"name": "support.type"
 				}
 			},
-			"match": "\\b(local)\\b"
+			"match": "\\b(local)\\b(\\s(\\w+):\\s*(\\w+))?"
+        },
+        {
+			"captures": {
+				"1": {
+					"name": "keyword.control.lua"
+                },
+                "2": {
+					"name": "keyword.control.lua"
+                },
+                "3": {
+					"name": "support.variable.lua"
+				}
+			},
+			"match": "(\\bexport\\b\\s+)?(\\btype\\b)\\s+([\\w_]+)"
         },
         {
             "match": "(?<![^.]\\.|:)\\b(false|nil|true|_G|_VERSION|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
@@ -300,7 +320,6 @@
 			"name": "constant.language",
 			"match": "\\b(workspace|game|script|plugin|shared)\\b"
 		},
-
 		{
 			"captures": {
 				"1": {
@@ -318,15 +337,8 @@
 			"match": "\\b(debug\\.(traceback|profilebegin|profileend)|math\\.(noise|clamp)|utf8\\.(char|codes|codepoint|len|offset|graphemes)|delay|elapsedTime|require|settings|spawn|tick|time|typeof|UserSettings|version|wait|warn)\\s*\\("
         },
         {
-			"captures": {
-                "1": {
-                    "name": "support.variable"
-                },
-				"3": {
-					"name": "support.type"
-				}
-			},
-			"match": "(\\w+)(: +(\\w+)[), =]?)?"
+            "name": "support.variable",
+			"match": "\\w+"
 		}
     ],
     "repository": {

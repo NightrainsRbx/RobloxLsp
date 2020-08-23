@@ -196,6 +196,12 @@ function table.equal(a, b)
     return a == b
 end
 
+function table.pick(tbl, index)
+    local value = tbl[index]
+    table.remove(tbl, index)
+    return value
+end
+
 function table.deepCopy(a)
     local t = {}
     for k, v in pairs(a) do

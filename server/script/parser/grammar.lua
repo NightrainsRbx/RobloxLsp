@@ -261,9 +261,9 @@ ErrNumber   <-  ({} {([0-9a-zA-Z] / '.')+}) -> UnknownSymbol
 
 Number10    <-  Float10 Float10Exp?
             /   Integer10 Float10? Float10Exp?
-Integer10   <-  [0-9]+ ('.' [0-9]*)?
-Float10     <-  '.' [0-9]+
-Float10Exp  <-  [eE] [+-]? [0-9]+
+Integer10   <-  Num+ ('.' Num*)?
+Float10     <-  '.' Num+
+Float10Exp  <-  [eE] [+-]? Num+
             /   ({} [eE] [+-]? {}) -> MissExponent
 
 Number16    <-  '0' [xX] Float16 Float16Exp?
@@ -272,26 +272,69 @@ Integer16   <-  X16+ ('.' X16*)?
             /   ({} {Word*}) -> MustX16
 Float16     <-  '.' X16+
             /   '.' ({} {Word*}) -> MustX16
-Float16Exp  <-  [pP] [+-]? [0-9]+
+Float16Exp  <-  [pP] [+-]? Num+
             /   ({} [pP] [+-]? {}) -> MissExponent
+
+Num         <- [0-9] [0-9_]*
 ]]
 
 grammar 'Name' [[
 Name        <-  Sp ({} NameBody {})
-            ->  Name
-LineName    <-  ({} NameBody {})
             ->  Name
 NameBody    <-  {[a-zA-Z_] [a-zA-Z0-9_]*}
 FreeName    <-  Sp ({} {NameBody=>NotReserved} {})
             ->  Name
 MustName    <-  Name / DirtyName
 DirtyName   <-  {} -> DirtyName
+]]
 
-VarType     <-  (COLON Sp Name '?'? Cut)
+grammar 'Type' [[
+TypeOp      <-  Sp {} {'|'}
+            /   Sp {} {'&'}
+
+Optional    <-  Sp ('?')*
+
+Type        <-  Sp (UnTypeUnit (TypeOp (UnTypeUnit / {} -> DirtyExp))*)
+            ->  Exp
+UnTypeUnit  <-  TypeUnit
+            /   UnaryOp+ (TypeUnit / {} -> DirtyExp)
+TypeUnit    <-  IndexType
+            /   NameType
+            /   FuncType
+            /   TableType
+            /   TypeSimple
+
+TypeSimple  <-  Sp ({} PL Type DirtyPR Optional)
+            ->  Prefix
+            /   FreeName
+
+Generics1   <-  Sp ('<' Sp (Name / Sp COMMA)+ Sp '>')
+            ->  Generics
+Generics2   <-  Sp ('<' Sp (Type / Sp COMMA)+ Sp '>')
+            ->  Generics
+
+TypeList    <-  ({} PL (Type / Sp COMMA)* NeedPR {})
+            ->  TypeList
+
+NameType    <-  Sp ({} NameBody {} Generics2? Optional)
+            ->  NameType
+IndexType   <-  Sp ({} NameBody DOT NameBody {} Optional)
+            ->  IndexType
+FuncType    <-  Sp ({} TypeList Sp '->' (TypeList / Type) {})
+            ->  FuncType
+
+FieldType   <-  Sp ({} Name COLON Type {}) ->  FieldType1
+            /   Sp ({} BL Type DirtyBR COLON Type {}) ->  FieldType2
+FieldList   <-  (FieldType / Sp COMMA)*
+            ->  FieldTypeList
+TableType   <-  Sp ({} TL FieldList DirtyTR Optional)
+            ->  TableType
+
+VarType     <-  (COLON Type)
             ->  VarType
-ReturnType  <-  (COLON Sp LineName* '?'?)
-            ->  ReturnType
-MultiReturnType  <-  (COLON Sp PL (LineName '?'? / COMMA Sp)* PR)
+ParamType   <-  (COLON Type)
+            ->  ParamType
+ReturnType  <-  (COLON (TypeList / Type)) 
             ->  ReturnType
 ]]
 
@@ -339,10 +382,10 @@ MustExpList <-  Sp (Exp      (COMMA (MaybeExp))*)
 CallArgList <-  Sp ({} (COMMA {} / Exp)+ {})
             ->  CallArgList
             /   %nil
-NameList    <-  (MustName VarType? (COMMA MustName VarType?)*)
+NameList    <-  (MustName ParamType? (COMMA MustName ParamType?)*)
             ->  List
 
-ArgList     <-  (DOTS -> DotsAsArg / (Name VarType?) / Sp {} COMMA)*
+ArgList     <-  (DOTS -> DotsAsArg / (Name ParamType?) / Sp {} COMMA)*
             ->  ArgList
 
 Table       <-  Sp ({} TL TableFields? DirtyTR)
@@ -359,7 +402,7 @@ Function    <-  Sp ({} FunctionBody {})
             ->  Function
 FuncArg     <-  PL {} ArgList {} NeedPR
             /   {} {} -> MissPL Nothing {}
-FunctionBody<-  FUNCTION BlockStart FuncArg (MultiReturnType / ReturnType)?
+FunctionBody<-  FUNCTION BlockStart FuncArg ReturnType?
                     (Emmy / !END Action)*
                     BlockEnd
                 NeedEnd
@@ -376,6 +419,7 @@ Emmy        <-  '---@'
 grammar 'Action' [[
 Action      <-  Sp (CrtAction / UnkAction)
 CrtAction   <-  Semicolon
+            /   TypeDef
             /   Do
             /   Break
             /   Continue
@@ -405,6 +449,9 @@ Semicolon   <-  SEMICOLON
             ->  Skip
 SimpleList  <-  (Simple (COMMA Simple)*)
             ->  List
+
+TypeDef     <-  Sp ({} ('export' Sps)? 'type' Cut Name Generics1? AssignOrEQ (Type !Suffix / DirtyExp) {})
+            ->  TypeDef
 
 Do          <-  Sp ({} 'do' Cut DoBody NeedEnd {})
             ->  Do
@@ -500,13 +547,13 @@ RepeatBody  <-  REPEAT
 LocalTag    <-  (Sp '<' Sp MustName Sp LocalTagEnd)*
             ->  LocalTag
 LocalTagEnd <-  '>' / {} -> MissGT
-Local       <-  (LOCAL LocalNameList VarType? (AssignOrEQ ExpList)?)
+Local       <-  (LOCAL LocalNameList (AssignOrEQ ExpList)?)
             ->  Local
 Set         <-  (SimpleList AssignOrEQ ExpList?)    ->  Set 
             /   (SimpleList COMPASSIGN ExpList?)    ->  CompSet
 
 LocalNameList
-            <-  (LocalName (COMMA LocalName)*)
+            <-  (LocalName VarType? (COMMA LocalName VarType?)*)
             ->  List
 LocalName   <-  (MustName LocalTag)
             ->  LocalName
@@ -522,7 +569,7 @@ NamedFunction
             <-  Sp ({} FunctionNamedBody {})
             ->  NamedFunction
 FunctionNamedBody
-            <-  FUNCTION FuncName BlockStart FuncArg (MultiReturnType / ReturnType)?
+            <-  FUNCTION FuncName BlockStart FuncArg ReturnType?
                     (Emmy / !END Action)*
                     BlockEnd
                 NeedEnd

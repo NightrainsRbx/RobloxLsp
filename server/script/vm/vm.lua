@@ -149,7 +149,7 @@ function mt:buildFunction(exp)
     if exp and exp:bindFunction() then
         return exp:bindFunction()
     end
-    
+
     if exp.emmys then
         for _, emmy in pairs(exp.emmys) do
             self:doEmmy(emmy)
@@ -161,14 +161,14 @@ function mt:buildFunction(exp)
     if not exp then
         return value
     end
-    
+
     exp:bindFunction(value)
     local func = value:getFunction()
-    
+
     self:eachLocal(function (name, loc)
         func:saveUpvalue(name, loc)
     end)
-    
+
     return value
 end
 
@@ -812,6 +812,12 @@ function mt:getExp(exp)
         return self:loadDots()
     elseif tp == 'list' then
         return self:getMultiByList(exp)
+    elseif tp == "varType"
+        or tp == "paramType"
+        or tp == "returnType"
+        or tp == "typeDef"
+    then
+        return exp
     end
     error('Unkown exp type: ' .. tostring(tp))
 end
