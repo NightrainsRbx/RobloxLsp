@@ -2,7 +2,8 @@
 
 [Original Project](https://github.com/sumneko/lua-language-server) by [sumneko](https://github.com/sumneko)
 
-[VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Nightrains.robloxlsp)
+## More Info
+https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745
 
 ## Feature
 
@@ -30,9 +31,6 @@
 - [x] EmmyLua Annotation
 - [x] Multi Workspace
 - [x] Semantic Tokens
-
-## More Info
-https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745
 
 ### Preview
 
