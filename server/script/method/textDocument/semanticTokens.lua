@@ -134,6 +134,14 @@ local Care = {
             type       = TokenTypes.type,
             modifieres = TokenModifiers.static,
         }
+    end,
+    ['number'] = function(source, sources)
+        sources[#sources+1] = {
+            start      = source.start,
+            finish     = source.finish,
+            type       = TokenTypes.number,
+            modifieres = TokenModifiers.static,
+        }
     end
 }
 
