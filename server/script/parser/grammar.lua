@@ -81,7 +81,7 @@ end
 
 grammar 'Comment' [[
 Comment         <-  LongComment / '--' ShortComment
-LongComment     <-  ('--[' {} {:eq: '='* :} {} '[' 
+LongComment     <-  ('--[' {} {:eq: '='* :} {} '['
                     {(!CommentClose .)*}
                     (CommentClose {} / {} {}))
                 ->  LongComment
@@ -254,7 +254,7 @@ grammar 'Number' [[
 Number      <-  Sp ({} {NumberDef} {}) -> Number
                 NumberSuffix?
                 ErrNumber?
-NumberDef   <-  Number16 / Number10
+NumberDef   <-  Number16 / Number2 / Number10
 NumberSuffix<-  ({} {[uU]? [lL] [lL]})      -> FFINumber
             /   ({} {[iI]})                 -> ImaginaryNumber
 ErrNumber   <-  ({} {([0-9a-zA-Z] / '.')+}) -> UnknownSymbol
@@ -263,19 +263,21 @@ Number10    <-  Float10 Float10Exp?
             /   Integer10 Float10? Float10Exp?
 Integer10   <-  Num+ ('.' Num*)?
 Float10     <-  '.' Num+
-Float10Exp  <-  [eE] [+-]? Num+
+Float10Exp  <-  [eE] [+-]? NumWithSep+
             /   ({} [eE] [+-]? {}) -> MissExponent
 
-Number16    <-  '0' [xX] Float16 Float16Exp?
-            /   '0' [xX] Integer16 Float16? Float16Exp?
-Integer16   <-  X16+ ('.' X16*)?
+Number16    <-  '0' [xX] Integer16
+Integer16   <-  HexWithSep+
             /   ({} {Word*}) -> MustX16
-Float16     <-  '.' X16+
-            /   '.' ({} {Word*}) -> MustX16
-Float16Exp  <-  [pP] [+-]? Num+
-            /   ({} [pP] [+-]? {}) -> MissExponent
 
-Num         <- [0-9] [0-9_]*
+Number2     <-  '0' [bB] Integer2
+Integer2    <-  BinWithSep+
+            /   ({} {Word*}) -> MustX2
+
+Num         <-  [0-9] [0-9_]*
+NumWithSep  <-  [0-9_]+
+HexWithSep  <-  [0-9A-Fa-f_]+
+BinWithSep  <-  [01_]+
 ]]
 
 grammar 'Name' [[
@@ -334,7 +336,7 @@ VarType     <-  (COLON Type)
             ->  VarType
 ParamType   <-  (COLON Type)
             ->  ParamType
-ReturnType  <-  (COLON (TypeList / Type)) 
+ReturnType  <-  (COLON (TypeList / Type))
             ->  ReturnType
 ]]
 
@@ -476,7 +478,7 @@ ReturnBody  <-  Sp ({} RETURN MustExpList? {})
             ->  Return
 AfterReturn <-  Sp !END !UNTIL !ELSEIF !ELSE Action
 
-Label       <-  Sp ({} LABEL MustName DirtyLabel {}) -> Label 
+Label       <-  Sp ({} LABEL MustName DirtyLabel {}) -> Label
 
 GoTo        <-  Sp ({} GOTO MustName {}) -> GoTo
 
@@ -549,7 +551,7 @@ LocalTag    <-  (Sp '<' Sp MustName Sp LocalTagEnd)*
 LocalTagEnd <-  '>' / {} -> MissGT
 Local       <-  (LOCAL LocalNameList (AssignOrEQ ExpList)?)
             ->  Local
-Set         <-  (SimpleList AssignOrEQ ExpList?)    ->  Set 
+Set         <-  (SimpleList AssignOrEQ ExpList?)    ->  Set
             /   (SimpleList COMPASSIGN ExpList?)    ->  CompSet
 
 LocalNameList
