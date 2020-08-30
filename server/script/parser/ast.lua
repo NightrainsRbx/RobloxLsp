@@ -592,10 +592,18 @@ local Defs = {
         return ''
     end,
     Number = function (start, number, finish)
+        local n;
         if State.Version == 'Luau' then
             number = number:gsub("_", "")
+            if number:sub(2, 2):lower() == "b" then
+                -- Luau binary constant support
+                n = tonumber(number:sub(3), 2)
+            else
+                n = tonumber(number)
+            end
+        else
+            n = tonumber(number)
         end
-        local n = tonumber(number)
         if n then
             State.LastNumber = {
                 type   = 'number',
@@ -2074,6 +2082,13 @@ local Defs = {
     MustX16 = function (pos, str)
         pushError {
             type = 'MUST_X16',
+            start = pos,
+            finish = pos + #str - 1,
+        }
+    end,
+    MustX2 = function (pos, str)
+        pushError {
+            type = 'MUST_X2',
             start = pos,
             finish = pos + #str - 1,
         }
