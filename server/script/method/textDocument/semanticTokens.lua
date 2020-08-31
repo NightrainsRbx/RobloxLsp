@@ -30,12 +30,41 @@ local constLib = {
     ['shared']            = true,
     -- ['Enum']              = true,
 }
-local Care = {
+
+-- Return true from func to not descend the AST further
+-- TODO: There should be an actual ast visitor which has more awareness of the
+-- AST structure, this is a quick hack.
+local function walkAst(root, func)
+    if not func(root) then
+        for i, part in pairs(root) do
+            if type(i) == "number" or (type(i) == "string" and i:sub(1, 1) ~= "_") then
+                if type(part) == "table" and part.type then
+                    walkAst(part, func)
+                end
+            end
+        end
+    end
+end
+
+local Care;
+
+local function walkAstFindingSemanticTokens(source, sources)
+    walkAst(source, function(node)
+        if Care[node.type] then
+            return Care[node.type](node, sources)
+        end
+    end)
+end
+
+Care = {
     ['name'] = function(source, sources)
         if source[1] == '' then
             return
         end
         if constLib[source[1]] then
+            return
+        end
+        if not source.get then
             return
         end
         if source:get 'global' then
@@ -135,6 +164,27 @@ local Care = {
             modifieres = TokenModifiers.static,
         }
     end,
+    ['typeList'] = function(source, sources)
+        for _, ty in ipairs(source.types) do
+            walkAstFindingSemanticTokens(ty, sources)
+        end
+    end,
+    ['nameType'] = function(source, sources)
+        sources[#sources+1] = {
+            start      = source.start,
+            finish     = source.finish,
+            type       = TokenTypes.type,
+            modifieres = TokenModifiers.static,
+        }
+    end,
+    ['indexType'] = function(source, sources)
+        sources[#sources+1] = {
+            start      = source.start,
+            finish     = source.finish,
+            type       = TokenTypes.type,
+            modifieres = TokenModifiers.static,
+        }
+    end,
     ['number'] = function(source, sources)
         sources[#sources+1] = {
             start      = source.start,
@@ -172,42 +222,10 @@ local function buildTokens(sources, lines)
     return tokens
 end
 
-local function findNameTypes(info, ret)
-    ret = ret or {}
-    for _, v in pairs(info) do
-        if type(v) == "table" then
-            if v.type == "nameType" then
-                ret[#ret+1] = v
-            else
-                findNameTypes(v, ret)
-            end
-        elseif v == "nameType" then
-            ret[#ret+1] = info
-        end
-    end
-    return ret
-end
-
 local function resolveTokens(vm, lines)
     local sources = {}
     for _, source in ipairs(vm.sources) do
-        if source.type == "varType"
-        or source.type == "paramType"
-        or source.type == "returnType"
-        or source.type == "typeDef"
-        then
-            for _, nameType in pairs(findNameTypes(source.info)) do
-                sources[#sources+1] = {
-                    start      = nameType.start,
-                    finish     = nameType.finish,
-                    type       = TokenTypes.type,
-                    modifieres = TokenModifiers.static,
-                }
-            end
-        end
-        if Care[source.type] then
-            Care[source.type](source, sources)
-        end
+        walkAstFindingSemanticTokens(source, sources)
     end
 
     -- 先进行排序
