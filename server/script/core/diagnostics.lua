@@ -255,7 +255,18 @@ local function fixType(tp, expected)
     return tp
 end
 
-local function isValidType(tp)
+function mt:isValidEmmy(name)
+    local class = self.vm.emmyMgr:eachClass(name, function (class)
+        if class.type == 'emmy.class' or class.type == 'emmy.alias' then
+            return class
+        end
+    end)
+    if class then
+        return true
+    end
+end
+
+function mt:isValidType(tp)
     if type(tp) == "string"
     and tp ~= "any"
     and tp ~= "..."
@@ -263,6 +274,7 @@ local function isValidType(tp)
     and tp ~= "Tuple"
     and tp ~= "call"
     and tp ~= "object"
+    and self:isValidEmmy(tp)
     then
         return true
     end
@@ -319,7 +331,7 @@ function mt:searchIncorrectArguments(callback)
                     end
                     local incorrect = 0
                     for _, libtp in pairs(argstp) do
-                        if isValidType(libtp) and isValidType(tp) then
+                        if self:isValidType(libtp) and self:isValidType(tp) then
                             libtp, tp = fixType(libtp), fixType(tp, libtp)
                             if libtp ~= tp then
                                 if lib.args[i].optional == "self" and #callArgs < #lib.args and lib.args[i + 1] then
@@ -1025,7 +1037,7 @@ function mt:checkEmmyType(source, callback)
                 return class
             end
         end)
-        if not class then
+        if not class and not tpsource.syntax then
             callback(tpsource.start, tpsource.finish, lang.script.DIAG_UNDEFINED_CLASS)
         end
     end
