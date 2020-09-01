@@ -257,6 +257,7 @@ local function buildEmmy(obj, keys)
             type = "emmyType",
             start = keys.start,
             finish = keys.finish,
+            syntax = true,
             [1] = {
                 type = "emmyName",
                 start = obj.info.start,
@@ -273,6 +274,7 @@ local function buildEmmy(obj, keys)
             type = "emmyParam",
             start = keys.start,
             finish = keys.finish,
+            syntax = true,
             [1] = {
                 type = "emmyName",
                 start = obj.info.start,
@@ -298,6 +300,7 @@ local function buildEmmy(obj, keys)
                 type = "emmyReturn",
                 start = obj.info.start,
                 finish = obj.info.finish,
+                syntax = true,
                 [1] = {
                     type = "emmyType",
                     start = obj.info.start,
@@ -319,6 +322,7 @@ local function buildEmmy(obj, keys)
                         type = "emmyReturn",
                         start = v.start,
                         finish = v.finish,
+                        syntax = true,
                         [1] = {
                             type = "emmyType",
                             start = v.start,
@@ -1328,6 +1332,26 @@ local Defs = {
     end,
     Generics = function()
     end,
+    Typeof = function(start, exp, finish)
+        local obj = {
+            type = "typeof",
+            start = start,
+            finish = finish,
+            [1] = {
+                type = "name",
+                start = start,
+                finish = start + #"typeof",
+                [1] = "typeof"
+            },
+            [2] = {
+                type = "call",
+                start = start + #"typeof",
+                finish = finish,
+                [1] = exp
+            }
+        }
+        return obj
+    end,
     TypeDef = function (start, name, value, finish)
         if State.Version ~= "Luau" then
             pushError {
@@ -1347,34 +1371,6 @@ local Defs = {
             name = name,
             info = value,
         }
-        local tp = value.type
-        if  tp ~= "tableType"
-        and tp ~= "funcType"
-        and tp ~= "nameType"
-        and tp ~= "indexType"
-        and tp ~= "binary"
-        then
-            if tp == "simple" then
-                if not (value[1]
-                    and value[1].type == "name"
-                    and value[1][1] == "typeof"
-                    and value[2]
-                    and value[2].type == "call")
-                then
-                    pushError {
-                        type = 'EXP_IDENTIFIER',
-                        start = start,
-                        finish = finish,
-                    }
-                end
-            else
-                pushError {
-                    type = 'EXP_TYPE',
-                    start = start,
-                    finish = finish,
-                }
-            end
-        end
         return obj
     end,
     DoBody = function (...)

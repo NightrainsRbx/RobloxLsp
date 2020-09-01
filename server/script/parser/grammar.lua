@@ -290,56 +290,6 @@ MustName    <-  Name / DirtyName
 DirtyName   <-  {} -> DirtyName
 ]]
 
-grammar 'Type' [[
-TypeOp      <-  Sp {} {'|'}
-            /   Sp {} {'&'}
-
-Optional    <-  Sp ('?')*
-
-Type        <-  Sp (UnTypeUnit (TypeOp (UnTypeUnit / {} -> DirtyExp))*)
-            ->  Exp
-UnTypeUnit  <-  TypeUnit
-            /   UnaryOp+ (TypeUnit / {} -> DirtyExp)
-TypeUnit    <-  IndexType
-            /   NameType
-            /   FuncType
-            /   TableType
-            /   TypeSimple
-
-TypeSimple  <-  Sp ({} PL Type DirtyPR Optional)
-            ->  Prefix
-            /   FreeName
-
-Generics1   <-  Sp ('<' Sp (Name / Sp COMMA)+ Sp '>')
-            ->  Generics
-Generics2   <-  Sp ('<' Sp (Type / Sp COMMA)+ Sp '>')
-            ->  Generics
-
-TypeList    <-  ({} PL (Type / Sp COMMA)* NeedPR {})
-            ->  TypeList
-
-NameType    <-  Sp ({} NameBody {} Generics2? Optional)
-            ->  NameType
-IndexType   <-  Sp ({} NameBody DOT NameBody {} Optional)
-            ->  IndexType
-FuncType    <-  Sp ({} TypeList Sp '->' (TypeList / Type) {})
-            ->  FuncType
-
-FieldType   <-  Sp ({} Name COLON Type {}) ->  FieldType1
-            /   Sp ({} BL Type DirtyBR COLON Type {}) ->  FieldType2
-FieldList   <-  (FieldType / Sp COMMA)*
-            ->  FieldTypeList
-TableType   <-  Sp ({} TL FieldList DirtyTR Optional)
-            ->  TableType
-
-VarType     <-  (COLON Type)
-            ->  VarType
-ParamType   <-  (COLON Type)
-            ->  ParamType
-ReturnType  <-  (COLON (TypeList / Type))
-            ->  ReturnType
-]]
-
 grammar 'Exp' [[
 Exp         <-  (UnUnit (BinaryOp (UnUnit / {} -> DirtyExp))*)
             ->  Exp
@@ -416,6 +366,59 @@ BlockEnd    <-  {} -> BlockEnd
 Action      <-  !END .
 Set         <-  END
 Emmy        <-  '---@'
+
+-- Type Grammars
+TypeOp      <-  Sp {} {'|'}
+            /   Sp {} {'&'}
+
+Optional    <-  Sp ('?')*
+
+Type        <-  Sp (UnTypeUnit (TypeOp (UnTypeUnit / {} -> DirtyExp))*)
+            ->  Exp
+UnTypeUnit  <-  TypeUnit
+            /   UnaryOp+ (TypeUnit / {} -> DirtyExp)
+TypeUnit    <-  IndexType
+            /   Typeof
+            /   NameType
+            /   FuncType
+            /   TableType
+            /   TypeSimple
+
+TypeSimple  <-  Sp ({} PL Type DirtyPR Optional)
+            ->  Prefix
+            /   FreeName
+
+Typeof      <-  Sp ({} 'typeof' PL DirtyExp NeedPR {} Optional)
+            ->  Typeof
+
+Generics1   <-  Sp ('<' Sp (Name / Sp COMMA)+ Sp '>')
+            ->  Generics
+Generics2   <-  Sp ('<' Sp (Type / Sp COMMA)+ Sp '>')
+            ->  Generics
+
+TypeList    <-  ({} PL (Type / Sp COMMA)* NeedPR {})
+            ->  TypeList
+
+NameType    <-  Sp ({} NameBody {} Generics2? Optional)
+            ->  NameType
+IndexType   <-  Sp ({} NameBody DOT NameBody {} Optional)
+            ->  IndexType
+FuncType    <-  Sp ({} TypeList Sp '->' (TypeList / Type) {})
+            ->  FuncType
+
+FieldType   <-  Sp ({} Name COLON Type {}) ->  FieldType1
+            /   Sp ({} BL Type DirtyBR COLON Type {}) ->  FieldType2
+FieldList   <-  (FieldType / Sp COMMA)*
+            ->  FieldTypeList
+TableType   <-  Sp ({} TL FieldList DirtyTR Optional)
+            ->  TableType
+
+VarType     <-  (COLON Type)
+            ->  VarType
+ParamType   <-  (COLON Type)
+            ->  ParamType
+ReturnType  <-  (COLON (TypeList / Type))
+            ->  ReturnType
 ]]
 
 grammar 'Action' [[
@@ -452,7 +455,7 @@ Semicolon   <-  SEMICOLON
 SimpleList  <-  (Simple (COMMA Simple)*)
             ->  List
 
-TypeDef     <-  Sp ({} ('export' Sps)? 'type' Cut Name Generics1? AssignOrEQ (Type !Suffix / DirtyExp) {})
+TypeDef     <-  Sp ({} ('export' Sps)? 'type' Cut Name Generics1? AssignOrEQ Type {})
             ->  TypeDef
 
 Do          <-  Sp ({} 'do' Cut DoBody NeedEnd {})
