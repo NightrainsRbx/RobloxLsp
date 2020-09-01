@@ -201,6 +201,9 @@ function mt:doTypedFunction(source)
             end
         elseif object:getType() == "RBXScriptSignal" then
             local lib = object:getLib()
+            if not lib then
+                return
+            end
             if not (rbxApi.EventsParameters[lib.name] and rbxApi.EventsParameters[lib.name][lib.parentClass]) then
                 return
             end
