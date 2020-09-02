@@ -1190,7 +1190,6 @@ local function makeList(source, pos, word)
                     snipData.kind = CompletionItemKind.Function
                     snipData.insertText = snipData.insertText:gsub("%(.-%)", "($1)")
                     list[#list] = snipData
-                    output("w", snipData)
                 end
             end
             data.snip = nil
