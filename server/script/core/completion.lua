@@ -1184,7 +1184,13 @@ local function makeList(source, pos, word)
                 if snipType == 'Both' then
                     list[#list+1] = snipData
                 elseif snipType == 'Replace' then
+                    snipData.kind = CompletionItemKind.Function
                     list[#list] = snipData
+                elseif snipType == 'Parentheses' then
+                    snipData.kind = CompletionItemKind.Function
+                    snipData.insertText = snipData.insertText:gsub("%(.-%)", "($1)")
+                    list[#list] = snipData
+                    output("w", snipData)
                 end
             end
             data.snip = nil

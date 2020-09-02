@@ -73,13 +73,13 @@ local Care = {
                 type       = TokenTypes.namespace,
                 modifieres = TokenModifiers.deprecated,
             }
-        -- elseif source:get 'table index' then
-        --     sources[#sources+1] = {
-        --         start      = source.start,
-        --         finish     = source.finish,
-        --         type       = TokenTypes.property,
-        --         modifieres = TokenModifiers.declaration,
-        --     }
+        elseif source:get 'table index' then
+            sources[#sources+1] = {
+                start      = source.start,
+                finish     = source.finish,
+                type       = TokenTypes.property,
+                modifieres = TokenModifiers.static,
+            }
         elseif source:bindLocal() then
             if source:get 'arg' then
                 sources[#sources+1] = {
