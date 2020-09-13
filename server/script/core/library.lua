@@ -274,9 +274,10 @@ end
 local function findLibFolder()
     if fs.exists(fs.current_path() / 'lib') then
         return fs.current_path() / 'lib'
-    end
-    if fs.exists(fs.current_path() / '.lib') then
+    elseif fs.exists(fs.current_path() / '.lib') then
         return fs.current_path() / '.lib'
+    elseif fs.exists(fs.current_path() / '.vscode') then
+        return fs.current_path() / '.vscode'
     end
 end
 
