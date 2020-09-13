@@ -298,6 +298,62 @@ function mt:callDoFile(func, values)
     func:setReturn(1, requireValue)
 end
 
+function mt:callKnitCreateService(func, values, source)
+    local serviceValue = values[1]
+    if not serviceValue then
+        serviceValue = self:createValue('table', self:getDefaultSource())
+    end
+    serviceValue:setType("Service", 2.0)
+    local client = serviceValue:getChild("Client")
+    if not client then
+        client = self:createValue('table', self:getDefaultSource())
+        serviceValue:setChild("Client", client, self:getDefaultSource())
+    end
+    client:setChild("Server", serviceValue, self:getDefaultSource())
+    local lib = library.object["Knit"]
+    if lib then
+        local childs = libraryBuilder.child(lib)
+        local services = childs.Services
+        local serviceName = serviceValue:getChild("Name")
+        if services and serviceName then
+            services:setChild(serviceName:getLiteral(), serviceValue, source, source.uri)
+        end
+    end
+    func:setReturn(1, serviceValue)
+end
+
+function mt:callKnitCreateController(func, values, source)
+    local controllerValue = values[1]
+    if not controllerValue then
+        controllerValue = self:createValue('table', self:getDefaultSource())
+    end
+    controllerValue:setType("Controller", 2.0)
+    local lib = library.object["Knit"]
+    if lib then
+        local childs = libraryBuilder.child(lib)
+        local controllers = childs.Controllers
+        local controllerName = controllerValue:getChild("Name")
+        if controllers and controllerName then
+            controllers:setChild(controllerName:getLiteral(), controllerValue, source, source.uri)
+        end
+    end
+    func:setReturn(1, controllerValue)
+end
+
+function mt:callKnitGetService(func, values)
+    if values[1] then
+        local lib = library.object["Knit"]
+        if lib then
+            local childs = libraryBuilder.child(lib)
+            local services = childs.Services
+            local serviceValue = services:getChild(values[1]:getLiteral())
+            if serviceValue then
+                func:setReturn(1, serviceValue:getChild("Client"))
+            end
+        end
+    end
+end
+
 function mt:callLibrary(func, values, source, lib)
     if lib.args then
         for i, arg in ipairs(lib.args) do
@@ -351,6 +407,12 @@ function mt:callLibrary(func, values, source, lib)
             self:callPairs(func, values, source)
         elseif lib.special == 'next' then
             self:callNext(func, values, source)
+        elseif lib.special == "knitCreateService" then
+            self:callKnitCreateService(func, values, source)
+        elseif lib.special == "knitCreateController" then
+            self:callKnitCreateController(func, values, source)
+        elseif lib.special == "knitGetService" then
+            self:callKnitGetService(func, values)
         end
     else
         -- 如果lib的参数中有function，则立即执行function
