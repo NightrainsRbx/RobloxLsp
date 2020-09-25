@@ -356,10 +356,17 @@ end
 
 function mt:callLibrary(func, values, source, lib)
     if lib.args then
-        for i, arg in ipairs(lib.args) do
-            local value = values[i]
-            if value and arg.type ~= '...' then
-                value:setType(arg.type, 0.6)
+        if lib.special == "require" and config.isLuau() then
+            local value = values[1]
+            if value then
+                value:setType("ModuleScript", 0.6)
+            end
+        else
+            for i, arg in ipairs(lib.args) do
+                local value = values[i]
+                if value and arg.type ~= '...' then
+                    value:setType(arg.type, 0.6)
+                end
             end
         end
     end
