@@ -822,6 +822,43 @@
                 },
                 {
                     "MemberType": "Function",
+                    "Name": "lookAt",
+                    "Parameters": [
+                        {
+                            "Name": "at",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "Vector3"
+                                ]
+                            }
+                        },
+                        {
+                            "Name": "target",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "Vector3"
+                                ]
+                            }
+                        },
+                        {
+                            "Name": "up",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "Vector3"
+                                ]
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "",
+                        "Name": "CFrame"
+                    }
+                },
+                {
+                    "MemberType": "Function",
                     "Name": "new",
                     "Parameters": [
                         {
