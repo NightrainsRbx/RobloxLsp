@@ -93,6 +93,9 @@ rbxApi.CorrectReturns = {
     },
     PluginMenu = {
         AddNewAction = "PluginAction"
+    },
+    TweenService = {
+        Create = "Tween"
     }
 }
 
