@@ -2,6 +2,7 @@ local workspace = require 'workspace'
 local nonil = require 'without-check-nil'
 local client = require 'client'
 local json = require 'json'
+local sp = require 'bee.subprocess'
 
 local function allWords()
     local str = [[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:)('"[,#*@| ]]
@@ -20,15 +21,12 @@ return function (lsp, params)
     lsp.client = params
     client.init(params)
     log.info(table.dump(params))
+    log.debug('ProcessID', sp.get_id())
 
-    if params.workspaceFolders and params.workspaceFolders ~= json.null then
-        for _, folder in ipairs(params.workspaceFolders) do
-            lsp:addWorkspace(folder.name, folder.uri)
-        end
-    elseif params.rootUri and params.rootUri ~= json.null then
+    if params.rootUri and params.rootUri ~= json.null then
         lsp:addWorkspace('root', params.rootUri)
     end
-
+    
     local server = {
         capabilities = {
             hoverProvider = true,
@@ -50,19 +48,19 @@ return function (lsp, params)
                 -- 文本改变时完全通知 TODO 支持差量更新（2）
                 change = 1,
             },
-            workspace = {
-                workspaceFolders = {
-                    supported = true,
-                    changeNotifications = true,
-                },
-            },
+            -- workspace = {
+            --     workspaceFolders = {
+            --         supported = true,
+            --         changeNotifications = true,
+            --     },
+            -- },
             documentOnTypeFormattingProvider = {
                 firstTriggerCharacter = '}',
             },
             executeCommandProvider = {
                 commands = {
-                    'lua.removeSpace',
-                    'lua.solve',
+                    'lua.removeSpace:' .. sp.get_id(),
+                    'lua.solve:' .. sp.get_id(),
                 },
             },
         }

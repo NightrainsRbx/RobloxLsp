@@ -998,9 +998,9 @@ function mt:_testMemory(skipDead)
     ))
     log.debug('test memory: ', ('%.3f'):format(os.clock() - clock))
 
-    if deadValue / totalValue >= 0.5 and not skipDead then
-        self:_testFindDeadValues()
-    end
+    -- if deadValue / totalValue >= 0.5 and not skipDead then
+    --     self:_testFindDeadValues()
+    -- end
 end
 
 function mt:_testFindDeadValues()

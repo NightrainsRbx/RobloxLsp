@@ -1,5 +1,7 @@
 local lang = require 'language'
 local library = require 'core.library'
+local client = require 'client'
+local sp = require 'bee.subprocess'
 local rbxApi = require 'rbxapi'
 
 local function disableDiagnostic(lsp, uri, data, callback)
@@ -205,7 +207,7 @@ local function solveTrailingSpace(lsp, uri, data, callback)
         kind = 'quickfix',
         command = {
             title = lang.script.COMMAND_REMOVE_SPACE,
-            command = 'lua.removeSpace',
+            command = 'lua.removeSpace:' .. sp:get_id(),
             arguments = {
                 {
                     uri = uri,
@@ -241,7 +243,7 @@ local function solveAmbiguity1(lsp, uri, data, callback)
         kind = 'quickfix',
         command = {
             title = lang.script.COMMAND_ADD_BRACKETS,
-            command = 'lua.solve',
+            command = 'lua.solve:' .. sp:get_id(),
             arguments = {
                 {
                     name = 'ambiguity-1',
