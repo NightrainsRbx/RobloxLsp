@@ -65,12 +65,12 @@
             "name": "constant.numeric.float.hexadecimal.lua"
         },
         {
-            "match": "(?<![\\w\\d.])[\\d_]+(?![pPeE.0-9_])",
-            "name": "constant.numeric.integer.lua"
+            "match": "(?<![\\w\\d.])(\\d[\\d_]*(\\.[\\d_]+)|\\.\\d[\\d_]*)([eE]-?\\d*)?",
+            "name": "constant.numeric.float.lua"
         },
         {
-            "match": "(?<![\\w\\d.])[\\d_]+(\\.[\\d_]+)?([eE]-?\\d_*)?",
-            "name": "constant.numeric.float.lua"
+            "match": "(?<![\\w\\d.])\\d[\\d_]*(?![pPeE.0-9])",
+            "name": "constant.numeric.integer.lua"
         },
         {
             "begin": "'",
@@ -259,7 +259,7 @@
 		{
 			"captures": {
 				"1": {
-					"name": "constant.language"
+					"name": "keyword.local.lua"
                 },
                 "3": {
 					"name": "support.variable"
@@ -285,11 +285,7 @@
 			"match": "(\\bexport\\b\\s+)?(\\btype\\b)\\s+([\\w_]+)"
         },
         {
-            "match": "(?<![^.]\\.|:)\\b(false|nil|true|_G|_VERSION|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
-            "name": "constant.language.lua"
-        },
-        {
-            "match": "(?<![^.]\\.|:)\\b(false|nil|true|_G|_VERSION|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
+            "match": "(?<![^.]\\.|:)\\b(workspace|game|script|plugin|shared|false|nil|true|_G|_VERSION|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
             "name": "constant.language.lua"
         },
         {
@@ -297,11 +293,11 @@
             "name": "variable.language.self.lua"
         },
         {
-            "match": "(?<![^.]\\.|:)\\b(assert|collectgarbage|dofile|error|getfenv|getmetatable|ipairs|loadfile|loadstring|module|next|pairs|pcall|print|rawequal|rawget|rawset|require|select|setfenv|setmetatable|tonumber|tostring|type|unpack|xpcall)\\b(?=\\s*(?:[({\"']|\\[\\[))",
+            "match": "(?<![^.]\\.|:)\\b(assert|collectgarbage|error|getfenv|getmetatable|ipairs|loadstring|next|pairs|pcall|print|rawequal|rawget|rawset|require|select|setfenv|setmetatable|tonumber|tostring|type|unpack|xpcall|typeof|wait|delay|settings|elapsedTime|tick|time|warn|spawn|newproxy|UserSettings)\\b(?=\\s*(?:[({\"']|\\[\\[))",
             "name": "support.function.lua"
         },
         {
-            "match": "(?<![^.]\\.|:)\\b(coroutine\\.(create|resume|running|status|wrap|yield)|string\\.(byte|char|dump|find|format|gmatch|gsub|len|lower|match|rep|reverse|sub|upper|split)|table\\.(concat|insert|maxn|remove|sort|create|find|foreach|foreachi|getn|move|pack|unpack)|math\\.(abs|acos|asin|atan2?|ceil|cosh?|deg|exp|floor|fmod|frexp|ldexp|log|log10|max|min|modf|pow|rad|random|randomseed|tointeger|type|ult|noise|sign|sinh?|sqrt|tanh?)|io\\.(close|flush|input|lines|open|output|popen|read|tmpfile|type|write)|os\\.(clock|date|difftime|execute|exit|getenv|remove|rename|setlocale|time|tmpname)|package\\.(cpath|loaded|loadlib|path|preload|seeall)|debug\\.(debug|[gs]etfenv|[gs]ethook|getinfo|[gs]etlocal|[gs]etmetatable|getregistry|[gs]etupvalue|traceback))\\b(?=\\s*(?:[({\"']|\\[\\[))",
+            "match": "(?<![^.]\\.|:)\\b(coroutine\\.(create|resume|running|status|wrap|yield|isyieldable)|string\\.(byte|char|dump|find|format|gmatch|gsub|len|lower|match|rep|reverse|sub|upper|split|packsize|pack|unpack)|table\\.(concat|insert|maxn|remove|sort|create|find|foreach|foreachi|getn|move|pack|unpack)|math\\.(abs|acos|asin|atan2?|ceil|cosh?|deg|exp|floor|fmod|frexp|ldexp|log|log10|max|min|modf|pow|rad|random|randomseed|tointeger|type|ult|noise|clamp|sign|sinh?|sqrt|tanh?|round)|io\\.(close|flush|input|lines|open|output|popen|read|tmpfile|type|write)|os\\.(clock|date|difftime|execute|exit|getenv|remove|rename|setlocale|time|tmpname)|package\\.(cpath|loaded|loadlib|path|preload|seeall)|debug\\.(debug|[gs]etfenv|[gs]ethook|getinfo|[gs]etlocal|[gs]etmetatable|getregistry|[gs]etupvalue|traceback|profileend|profilebegin)|utf8\\.(char|codes|codepoint|len|offset|graphemes|charpattern|nfcnormalize|nfdnormalize)|bit32\\.(arshift|band|bnot|bor|btest|bxor|extract|lrotate|lshift|replace|rrotate|rshift))\\b(?=\\s*(?:[({\"']|\\[\\[))",
             "name": "support.function.library.lua"
         },
         {
@@ -317,10 +313,6 @@
             "name": "keyword.operator.lua"
 		},
 		{
-			"name": "constant.language",
-			"match": "\\b(workspace|game|script|plugin|shared)\\b"
-		},
-		{
 			"captures": {
 				"1": {
 					"name": "support.class"
@@ -328,14 +320,6 @@
 			},
 			"match": "\\b(Axes|BrickColor|CFrame|Color3|ColorSequence|ColorSequenceKeypoint|DateTime|DockWidgetPluginGuiInfo|Faces|Instance|NumberRange|NumberSequence|NumberSequenceKeypoint|PathWaypoint|PhysicalProperties|Random|Ray|RaycastParams|Rect|Region3|TweenInfo|UDim|UDim2|Vector2|Vector3)\\b[.:]"
 		},
-		{
-			"captures": {
-				"1": {
-					"name": "support.function"
-				}
-			},
-			"match": "\\b(debug\\.(traceback|profilebegin|profileend)|math\\.(noise|clamp)|utf8\\.(char|codes|codepoint|len|offset|graphemes)|delay|elapsedTime|require|settings|spawn|tick|time|typeof|UserSettings|version|wait|warn)\\s*\\("
-        },
         {
             "name": "support.variable",
 			"match": "\\w+"

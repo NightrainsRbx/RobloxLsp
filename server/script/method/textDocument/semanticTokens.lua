@@ -5,9 +5,8 @@ local rbxapi         = require 'rbxapi'
 local config         = require 'config'
 
 local timerCache = {}
+
 local constLib = {
-    ['_G']                = true,
-    ['_VERSION']          = true,
     ['math.pi']           = true,
     ['math.huge']         = true,
     ['math.maxinteger']   = true,
@@ -23,19 +22,24 @@ local constLib = {
     ['package.path']      = true,
     ['package.preload']   = true,
     ['package.searchers'] = true,
+}
+
+local ignore = {
+    ['_G']                = true,
+    ['_VERSION']          = true,
     ['workspace']         = true,
     ['game']              = true,
     ['script']            = true,
     ['plugin']            = true,
     ['shared']            = true,
-    -- ['Enum']              = true,
 }
+
 local Care = {
     ['name'] = function(source, sources)
         if source[1] == '' then
             return
         end
-        if constLib[source[1]] then
+        if ignore[source[1]] then
             return
         end
         if source:get 'global' then
@@ -104,12 +108,12 @@ local Care = {
                 }
                 return
             end
-            -- sources[#sources+1] = {
-            --     start      = source.start,
-            --     finish     = source.finish,
-            --     type       = TokenTypes.variable,
-            -- }
         elseif source:bindValue() then
+            local lib = findLib(source)
+            if lib and lib.doc and constLib[lib.doc] then
+                table.remove(sources, #sources)
+                return
+            end
             local value = source:bindValue()
             if value:getType():sub(1, 4) == "Enum" then
                 local simple = source:get("simple")
