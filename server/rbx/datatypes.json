@@ -2735,6 +2735,23 @@
                     }
                 },
                 {
+                    "MemberType": "Function",
+                    "Name": "Orthonormalize",
+                    "Parameters": [
+                        {
+                            "Name": "self",
+                            "Type": {
+                                "Category": "",
+                                "Name": "any"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "",
+                        "Name": "CFRame"
+                    }
+                },
+                {
                     "MemberType": "Property",
                     "Name": "z",
                     "Deprecated": true,
