@@ -396,7 +396,7 @@ Generics1   <-  Sp ('<' Sp (Name / Sp COMMA)+ Sp '>')
 Generics2   <-  Sp ('<' Sp (Type / Sp COMMA)+ Sp '>')
             ->  Generics
 
-TypeList    <-  ({} PL (Type / Sp COMMA)* NeedPR {})
+TypeList    <-  ({} PL (Type / Sp COMMA)* NeedPR {} Optional)
             ->  TypeList
 
 NameType    <-  Sp ({} NameBody {} Generics2? Optional)
@@ -408,6 +408,7 @@ FuncType    <-  Sp ({} TypeList Sp '->' (TypeList / Type) {})
 
 FieldType   <-  Sp ({} Name COLON Type {}) ->  FieldType1
             /   Sp ({} BL Type DirtyBR COLON Type {}) ->  FieldType2
+            /   Sp ({} Type {}) ->  FieldType3
 FieldList   <-  (FieldType / Sp COMMA)*
             ->  FieldTypeList
 TableType   <-  Sp ({} TL FieldList DirtyTR Optional)

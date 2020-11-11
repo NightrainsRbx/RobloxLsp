@@ -1252,6 +1252,15 @@ local Defs = {
             value = value
         }
     end,
+    FieldType3 = function (start, value, finish)
+        return {
+            type = "fieldType3",
+            start = start,
+            finish = finish,
+            key = nil,
+            value = value
+        }
+    end,
     FieldTypeList = function (...)
         local list = {...}
         local hasIndexer = false
