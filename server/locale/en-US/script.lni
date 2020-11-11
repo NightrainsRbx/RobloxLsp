@@ -91,6 +91,7 @@ PARSER_MISS_END         = 'Miss corresponding `end` .'
 PARSER_ERR_COMMENT_PREFIX = 'Lua should use `--` for annotations.'
 PARSER_MISS_SEP_IN_TABLE = 'Miss symbol `,` or `;` .'
 PARSER_MULTIPLE_TABLE_INDEXER = 'Cannot have more than one table indexer.'
+PARSER_EXPECTED_FIELD_COLON = 'Expected `:` when parsing table field.'
 PARSER_EXP_TYPE         = 'Expected type.'
 PARSER_EXP_IDENTIFIER   = 'Expected indentifier when parsing expression.'
 
