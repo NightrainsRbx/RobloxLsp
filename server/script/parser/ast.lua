@@ -1275,6 +1275,12 @@ local Defs = {
                 else
                     hasIndexer = true
                 end
+            elseif field.type == "fieldType3" and #list > 1 then
+                pushError {
+                    type = 'EXPECTED_FIELD_COLON',
+                    start = field.finish,
+                    finish = field.finish,
+                }
             end
         end
         return list

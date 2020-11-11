@@ -32,7 +32,7 @@ return function(mode, ...)
     end
     local output = table.concat(strs, "\n") .. "\n"
 
-    local file = io.open("C:\\Users\\Andres\\output.txt", mode)
+    local file = io.open("C:\\Users\\andre\\output.txt", mode)
     file:write(output)
     file:close()
 end

@@ -48,6 +48,55 @@ local function isDoubleIndexed(index)
     -- end
 end
 
+local function searchReturn(source)
+    if source.type == "return" then
+        return source
+    elseif source.type == "if" then
+        if source[1] then
+            for _, source2 in ipairs(source[1]) do
+                local ret = searchReturn(source2)
+                if ret then
+                    return ret
+                end
+            end
+        end
+    elseif source.type == "do" then
+        for _, source2 in ipairs(source) do
+            if searchReturn(source2) then
+                local ret = searchReturn(source2)
+                if ret then
+                    return ret
+                end
+            end
+        end
+    end
+end
+
+function mt:searchMissingModuleReturn(callback)
+    if not config.isLuau() then
+        return
+    end
+    if (not self.vm.uri:match("%.server%.lua$")) and (not self.vm.uri:match("%.client%.lua$")) then
+        local hasReturn, hasLast = false, false
+        local start, finish = #self.vm.text, #self.vm.text
+        self.vm:eachSource(function (source)
+            if source.last then
+                hasLast = true
+                local ret = searchReturn(source)
+                if ret then
+                    start, finish = ret.start, ret.finish
+                    if #ret == 1 then
+                        hasReturn = true
+                    end
+                end
+            end
+        end)
+        if hasLast and not hasReturn then
+            callback(start, finish)
+        end
+    end
+end
+
 function mt:searchUnknownSymbol(callback)
     if not config.isLuau() then
         return
@@ -1265,6 +1314,12 @@ return function (vm, lines, uri, errs)
         datas = {},
         errs = errs or {}
     }, mt)
+
+    session:doDiagnostics(session.searchMissingModuleReturn, 'missing-module-return', function ()
+        return {
+            message = lang.script.DIAG_MISS_MOD_RETURN,
+        }
+    end)
 
     session:doDiagnostics(session.searchUndefinedRbxMember, 'undefined-rbx-member', function (member, class)
         return {

@@ -37,5 +37,8 @@ return function (self, lua, mode, version)
         pushError(err)
         return nil, Errs
     end
+    if #res > 0 and type(res[#res]) == "table" then
+        res[#res].last = true
+    end
     return res, Errs, State.Comments
 end

@@ -407,7 +407,7 @@
 							"type": "string"
 						},
 						"invalid-rbx-classname": {
-							"default": "Information",
+							"default": "Warning",
 							"enum": [
 								"Error",
 								"Warning",
@@ -418,7 +418,18 @@
 							"type": "string"
 						},
 						"unknown-symbol": {
-							"default": "Information",
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"missing-module-return": {
+							"default": "Warning",
 							"enum": [
 								"Error",
 								"Warning",
