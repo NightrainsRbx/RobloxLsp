@@ -611,14 +611,12 @@ end
 
 ---@param uri uri
 function mt:doDiagnostics(uri, saved)
-    if not saved then
-        if not config.config.diagnostics.enable then
-            self._needDiagnostics[uri] = nil
-            return
-        end
-        if not self._needDiagnostics[uri] then
-            return
-        end
+    if not config.config.diagnostics.enable then
+        self._needDiagnostics[uri] = nil
+        return
+    end
+    if not self._needDiagnostics[uri] and not saved then
+        return
     end
     
     local name = 'textDocument/publishDiagnostics'
