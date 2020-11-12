@@ -610,13 +610,15 @@ function mt:compileVM(uri)
 end
 
 ---@param uri uri
-function mt:doDiagnostics(uri)
-    if not config.config.diagnostics.enable then
-        self._needDiagnostics[uri] = nil
-        return
-    end
-    if not self._needDiagnostics[uri] then
-        return
+function mt:doDiagnostics(uri, saved)
+    if not saved then
+        if not config.config.diagnostics.enable then
+            self._needDiagnostics[uri] = nil
+            return
+        end
+        if not self._needDiagnostics[uri] then
+            return
+        end
     end
     
     local name = 'textDocument/publishDiagnostics'
@@ -648,7 +650,7 @@ function mt:doDiagnostics(uri)
     end
     if self._needDiagnostics[uri] then
         self._needDiagnostics[uri] = nil
-    else
+    elseif not saved then
         return
     end
     if res then

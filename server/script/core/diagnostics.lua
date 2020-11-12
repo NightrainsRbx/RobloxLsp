@@ -3,6 +3,7 @@ local config = require 'config'
 local library = require 'core.library'
 local rbxApi = require 'rbxapi'
 local buildGlobal = require 'vm.global'
+local uri = require 'uri'
 local DiagnosticSeverity = require 'constant.DiagnosticSeverity'
 local DiagnosticDefaultSeverity = require 'constant.DiagnosticDefaultSeverity'
 local DiagnosticTag = require 'constant.DiagnosticTag'
@@ -72,27 +73,53 @@ local function searchReturn(source)
     end
 end
 
+local function readFile(path)
+    local file = io.open(tostring(path))
+    local contents = file:read("*a")
+    file:close()
+    return contents
+end
+
+local function searchLastLine(text)
+    local start, finish = 1, 1
+    local lastStart = 1
+    for i = 1, #text, 1 do
+        if text:sub(i, i):match("[\n\r]") then
+            lastStart = i + 1
+        elseif not text:sub(i, i):match("%s") then
+            start = lastStart
+            finish = i
+        end
+    end
+    return start, finish
+end
+
 function mt:searchMissingModuleReturn(callback)
     if not config.isLuau() then
         return
     end
     if (not self.vm.uri:match("%.server%.lua$")) and (not self.vm.uri:match("%.client%.lua$")) then
-        local hasReturn, hasLast = false, false
-        local start, finish = #self.vm.text, #self.vm.text
+        local hasReturn, multipleReturn = false, false
+        local start, finish = searchLastLine(self.vm.text)
         self.vm:eachSource(function (source)
             if source.last then
-                hasLast = true
                 local ret = searchReturn(source)
                 if ret then
-                    start, finish = ret.start, ret.finish
+                    if ret.start and ret.finish and ret.finish ~= 0 then
+                        start, finish = ret.start, ret.finish
+                    end
                     if #ret == 1 then
                         hasReturn = true
+                    elseif #ret > 1 then
+                        multipleReturn = true
                     end
                 end
             end
         end)
-        if hasLast and not hasReturn then
-            callback(start, finish)
+        if #self.vm.sources > 2 and not hasReturn then
+            if #readFile(uri.decode(self.vm.uri)) == #self.vm.text:gsub("\r", "") or multipleReturn then
+                callback(start, finish)
+            end
         end
     end
 end

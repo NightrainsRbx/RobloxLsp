@@ -38,6 +38,8 @@ return function (lsp, params)
             if lsp:getVM(change.uri) then
                 needReset[ws] = true
             end
+        elseif change.type == FileChangeType.Changed then
+            lsp:doDiagnostics(change.uri, true)
         end
         -- 排除类文件发生更改需要重新扫描
         local filename = path:filename():string()

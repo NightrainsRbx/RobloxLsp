@@ -108,7 +108,7 @@ Rest        <-  (!%nl .)*
 
 AND         <-  Sp {'and'}    Cut
 BREAK       <-  Sp 'break'    Cut
-CONTINUE    <-  Sp 'continue' Cut Sp ';'? !%p
+CONTINUE    <-  Sp 'continue' Cut
 DO          <-  Sp 'do'       Cut
             /   Sp ({} 'then' Cut {}) -> ErrDo
 ELSE        <-  Sp 'else'     Cut
@@ -470,7 +470,7 @@ AfterBreak  <-  Sp !END !UNTIL !ELSEIF !ELSE Action
 BreakStart  <-  {} -> BreakStart
 BreakEnd    <-  {} -> BreakEnd
 
-Continue       <-  CONTINUE ({} Semicolon* AfterContinue?)
+Continue    <-  CONTINUE ({} (Sp ';'? !%p) Semicolon* AfterContinue?)
             ->  Continue
 AfterContinue  <-  Sp !END !UNTIL !ELSEIF !ELSE Action
 ContinueStart  <-  {} -> ContinueStart
