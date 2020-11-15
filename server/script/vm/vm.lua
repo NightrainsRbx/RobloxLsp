@@ -272,6 +272,9 @@ function mt:callRequire(func, values)
         if self:isRoact(values[valueIndex], scriptPath, requireValue) then
             requireValue = self:createValue('Roact', self:getDefaultSource())
             requireValue:set('cross file', true)
+        elseif self:isRodux(values[valueIndex], scriptPath, requireValue) then
+            requireValue = self:createValue('Rodux', self:getDefaultSource())
+            requireValue:set('cross file', true)
         end
         func:setReturn(1, requireValue)
     end

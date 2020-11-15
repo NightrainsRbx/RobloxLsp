@@ -503,6 +503,50 @@ function mt:isRoact(value, path, requireValue)
     end
 end
 
+function mt:isRodux(value, path, requireValue)
+    if value:getType() == "string" then
+        if value._literal and value._literal:lower():match("rodux") then
+            return true
+        end
+        return
+    end
+    if path and not path:lower():match("rodux") then
+       return
+    end
+    if (not value._child) or value:getType() ~= "ModuleScript" then
+        return
+    end
+    local children = {
+        "combineReducers",
+        "createReducer",
+        "loggerMiddleware",
+        "NoYield",
+        "Signal",
+        "Store",
+        "thunkMiddleware"
+    }
+    for child in pairs(value._child) do
+        for index, childName in pairs(children) do
+            if child == childName then
+                table.remove(children, index)
+                break
+            end
+        end
+        if #children == 0 then
+            break
+        end
+    end
+    if #children == 0 then
+        return true
+    end
+    if requireValue and requireValue.uri then
+        local success, source = pcall(readFile, uri.decode(requireValue.uri))
+        if success and source:lower():match("rodux") and source:match("Rotriever") then
+            return true
+        end
+    end
+end
+
 function mt:searchAeroModules(value)
     local currentPath = fs.current_path()
     if fs.exists(currentPath / "src") then

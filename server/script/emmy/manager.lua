@@ -14,6 +14,7 @@ local newFuncType  = require 'emmy.funcType'
 
 local config = require 'config'
 local rbxApi = require 'rbxapi'
+local robloxLibs = require 'robloxlibs'
 
 local mt = {}
 mt.__index = mt
@@ -232,6 +233,9 @@ return function ()
         end
         for tp in pairs(rbxApi.NewTypes) do
             self:newClass(tp, 'any', source)
+        end
+        for _, tp in pairs(robloxLibs:getTypes()) do
+            self:newClass(tp, nil, source)
         end
     end
 

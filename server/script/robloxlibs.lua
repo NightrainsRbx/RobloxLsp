@@ -1,7 +1,6 @@
-local testez = {}
+local robloxlibs = {}
 
-function testez:generateLibs()
-    local globals = {}
+local function generateTestez(globals)
     globals.describe = {
         name = "describe",
         type = "function",
@@ -356,7 +355,199 @@ function testez:generateLibs()
     globals.itFIXME = globals.itFOCUS
     globals.fit = globals.itFOCUS
     globals.xit = globals.itSKIP
-    return globals
 end
 
-return testez
+local function generateRodux(objects)
+    objects.Rodux = {
+        createReducer = {
+            name = "createReducer",
+            type = "function",
+            args = {
+                [1] = {
+                    name = "initialState",
+                    type = "any"
+                },
+                [2] = {
+                    name = "actionHandlers",
+                    type = "table"
+                }
+            },
+            returns = {
+                [1] = {
+                    name = "reducer",
+                    type = "function"
+                }
+            },
+            description = "A helper function that can be used to create reducers."
+        },
+        combineReducers = {
+            name = "combineReducers",
+            type = "function",
+            args = {
+                [1] = {
+                    name = "map",
+                    type = "table"
+                }
+            },
+            returns = {
+                [1] = {
+                    name = "reducer",
+                    type = "function"
+                }
+            },
+            description = "A helper function that can be used to combine multiple reducers into a new reducer."
+        },
+        loggerMiddleware = {
+            name = "loggerMiddleware",
+            type = "function",
+            description = "A middleware that logs actions and the new state that results from them."
+        },
+        thunkMiddleware = {
+            name = "thunkMiddleware",
+            type = "function",
+            description = "A middleware that allows thunks to be dispatched. Thunks are functions that perform asynchronous tasks or side effects, and can dispatch actions."
+        },
+        Store = {
+            name = "Store",
+            type = "table",
+            child = {
+                new = {
+                    name = "new",
+                    type = "function",
+                    args = {
+                        [1] = {
+                            name = "reducer",
+                            type = "function"
+                        },
+                        [2] = {
+                            name = "initialState",
+                            type = "any",
+                            optional = "after"
+                        },
+                        [3] = {
+                            name = "middlewares",
+                            type = "table",
+                            optional = "self"
+                        }
+                    },
+                    returns = {
+                        [1] = {
+                            type = "RoduxStore"
+                        }
+                    },
+                    description = "Creates and returns a new Store."
+                }
+            }
+        }
+    }
+    objects.RoduxStore = {
+        changed = {
+            name = "changed",
+            type = "RoduxSignal",
+            description = "A ``Signal`` that is fired when the store's state is changed up to once per frame."
+        },
+        dispatch = {
+            name = "dispatch",
+            type = "function",
+            args = {
+                [1] = {
+                    name = "self",
+                    type = "any"
+                },
+                [2] = {
+                    name = "action",
+                    type = "table"
+                }
+            },
+            description = "Dispatches an action. The action will travel through all of the store's middlewares before reaching the store's reducer.\n\nUnless handled by middleware, ``action`` must contain a ``type`` field to indicate what type of action it is. No other fields are required."
+        },
+        getState = {
+            name = "getState",
+            type = "function",
+            args = {
+                [1] = {
+                    name = "self",
+                    type = "any"
+                }
+            },
+            returns = {
+                [1] = {
+                    name = "state",
+                    type = "table"
+                }
+            },
+            description = "Gets the store's current state."
+        },
+        destruct = {
+            name = "destruct",
+            type = "function",
+            args = {
+                [1] = {
+                    name = "self",
+                    type = "any"
+                }
+            },
+            description = "Destroys the store, cleaning up its connections."
+        },
+        flush = {
+            name = "flush",
+            type = "function",
+            args = {
+                [1] = {
+                    name = "self",
+                    type = "any"
+                }
+            },
+            description = "Flushes the store's pending actions, firing the ``changed`` event if necessary."
+        }
+    }
+    objects.RoduxSignal = {
+        connect = {
+            name = "connect",
+            type = "function",
+            args = {
+                [1] = {
+                    name = "self",
+                    type = "any"
+                },
+                [2] = {
+                    name = "listener",
+                    type = "function"
+                }
+            },
+            returns = {
+                [1] = {
+                    name = "Connection",
+                    type = "table",
+                    child = {
+                        disconnect = {
+                            name = "disconnect",
+                            type = "function"
+                        }
+                    }
+                }
+            },
+            description = "Connects a listener to the signal. The listener will be invoked whenever the signal is fired.\n\n``connect`` returns a table with a ``disconnect`` function that can be used to disconnect the listener from the signal."
+        }
+    }
+end
+
+function robloxlibs:generateLibs()
+    local libs = {
+        globals = {},
+        objects = {}
+    }
+    generateTestez(libs.globals)
+    generateRodux(libs.objects)
+    return libs
+end
+
+function robloxlibs:getTypes()
+    return {
+        "Rodux",
+        "RoduxStore",
+        "RoduxSignal"
+    }
+end
+
+return robloxlibs

@@ -2,7 +2,7 @@ local lni = require 'lni'
 local fs = require 'bee.filesystem'
 local config = require 'config'
 local rbxApi = require 'rbxapi'
-local testezApi = require 'testez'
+local robloxlibs = require 'robloxlibs'
 
 local Library = {}
 
@@ -329,16 +329,18 @@ local function init()
         end
     end
     if config.isLuau() then
-        local rbxLibs = rbxApi:generateLibs()
-        initRbxTypes(rbxLibs)
-        for parent, members in pairs(rbxLibs.globals) do
+        local rbxApiLibs = rbxApi:generateLibs()
+        initRbxTypes(rbxApiLibs)
+        for parent, members in pairs(rbxApiLibs.globals) do
             for name, lib in pairs(members) do
                 insertChild(Library.global, parent, name, lib, "table")
             end
         end
-        for key, value in pairs(testezApi:generateLibs()) do
+        local rbxLibs = robloxlibs:generateLibs()
+        for key, value in pairs(rbxLibs.globals) do
             insertGlobal(Library.global, key, value)
         end
+        initRbxTypes(rbxLibs)
     end
 end
 
