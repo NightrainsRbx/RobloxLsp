@@ -346,6 +346,13 @@ local function removeLuaExtension(str)
     return str:gsub("%.server%.lua", ""):gsub("%.client%.lua", ""):gsub("%.lua", "")
 end
 
+local function readFile(path)
+    local file = io.open(tostring(path))
+    local contents = file:read("*a")
+    file:close()
+    return contents
+end
+
 function mt:findScriptByPath(uri)
     if #rojo.RojoProject == 0 then
         return
@@ -424,6 +431,61 @@ function mt:findPathByScript(script)
         end
     end
     return path:gsub("%/", ".")
+end
+
+function mt:isRoact(value)
+    if value:getType() == "string" then
+        if value._literal and value._literal:lower():match("roact") then
+            return true
+        end
+        return
+    end
+    if (not value._child) or value:getType() ~= "ModuleScript" then
+        return
+    end
+    local children = {
+        "None",
+        "Binding",
+        "Logging",
+        "createContext",
+        "Component",
+        "createRef",
+        "ComponentLifecyclePhase",
+        "RobloxRenderer",
+        "ElementUtils",
+        "SingleEventManager",
+        "PropMarkers",
+        "getDefaultInstanceProperty",
+        "Symbol",
+        "ElementKind",
+        "PureComponent",
+        "Portal",
+        "strict",
+        "assertDeepEqual",
+        "createSpy",
+        "oneChild",
+        "Config",
+        "NoopRenderer",
+        "internalAssert",
+        "assign",
+        "createReconciler",
+        "createFragment",
+        "createReconcilerCompat",
+        "Type",
+        "createElement",
+        "invalidSetStateMessages",
+        "createSignal",
+        "GlobalConfig",
+    }
+    for child in pairs(value._child) do
+        for index, childName in pairs(children) do
+            if child == childName then
+                table.remove(children, index)
+                break
+            end
+        end
+    end
+    return #children < 16
 end
 
 function mt:searchAeroModules(value)

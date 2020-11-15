@@ -569,7 +569,6 @@ function mt:eachInfo(callback, uri)
     if passed > 0.1 then
         log.warn(('eachInfo takes: [%.3f]sec, #list: %d'):format(passed, #list))
     end
-    output("w")
     for i = 1, #list do
         local info = list[i]
         if info[2] and isFromTestEZ(info[2], uri) then

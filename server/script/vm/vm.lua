@@ -263,6 +263,12 @@ function mt:callRequire(func, values)
         func:setReturn(1, value)
         return
     else
+        if self:isRoact(values[valueIndex]) then
+            local requireValue = self:createValue('Roact', self:getDefaultSource())
+            requireValue:set('cross file', true)
+            func:setReturn(1, requireValue)
+            return
+        end
         local requireValue = self:tryRequireOne(str, value, 'require')
         if not requireValue then
             requireValue = self:createValue('any', self:getDefaultSource())
