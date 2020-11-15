@@ -7,6 +7,7 @@ local library = require 'core.library'
 local valueMgr = require 'vm.value'
 local fs = require 'bee.filesystem'
 local mt = require 'vm.manager'
+local uri = require 'uri'
 
 function mt:getArgString(source)
     if source.type == "string" then
@@ -433,12 +434,15 @@ function mt:findPathByScript(script)
     return path:gsub("%/", ".")
 end
 
-function mt:isRoact(value)
+function mt:isRoact(value, path, requireValue)
     if value:getType() == "string" then
         if value._literal and value._literal:lower():match("roact") then
             return true
         end
         return
+    end
+    if path and not path:lower():match("roact") then
+       return
     end
     if (not value._child) or value:getType() ~= "ModuleScript" then
         return
@@ -484,8 +488,19 @@ function mt:isRoact(value)
                 break
             end
         end
+        if #children < 16 then
+            break
+        end
     end
-    return #children < 16
+    if #children < 16 then
+        return true
+    end
+    if requireValue and requireValue.uri then
+        local success, source = pcall(readFile, uri.decode(requireValue.uri))
+        if success and source:match("Roact") and source:match("Rotriever") then
+            return true
+        end
+    end
 end
 
 function mt:searchAeroModules(value)

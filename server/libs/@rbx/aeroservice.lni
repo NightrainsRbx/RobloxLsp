@@ -1,0 +1,119 @@
+[AeroService]
+type = 'class'
+parent = {}
+
+<default>
+type = 'function'
+parent = {
+    1 = {
+        type = 'object',
+        name = 'AeroService'
+    }
+}
+
+[WrapModule]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'module'
+type = 'table'
+
+[RegisterEvent]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'eventName'
+type = 'string'
+
+[RegisterClientEvent]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'clientEventName'
+type = 'string'
+
+[Fire]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'eventName'
+type = 'string'
+``````````
+type = '...'
+
+[FireClient]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'clientEventName'
+type = 'string'
+``````````
+name = 'player'
+type = 'Player'
+``````````
+type = '...'
+
+[FireAllClients]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'clientEventName'
+type = 'string'
+``````````
+type = '...'
+
+[FireOtherClients]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'clientEventName'
+type = 'string'
+``````````
+name = 'player'
+type = 'Player'
+``````````
+type = '...'
+
+[ConnectEvent]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'eventName'
+type = 'string'
+``````````
+name = 'handler'
+type = 'function'
+[[.returns]]
+type = 'RBXScriptConnection'
+
+[ConnectClientEvent]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'clientEventName'
+type = 'string'
+``````````
+name = 'handler'
+type = 'function'
+[[.returns]]
+type = 'RBXScriptConnection'
+
+[Services]
+type = 'table'
+
+[Modules]
+type = 'table'
+special = 'aeroModules'
+
+[Shared]
+type = 'table'
+special = 'aeroModules'

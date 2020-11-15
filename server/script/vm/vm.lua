@@ -233,9 +233,10 @@ end
 function mt:callRequire(func, values)
     local valueIndex = 1
     local value = values[valueIndex]
+    local scriptPath
     if config.isLuau() then
         if value then
-            local scriptPath = self:findPathByScript(value)
+            scriptPath = self:findPathByScript(value)
             if scriptPath then
                 value = self:createValue('string', self:getDefaultSource(), scriptPath)
                 goto CONTINUE
@@ -263,15 +264,13 @@ function mt:callRequire(func, values)
         func:setReturn(1, value)
         return
     else
-        if self:isRoact(values[valueIndex]) then
-            local requireValue = self:createValue('Roact', self:getDefaultSource())
-            requireValue:set('cross file', true)
-            func:setReturn(1, requireValue)
-            return
-        end
         local requireValue = self:tryRequireOne(str, value, 'require')
         if not requireValue then
             requireValue = self:createValue('any', self:getDefaultSource())
+            requireValue:set('cross file', true)
+        end
+        if self:isRoact(values[valueIndex], scriptPath, requireValue) then
+            requireValue = self:createValue('Roact', self:getDefaultSource())
             requireValue:set('cross file', true)
         end
         func:setReturn(1, requireValue)
