@@ -81,6 +81,10 @@ local function addAeroController(value)
     end
 end
 
+local function isFromTestEZ(child, uri)
+    return type(uri) == "string" and #uri > 1 and (child._lib and child._lib.testez) and not uri:match("%.spec%.lua$")
+end
+
 function mt:setType(tp, rate)
     if type(tp) == 'table' then
         for _, ctp in ipairs(tp) do
@@ -188,7 +192,11 @@ function mt:rawGet(index, uri)
             return
         end
         if not self._child[uri] or not self._child[uri][index] then
-            return self._child["@global"][index]
+            local ret = self._child["@global"][index]
+            if ret and isFromTestEZ(ret, uri) then
+                return nil
+            end
+            return ret
         end
         return self._child[uri][index]
     end
@@ -341,6 +349,7 @@ function mt:rawEach(callback, mark, uri)
         return nil
     end
     self:flushChild()
+
     local _childs = {self._child}
     if self:get 'ENV' and config.isLuau() then
         _childs = {self._child["@global"]}
@@ -350,6 +359,9 @@ function mt:rawEach(callback, mark, uri)
     end
     for _, _child in pairs(_childs) do
         for index, value in pairs(_child) do
+            if isFromTestEZ(value, uri) then
+                goto CONTINUE
+            end
             if mark then
                 if mark[index] then
                     goto CONTINUE
@@ -413,11 +425,13 @@ function mt:mergeInfo(value)
         return
     end
     local infos = self._info
-    for srcId, info in pairs(value._info) do
-        local src = listMgr.get(srcId)
-        if src and not infos[srcId] then
-            infos[srcId] = info
-            infos._count = (infos._count or 0) + 1
+    if value._info then
+        for srcId, info in pairs(value._info) do
+            local src = listMgr.get(srcId)
+            if src and not infos[srcId] then
+                infos[srcId] = info
+                infos._count = (infos._count or 0) + 1
+            end
         end
     end
     value._info = infos
@@ -532,7 +546,7 @@ function mt:addInfo(tp, source, ...)
     end
 end
 
-function mt:eachInfo(callback)
+function mt:eachInfo(callback, uri)
     local clock = os.clock()
     local infos = self._info
     local list = {}
@@ -555,12 +569,17 @@ function mt:eachInfo(callback)
     if passed > 0.1 then
         log.warn(('eachInfo takes: [%.3f]sec, #list: %d'):format(passed, #list))
     end
+    output("w")
     for i = 1, #list do
         local info = list[i]
+        if info[2] and isFromTestEZ(info[2], uri) then
+            goto CONTINUE
+        end
         local res = callback(info, listMgr.get(info.source))
         if res ~= nil then
             return res
         end
+        ::CONTINUE::
     end
     return nil
 end

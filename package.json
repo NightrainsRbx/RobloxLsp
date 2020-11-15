@@ -503,8 +503,7 @@
 				},
 				"Lua.workspace.ignoreDir": {
 					"default": [
-						".vscode",
-						"*.spec.lua"
+						".vscode"
 					],
 					"items": {
 						"type": "string"

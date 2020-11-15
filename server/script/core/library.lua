@@ -2,6 +2,7 @@ local lni = require 'lni'
 local fs = require 'bee.filesystem'
 local config = require 'config'
 local rbxApi = require 'rbxapi'
+local testezApi = require 'testez'
 
 local Library = {}
 
@@ -272,12 +273,10 @@ local function initRbxTypes(rbxLibs)
 end
 
 local function findLibFolder()
-    if fs.exists(fs.current_path() / 'lib') then
-        return fs.current_path() / 'lib'
-    elseif fs.exists(fs.current_path() / '.lib') then
+    if fs.exists(fs.current_path() / '.lib') then
         return fs.current_path() / '.lib'
-    elseif fs.exists(fs.current_path() / '.vscode') then
-        return fs.current_path() / '.vscode'
+    else
+        -- return fs.current_path()
     end
 end
 
@@ -336,6 +335,9 @@ local function init()
             for name, lib in pairs(members) do
                 insertChild(Library.global, parent, name, lib, "table")
             end
+        end
+        for key, value in pairs(testezApi:generateLibs()) do
+            insertGlobal(Library.global, key, value)
         end
     end
 end

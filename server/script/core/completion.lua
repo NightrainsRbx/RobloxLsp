@@ -353,7 +353,7 @@ local function searchFieldsByInfo(parent, word, source, map, srcMap)
             map[k] = v
             srcMap[k] = src
         end
-    end)
+    end, source.uri)
 end
 
 local function searchFieldsByChild(parent, word, source, map, srcMap)

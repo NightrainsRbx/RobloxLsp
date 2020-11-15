@@ -5,7 +5,7 @@ local client = require 'client'
 
 local function formatDefault(value)
     if type(value) == "string" then
-        if value:match("^[%d%.]+$") or value == "true" or value == "false" then
+        if value:match("^[%d%.]+$") or value == "true" or value == "false" or value == "nil" then
             return ('(%s)'):format(value)
         end
     end
