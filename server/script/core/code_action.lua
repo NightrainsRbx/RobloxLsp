@@ -3,6 +3,7 @@ local library = require 'core.library'
 local client = require 'client'
 local sp = require 'bee.subprocess'
 local rbxApi = require 'rbxapi'
+local findSource = require 'core.find_source'
 
 local function disableDiagnostic(lsp, uri, data, callback)
     callback {
@@ -42,7 +43,7 @@ local function addGlobal(name, uri, callback)
     }
 end
 
-local function addIgnoreMember(name, uri, callback)
+local function addIgnoreName(name, uri, callback)
     callback {
         title = lang.script('ACTION_IGNORE_NAME', name),
         kind = 'quickfix',
@@ -54,6 +55,25 @@ local function addIgnoreMember(name, uri, callback)
                     key    = 'Lua.diagnostics.ignore',
                     action = 'add',
                     value  = name,
+                    uri    = uri,
+                }
+            }
+        },
+    }
+end
+
+local function addIgnorePath(path, uri, callback)
+    callback {
+        title = lang.script('ACTION_IGNORE_PATH', path),
+        kind = 'quickfix',
+        command = {
+            title = lang.script.COMMAND_IGNORE_PATH,
+            command = 'lua.config',
+            arguments = {
+                {
+                    key    = 'Lua.diagnostics.ignore',
+                    action = 'add',
+                    value  = path,
                     uri    = uri,
                 }
             }
@@ -99,6 +119,10 @@ local function openCustomLibrary(libName, uri, callback)
     }
 end
 
+local function solvePath(path)
+    return "game" .. path:gsub("%/", ".")
+end
+
 local function solveUndefinedRbxMember(lsp, uri, data, callback)
     local vm, lines, text = lsp:getVM(uri)
     if not vm then
@@ -107,27 +131,20 @@ local function solveUndefinedRbxMember(lsp, uri, data, callback)
     local start = lines:position(data.range.start.line + 1, data.range.start.character + 1)
     local finish = lines:position(data.range['end'].line + 1, data.range['end'].character)
     local name = text:sub(start, finish)
-    addIgnoreMember(name, uri, callback)
-    -- callback {
-    --     title = lang.script.ACTION_FIX_UNDEF_MEMBER,
-    --     kind = 'quickfix',
-    --     edit = {
-    --         changes = {
-    --             [uri] = {
-    --                 {
-    --                     range = {
-    --                         start = {
-    --                             line = data.range.start.line,
-    --                             character = data.range.start.character - 1
-    --                         },
-    --                         ['end'] = data.range["end"],
-    --                     },
-    --                     newText = "['" .. name .. "']",
-    --                 }
-    --             }
-    --         }
-    --     }
-    -- }
+    addIgnoreName(name, uri, callback)
+    local filter = {
+        ['name']           = true,
+        ['.']              = true,
+        [':']              = true,
+        ['call']           = true,
+    }
+    local source = findSource(vm, start, filter)
+    if source then
+        local parent = source:get('parent')
+        if parent and parent._lib and parent._lib.path then
+            addIgnorePath(solvePath(parent._lib.path), uri, callback)
+        end
+    end
 end
 
 local function solveDeprecatedRbxMember(lsp, uri, data, callback)
@@ -157,7 +174,7 @@ local function solveDeprecatedRbxMember(lsp, uri, data, callback)
             }
         }
     end
-    addIgnoreMember(name, uri, callback)
+    addIgnoreName(name, uri, callback)
 end
 
 local function solveUndefinedGlobal(lsp, uri, data, callback)

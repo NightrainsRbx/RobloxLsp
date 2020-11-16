@@ -11,6 +11,7 @@ local emmyMgr = require 'emmy.manager'
 local config = require 'config'
 local mt = require 'vm.manager'
 local plugin = require 'plugin'
+local rbxApi = require 'rbxapi'
 
 require 'vm.module'
 require 'vm.raw'
@@ -998,6 +999,13 @@ function mt:setOne(var, value, emmy, comment)
             local index = key[1]
             key:set('parent', parent)
             parent:setChild(index, value, key)
+            if config.isLuau() and config.config.diagnostics.datamodelAsIgnore then
+                if rbxApi:isInstance(parent:getType()) and index == "Name" then
+                    if value:getType() == "string" and value._literal then
+                        config.config.diagnostics.ignore[value._literal] = true
+                    end
+                end
+            end
         end
         key:bindValue(value, 'set')
     end

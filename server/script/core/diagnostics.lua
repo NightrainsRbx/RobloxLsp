@@ -37,18 +37,6 @@ local function isDeprecated(member, className)
     end
 end
 
-local function isDoubleIndexed(index)
-    -- local amount = 0
-    -- for _, names in pairs(LUA_NAMES) do
-    --     if names[index] then
-    --         amount = amount + names[index]
-    --     end
-    -- end
-    -- if amount > 1 then
-    --     return true
-    -- end
-end
-
 local function searchReturn(source)
     if source.type == "return" then
         return source
@@ -100,7 +88,7 @@ function mt:searchMissingModuleReturn(callback)
     end
     if (not self.vm.uri:match("%.server%.lua$")) and (not self.vm.uri:match("%.client%.lua$")) then
         local hasReturn, multipleReturn = false, false
-        local start, finish = searchLastLine(self.vm.text)
+        local start, finish = #self.vm.text, #self.vm.text --searchLastLine(self.vm.text)
         self.vm:eachSource(function (source)
             if source.last then
                 local ret = searchReturn(source)
@@ -188,6 +176,10 @@ function mt:searchInvalidRbxClass(callback)
     end)
 end
 
+local function solvePath(path)
+    return "game" .. path:gsub("%/", ".")
+end
+
 function mt:searchUndefinedRbxMember(callback)
     if not config.isLuau() then
         return
@@ -211,12 +203,22 @@ function mt:searchUndefinedRbxMember(callback)
                     return
                 end
                 local name = source[index + 1]
-                if name.type == "name" then -- and name._action == "get" then
-                    if rbxApi:isInstance(tp) and ignored[name[1]]
-                    or isDoubleIndexed(name[1])
-                    or (config.config.diagnostics.datamodelAsIgnore and rbxApi.DataModelIgnoreNames[name[1]])
-                    then
+                if name.type == "name" then
+                    local isInstance = rbxApi:isInstance(tp)
+                    if isInstance and ignored[name[1]] or (config.config.diagnostics.datamodelAsIgnore and rbxApi.DataModelIgnoreNames[name[1]]) then
                         goto CONTINUE
+                    end
+                    if isInstance then
+                        if (parent._lib and parent._lib.path) then
+                            local path = solvePath(parent._lib.path)
+                            for ignore in pairs(ignored) do
+                                if ignore:sub(1, 5) == "game." and (path .. "."):match("^" .. ignore:gsub("%.", "%%.") .. "%.") then
+                                    goto CONTINUE
+                                end
+                            end
+                        else
+                            goto CONTINUE
+                        end
                     end
                     local hasChild = false
                     if tp == "Instance" then
@@ -232,11 +234,6 @@ function mt:searchUndefinedRbxMember(callback)
                             end)
                         end
                     end
-                    -- parent:eachInfo(function (info)
-                    --     if info.type == "set child" and info[1] == name[1] then
-                    --         hasChild = true
-                    --     end
-                    -- end)
                     if not hasChild then
                         callback(name.start, name.finish, name[1], tp)
                         break
