@@ -1,0 +1,99 @@
+[createElement]
+description = "Creates a new Roact element representing the given ``component``.\n\nThe ``children`` argument is shorthand for adding a ``Roact.Children`` key to props. It should be specified as a dictionary of names to elements.\n\n``component`` can be a string, a function, or a table created by ``Component:extend``."
+
+[createFragment]
+description = "Creates a new Roact fragment with the provided table of elements. Fragments allow grouping of elements without the need for intermediate containing objects like ``Frames``."
+
+[mount]
+description = "Creates a Roblox Instance given a Roact element, and optionally a ``parent`` to put it in, and a key to use as the instance's ``Name``.\n\nThe result is a ``RoactTree``, which is an opaque handle that represents a tree of components owned by Roact. You can pass this to APIs like ``Roact.unmount``."
+
+[update]
+description = "Updates an existing instance handle with a new element, returning a new handle. This can be used to update a UI created with ``Roact.mount`` by passing in a new element with new props."
+
+[unmount]
+description = "Destroys the given ``RoactTree`` and all of its descendants. Does not operate on a Roblox Instance -- this must be given a handle that was returned by ``Roact.mount.``"
+
+[oneChild]
+description = "Given a dictionary of children, returns a single child element.\n\nIf ``children`` contains more than one child, this function will throw an error. This is intended to denote an error when using the component using ``oneChild``.\n\nIf ``children`` is ``nil`` or contains no children, ``oneChild`` will return nil."
+
+[createBinding]
+description = "The first value returned is a ``RoactBinding`` object, which will typically be passed as a prop to a Roact host component. The second is a function that can be called with a new value to update the binding."
+
+[getValue]
+description = "Returns the internal value of the binding. This is helpful when updating a binding relative to its current value."
+
+[map]
+description = "Returns a new binding that maps the existing binding's value to something else. For example, ``map`` can be used to transform an animation progress value like ``0.4`` into a property that can be consumed by a Roblox Instance like ``UDim2.new(0.4, 0, 1, 0)``."
+
+[joinBindings]
+description = "Combines multiple bindings into a single binding. The new binding's value will have the same keys as the input table of bindings."
+
+[createRef]
+description = "Creates a new reference object that can be used with ``Roact.Ref``."
+
+[createContext]
+description = "Creates a new context provider and consumer.\n\n``defaultValue`` is given to consumers if they have no ``Provider`` ancestors. It is up to users of Roact's context API to turn this case into an error if it is an invalid state.\n\n``Provider`` and ``Consumer`` are both Roact components."
+
+[setGlobalConfig]
+description = "The entry point for configuring Roact. Roact currently applies this to everything using this instance of Roact, so be careful using this with a project that has multiple consumers of Roact.\n\nOnce config values are set, they will apply from then on. This is primarily useful when developing as it can enable features that validate your code more strictly. Most of the settings here incur a performance cost and should typically be disabled in production environments."
+
+[Children]
+description = "This is the key that Roact uses internally to store the children that are attached to a Roact element.\n\nIf you're writing a new function component or stateful component that renders children like a host component, you can access Roact.Children in your props table."
+
+[Ref]
+description = "Use ``Roact.Ref`` as a key into the props of a host element to receive a handle to the underlying Roblox Instance."
+
+[Event]
+description = "Index into ``Roact.Event`` to receive a key that can be used to connect to events when creating host elements."
+
+[Change]
+description = "Index into ``Roact.Change`` to receive a key that can be used to connect to ``GetPropertyChangedSignal`` events."
+
+[None]
+description = "``Roact.None`` is a special value that can be used to clear elements from your component state when calling ``setState`` or returning from ``getDerivedStateFromProps.``"
+
+[Component]
+description = "The base component instance that can be extended to make stateful components.\n\nCall ``Roact.Component:extend('ComponentName')`` to make a new stateful component with a given name."
+
+[PureComponent]
+description = "An extension of ``Roact.Component`` that only re-renders if its props or state change."
+
+[Portal]
+description = "A component that represents a portal to a Roblox Instance. Portals are created using ``Roact.createElement``.\n\nAny children of a portal are put inside the Roblox Instance specified by the required ``target`` prop. That Roblox Instance should not be one created by Roact."
+
+[defaultProps]
+description = "If defined on a stateful component, any props that aren't specified when a component is created will be taken from there."
+
+[init]
+description = "Called exactly once when a new instance of a component is created. It can be used to set up the initial ``state``, as well as any non-render related values directly on the component.\n\nUse ``setState`` inside of ``init`` to set up your initial component state"
+
+[render]
+description = "Describes what a component should display at the current instant in time."
+
+[setState]
+description = "Requests an update to the component's state. Roact may schedule this update for a later time or resolve it immediately.\n\nIf a function is passed to ``setState``, that function will be called with the current state and props as arguments."
+
+[shouldUpdate]
+description = "Provides a way to override Roact's rerendering heuristics.\n\nBy default, components are re-rendered any time a parent component updates, or when state is updated via ``setState``."
+
+[validateProps]
+description = "An optional method that can be implemented for a component. It provides a mechanism for verifying inputs passed into the component."
+
+[getElementTraceback]
+description = "Gets the stack trace that the component was created in. This allows you to report error messages accurately."
+
+[didMount]
+description = "Fired after the component finishes its initial render. At this point, all associated Roblox Instances have been created, and all components have finished mounting.\n\n``didMount`` is a good place to start initial network communications, attach events to services, or modify the Roblox Instance hierarchy."
+
+[willUnmount]
+description = "Fired right before Roact begins unmounting a component instance's children.\n\n``willUnmount`` acts like a component's destructor, and is a good place to disconnect any manually-connected events."
+
+[willUpdate]
+description = "Fired after an update is started but before a component's state and props are updated."
+
+[didUpdate]
+description = "Fired after at the end of an update. At this point, Roact has updated the properties of any Roblox Instances and the component instance's props and state are up to date."
+
+[getDerivedStateFromProps]
+description = "Used to recalculate any state that depends on being synchronized with ``props``."
+
