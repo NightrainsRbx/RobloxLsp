@@ -1334,6 +1334,11 @@ function mt:searchSetForState(callback)
     end
 end
 
+local function hasIgnoreComment(text, start)
+    local line = text:sub(start):match(".-\r") or text:sub(start)
+    return line:match(".-%-%-%-*[ ]*ignore[ ]*")
+end
+
 function mt:doDiagnostics(func, code, callback)
     if config.config.diagnostics.disable[code] then
         return
@@ -1348,6 +1353,9 @@ function mt:doDiagnostics(func, code, callback)
             or (err.type == "MISS_SYMBOL" and err.finish == finish + 1) then
                 return
             end
+        end
+        if hasIgnoreComment(self.vm.text, finish) then
+            return
         end
         local data = callback(...)
         data.code   = code
