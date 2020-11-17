@@ -1247,13 +1247,18 @@ end
 local defaultDatamodelChilds = table.deepCopy(rbxApi.DataModelChilds)
 local defaultPlayerChilds = table.deepCopy(rbxApi.PlayerChilds)
 
-function rbxApi:loadRojoProject()
+function rbxApi:loadRojoProject(datamodel)
     self.DataModelChilds = table.deepCopy(defaultDatamodelChilds)
     self.PlayerChilds = table.deepCopy(defaultPlayerChilds)
 
     rbxApi.DataModelIgnoreNames = {}
 
-    local datamodel = loadDatamodelJson()
+    local datamodelJson = loadDatamodelJson()
+    if not datamodel then
+        datamodel = datamodelJson
+    elseif datamodelJson then
+        datamodel = table.merge(datamodelJson, datamodel)
+    end
 
     local rojoProject = rojo:loadRojoProject()
     if rojoProject then
@@ -1267,14 +1272,14 @@ function rbxApi:loadRojoProject()
     end
 end
 
-function rbxApi:generateLibs()
+function rbxApi:generateLibs(datamodel)
     local api = self:loadApiJson()
     local classNames = self:getClassNames()
     local libs = {
         objects = {},
         globals = {}
     }
-    self:loadRojoProject()
+    self:loadRojoProject(datamodel)
     for _, rbxClass in pairs(api.Classes) do
         if classNames[rbxClass.Name] then
            libs.objects[rbxClass.Name] = self:getMembers(rbxClass.Members, true, rbxClass.Name)

@@ -61,6 +61,7 @@ return function (lsp, params)
                 commands = {
                     'lua.removeSpace:' .. sp.get_id(),
                     'lua.solve:' .. sp.get_id(),
+                    "lua.updateDatamodel"
                 },
             },
         }

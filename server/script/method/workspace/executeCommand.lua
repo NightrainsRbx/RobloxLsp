@@ -1,5 +1,6 @@
 local rpc = require 'rpc'
 local lang = require 'language'
+local library = require 'core.library'
 
 local command = {}
 
@@ -97,6 +98,12 @@ local literalMap = {
     ['string']  = true,
     ['table']   = true,
 }
+
+command['lua.updateDatamodel'] = function (lsp, data)
+    if data then
+        library.reloadRbx(data.datamodel)
+    end
+end
 
 --- @param lsp LSP
 --- @param data table

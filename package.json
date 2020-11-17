@@ -57,6 +57,14 @@
 					"scope": "resource",
 					"type": "integer"
 				},
+				"Lua.completion.serverPort": {
+					"default": 27843,
+					"markdownDescription": "%config.completion.serverPort%",
+					"scope": "resource",
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 65535
+				},
 				"Lua.completion.fastAutocompletion": {
 					"default": false,
 					"markdownDescription": "%config.completion.fastAutocompletion%",
@@ -78,24 +86,6 @@
 					],
 					"scope": "resource",
 					"type": "string"
-				},
-				"Lua.develop.debuggerPort": {
-					"default": 11412,
-					"markdownDescription": "%config.develop.debuggerPort%",
-					"scope": "resource",
-					"type": "integer"
-				},
-				"Lua.develop.debuggerWait": {
-					"default": false,
-					"markdownDescription": "%config.develop.debuggerWait%",
-					"scope": "resource",
-					"type": "boolean"
-				},
-				"Lua.develop.enable": {
-					"default": false,
-					"markdownDescription": "%config.develop.enable%",
-					"scope": "resource",
-					"type": "boolean"
 				},
 				"Lua.diagnostics.disable": {
 					"items": {

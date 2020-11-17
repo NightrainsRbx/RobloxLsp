@@ -15,6 +15,7 @@
 	"dependencies": {
 		"@types/node": "^13.13.12",
 		"@types/vscode": "^1.47.0",
+		"express": "^4.17.1",
 		"vscode-languageclient": "^7.0.0-next.6"
 	}
 }

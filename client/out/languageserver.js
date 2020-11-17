@@ -4,10 +4,16 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs");
 const vscode_1 = require("vscode");
+const express = require("express");
 let patch = require("./patch");
 const node_1 = require("vscode-languageclient/node");
 const vscode_2 = require("vscode");
+
 let client;
+
+let app;
+let server;
+
 function registerCustomCommands(context) {
     context.subscriptions.push(vscode_2.commands.registerCommand('lua.config', (data) => {
         let config = vscode_1.workspace.getConfiguration();
@@ -36,10 +42,11 @@ function activate(context) {
     };
     let beta = vscode_1.workspace.getConfiguration().get("Lua.zzzzzz.cat");
     //let beta: boolean = false;
-    let develop = vscode_1.workspace.getConfiguration().get("Lua.develop.enable");
-    let debuggerPort = vscode_1.workspace.getConfiguration().get("Lua.develop.debuggerPort");
-    let debuggerWait = vscode_1.workspace.getConfiguration().get("Lua.develop.debuggerWait");
+    let develop = false //vscode_1.workspace.getConfiguration().get("Lua.develop.enable");
+    let debuggerPort = 11412 //vscode_1.workspace.getConfiguration().get("Lua.develop.debuggerPort");
+    let debuggerWait = false //vscode_1.workspace.getConfiguration().get("Lua.develop.debuggerWait");
     let command;
+    
     let platform = os.platform();
     switch (platform) {
         case "win32":
@@ -54,6 +61,7 @@ function activate(context) {
             fs.chmodSync(command, '777');
             break;
     }
+    
     let serverOptions = {
         command: command,
         args: [
@@ -63,7 +71,55 @@ function activate(context) {
             context.asAbsolutePath(path.join('server', beta ? 'main-beta.lua' : 'main.lua'))
         ]
     };
+
+    try {
+        app = express();
+        app.use('/update', express.json({
+            limit: '10mb',
+        }));
+        app.post('/update', async (req, res) => {
+            if (!req.body) {
+                res.status(400);
+                res.json({
+                    success: false,
+                    reason: 'Missing JSON',
+                });
+                return;
+            }
+            if (!req.body.DataModel) {
+                res.status(400);
+                res.json({
+                    success: false,
+                    reason: 'Missing body.DataModel',
+                });
+                return;
+            }
+            try {
+                vscode_1.commands.executeCommand("lua.updateDatamodel", {
+                    "datamodel": req.body.DataModel
+                })
+            }
+            catch (e) {
+                vscode_1.window.showErrorMessage(e);
+            }
+            res.status(200)
+            res.json({success: true});
+        });
+
+        let port = vscode_1.workspace.getConfiguration().get("Lua.completion.serverPort");;
+        if (port > 0) {
+            server = app.listen(port);
+            // server = app.listen(port, () => {
+            //     vscode_1.window.showInformationMessage(`Started Roblox Output Server on port ${port}`);
+            // });
+        }
+    }
+    catch (e) {
+        vscode_1.window.showErrorMessage(`Failed to launch Roblox LSP plugin server: ${e}`);
+    }
+    
     client = new node_1.LanguageClient('Lua', 'Lua', serverOptions, clientOptions);
+
     client.registerProposedFeatures();
     registerCustomCommands(context);
     patch.patch(client);
@@ -73,6 +129,10 @@ exports.activate = activate;
 function deactivate() {
     if (!client) {
         return undefined;
+    }
+    if (server) {
+        server.close();
+        server = undefined;
     }
     return client.stop();
 }

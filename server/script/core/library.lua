@@ -344,8 +344,8 @@ local function init()
     end
 end
 
-function Library.reloadRbx()
-    initRbxTypes(rbxApi:generateLibs())
+function Library.reloadRbx(datamodel)
+    initRbxTypes(rbxApi:generateLibs(datamodel))
 end
 
 function Library.reload()
