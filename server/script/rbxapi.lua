@@ -3,6 +3,7 @@ local xml = require 'xml'
 local fs = require 'bee.filesystem'
 local rojo = require 'rojo'
 local config = require 'config'
+local rpc = require 'rpc'
 
 local rbxApi = {}
 
@@ -1218,31 +1219,43 @@ local function addChild(name, members, children, parent, path)
     end
 end
 
-local function loadDatamodelJson()
-    local projectFileName = config.config.workspace.rojoProjectFile
-    if projectFileName ~= "" then
-        local path = fs.current_path() / (config.config.workspace.rojoProjectFile .. ".datamodel.json")
-        if fs.exists(path) then
-            local success, datamodel = pcall(json.decode, readFile(path:string()))
-            if success and datamodel.children then
-                return datamodel
-            end
-        end
-    else
-        local datamodel = {}
-        for path in fs.current_path():list_directory() do
-            if path:string():match("%.datamodel%.json") then
-                local success, data = pcall(json.decode, readFile(path:string()))
-                if success and data.children then
-                    datamodel = table.merge(datamodel, data)
-                end
-            end
-        end
-        if datamodel.children then
-            return datamodel
+local function datamodelJsonDeprecated()
+    for path in fs.current_path():list_directory() do
+        if path:string():match("%.datamodel%.json$") then
+            rpc:notify('window/showMessage', {
+                type = 3,
+                message = "Using .datamodel.json file is cancelled, you can now sync with Roblox Studio.",
+            })
+            break
         end
     end
 end
+
+-- local function loadDatamodelJson()
+--     local projectFileName = config.config.workspace.rojoProjectFile
+--     if projectFileName ~= "" then
+--         local path = fs.current_path() / (config.config.workspace.rojoProjectFile .. ".datamodel.json")
+--         if fs.exists(path) then
+--             local success, datamodel = pcall(json.decode, readFile(path:string()))
+--             if success and datamodel.children then
+--                 return datamodel
+--             end
+--         end
+--     else
+--         local datamodel = {}
+--         for path in fs.current_path():list_directory() do
+--             if path:string():match("%.datamodel%.json") then
+--                 local success, data = pcall(json.decode, readFile(path:string()))
+--                 if success and data.children then
+--                     datamodel = table.merge(datamodel, data)
+--                 end
+--             end
+--         end
+--         if datamodel.children then
+--             return datamodel
+--         end
+--     end
+-- end
 
 local defaultDatamodelChilds = table.deepCopy(rbxApi.DataModelChilds)
 local defaultPlayerChilds = table.deepCopy(rbxApi.PlayerChilds)
@@ -1253,12 +1266,14 @@ function rbxApi:loadRojoProject(datamodel)
 
     rbxApi.DataModelIgnoreNames = {}
 
-    local datamodelJson = loadDatamodelJson()
-    if not datamodel then
-        datamodel = datamodelJson
-    elseif datamodelJson then
-        datamodel = table.merge(datamodelJson, datamodel)
-    end
+    datamodelJsonDeprecated()
+
+    -- local datamodelJson = loadDatamodelJson()
+    -- if not datamodel then
+    --     datamodel = datamodelJson
+    -- elseif datamodelJson then
+    --     datamodel = table.merge(datamodelJson, datamodel)
+    -- end
 
     local rojoProject = rojo:loadRojoProject()
     if rojoProject then

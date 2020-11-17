@@ -193,13 +193,13 @@ end
 
 function rojo:projectChanged(change)
     local projectFileName = config.config.workspace.rojoProjectFile
-    if change.uri:match("%.datamodel%.json$") then
-        local path = uric.decode(change.uri)
-        local filename = path:filename():string()
-        if filename == projectFileName .. ".datamodel.json" then
-            return true, true
-        end
-    elseif change.uri:match(projectFileName .. "%.project%.json$") then
+    -- if change.uri:match("%.datamodel%.json$") then
+    --     local path = uric.decode(change.uri)
+    --     local filename = path:filename():string()
+    --     if filename == projectFileName .. ".datamodel.json" then
+    --         return true, true
+    --     end
+    if change.uri:match(projectFileName .. "%.project%.json$") then
         return true, true
     elseif change.type == 2 then
         local path = uric.decode(change.uri)
