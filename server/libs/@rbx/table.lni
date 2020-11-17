@@ -12,6 +12,10 @@ parent = {
     }
 }
 
+[clear]
+[[.args]]
+type = 'table'
+
 [create]
 [[.args]]
 name = 'count'

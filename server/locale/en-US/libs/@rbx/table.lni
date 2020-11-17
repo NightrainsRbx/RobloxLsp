@@ -12,3 +12,6 @@ description = 'This is similar to ``table.foreach()`` except that index-value pa
 
 [getn]
 description = 'Returns the number of elements in the table passed'
+
+[clear]
+description = "Clears all keys from the table, but leaves their capacity allocated so that future keys added to the table can re-use that storage, avoiding additional allocations."
