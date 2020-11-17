@@ -1354,9 +1354,9 @@ function mt:doDiagnostics(func, code, callback)
                 return
             end
         end
-        if hasIgnoreComment(self.vm.text, finish) then
-            return
-        end
+        -- if hasIgnoreComment(self.vm.text, finish) then
+        --     return
+        -- end
         local data = callback(...)
         data.code   = code
         data.start  = start

@@ -20,7 +20,7 @@
     "config.develop.enable": "Developer mode. Do not enable, performance will be affected.",
     "config.diagnostics.disable": "Disabled diagnostic (Use code in hover brackets).\n```json\n\"Lua.diagnostics.disable\" : [\n    \"unused-local\",\n    \"lowercase-global\"\n]\n```\n",
     "config.diagnostics.enable": "Enable diagnostics.",
-    "config.diagnostics.syntax": "Enable syntax errors.",
+    "config.diagnostics.syntax": "Enable syntax errors. Disable it if you want to use Selene.",
     "config.diagnostics.datamodelAsIgnore": "Use datamodel.json as ignore list.",
     "config.diagnostics.globals": "Defined global variables.\n```json\n\"Lua.diagnostics.globals\" : [\n    \"GLOBAL1\",\n    \"GLOBAL2\"\n]\n```\n",
     "config.diagnostics.ignore": "Ignored instance members.\n```json\n\"Lua.diagnostics.ignore\" : [\n    \"NAME1\",\n    \"NAME2\"\n]\n```\n",
