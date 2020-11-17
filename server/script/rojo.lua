@@ -52,7 +52,7 @@ local function scriptClass(filename)
 end
 
 local function isValidName(name)
-    return name:match("^[%a_][%w_]*$")
+    return true--name:match("^[%a_][%w_]*$")
 end
 
 local function removeLuaExtension(name)

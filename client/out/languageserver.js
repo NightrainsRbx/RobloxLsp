@@ -29,6 +29,59 @@ function registerCustomCommands(context) {
         }
     }));
 }
+
+function startPluginServer() {
+    try {
+        app = express();
+        app.use('/update', express.json({
+            limit: '10mb',
+        }));
+        let lastUpdate = "";
+        app.post('/update', async (req, res) => {
+            if (!req.body) {
+                res.status(400);
+                res.json({
+                    success: false,
+                    reason: 'Missing JSON',
+                });
+                return;
+            }
+            if (!req.body.DataModel) {
+                res.status(400);
+                res.json({
+                    success: false,
+                    reason: 'Missing body.DataModel',
+                });
+                return;
+            }
+            try {
+                vscode_1.commands.executeCommand("lua.updateDatamodel", {
+                    "datamodel": req.body.DataModel
+                });
+                lastUpdate = req.body.DataModel;
+            }
+            catch (e) {
+                vscode_1.window.showErrorMessage(e);
+            }
+            res.status(200);
+            res.json({success: true});
+        });
+        app.get("/last", (req, res) => {
+            res.send(lastUpdate);
+        });
+        let port = vscode_1.workspace.getConfiguration().get("Lua.completion.serverPort");
+        if (port > 0) {
+            // server = app.listen(port);
+            server = app.listen(port, () => {
+                vscode_1.window.showInformationMessage(`Started Roblox LSP Plugin Server on port ${port}`);
+            });
+        }
+    }
+    catch (e) {
+        vscode_1.window.showErrorMessage(`Failed to launch Roblox LSP plugin server: ${e}`);
+    }
+}
+
 function activate(context) {
     let language = vscode_1.env.language;
     // Options to control the language client
@@ -72,52 +125,10 @@ function activate(context) {
         ]
     };
 
-    try {
-        app = express();
-        app.use('/update', express.json({
-            limit: '10mb',
-        }));
-        app.post('/update', async (req, res) => {
-            if (!req.body) {
-                res.status(400);
-                res.json({
-                    success: false,
-                    reason: 'Missing JSON',
-                });
-                return;
-            }
-            if (!req.body.DataModel) {
-                res.status(400);
-                res.json({
-                    success: false,
-                    reason: 'Missing body.DataModel',
-                });
-                return;
-            }
-            try {
-                vscode_1.commands.executeCommand("lua.updateDatamodel", {
-                    "datamodel": req.body.DataModel
-                })
-            }
-            catch (e) {
-                vscode_1.window.showErrorMessage(e);
-            }
-            res.status(200)
-            res.json({success: true});
-        });
+    if (vscode_1.workspace.getConfiguration().get("Lua.runtime.version") == "Luau") {
+        startPluginServer();
+    }
 
-        let port = vscode_1.workspace.getConfiguration().get("Lua.completion.serverPort");;
-        if (port > 0) {
-            server = app.listen(port);
-            // server = app.listen(port, () => {
-            //     vscode_1.window.showInformationMessage(`Started Roblox Output Server on port ${port}`);
-            // });
-        }
-    }
-    catch (e) {
-        vscode_1.window.showErrorMessage(`Failed to launch Roblox LSP plugin server: ${e}`);
-    }
-    
     client = new node_1.LanguageClient('Lua', 'Lua', serverOptions, clientOptions);
 
     client.registerProposedFeatures();
