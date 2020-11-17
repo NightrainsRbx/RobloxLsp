@@ -132,19 +132,19 @@ local function solveUndefinedRbxMember(lsp, uri, data, callback)
     local finish = lines:position(data.range['end'].line + 1, data.range['end'].character)
     local name = text:sub(start, finish)
     addIgnoreName(name, uri, callback)
-    local filter = {
-        ['name']           = true,
-        ['.']              = true,
-        [':']              = true,
-        ['call']           = true,
-    }
-    local source = findSource(vm, start, filter)
-    if source then
-        local parent = source:get('parent')
-        if parent and parent._lib and parent._lib.path then
-            addIgnorePath(solvePath(parent._lib.path), uri, callback)
-        end
-    end
+    -- local filter = {
+    --     ['name']           = true,
+    --     ['.']              = true,
+    --     [':']              = true,
+    --     ['call']           = true,
+    -- }
+    -- local source = findSource(vm, start, filter)
+    -- if source then
+    --     local parent = source:get('parent')
+    --     if parent and parent._lib and parent._lib.path then
+    --         addIgnorePath(solvePath(parent._lib.path), uri, callback)
+    --     end
+    -- end
 end
 
 local function solveDeprecatedRbxMember(lsp, uri, data, callback)

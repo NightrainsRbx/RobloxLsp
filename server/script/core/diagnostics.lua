@@ -124,6 +124,9 @@ function mt:searchUnknownSymbol(callback)
             if source._bindValue and source._bindValue:getType() == "function" then
                 return
             end
+            if source[1]:match("^%_+$") then
+                return
+            end
             callback(source.start, source.finish, source[1])
         end
     end)
@@ -176,10 +179,6 @@ function mt:searchInvalidRbxClass(callback)
     end)
 end
 
-local function solvePath(path)
-    return "game" .. path:gsub("%/", ".")
-end
-
 function mt:searchUndefinedRbxMember(callback)
     if not config.isLuau() then
         return
@@ -198,25 +197,22 @@ function mt:searchUndefinedRbxMember(callback)
                 if not parent then
                     return
                 end
+                local _lib = parent._lib
                 local tp = parent:getType()
                 if not (tp and rbxApi:getTypes()[tp]) then
-                    return
+                    if _lib and _lib.name and rbxApi:getTypes()[_lib.name] then
+                        tp = _lib.name
+                    else
+                        goto CONTINUE
+                    end
                 end
                 local name = source[index + 1]
                 if name.type == "name" then
-                    local isInstance = rbxApi:isInstance(tp)
-                    if isInstance and ignored[name[1]] or (config.config.diagnostics.datamodelAsIgnore and rbxApi.DataModelIgnoreNames[name[1]]) then
+                    if ignored[name[1]] then
                         goto CONTINUE
                     end
-                    if isInstance then
-                        if (parent._lib and parent._lib.path) then
-                            local path = solvePath(parent._lib.path)
-                            for ignore in pairs(ignored) do
-                                if ignore:sub(1, 5) == "game." and (path .. "."):match("^" .. ignore:gsub("%.", "%%.") .. "%.") then
-                                    goto CONTINUE
-                                end
-                            end
-                        else
+                    if rbxApi:isInstance(tp) and item.type == "." then
+                        if name._action ~= "set" and not (source[index + 2] and source[index + 2].type == "call") then
                             goto CONTINUE
                         end
                     end
@@ -224,7 +220,7 @@ function mt:searchUndefinedRbxMember(callback)
                     if tp == "Instance" then
                         hasChild = rbxApi.AllMembers[name[1]]
                     else
-                        if parent._lib and parent._lib.child and parent._lib.child[name[1]] then
+                        if _lib and _lib.child and _lib.child[name[1]] then
                             hasChild = true
                         else
                             parent:eachLibChild(function(k)
@@ -498,6 +494,45 @@ function mt:searchUnusedFunctions(callback)
     end)
 end
 
+local yesIsDefinedGlobal = {
+    print = true,
+    next = true,
+    assert = true,
+    pairs = true,
+    pcall = true,
+    rawequal = true,
+    rawget = true,
+    rawlen = true,
+    rawset = true,
+    select = true,
+    setfenv = true,
+    setmetatable = true,
+    tonumber = true,
+    tostring = true,
+    type = true,
+    warn    = true,
+    xpcall = true,
+    require = true,
+    unpack = true,
+    delay = true,
+    elapsedTime = true,
+    settings = true,
+    spawn = true,
+    tick = true,
+    time = true,
+    typeof = true,
+    UserSettings = true,
+    wait = true,
+    bit32 = true,
+    coroutine = true,
+    debug = true,
+    math = true,
+    os = true,
+    string = true,
+    table = true,
+    utf8 = true,
+}
+
 function mt:searchUndefinedGlobal(callback)
     local definedGlobal = {}
     for name in pairs(config.config.diagnostics.globals) do
@@ -530,7 +565,7 @@ function mt:searchUndefinedGlobal(callback)
         if not parent:get 'ENV' and not source:get 'in index' then
             return
         end
-        if definedGlobal[name] then
+        if definedGlobal[name] or yesIsDefinedGlobal[name] then
             return
         end
         if type(name) ~= 'string' then

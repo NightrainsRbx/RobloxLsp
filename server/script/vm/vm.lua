@@ -799,8 +799,8 @@ function mt:getBinary(exp)
         or op == '%'
         or op == '//'
     then
-        v1:setType('number', 0.5)
-        v2:setType('number', 0.5)
+        -- v1:setType('number', 0.5)
+        -- v2:setType('number', 0.5)
         if type(v1:getLiteral()) == 'number' and type(v2:getLiteral()) == 'number' then
             if op == '+' then
                 return self:createValue('number', exp, v1:getLiteral() + v2:getLiteral())
@@ -824,7 +824,7 @@ function mt:getBinary(exp)
                 end
             end
         end
-        return self:createValue('number', exp)
+        return self:createValue('any', exp)
     end
     return nil
 end
@@ -999,13 +999,13 @@ function mt:setOne(var, value, emmy, comment)
             local index = key[1]
             key:set('parent', parent)
             parent:setChild(index, value, key)
-            if config.isLuau() and config.config.diagnostics.datamodelAsIgnore then
-                if rbxApi:isInstance(parent:getType()) and index == "Name" then
-                    if value:getType() == "string" and value._literal then
-                        config.config.diagnostics.ignore[value._literal] = true
-                    end
-                end
-            end
+            -- if config.isLuau() and config.config.diagnostics.datamodelAsIgnore then
+            --     if rbxApi:isInstance(parent:getType()) and index == "Name" then
+            --         if value:getType() == "string" and value._literal then
+            --             config.config.diagnostics.ignore[value._literal] = true
+            --         end
+            --     end
+            -- end
         end
         key:bindValue(value, 'set')
     end

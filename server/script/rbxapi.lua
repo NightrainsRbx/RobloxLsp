@@ -497,7 +497,6 @@ rbxApi.DeprecatedQuickFix = {
     target = "Target",
     toAxisAngle = "ToAxisAngle",
     toEulerAnglesXYZ = "ToEulerAnglesXYZ",
-    toHSV = "ToHSV",
     toObjectSpace = "ToObjectSpace",
     toWorldSpace = "ToWorldSpace",
     touched = "Touched",
@@ -773,7 +772,9 @@ end
 
 function rbxApi:getServices()
     if not self.Services then
-        self.Services = {}
+        self.Services = {
+            UserGameSettings = true
+        }
         local api = self:loadApiJson()
         for _, rbxClass in pairs(api.Classes) do
             local _continue = false
@@ -1115,6 +1116,12 @@ function rbxApi:getMembers(members, methods, className)
         for name, child in pairs(self.DataModelChilds[className].child) do
             data[name] = child
         end
+    end
+    if className == "LuaSourceContainer" then
+        data.Disabled = {
+            name = "Disabled",
+            type = "string"
+        }
     end
     if className == "Enums" then
         self:getEnums(data)

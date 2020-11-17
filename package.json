@@ -133,12 +133,6 @@
 					"scope": "resource",
 					"type": "array"
 				},
-				"Lua.diagnostics.datamodelAsIgnore": {
-					"default": true,
-					"markdownDescription": "%config.diagnostics.datamodelAsIgnore%",
-					"scope": "resource",
-					"type": "boolean"
-				},
 				"Lua.diagnostics.severity": {
 					"markdownDescription": "%config.diagnostics.severity%",
 					"properties": {

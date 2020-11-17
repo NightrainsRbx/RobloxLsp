@@ -19,9 +19,9 @@ function mt:callPcall(func, values, source)
     self:call(funcValue, argList, source)
     if realFunc ~= func then
         func:setReturn(1, self:createValue('boolean', source))
-        realFunc:getReturn():eachValue(function (i, v)
-            func:setReturn(i + 1, v)
-        end)
+        -- realFunc:getReturn():eachValue(function (i, v)
+        --     func:setReturn(i + 1, v)
+        -- end)
     end
 end
 
@@ -43,8 +43,8 @@ function mt:callXpcall(func, values, source)
     self:call(funcValue, argList, source)
     if realFunc ~= func then
         func:setReturn(1, self:createValue('boolean', source))
-        realFunc:getReturn():eachValue(function (i, v)
-            func:setReturn(i + 1, v)
-        end)
+        -- realFunc:getReturn():eachValue(function (i, v)
+        --     func:setReturn(i + 1, v)
+        -- end)
     end
 end

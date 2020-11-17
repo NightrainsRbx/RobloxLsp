@@ -361,6 +361,23 @@
                 },
                 {
                     "MemberType": "Function",
+                    "Name": "toHSV",
+                    "Parameters": [
+                        {
+                            "Name": "color",
+                            "Type": {
+                                "Category": "",
+                                "Name": "Color3"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "",
+                        "Name": "Tuple"
+                    }
+                },
+                {
+                    "MemberType": "Function",
                     "Name": "new",
                     "Parameters": [
                         {
@@ -1987,13 +2004,6 @@
                                 "Category": "",
                                 "Name": "any"
                             }
-                        },
-                        {
-                            "Name": "color",
-                            "Type": {
-                                "Category": "",
-                                "Name": "Color3"
-                            }
                         }
                     ],
                     "ReturnType": {
@@ -2057,31 +2067,6 @@
                     "ValueType": {
                         "Category": "",
                         "Name": "number"
-                    }
-                },
-                {
-                    "MemberType": "Function",
-                    "Name": "toHSV",
-                    "Deprecated": true,
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
-                            "Name": "color",
-                            "Type": {
-                                "Category": "",
-                                "Name": "Color3"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
                     }
                 },
                 {
