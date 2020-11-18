@@ -105,10 +105,6 @@ command['lua.updateDatamodel'] = function (lsp, data)
     end
 end
 
-command['lua.updateAPI'] = function (lsp, data)
-    output("w", data)
-end
-
 --- @param lsp LSP
 --- @param data table
 command['lua.solve'] = function (lsp, data)
