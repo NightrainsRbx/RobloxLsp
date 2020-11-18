@@ -146,9 +146,10 @@ function openUpdatesWindow(context) {
             <body>
                 <div style="position:relative; padding-left:100px; padding-right:100px">
                     <center><img src="https://t3.rbxcdn.com/7bdf9c64b9c096d7db26bf8927213f2a", witdh="300" height="300"></center>
-                    <h1 style="font-size:3rem; font-weight:100">Roblox LSP Updates!</h1>
+                    <h1 style="font-size:3rem; font-weight:100">Roblox LSP Updates! (0.14.0)</h1>
                     <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
                     <p style="font-size:1rem">This is one of the latest updates I will make for Roblox LSP in a while, this update comes with three nice features.</p>
+                    <p style="font-size:1rem">Report any bug or question here: <a href="https://github.com/NightrainsRbx/RobloxLsp/issues">https://github.com/NightrainsRbx/RobloxLsp/issues</a></p>
                     <h2 style="font-size:2rem; font-weight:100">Auto-updatable Roblox API</h2>
                     <p style="font-size:1rem">You will no longer have to wait for the extension to update when Roblox adds a new function.</p>
                     <p style="font-size:1rem">Every time you start the extension it will check if there is a new version of Roblox and if there is it will automatically download the API from <a href="https://github.com/CloneTrooper1019/Roblox-Client-Tracker">https://github.com/CloneTrooper1019/Roblox-Client-Tracker</a>.</p>
@@ -190,6 +191,7 @@ function openUpdatesWindow(context) {
                     <p style="font-size:1rem">For a long time, a new version of Lua Language Server has been working from scratch, this is much faster and more efficient, Roblox LSP will use this new version when it is stable enough.</p>
                     <p style="font-size:1rem">And for that version I plan to implement new features like a basic optional type checking based on Luau.</p>
                     <p style="font-size:1rem">But Roblox LSP will be deprecated if Roblox decides to make its own LSP for Luau that is compatible with external editors and is superior in every way, which is possible that they do next year.</p>
+                    <p style="font-size:1rem">More info about Roblox LSP: <a href="https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745">https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745</a></p>
                 </div>
             </body>
             </html>`;
@@ -239,6 +241,7 @@ function activate(context) {
             context.asAbsolutePath(path.join('server', beta ? 'main-beta.lua' : 'main.lua'))
         ]
     };
+
     openUpdatesWindow(context)
 
     if (vscode_1.workspace.getConfiguration().get("Lua.runtime.version") == "Luau") {

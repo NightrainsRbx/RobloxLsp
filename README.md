@@ -38,6 +38,7 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 
 ![avatar](https://i.imgur.com/4sgYDii.gif)
 ![avatar](https://i.imgur.com/vHbKIJ0.gif)
+![avatar](https://cdn.discordapp.com/attachments/434146484758249482/778145929345368064/test.gif)
 
 ## Credit
 
