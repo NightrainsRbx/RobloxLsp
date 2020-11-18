@@ -9,12 +9,14 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 
 ## Feature
 
-- [x] Full Roblox Environment
+- [x] Exact Roblox Environment
 - [x] Support for Luau Syntax
 - [x] Roblox Classes and Datatypes
 - [x] Support for [Rojo](https://github.com/Roblox/rojo)
+- [x] Support for Roact, Rodux, TestEz, AeroGameFramework and Knit
+- [x] Autocompletion of Datamodel descendants
+- [x] Auto-updatable API
 - [x] Intellisense for Modules
-- [x] Import Instance Tree
 - [x] Custom Diagnostics for Roblox Classes
 
 - [x] Goto Definition
