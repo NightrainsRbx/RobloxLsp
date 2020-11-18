@@ -4,10 +4,12 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs");
 const vscode_1 = require("vscode");
-const express = require("express");
 let patch = require("./patch");
 const node_1 = require("vscode-languageclient/node");
 const vscode_2 = require("vscode");
+
+const express = require("express");
+const fetch = require("node-fetch");
 
 let client;
 
@@ -28,6 +30,47 @@ function registerCustomCommands(context) {
             return;
         }
     }));
+}
+
+const fetchData = async (url, handler) => {
+    try {
+        fetch(url)
+            .then(res => res.text())
+            .then(body => handler(body));
+    } catch (error) {
+        vscode_1.window.showErrorMessage(`Roblox LSP Error: ${error}`);
+    }
+};
+
+function writeToFile(path, content) {
+    try {
+        fs.writeFileSync(path, content);
+    } catch (err) {
+        vscode_1.window.showErrorMessage(`Roblox LSP Error: ${err}`);
+    }
+}
+
+function updateRobloxAPI(context) {
+    fetchData('https://clientsettings.roblox.com/v1/client-version/WindowsStudio', (lastVersion) => {
+        try {
+            const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'rbx', 'version.json')), 'utf8')
+            if (currentVersion != lastVersion) {
+                fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/AutocompleteMetadata.xml', (data) => {
+                    writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'AutocompleteMetadata.xml')), data);
+                });
+                fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/ReflectionMetadata.xml', (data) => {
+                    writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'ReflectionMetadata.xml')), data);
+                });
+                fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/API-Dump.json', (data) => {
+                    writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'API-Dump.json')), data);
+                });
+                writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'version.json')), lastVersion);
+                vscode_1.window.showInformationMessage("Roblox LSP: Updated API");
+            }
+        } catch (err) {
+            vscode_1.window.showErrorMessage(`Roblox LSP Error: ${err}`);
+        }
+    });
 }
 
 function startPluginServer() {
@@ -71,15 +114,38 @@ function startPluginServer() {
         });
         let port = vscode_1.workspace.getConfiguration().get("Lua.completion.serverPort");
         if (port > 0) {
-            // server = app.listen(port);
-            server = app.listen(port, () => {
-                vscode_1.window.showInformationMessage(`Started Roblox LSP Plugin Server on port ${port}`);
-            });
+            server = app.listen(port);
+            // server = app.listen(port, () => {
+            //     vscode_1.window.showInformationMessage(`Started Roblox LSP Plugin Server on port ${port}`);
+            // });
         }
     }
     catch (e) {
         vscode_1.window.showErrorMessage(`Failed to launch Roblox LSP plugin server: ${e}`);
     }
+}
+
+function openUpdatesWindow() {
+    const panel = vscode_1.window.createWebviewPanel(
+        'robloxlspUpdates', // Identifies the type of the webview. Used internally
+        'Roblox LSP Updates', // Title of the panel displayed to the user
+        vscode_1.ViewColumn.One, // Editor column to show the new webview panel in.
+        {} // Webview options. More on these later.
+    );
+
+    panel.webview.html = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div style="position:relative; padding-left:100px; padding-right:100px">
+            <h1 style="font-size:3rem; font-weight:100">Roblox LSP Updates!</h1>
+            <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
+        </div>
+    </body>
+    </html>`;
 }
 
 function activate(context) {
@@ -126,8 +192,11 @@ function activate(context) {
     };
 
     if (vscode_1.workspace.getConfiguration().get("Lua.runtime.version") == "Luau") {
+        updateRobloxAPI(context);
         startPluginServer();
     }
+
+    // openUpdatesWindow()
 
     client = new node_1.LanguageClient('Lua', 'Lua', serverOptions, clientOptions);
 
