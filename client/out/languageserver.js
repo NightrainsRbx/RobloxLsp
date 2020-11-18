@@ -51,9 +51,9 @@ function writeToFile(path, content) {
 }
 
 function updateRobloxAPI(context) {
-    fetchData('https://clientsettings.roblox.com/v1/client-version/WindowsStudio', (lastVersion) => {
+    fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/version.txt', (lastVersion) => {
         try {
-            const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'rbx', 'version.json')), 'utf8')
+            const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), 'utf8')
             if (currentVersion != lastVersion) {
                 fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/AutocompleteMetadata.xml', (data) => {
                     writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'AutocompleteMetadata.xml')), data);
@@ -64,8 +64,8 @@ function updateRobloxAPI(context) {
                 fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/API-Dump.json', (data) => {
                     writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'API-Dump.json')), data);
                 });
-                writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'version.json')), lastVersion);
-                vscode_1.window.showInformationMessage("Roblox LSP: Updated API");
+                writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), lastVersion);
+                vscode_1.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://clonetrooper1019.github.io/Roblox-API-History.html)`);
             }
         } catch (err) {
             vscode_1.window.showErrorMessage(`Roblox LSP Error: ${err}`);
@@ -127,9 +127,9 @@ function startPluginServer() {
 
 function openUpdatesWindow(context) {
     try {
-        const sawUpdate = fs.readFileSync(context.asAbsolutePath(path.join('server', 'script', 'sawupdate.txt')), 'utf8')
+        const sawUpdate = fs.readFileSync(context.asAbsolutePath(path.join('client', 'sawupdate.txt')), 'utf8')
         if (sawUpdate == "false") {
-            writeToFile(context.asAbsolutePath(path.join('server', 'script', 'sawupdate.txt')), "true");
+            writeToFile(context.asAbsolutePath(path.join('client', 'sawupdate.txt')), "true");
             const panel = vscode_1.window.createWebviewPanel(
                 'robloxlspUpdates', // Identifies the type of the webview. Used internally
                 'Roblox LSP Updates', // Title of the panel displayed to the user
@@ -154,7 +154,7 @@ function openUpdatesWindow(context) {
                     <p style="font-size:1rem">You will no longer have to wait for the extension to update when Roblox adds a new function.</p>
                     <p style="font-size:1rem">Every time you start the extension it will check if there is a new version of Roblox and if there is it will automatically download the API from <a href="https://github.com/CloneTrooper1019/Roblox-Client-Tracker">https://github.com/CloneTrooper1019/Roblox-Client-Tracker</a>.</p>
                     <p style="font-size:1rem">And you will receive this notification:</p>
-                    <img src="https://i.imgur.com/zJAbR8f.png">
+                    <img src="https://i.imgur.com/U0Sw31z.png">
                     <h2 style="font-size:2rem; font-weight:100">Autocompletion for descendants in game</h2>
                     <p style="font-size:1rem">Roblox LSP can now receive information from Roblox Studio using a plugin, if you install it, a list of every descendant in your game will be send to Roblox LSP every time you create, remove, move or rename an Instance.</p>
                     <img src="https://media.discordapp.net/attachments/434146484758249482/778145929345368064/test.gif" width="653" height="430">
@@ -171,6 +171,7 @@ function openUpdatesWindow(context) {
                     <ul>
                         <li>Added new table.clear function</li>
                         <li>Improved number operations with Roblox types</li>
+                        <li>Added "--ignore" comment for ignore diagnostics in a line</li>
                         <li>Fixed API</li>
                     </ul>
                     <p style="font-size:1rem">0.13.0</p>

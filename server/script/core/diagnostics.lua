@@ -1334,11 +1334,6 @@ function mt:searchSetForState(callback)
     end
 end
 
-local function hasIgnoreComment(text, start)
-    local line = text:sub(start):match(".-\r") or text:sub(start)
-    return line:match(".-%-%-%-*[ ]*ignore[ ]*")
-end
-
 function mt:doDiagnostics(func, code, callback)
     if config.config.diagnostics.disable[code] then
         return
@@ -1354,9 +1349,6 @@ function mt:doDiagnostics(func, code, callback)
                 return
             end
         end
-        -- if hasIgnoreComment(self.vm.text, finish) then
-        --     return
-        -- end
         local data = callback(...)
         data.code   = code
         data.start  = start
@@ -1589,5 +1581,13 @@ return function (vm, lines, uri, errs)
             message = lang.script.DIAG_SET_FOR_STATE,
         }
     end)
+
+    for index, data in pairs(session.datas) do
+        local line = lines:line(lines:rowcol(data.start))
+        if line:match(".-%-%-%-*[ ]*ignore[ ]*$") then
+            table.remove(session.datas, index)
+        end
+    end
+
     return session.datas
 end
