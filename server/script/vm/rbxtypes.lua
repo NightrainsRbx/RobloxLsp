@@ -301,6 +301,14 @@ function mt:getRbxBinaryExp(v1, v2, op)
         or (tp2 == "Vector2" and (tp1 == "Vector2" or tp1 == "number")) then
             return "Vector2"
         end
+        if (tp1 == "Vector3int16" and (tp2 == "Vector3in16" or tp2 == "number"))
+        or (tp2 == "Vector3in16" and (tp1 == "Vector3in16" or tp1 == "number")) then
+            return "Vector3in16"
+        end
+        if (tp1 == "Vector2int16" and (tp2 == "Vector2in16" or tp2 == "number"))
+        or (tp2 == "Vector2in16" and (tp1 == "Vector2in16" or tp1 == "number")) then
+            return "Vector2in16"
+        end
     end
     if op == "*" then
         if tp1 == "CFrame" and tp2 == "Vector3" then
@@ -312,6 +320,12 @@ function mt:getRbxBinaryExp(v1, v2, op)
     end
     if op ~= "*" and op ~= "+" and op ~= "-" and op ~= "/" then
         return
+    end
+    if tp1 == "Vector3int16" and tp2 == "Vector3in16" then
+        return "Vector3in16"
+    end
+    if tp1 == "Vector2int16" and tp2 == "Vector2in16" then
+        return "Vector2in16"
     end
     if rbxApi:getTypes()[tp1] or rbxApi:getTypes()[tp2] then
         return "nil"

@@ -21,10 +21,7 @@ local Types = {
     int64 = "integer",
     double = "number",
     float = "number",
-    Function = "function",
-    Vector2int16 = "Vector2",
-    Vector3int16 = "Vector3",
-    Region3int16 = "Region3"
+    Function = "function"
 }
 
 rbxApi.AllMembers = {}

@@ -284,6 +284,39 @@
             "Members": [
                 {
                     "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "x",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "number"
+                                ]
+                            }
+                        },
+                        {
+                            "Name": "y",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "number"
+                                ]
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "",
+                        "Name": "Vector2int16"
+                    }
+                }
+            ],
+            "Name": "Vector2int16"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Function",
                     "Name": "fromRGB",
                     "Parameters": [
                         {
@@ -532,6 +565,39 @@
                 }
             ],
             "Name": "Region3"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "min",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "Vector3int16"
+                                ]
+                            }
+                        },
+                        {
+                            "Name": "max",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "Vector3int16"
+                                ]
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "",
+                        "Name": "Region3int16"
+                    }
+                }
+            ],
+            "Name": "Region3int16"
         },
         {
             "Members": [
@@ -1066,6 +1132,51 @@
                 }
             ],
             "Name": "Vector3"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Default": "0",
+                            "Name": "x",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "number"
+                                ]
+                            }
+                        },
+                        {
+                            "Default": "0",
+                            "Name": "y",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "number"
+                                ]
+                            }
+                        },
+                        {
+                            "Default": "0",
+                            "Name": "z",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "number"
+                                ]
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "",
+                        "Name": "Vector3int16"
+                    }
+                }
+            ],
+            "Name": "Vector3int16"
         },
         {
             "Members": [
@@ -4062,6 +4173,77 @@
                 }
             ],
             "Name": "DockWidgetPluginGuiInfo"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Property",
+                    "Name": "X",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Y",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "number"
+                    }
+                }
+            ],
+            "Name": "Vector2int16"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Property",
+                    "Name": "X",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Y",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Z",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "number"
+                    }
+                }
+            ],
+            "Name": "Vector3int16"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Property",
+                    "Name": "Min",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "Vector3int16"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Max",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "Vector3int16"
+                    }
+                }
+            ],
+            "Name": "Region3int16"
         }
     ]
 }
