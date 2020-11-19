@@ -272,14 +272,6 @@ local function initRbxTypes(rbxLibs)
     end
 end
 
-local function findLibFolder()
-    if fs.exists(fs.current_path() / '.lib') then
-        return fs.current_path() / '.lib'
-    elseif fs.exists(fs.current_path() / '.vscode') then
-        return fs.current_path() / '.vscode'
-    end
-end
-
 local function init()
     local lang = require 'language'
     local id = lang.id
@@ -311,21 +303,6 @@ local function init()
                 mergeLocale(libs, locale)
             end
             mergeLibs(Library, libs, libName)
-        end
-    end
-    local libFolderPath = findLibFolder()
-    if libFolderPath then
-        for path in scan(libFolderPath) do
-            if tostring(path):match("%.lni$") then
-                local libs
-                local buf = io.load(path)
-                if buf then
-                    libs = table.container()
-                    xpcall(lni, log.error, buf, path:string(), {libs})
-                    fix(libs)
-                end
-                mergeLibs(Library, libs, "@")
-            end
         end
     end
     if config.isLuau() then

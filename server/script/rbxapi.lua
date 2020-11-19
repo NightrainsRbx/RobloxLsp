@@ -1163,10 +1163,10 @@ function rbxApi:getTypes()
 end
 
 local replicateToPlayer = {
-    StarterPack = rbxApi.PlayerChilds.Backpack,
-    StarterGui = rbxApi.PlayerChilds.PlayerGui,
-    StarterPlayerScripts = rbxApi.PlayerChilds.PlayerScripts,
-    StarterCharacterScripts = rbxApi.PlayerChilds.Character
+    StarterPack = "Backpack",
+    StarterGui = "PlayerGui",
+    StarterPlayerScripts = "PlayerScripts",
+    StarterCharacterScripts = "Character"
 }
 
 local function addPlayerChildren(children, parent)
@@ -1188,7 +1188,7 @@ local function addPlayerChildren(children, parent)
             path = parent.path
         }
         parent.child[childName] = copy
-     end
+    end
 end
 
 local function addChild(name, members, children, parent, path)
@@ -1215,7 +1215,7 @@ local function addChild(name, members, children, parent, path)
         end
     end
     if replicateToPlayer[members.className] then
-        addPlayerChildren(child.child, replicateToPlayer[members.className])
+        addPlayerChildren(child.child, rbxApi.PlayerChilds[replicateToPlayer[members.className]])
     end
 end
 
