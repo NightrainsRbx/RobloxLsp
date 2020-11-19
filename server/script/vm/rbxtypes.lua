@@ -78,6 +78,8 @@ function mt:fixParamType(type)
         type = type:gsub("^[%w_]+%: ", "")
         if type:sub(1, 5) == "Enum." then
             return "EnumItem"
+        elseif type == "Tuple" then
+            return "any"
         end
     end
     return type
