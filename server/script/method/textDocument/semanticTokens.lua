@@ -34,6 +34,29 @@ local ignore = {
     ['shared']            = true,
 }
 
+local luauTypeSources = {
+    ["varType"]           = true,
+    ["paramType"]         = true,
+    ["returnType"]        = true,
+    ["typeDef"]           = true,
+    ["typeGenerics"]      = true,
+}
+
+local function findNameTypes(info, ret)
+    ret = ret or {}
+    for _, v in pairs(info) do
+        if type(v) == "table" then
+            -- if v.type == "nameType" then
+            --     ret[#ret+1] = v
+            -- end
+            findNameTypes(v, ret)
+        elseif v == "nameType" then
+            ret[#ret+1] = info
+        end
+    end
+    return ret
+end
+
 local Care = {
     ['name'] = function(source, sources)
         if source[1] == '' then
@@ -82,7 +105,7 @@ local Care = {
                 start      = source.start,
                 finish     = source.finish,
                 type       = TokenTypes.property,
-                modifieres = TokenModifiers.static,
+                modifieres = TokenModifiers.declaration,
             }
         elseif source:bindLocal() then
             if source:get 'arg' then
@@ -128,16 +151,19 @@ local Care = {
             end
         end
     end,
-    ['emmyName'] = function(source, sources)
-        if source[1] == '' or not source.syntax then
-            return
+    ['emmyType'] = function(source, sources)
+        for type in pairs(luauTypeSources) do
+            if source[type] then
+                for _, nameType in pairs(findNameTypes(source[type].info)) do
+                    sources[#sources+1] = {
+                        start      = nameType.start,
+                        finish     = nameType.finish,
+                        type       = TokenTypes.type,
+                        modifieres = TokenModifiers.static,
+                    }
+                end
+            end
         end
-        sources[#sources+1] = {
-            start      = source.start,
-            finish     = source.finish,
-            type       = TokenTypes.type,
-            modifieres = TokenModifiers.static,
-        }
     end,
     ['number'] = function(source, sources)
         sources[#sources+1] = {
@@ -176,30 +202,10 @@ local function buildTokens(sources, lines)
     return tokens
 end
 
-local function findNameTypes(info, ret)
-    ret = ret or {}
-    for _, v in pairs(info) do
-        if type(v) == "table" then
-            if v.type == "nameType" then
-                ret[#ret+1] = v
-            else
-                findNameTypes(v, ret)
-            end
-        elseif v == "nameType" then
-            ret[#ret+1] = info
-        end
-    end
-    return ret
-end
-
 local function resolveTokens(vm, lines)
     local sources = {}
     for _, source in ipairs(vm.sources) do
-        if source.type == "varType"
-        or source.type == "paramType"
-        or source.type == "returnType"
-        or source.type == "typeDef"
-        then
+        if luauTypeSources[source.type] then
             for _, nameType in pairs(findNameTypes(source.info)) do
                 sources[#sources+1] = {
                     start      = nameType.start,

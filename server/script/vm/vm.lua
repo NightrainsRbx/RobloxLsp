@@ -894,6 +894,7 @@ function mt:getExp(exp)
         or tp == "paramType"
         or tp == "returnType"
         or tp == "typeDef"
+        or tp == "typeGenerics"
     then
         return exp
     end

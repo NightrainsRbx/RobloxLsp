@@ -391,9 +391,9 @@ TypeSimple  <-  Sp ({} PL Type DirtyPR Optional)
 Typeof      <-  Sp ({} 'typeof' PL DirtyExp NeedPR {} Optional)
             ->  Typeof
 
-Generics1   <-  Sp ('<' Sp (Name / Sp COMMA)+ Sp '>')
+Generics1   <-  Sp ({} '<' Sp (Name / Sp COMMA)+ Sp '>' {})
             ->  Generics
-Generics2   <-  Sp ('<' Sp (Type / Sp COMMA)+ Sp '>')
+Generics2   <-  Sp ({} '<' Sp (Type / Sp COMMA)+ Sp '>' {})
             ->  Generics
 
 TypeList    <-  ({} PL (Type / Sp COMMA)* NeedPR {} Optional)

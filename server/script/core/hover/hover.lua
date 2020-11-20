@@ -6,6 +6,7 @@ local buildValueName = require 'core.hover.name'
 local lang = require 'language'
 local config = require 'config'
 local uric = require 'uri'
+local rbxApi = require 'rbxapi'
 
 local OriginTypes = {
     ['any']      = true,
@@ -18,6 +19,8 @@ local OriginTypes = {
     ['userdata'] = true,
     ['table']    = true,
     ['function'] = true,
+    ['Array'] = true,
+    ['Dictionary'] = true
 }
 
 local function longString(str)
@@ -189,12 +192,14 @@ local function getValueHover(source, name, value, lib)
     local valueType = value:getType()
     local class = findClass(value)
 
+    name = name:gsub("<.->", "")
+
     if class then
         valueType = class
         lib = nil
     end
 
-    if not OriginTypes[valueType] then
+    if not OriginTypes[valueType] and not rbxApi:getTypes()[valueType] then
         valueType = '*' .. valueType
     end
 
@@ -244,7 +249,7 @@ local function getValueHover(source, name, value, lib)
         text = ('%s %s: %s'):format(tp, name, unpackTable(value))
     else
         if literal == nil then
-            if class and not OriginTypes[class] then
+            if class and not OriginTypes[class] and not rbxApi:getTypes(class) then
                 text = ('%s %s: %s %s'):format(tp, name, valueType, unpackTable(value))
             else
                 text = ('%s %s: %s'):format(tp, name, valueType)
@@ -258,6 +263,7 @@ local function getValueHover(source, name, value, lib)
     if #tips > 0 then
         tip = table.concat(tips, '\n\n-------------\n\n')
     end
+
     return {
         label = text,
         description = tip,

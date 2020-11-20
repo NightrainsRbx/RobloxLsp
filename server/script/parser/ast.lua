@@ -258,6 +258,7 @@ local function buildEmmy(obj, keys)
             start = keys.start,
             finish = keys.finish,
             syntax = true,
+            varType = obj,
             [1] = {
                 type = "emmyName",
                 start = obj.info.start,
@@ -285,6 +286,7 @@ local function buildEmmy(obj, keys)
                 type = "emmyType",
                 start = keys.start,
                 finish = keys.finish,
+                paramType = obj,
                 [1] = {
                     type = "emmyName",
                     start = obj.info.start,
@@ -305,6 +307,7 @@ local function buildEmmy(obj, keys)
                     type = "emmyType",
                     start = obj.info.start,
                     finish = obj.info.finish,
+                    returnType = obj,
                     [1] = {
                         type = "emmyName",
                         start = obj.info.start,
@@ -327,6 +330,7 @@ local function buildEmmy(obj, keys)
                             type = "emmyType",
                             start = v.start,
                             finish = v.finish,
+                            returnType = obj,
                             [1] = {
                                 type = "emmyName",
                                 start = v.start,
@@ -1198,11 +1202,12 @@ local Defs = {
         }
         return table.unpack(ret)
     end,
-    NameType = function (start, str, finish)
+    NameType = function (start, str, finish, generics)
         return {
             type   = 'nameType',
             start  = start,
             finish = finish - 1,
+            generics = generics,
             [1]    = str,
         }
     end,
@@ -1345,7 +1350,22 @@ local Defs = {
             info = ...
         }
     end,
-    Generics = function()
+    Generics = function(start, ...)
+        local info = {...}
+        local finish = info[#info]
+        table.remove(info, #info)
+        local obj = {
+            type = "typeGenerics",
+            start = start,
+            finish = finish,
+            info = info
+        }
+        for _, v in pairs(info) do
+            if v.type == "name" then
+                v.type = "nameType"
+            end
+        end
+        return obj
     end,
     Typeof = function(start, exp, finish)
         local obj = {
@@ -1367,7 +1387,10 @@ local Defs = {
         }
         return obj
     end,
-    TypeDef = function (start, name, value, finish)
+    TypeDef = function (start, name, ...)
+        local info = {...}
+        local finish = info[#info]
+        table.remove(info, #info)
         if State.Version ~= "Luau" then
             pushError {
                 type = 'UNSUPPORT_SYMBOL',
@@ -1382,9 +1405,9 @@ local Defs = {
         local obj = {
             type = "typeDef",
             start = start,
-            finish = finish,
             name = name,
-            info = value,
+            finish = finish,
+            info = info
         }
         return obj
     end,
