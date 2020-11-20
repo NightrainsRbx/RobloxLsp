@@ -95,10 +95,15 @@ end
 
 local lastResponse = {}
 
-local function matchLastResponse(word, uri)
-    if lastResponse[3] == uri and lastResponse[1]
-    and ((#lastResponse[1] > 0 and word:sub(1, #lastResponse[1]) == lastResponse[1])
-    or lastResponse[1] == ":" or lastResponse[1] == ".") then
+local function matchLastResponse(word, uri, position)
+    if  lastResponse[3] == uri
+    and position >= lastResponse[4]
+    and lastResponse[1]
+    and ((#lastResponse[1] > 0
+    and word:sub(1, #lastResponse[1]) == lastResponse[1])
+    or  lastResponse[1] == ":"
+    or  lastResponse[1] == ".")
+    then
         return true
     end
 end
@@ -122,14 +127,13 @@ return function (lsp, params)
         if not trigger then
             trigger = word
         end
-        if matchLastResponse(word, uri) then
+        if word ~= "then" and matchLastResponse(word, uri, position) then
             lastResponse[1] = word
             return lastResponse[2], position
         end
     end
 
     lastResponse = {}
-
     local items = fastCompletion(lsp, params, position, text, oldText)
     if not items then
         return nil
@@ -164,6 +168,7 @@ return function (lsp, params)
         items = items,
     }
 
-    lastResponse = {trigger, response, uri}
+    lastResponse = {trigger, response, uri, position}
+
     return response
 end
