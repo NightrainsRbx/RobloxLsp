@@ -100,8 +100,9 @@ local literalMap = {
 }
 
 command['lua.updateDatamodel'] = function (lsp, data)
-    if data then
+    if data and data.datamodel then
         library.reloadRbx(data.datamodel)
+        lsp:reCompile()
     end
 end
 
