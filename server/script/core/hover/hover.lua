@@ -287,7 +287,8 @@ local function hoverAsValue(source, lsp, select)
                 hover = getFunctionHoverAsEmmy(name, emmy, object, select)
             else
                 local func = value:getFunction()
-                hover = getFunctionHover(name, func, object, select)
+                local text = lsp:getText(func:getUri())
+                hover = getFunctionHover(name, func, object, select, text)
             end
         end
     else

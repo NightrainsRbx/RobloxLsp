@@ -1,6 +1,15 @@
 local emmyFunction = require 'core.hover.emmy_function'
 
-local function buildValueArgs(func, object, select)
+local function getTypeWithText(text, func, arg, nextArg)
+    local start = arg:getSource().start
+    local finish = nextArg and nextArg:getSource().start - 1 or func:getSource().argFinish
+    local type = text:sub(start, finish):match(":%s*(.-)%s*[%,%)]%s*$")
+    if type then
+        return type:gsub("[\n\r]", ""):gsub("%s%s+", " ")
+    end
+end
+
+local function buildValueArgs(func, object, select, text)
     if not func then
         return '', nil
     end
@@ -19,6 +28,12 @@ local function buildValueArgs(func, object, select)
             if param then
                 values[i] = param:getType()
                 options[i] = param:getOption()
+            end
+            if text then
+                local type = getTypeWithText(text, func, arg, func.args[i + 1])
+                if type then
+                    values[i] = type
+                end
             end
         end
     end
@@ -222,8 +237,8 @@ local function getOverLoads(name, func, object, select)
     return table.concat(list, '\n')
 end
 
-return function (name, func, object, select)
-    local argStr, argLabel, args = buildValueArgs(func, object, select)
+return function (name, func, object, select, text)
+    local argStr, argLabel, args = buildValueArgs(func, object, select, text)
     local returns = buildValueReturns(func)
     local enum, rawEnum = buildEnum(func)
     local comment = getComment(func)

@@ -71,7 +71,9 @@ local function getDucumentation(name, value)
             if emmy and emmy.type == 'emmy.functionType' then
                 hover = getFunctionHoverAsEmmy(name, emmy)
             else
-                hover = getFunctionHover(name, value:getFunction())
+                local func = value:getFunction()
+                local text = State.lsp:getText(func:getUri())
+                hover = getFunctionHover(name, func, nil, nil, text)
             end
         end
         if not hover then
@@ -1293,7 +1295,6 @@ return function (vm, text, pos, oldText)
         ['localfunction']  = true,
         ['type']           = true
     }
-
     local source, pos, word = getSource(vm, pos, text, filter)
     if not source then
         return nil
@@ -1305,7 +1306,7 @@ return function (vm, text, pos, oldText)
         end
     end
     State = {}
-    
+    State.lsp = vm.lsp
     local callback, list = makeList(source, pos, word)
     searchSpecialEnd(word, pos, text, callback)
     searchCallArg(vm, source, word, callback, pos, text)

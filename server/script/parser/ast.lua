@@ -249,9 +249,10 @@ Exp = {
 }
 
 local function buildEmmy(obj, keys)
+    local emmyName = "any"
     if obj.type == "varType" and keys.type == "name" then
-        if obj.info.type ~= "nameType" then
-            return obj
+        if obj.info.type == "nameType" then
+            emmyName = obj.info[1]
         end
         return {
             type = "emmyType",
@@ -264,12 +265,12 @@ local function buildEmmy(obj, keys)
                 start = obj.info.start,
                 finish = obj.info.finish,
                 syntax = true,
-                [1] = obj.info[1]
+                [1] = emmyName
             },
         }
     elseif obj.type == "paramType" and keys.type == "name" then
-        if obj.info.type ~= "nameType" then
-            return obj
+        if obj.info.type == "nameType" then
+            emmyName = obj.info[1]
         end
         return {
             type = "emmyParam",
@@ -292,12 +293,43 @@ local function buildEmmy(obj, keys)
                     start = obj.info.start,
                     finish = obj.info.finish,
                     syntax = true,
-                    [1] = obj.info[1]
+                    [1] = emmyName
                 }
             },
         }
     elseif obj.type == "returnType" then
-        if obj.info.type == "nameType" then
+        if obj.info.type == "typeList" then 
+            local types = table.deepCopy(obj.info.types)
+            for i, v in pairs(types) do
+                local name = "any"
+                if v.type == "nameType" then
+                    name = v[1]
+                end
+                types[i] = {
+                    type = "emmyReturn",
+                    start = v.start,
+                    finish = v.finish,
+                    syntax = true,
+                    [1] = {
+                        type = "emmyType",
+                        start = v.start,
+                        finish = v.finish,
+                        returnType = obj,
+                        [1] = {
+                            type = "emmyName",
+                            start = v.start,
+                            finish = v.finish,
+                            syntax = true,
+                            [1] = name
+                        }
+                    },
+                }
+            end
+            return types
+        else
+            if obj.info.type == "nameType" then
+                emmyName = obj.info[1]
+            end
             return {{
                 type = "emmyReturn",
                 start = obj.info.start,
@@ -313,43 +345,11 @@ local function buildEmmy(obj, keys)
                         start = obj.info.start,
                         finish = obj.info.finish,
                         syntax = true,
-                        [1] = obj.info[1]
+                        [1] = emmyName
                     }
                 },
             }}
-        elseif obj.info.type == "typeList" then
-            local types = obj.info.types
-            for i, v in pairs(types) do
-                if v.type == "nameType" then
-                    types[i] = {
-                        type = "emmyReturn",
-                        start = v.start,
-                        finish = v.finish,
-                        syntax = true,
-                        [1] = {
-                            type = "emmyType",
-                            start = v.start,
-                            finish = v.finish,
-                            returnType = obj,
-                            [1] = {
-                                type = "emmyName",
-                                start = v.start,
-                                finish = v.finish,
-                                syntax = true,
-                                [1] = v[1]
-                            }
-                        },
-                    }
-                else
-                    types[i] = {
-                        type = "returnType",
-                        info = v
-                    }
-                end
-            end
-            return types
         end
-        return {obj}
     end
     return obj
 end
