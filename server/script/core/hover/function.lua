@@ -5,7 +5,7 @@ local function getTypeWithText(text, func, arg, nextArg)
     local finish = nextArg and nextArg:getSource().start - 1 or func:getSource().argFinish
     local type = text:sub(start, finish):match(":%s*(.-)%s*[%,%)]%s*$")
     if type then
-        return type:gsub("[\n\r]", ""):gsub("%s%s+", " ")
+        return type:gsub("[\n\r%s]", "")
     end
 end
 

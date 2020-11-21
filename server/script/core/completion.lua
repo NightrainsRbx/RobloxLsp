@@ -72,7 +72,10 @@ local function getDucumentation(name, value)
                 hover = getFunctionHoverAsEmmy(name, emmy)
             else
                 local func = value:getFunction()
-                local text = State.lsp:getText(func:getUri())
+                local text
+                if State.lsp and State.lsp.getText then
+                    text = State.lsp:getText(func:getUri())
+                end
                 hover = getFunctionHover(name, func, nil, nil, text)
             end
         end

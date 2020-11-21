@@ -146,10 +146,16 @@ function openUpdatesWindow(context) {
             <body>
                 <div style="position:relative; padding-left:100px; padding-right:100px">
                     <center><img src="https://t3.rbxcdn.com/7bdf9c64b9c096d7db26bf8927213f2a", witdh="300" height="300"></center>
-                    <h1 style="font-size:3rem; font-weight:100">Roblox LSP Updates! (0.14.0)</h1>
+                    <h1 style="font-size:3rem; font-weight:100">Roblox LSP Updates!</h1>
                     <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
-                    <p style="font-size:1rem">This is one of the latest updates I will make for Roblox LSP in a while, this update comes with three nice features.</p>
+                    <h2 style="font-size:2rem; font-weight:100">Latest Updates (0.14.1/3)</h2>
+                    <li style="font-size:1rem">Children of StarterPack, StarterGui, StarterPlayerScripts and StarterCharacter now becomes also children of Backpack, PlayerGui, PlayerScripts and Character respectively.</li>
+                    <li style="font-size:1rem">Method Instance:Clone() now returns a copy of the Instance.</li>
+                    <li style="font-size:1rem">The VM recompiles every time the DataModel changes so it's more synchronized.</li>
+                    <li style="font-size:1rem">Improved Hover and Syntax Highlighting.</li>
+                    <li style="font-size:1rem">Added Vector3int16, Vector2int16 and Region3int16 DataTypes.</li>
                     <p style="font-size:1rem">Report any bug or question here: <a href="https://github.com/NightrainsRbx/RobloxLsp/issues">https://github.com/NightrainsRbx/RobloxLsp/issues</a></p>
+                    <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
                     <h2 style="font-size:2rem; font-weight:100">Auto-updatable Roblox API</h2>
                     <p style="font-size:1rem">You will no longer have to wait for the extension to update when Roblox adds a new function.</p>
                     <p style="font-size:1rem">Every time you start the extension it will check if there is a new version of Roblox and if there is it will automatically download the API from <a href="https://github.com/CloneTrooper1019/Roblox-Client-Tracker">https://github.com/CloneTrooper1019/Roblox-Client-Tracker</a>.</p>
