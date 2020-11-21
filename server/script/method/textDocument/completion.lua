@@ -127,7 +127,7 @@ return function (lsp, params)
         if not trigger then
             trigger = word
         end
-        if word ~= "then" and matchLastResponse(word, uri, position) then
+        if word and #word > 1 and word ~= "then" and matchLastResponse(word, uri, position) then
             lastResponse[1] = word
             return lastResponse[2], position
         end

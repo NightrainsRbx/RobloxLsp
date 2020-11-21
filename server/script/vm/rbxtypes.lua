@@ -203,7 +203,8 @@ function mt:doTypedFunction(source)
                 return returns
             end
         elseif funcName[1] == "Clone" then
-            if not rbxApi:isInstance(object:getType()) then
+            local tp = object:getType()
+            if tp == "Instance" or not rbxApi:isInstance(tp) then
                 return
             end
             local clone = self:createValue(object:getType(), source)
