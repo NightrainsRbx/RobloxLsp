@@ -23,7 +23,9 @@ return function (lsp, params)
     local desc = {}
     -- desc[#desc+1] = hover.description
     desc[#desc+1] = hover.doc
-    desc[#desc+1] = hover.variants
+    if hover.variants then
+        desc[#desc+1] = hover.variants
+    end
     local active
     local signatures = {}
     for i, hover in ipairs(hovers) do
