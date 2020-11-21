@@ -82,6 +82,9 @@ local function getHover(call, pos)
             end
         end
     end
+    if value._lib and value._lib.variants then
+        hover.variants = value._lib.variants
+    end
     return hover
 end
 

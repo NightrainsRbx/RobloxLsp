@@ -1000,6 +1000,7 @@ function rbxApi:getMembers(members, methods, className)
                 end
             end
             local enums = nil
+            local variants
             if self.ParamsEnums[className] then
                 enums = self.ParamsEnums[className][member.Name]
             end
@@ -1009,8 +1010,10 @@ function rbxApi:getMembers(members, methods, className)
             end
             if self.FunctionVariants[member.Name] and self.FunctionVariants[member.Name][className] then
                 local desc = {}
+                variants = {}
                 for _, variant in pairs(self.FunctionVariants[member.Name][className]) do
                     desc[#desc+1] = "function " .. member.Name .. "(" .. variant .. ")"
+                    variants[#variants+1] = member.Name .. "(" .. variant .. ")"
                 end
                 desc = ([[
 ```lua
@@ -1018,6 +1021,7 @@ function rbxApi:getMembers(members, methods, className)
 ```
                 ]]):format(table.concat(desc, "\n"))
                 docs = docs and desc .. "\n" .. docs or desc
+                variants = table.concat(variants, "\n\n")
             end
             local returns = {
                 {type = returnType}
@@ -1035,6 +1039,7 @@ function rbxApi:getMembers(members, methods, className)
                 returns = returns,
                 child = {},
                 description = docs,
+                variants = variants,
                 enums = enums,
                 hidden = hidden
             }
