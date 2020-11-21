@@ -202,6 +202,16 @@ function mt:doTypedFunction(source)
                 returns:push(child)
                 return returns
             end
+        elseif funcName[1] == "Clone" then
+            if not rbxApi:isInstance(object:getType()) then
+                return
+            end
+            local clone = self:createValue(object:getType(), source)
+            clone._lib = object._lib
+            clone._child = object._child
+            local returns = createMulti()
+            returns:push(clone)
+            return returns
         elseif object:getType() == "RBXScriptSignal" then
             local lib = object:getLib()
             if not lib then
