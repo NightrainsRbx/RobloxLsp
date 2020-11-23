@@ -216,29 +216,6 @@
             ]
         },
         {
-            "captures": {
-                "1": {
-                    "name": "keyword.control.goto.lua"
-                },
-                "2": {
-                    "name": "constant.other.placeholder.lua"
-                }
-            },
-            "match": "\\b(goto)\\s+([a-zA-Z_][a-zA-Z0-9_]*)"
-        },
-        {
-            "captures": {
-                "1": {
-                    "name": "punctuation.definition.label.begin.lua"
-                },
-                "2": {
-                    "name": "punctuation.definition.label.end.lua"
-                }
-            },
-            "match": "(::)[a-zA-Z_][a-zA-Z0-9_]*(::)",
-            "name": "constant.other.placeholder.lua"
-        },
-        {
             "match": "\\b(break|do|else|for|if|elseif|goto|return|then|repeat|while|until|end|function|in|and|or|not|continue)\\b",
             "name": "keyword.control.lua"
         },
@@ -294,7 +271,7 @@
         {
 			"captures": {
 				"1": {
-					"name": "storage.modifier.visibility.lua"
+					"name": "keyword.control.export"
                 },
                 "2": {
 					"name": "storage.type.lua"
@@ -306,8 +283,26 @@
 			"match": "(\\bexport\\b\\s+)?(\\btype\\b)\\s+([\\w_]+)(<.+>)?\\s*="
         },
         {
-            "match": "(?<![^.]\\.|:)\\b(workspace|game|script|plugin|shared|false|nil|true|_G|_VERSION|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
+            "match": "\\+|-|%|#|\\*|\\/|\\^|==?|~=|<=?|>=?|(?<!\\.)\\.{2}(?!\\.)",
+            "name": "keyword.operator.lua"
+        },
+        {
+            "match": "(?<![^.]\\.|:)\\b(workspace|game|script|plugin|shared|_G|_VERSION|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
             "name": "constant.language.lua"
+        },
+        {
+            "match": "\\b(true)|(false)|(nil)\\b",
+            "captures": {
+                "1": {
+					"name": "constant.language.boolean.true.lua"
+                },
+                "2": {
+					"name": "constant.language.boolean.false.lua"
+                },
+                "3": {
+					"name": "constant.language.nil.lua"
+				}
+            }
         },
         {
             "match": "(?<![^.]\\.|:)\\b(self)\\b",
@@ -323,35 +318,40 @@
         },
         {
             "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s*(?:[({\"']|\\[\\[))",
-            "name": "support.function.any-method.lua"
-        },
-        {
-            "match": "(?<=[^.]\\.|:)\\b([a-zA-Z_][a-zA-Z0-9_]*)",
-            "name": "variable.other.lua"
-        },
-        {
-            "match": "\\+|-|%|#|\\*|\\/|\\^|==?|~=|<=?|>=?|(?<!\\.)\\.{2}(?!\\.)",
-            "name": "keyword.operator.lua"
-		},
-		{
-			"captures": {
-				"1": {
-					"name": "support.class.lua"
-				}
-			},
-			"match": "\\b(Axes|BrickColor|CFrame|Color3|ColorSequence|ColorSequenceKeypoint|DateTime|DockWidgetPluginGuiInfo|Faces|Instance|NumberRange|NumberSequence|NumberSequenceKeypoint|PathWaypoint|PhysicalProperties|Random|Ray|RaycastParams|Rect|Region3|TweenInfo|UDim|UDim2|Vector2|Vector3)\\b[.:]"
+            "name": "entity.name.function.lua"
         },
         {
             "match": "\\b([A-Z_][A-Z0-9_]*)\\b",
             "name": "variable.other.constant.lua"
         },
         {
-            "match": "(?<=\\.)([a-zA-Z_]\\w*)\\b",
-            "name": "support.variable.property.lua"
+            "include": "#table_fields_declaration"
         },
         {
+            "match": "(?<=[^.]\\.|:)\\b([a-zA-Z_][a-zA-Z0-9_]*)",
+            "name": "variable.property.lua"
+        },
+        {
+            "match": "\\b(Axes|BrickColor|CFrame|Color3|ColorSequence|ColorSequenceKeypoint|DateTime|DockWidgetPluginGuiInfo|Faces|Instance|NumberRange|NumberSequence|NumberSequenceKeypoint|PathWaypoint|PhysicalProperties|Random|Ray|RaycastParams|Rect|Region3|Region3int16|TweenInfo|UDim|UDim2|Vector2|Vector2int16|Vector3|Vector3int16)\\b",
+            "name": "support.type.lua"
+        },
+        {
+			"match": "(Enum)\\.?(\\w*)\\.?(\\w*)",
+			"captures": {
+				"1": {
+					"name": "variable.other.enummember.lua"
+                },
+                "2": {
+					"name": "variable.other.enummember.lua"
+                },
+                "3": {
+					"name": "variable.other.enummember.lua"
+				}
+			}
+		},
+        {
             "match": "\\b([a-zA-Z_]\\w*)\\b",
-            "name": "variable.other.readwrite.lua"
+            "name": "variable.other.readwrite.js"
         }
     ],
     "repository": {
@@ -409,6 +409,28 @@
 							"name": "keyword.operator.other.lua"
 						}
                     }
+                }
+            ]
+        },
+        "table_fields_declaration": {
+            "patterns": [
+                {
+                    "begin": "\\{",
+                    "end": "\\}",
+                    "name": "meta.object-literal.key.lua",
+                    "patterns": [
+                        {
+                            "match": "([a-zA-Z_]\\w*)\\s*=",
+                            "captures": {
+                                "1": {
+                                    "name": "variable.property.lua"
+                                }
+                            }
+                        },
+                        {
+							"include": "$self"
+						}
+					]
                 }
             ]
         }
