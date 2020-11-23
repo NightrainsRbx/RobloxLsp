@@ -1,8 +1,14 @@
 local emmyFunction = require 'core.hover.emmy_function'
 
 local function getTypeWithText(text, func, arg, nextArg)
-    local start = arg:getSource().start
-    local finish = nextArg and nextArg:getSource().start - 1 or func:getSource().argFinish
+    local funcSource = func:getSource()
+    local argSource = arg:getSource()
+    local nextArgSource = nextArg and nextArg:getSource()
+    if not funcSource or not argSource or (nextArg and not nextArgSource) then
+        return
+    end
+    local start = argSource.start
+    local finish = nextArg and nextArgSource.start - 1 or funcSource.argFinish
     local type = text:sub(start, finish):match(":%s*(.-)%s*[%,%)]%s*$")
     if type then
         return type:gsub("[\n\r%s]", "")
