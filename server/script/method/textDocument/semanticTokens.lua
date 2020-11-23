@@ -46,9 +46,6 @@ local function findNameTypes(info, ret)
     ret = ret or {}
     for _, v in pairs(info) do
         if type(v) == "table" then
-            -- if v.type == "nameType" then
-            --     ret[#ret+1] = v
-            -- end
             findNameTypes(v, ret)
         elseif v == "nameType" then
             ret[#ret+1] = info
@@ -78,12 +75,6 @@ local Care = {
             local lib = findLib(source)
             if lib then
                 if lib.type == "Enums" then
-                    sources[#sources+1] = {
-                        start      = source.start,
-                        finish     = source.finish,
-                        type       = TokenTypes.enum,
-                        modifieres = TokenModifiers.static,
-                    }
                     return
                 end
                 sources[#sources+1] = {
@@ -115,6 +106,12 @@ local Care = {
                     type       = TokenTypes.parameter,
                     modifieres = TokenModifiers.declaration,
                 }
+            elseif source:bindLocal():getSource():get 'arg' then
+                sources[#sources+1] = {
+                    start      = source.start,
+                    finish     = source.finish,
+                    type       = TokenTypes.parameter,
+                }
             end
             if source[1] == '_ENV'
             or source[1] == 'self' then
@@ -126,28 +123,17 @@ local Care = {
                 sources[#sources+1] = {
                     start      = source.start,
                     finish     = source.finish,
-                    type       = TokenTypes.interface,
+                    type       = TokenTypes["function"],
                     modifieres = TokenModifiers.declaration,
                 }
                 return
             end
+            
         elseif source:bindValue() then
             local lib = findLib(source)
             if lib and lib.doc and constLib[lib.doc] then
                 table.remove(sources, #sources)
                 return
-            end
-            local value = source:bindValue()
-            if value:getType():sub(1, 4) == "Enum" then
-                local simple = source:get("simple")
-                if simple and simple[1] and simple[1][1] == "Enum" then
-                    sources[#sources+1] = {
-                        start      = source.start,
-                        finish     = source.finish,
-                        type       = TokenTypes.enum,
-                        modifieres = TokenModifiers.static,
-                    }
-                end
             end
         end
     end,
@@ -227,43 +213,6 @@ local function resolveTokens(vm, lines)
 
     local tokens = buildTokens(sources, lines)
 
-    return tokens
-end
-
-local function toArray(map)
-    local array = {}
-    for k in pairs(map) do
-        array[#array+1] = k
-    end
-    table.sort(array, function (a, b)
-        return map[a] < map[b]
-    end)
-    return array
-end
-
-local function testTokens(vm, lines)
-    local text = vm.text
-    local sources = {}
-    local init = 1
-    while true do
-        local start, finish = text:find('[%w_%.]+', init)
-        if not start then
-            break
-        end
-        init = finish + 1
-        local token = text:sub(start, finish)
-        local type = token:match '[%w_]+'
-        local mod  = token:match '%.([%w_]+)'
-        sources[#sources+1] = {
-            start      = start,
-            finish     = finish,
-            type       = TokenTypes[type],
-            modifieres = TokenModifiers[mod] or 0,
-        }
-    end
-    local tokens = buildTokens(sources, lines)
-    log.debug(table.dump(sources))
-    log.debug(table.dump(tokens))
     return tokens
 end
 
