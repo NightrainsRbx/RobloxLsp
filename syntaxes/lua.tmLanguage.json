@@ -417,7 +417,6 @@
                 {
                     "begin": "\\{",
                     "end": "\\}",
-                    "name": "meta.object-literal.key.lua",
                     "patterns": [
                         {
                             "match": "([a-zA-Z_]\\w*)\\s*=",
