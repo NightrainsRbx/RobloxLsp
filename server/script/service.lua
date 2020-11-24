@@ -129,8 +129,10 @@ end
 ---@param compiled table
 ---@param mode string
 ---@return boolean
-function mt:needCompile(uri, compiled, mode)
-    self._needDiagnostics[uri] = true
+function mt:needCompile(uri, compiled, mode, skipDiagnostics)
+    if not skipDiagnostics then
+        self._needDiagnostics[uri] = true
+    end
     if self._needCompile[uri] then
         return false
     end
@@ -407,7 +409,7 @@ function mt:reCompile()
     self._needCompile = {}
     local n = 0
     for uri in self._files:eachFile() do
-        self:needCompile(uri, compiled)
+        self:needCompile(uri, compiled, true)
         n = n + 1
     end
     log.debug('reCompile:', n, self._files:count())
