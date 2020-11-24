@@ -379,7 +379,7 @@ function mt:getCachedFileCount()
     return self._files:count()
 end
 
-function mt:reCompile()
+function mt:reCompile(skipDiagnostics)
     if self.global then
         self.global:remove()
     end
@@ -409,7 +409,7 @@ function mt:reCompile()
     self._needCompile = {}
     local n = 0
     for uri in self._files:eachFile() do
-        self:needCompile(uri, compiled, true)
+        self:needCompile(uri, compiled, skipDiagnostics)
         n = n + 1
     end
     log.debug('reCompile:', n, self._files:count())
