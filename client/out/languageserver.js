@@ -223,6 +223,14 @@ function activate(context) {
     let debuggerPort = 11412 //vscode_1.workspace.getConfiguration().get("Lua.develop.debuggerPort");
     let debuggerWait = false //vscode_1.workspace.getConfiguration().get("Lua.develop.debuggerWait");
     let command;
+
+    try {
+        if (vscode_1.extensions.getExtension("sumneko.lua") != undefined) {
+            vscode_1.window.showErrorMessage("The extension [Lua](https://marketplace.visualstudio.com/items?itemName=sumneko.lua) by sumneko is enabled, please disable it so that Roblox LSP can work properly.");
+        }
+    } catch (err) {
+        vscode_1.window.showErrorMessage(err);
+    }
     
     let platform = os.platform();
     switch (platform) {
