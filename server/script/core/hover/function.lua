@@ -35,12 +35,12 @@ local function buildValueArgs(func, object, select, text)
                 values[i] = param:getType()
                 options[i] = param:getOption()
             end
-            if text then
-                local type = getTypeWithText(text, func, arg, func.args[i + 1])
-                if type then
-                    values[i] = type
-                end
-            end
+            -- if text then
+            --     local type = getTypeWithText(text, func, arg, func.args[i + 1])
+            --     if type then
+            --         values[i] = type
+            --     end
+            -- end
         end
     end
     local strs = {}
