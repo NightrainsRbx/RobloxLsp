@@ -536,6 +536,11 @@ type = 'function'
 ``````````
 name = 'err'
 type = 'function'
+``````````
+name = 'arg1'
+optional = 'after'
+``````````
+type = '...'
 [[.returns]]
 name = 'success'
 type = 'boolean'
