@@ -6,7 +6,7 @@
             "begin": "\\b(?:(local)\\s+)?(function)\\s*(?:\\s+([a-zA-Z_][a-zA-Z0-9_]*(?:([\\.:])[a-zA-Z_][a-zA-Z0-9_]*)?)\\s*)?(\\()",
             "beginCaptures": {
                 "1": {
-                    "name": "keyword.control.lua"
+                    "name": "keyword.local.lua"
                 },
                 "2": {
                     "name": "keyword.control.lua"
@@ -325,9 +325,6 @@
             "name": "variable.other.constant.lua"
         },
         {
-            "include": "#table_fields_declaration"
-        },
-        {
             "match": "(?<=[^.]\\.|:)\\b([a-zA-Z_][a-zA-Z0-9_]*)",
             "name": "variable.property.lua"
         },
@@ -409,27 +406,6 @@
 							"name": "keyword.operator.other.lua"
 						}
                     }
-                }
-            ]
-        },
-        "table_fields_declaration": {
-            "patterns": [
-                {
-                    "begin": "\\{",
-                    "end": "\\}",
-                    "patterns": [
-                        {
-                            "match": "([a-zA-Z_]\\w*)\\s*=",
-                            "captures": {
-                                "1": {
-                                    "name": "variable.property.lua"
-                                }
-                            }
-                        },
-                        {
-							"include": "$self"
-						}
-					]
                 }
             ]
         }
