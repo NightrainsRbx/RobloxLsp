@@ -637,14 +637,19 @@ function mt:getSource()
     return listMgr.get(self.source)
 end
 
-function mt:markGlobal()
-    if self._global then
+local marked = {}
+function mt:markGlobal(recursive)
+    if self._global or marked[self] then
         return
     end
     self._global = true
+    marked[self] = true
     self:rawEach(function (index, value)
-        value:markGlobal()
+        value:markGlobal(true)
     end)
+    if not recursive then
+        marked = {}
+    end
     local func = self:getFunction()
     if func then
         func:markGlobal()
