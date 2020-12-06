@@ -92,12 +92,14 @@ local Care = {
                 modifieres = TokenModifiers.deprecated,
             }
         elseif source:get 'table index' then
-            sources[#sources+1] = {
-                start      = source.start,
-                finish     = source.finish,
-                type       = TokenTypes.property,
-                modifieres = TokenModifiers.declaration,
-            }
+            if source._action == "set" then
+                sources[#sources+1] = {
+                    start      = source.start,
+                    finish     = source.finish,
+                    type       = TokenTypes.property,
+                    modifieres = TokenModifiers.declaration,
+                }
+            end
         elseif source:bindLocal() then
             if source:get 'arg' then
                 sources[#sources+1] = {
