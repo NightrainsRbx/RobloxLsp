@@ -5,7 +5,7 @@ local fs = require 'bee.filesystem'
 ROOT = fs.current_path() / rootPath
 LANG = LANG or 'en-US'
 
-output = require 'output'
+-- output = require 'output'
 --collectgarbage('generational')
 collectgarbage("setpause", 100)
 collectgarbage("setstepmul", 1000)
