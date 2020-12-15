@@ -65,25 +65,22 @@ local function getHover(call, pos)
     local name = fullkey or buildValueName(source)
     local hover
     if lib then
-        hover = getFunctionHoverAsLib(name, lib, object, select)
+        hover = getFunctionHoverAsLib(name, lib, object, select, true)
     else
         local emmy = value:getEmmy()
         if emmy and emmy.type == 'emmy.functionType' then
-            hover = getFunctionHoverAsEmmy(name, emmy, object, select)
+            hover = {getFunctionHoverAsEmmy(name, emmy, object, select)}
         else
             ---@type emmyFunction
             local func = value:getFunction()
-            hover = getFunctionHover(name, func, object, select)
+            hover = {getFunctionHover(name, func, object, select)}
             local overLoads = func and func:getEmmyOverLoads()
             if overLoads then
                 for _, ol in ipairs(overLoads) do
-                    hover = getFunctionHoverAsEmmy(name, ol, object, select)
+                    hover = {getFunctionHoverAsEmmy(name, ol, object, select)}
                 end
             end
         end
-    end
-    if value._lib and value._lib.variants then
-        hover.variants = value._lib.variants
     end
     return hover
 end
@@ -119,18 +116,19 @@ return function (vm, pos)
         return nil
     end
 
-    local hover = getHover(nearCall, pos)
-    if not hover then
+    local hovers = getHover(nearCall, pos)
+    if not hovers then
         return nil
     end
 
     -- skip `name(`
-    local head = #hover.name + 1
-    hover.label = ('%s(%s)'):format(hover.name, hover.argStr)
-    if hover.argLabel then
-        hover.argLabel[1] = hover.argLabel[1] + head
-        hover.argLabel[2] = hover.argLabel[2] + head
+    for _, hover in pairs(hovers) do
+        local head = #hover.name + 1
+        hover.label = ('%s(%s)'):format(hover.name, hover.argStr)
+        if hover.argLabel then
+            hover.argLabel[1] = hover.argLabel[1] + head
+            hover.argLabel[2] = hover.argLabel[2] + head
+        end
     end
-    
-    return { hover }
+    return hovers
 end

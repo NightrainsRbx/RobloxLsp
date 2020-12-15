@@ -246,13 +246,44 @@ local function buildDoc(lib)
     end
 end
 
-return function (name, lib, object, select)
+local function buildFromVariants(lib, select)
+    local hovers = {}
+    for _, variant in pairs(lib.variants) do
+        local hover = {}
+        local returns = ""
+        if lib.returns and lib.returns[1] then
+            returns = "\n  -> " .. lib.returns[1].type
+        end
+        hover.argStr = variant
+        hover.name = lib.name
+        hover.description = lib.description
+        hover.returns = returns
+        hover.label = "function " .. lib.name .. "(" .. variant .. ")" .. returns
+        hover.args = {}
+        hover.argLabel = nil
+        local i = 0
+        for arg in variant:gmatch(" *([^,]+)") do
+            i = i + 1
+            if i == select then
+                hover.argLabel = {string.find(variant, arg, 1, true)}
+            end
+            hover.args[#hover.args+1] = arg
+        end
+        hovers[#hovers+1] = hover
+    end
+    return hovers
+end
+
+return function (name, lib, object, select, overloads)
+    if overloads and lib.variants then
+        return buildFromVariants(lib, select)
+    end
     local argStr, argLabel, args = buildLibArgs(lib, object, select)
     local returns = buildLibReturns(lib)
     local enum, rawEnum = buildEnum(lib)
     local tip = buildDescription(lib)
     -- local doc = buildDoc(lib)
-    return {
+    local hover = {
         label = ('function %s(%s)%s'):format(name, argStr:gsub("self: any[, ]*", ""), returns),
         name = name,
         argStr = argStr,
@@ -264,4 +295,5 @@ return function (name, lib, object, select)
         --doc = doc,
         args = args,
     }
+    return overloads and {hover} or hover
 end

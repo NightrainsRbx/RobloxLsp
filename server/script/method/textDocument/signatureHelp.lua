@@ -5,6 +5,7 @@ local config = require 'config'
 --- @param params table
 --- @return table
 return function (lsp, params)
+    output("w", params)
     if not config.config.signatureHelp.enable then
         return
     end
@@ -23,10 +24,8 @@ return function (lsp, params)
     local desc = {}
     -- desc[#desc+1] = hover.description
     desc[#desc+1] = hover.doc
-    if hover.variants then
-        desc[#desc+1] = hover.variants
-    end
-    local active
+
+    local active = 0
     local signatures = {}
     for i, hover in ipairs(hovers) do
         local signature = {
@@ -37,9 +36,6 @@ return function (lsp, params)
             },
         }
         if hover.argLabel then
-            if not active then
-                active = i
-            end
             signature.parameters = {
                 {
                     label = {
@@ -51,10 +47,12 @@ return function (lsp, params)
         end
         signatures[i] = signature
     end
-
+    if params.context.activeSignatureHelp and params.context.activeSignatureHelp.activeSignature then
+        active = params.context.activeSignatureHelp.activeSignature
+    end
     local response = {
         signatures = signatures,
-        activeSignature = active and active - 1 or 0,
+        activeSignature = active,
     }
 
     return response
