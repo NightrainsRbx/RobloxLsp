@@ -20,6 +20,7 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 - [x] Auto-updatable API
 - [x] Intellisense for Modules
 - [x] Custom Diagnostics for Roblox Classes
+- [x] Color3 Preview and Picker
 
 - [x] Goto Definition
 - [x] Find All References
