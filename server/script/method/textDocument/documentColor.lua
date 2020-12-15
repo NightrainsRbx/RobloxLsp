@@ -1,3 +1,5 @@
+local config = require 'config'
+
 local function getRange(start, finish, lines)
     local start_row,  start_col  = lines:rowcol(start)
     local finish_row, finish_col = lines:rowcol(finish)
@@ -46,6 +48,9 @@ local COLOR3_CONSTRUCTORS = {
 --- @param params table
 --- @return table
 return function (lsp, params)
+    if not (config.isLuau() and config.config.misc.color3Picker) then
+        return
+    end
     local vm, lines = lsp:getVM(params.textDocument.uri)
     if not vm then
         return

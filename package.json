@@ -27,6 +27,12 @@
 					"scope": "resource",
 					"type": "string"
 				},
+				"Lua.misc.color3Picker": {
+					"default": true,
+					"markdownDescription": "%config.misc.color3Picker%",
+					"scope": "resource",
+					"type": "boolean"
+				},
 				"Lua.completion.callSnippet": {
 					"default": "Disable",
 					"enum": [

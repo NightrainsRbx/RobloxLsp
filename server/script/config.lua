@@ -144,6 +144,9 @@ local ConfigTemplate = {
     color = {
         mode            = {'Semantic', String},
     },
+    misc = {
+        color3Picker    = {true,      Boolean},
+    },
     plugin = {
         enable          = {false, Boolean},
         path            = {'.vscode/lua-plugin/*.lua', String},

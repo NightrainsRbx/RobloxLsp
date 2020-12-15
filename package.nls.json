@@ -2,6 +2,7 @@
     "config.color.mode": "Color mode.",
     "config.color.mode.Grammar": "Grammar color.",
     "config.color.mode.Semantic": "Semantic color (Testing. Your color theme must support semantic coloring to be effective.).",
+    "config.misc.color3Picker": "Enable Color Picker and Preview for Color3 functions.",
     "config.completion.callSnippet": "Shows function call snippets.",
     "config.completion.callSnippet.Both": "Shows `function name` and `call snippet`.",
     "config.completion.callSnippet.Disable": "Only shows `function name`.",
