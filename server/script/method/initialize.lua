@@ -37,7 +37,7 @@ return function (lsp, params)
             documentHighlightProvider = true,
             colorProvider = true,
             codeActionProvider = true,
-            foldingRangeProvider = true,
+            -- foldingRangeProvider = true,
             workspaceSymbolProvider = true,
             signatureHelpProvider = {
                 triggerCharacters = { '(', ',' },
