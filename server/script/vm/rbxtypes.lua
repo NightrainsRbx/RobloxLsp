@@ -28,6 +28,30 @@ function mt:getArgString(source)
     end
 end
 
+function mt:getArgNumber(source)
+    if source.type == "number" then
+        return source[1]
+    elseif source.type == "name" then
+        source = self:getName(source:getName(), source)
+        if source and source:getType() == "number" then
+            return source:getLiteral()
+        end
+    elseif source.type == "simple" then
+        source = self:getSimple(source)
+        if source and source.type == "multi" then
+            source = self:getFirstInMulti(source)
+        end
+        if source and source:getType() == "number" then
+            return source:getLiteral()
+        end
+    elseif source.type == "binary" then
+        source = self:getBinary(source)
+        if source and source:getType() == "number" then
+            return source:getLiteral()
+        end
+    end
+end
+
 function mt:getArgFunction(source)
     if source.type == "function" then
         source = source:bindFunction():getFunction()
