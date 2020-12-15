@@ -1,18 +1,30 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.deactivate = exports.activate = void 0;
-const path = require("path");
-const os = require("os");
-const fs = require("fs");
-const vscode_1 = require("vscode");
-const node_1 = require("vscode-languageclient/node");
-let defaultClient;
-let clients = new Map();
-function registerCustomCommands(context) {
-    context.subscriptions.push(vscode_1.commands.registerCommand('lua.config', (data) => {
-        let config = vscode_1.workspace.getConfiguration(undefined, vscode_1.Uri.parse(data.uri));
+import * as path from 'path';
+import * as os from 'os';
+import * as fs from 'fs';
+import {
+    workspace as Workspace,
+    ExtensionContext,
+    env as Env,
+    commands as Commands,
+    TextDocument,
+    WorkspaceFolder,
+    Uri,
+} from 'vscode';
+import {
+    LanguageClient,
+    LanguageClientOptions,
+    ServerOptions,
+    DocumentSelector,
+} from 'vscode-languageclient/node';
+
+let defaultClient: LanguageClient;
+let clients: Map<string, LanguageClient> = new Map();
+
+function registerCustomCommands(context: ExtensionContext) {
+    context.subscriptions.push(Commands.registerCommand('lua.config', (data) => {
+        let config = Workspace.getConfiguration(undefined, Uri.parse(data.uri));
         if (data.action == 'add') {
-            let value = config.get(data.key);
+            let value: any[] = config.get(data.key);
             value.push(data.value);
             config.update(data.key, value);
             return;
@@ -21,25 +33,29 @@ function registerCustomCommands(context) {
             config.update(data.key, data.value);
             return;
         }
-    }));
+    }))
 }
-let _sortedWorkspaceFolders;
-function sortedWorkspaceFolders() {
+
+let _sortedWorkspaceFolders: string[] | undefined;
+function sortedWorkspaceFolders(): string[] {
     if (_sortedWorkspaceFolders === void 0) {
-        _sortedWorkspaceFolders = vscode_1.workspace.workspaceFolders ? vscode_1.workspace.workspaceFolders.map(folder => {
+        _sortedWorkspaceFolders = Workspace.workspaceFolders ? Workspace.workspaceFolders.map(folder => {
             let result = folder.uri.toString();
             if (result.charAt(result.length - 1) !== '/') {
                 result = result + '/';
             }
             return result;
-        }).sort((a, b) => {
-            return a.length - b.length;
-        }) : [];
+        }).sort(
+            (a, b) => {
+                return a.length - b.length;
+            }
+        ) : [];
     }
     return _sortedWorkspaceFolders;
 }
-vscode_1.workspace.onDidChangeWorkspaceFolders(() => _sortedWorkspaceFolders = undefined);
-function getOuterMostWorkspaceFolder(folder) {
+Workspace.onDidChangeWorkspaceFolders(() => _sortedWorkspaceFolders = undefined);
+
+function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
     let sorted = sortedWorkspaceFolders();
     for (let element of sorted) {
         let uri = folder.uri.toString();
@@ -47,14 +63,15 @@ function getOuterMostWorkspaceFolder(folder) {
             uri = uri + '/';
         }
         if (uri.startsWith(element)) {
-            return vscode_1.workspace.getWorkspaceFolder(vscode_1.Uri.parse(element));
+            return Workspace.getWorkspaceFolder(Uri.parse(element))!;
         }
     }
     return folder;
 }
-function start(context, documentSelector, folder) {
+
+function start(context: ExtensionContext, documentSelector: DocumentSelector, folder: WorkspaceFolder): LanguageClient {
     // Options to control the language client
-    let clientOptions = {
+    let clientOptions: LanguageClientOptions = {
         // Register the server for plain text documents
         documentSelector: documentSelector,
         workspaceFolder: folder,
@@ -63,55 +80,92 @@ function start(context, documentSelector, folder) {
             isTrusted: true,
         },
     };
-    let config = vscode_1.workspace.getConfiguration(undefined, folder);
-    let develop = config.get("Lua.develop.enable");
-    let debuggerPort = config.get("Lua.develop.debuggerPort");
-    let debuggerWait = config.get("Lua.develop.debuggerWait");
-    let command;
-    let platform = os.platform();
+
+    let config = Workspace.getConfiguration(undefined, folder);
+    let develop: boolean = config.get("Lua.develop.enable");
+    let debuggerPort: number = config.get("Lua.develop.debuggerPort");
+    let debuggerWait: boolean = config.get("Lua.develop.debuggerWait");
+    let command: string;
+    let platform: string = os.platform();
     switch (platform) {
         case "win32":
-            command = context.asAbsolutePath(path.join('server', 'bin', 'Windows', 'lua-language-server.exe'));
+            command = context.asAbsolutePath(
+                path.join(
+                    'server',
+                    'bin',
+                    'Windows',
+                    'lua-language-server.exe'
+                )
+            );
             break;
         case "linux":
-            command = context.asAbsolutePath(path.join('server', 'bin', 'Linux', 'lua-language-server'));
+            command = context.asAbsolutePath(
+                path.join(
+                    'server',
+                    'bin',
+                    'Linux',
+                    'lua-language-server'
+                )
+            );
             fs.chmodSync(command, '777');
             break;
         case "darwin":
-            command = context.asAbsolutePath(path.join('server', 'bin', 'macOS', 'lua-language-server'));
+            command = context.asAbsolutePath(
+                path.join(
+                    'server',
+                    'bin',
+                    'macOS',
+                    'lua-language-server'
+                )
+            );
             fs.chmodSync(command, '777');
             break;
     }
-    let serverOptions = {
+
+    let serverOptions: ServerOptions = {
         command: command,
         args: [
             '-E',
             '-e',
             `DEVELOP=${develop};DBGPORT=${debuggerPort};DBGWAIT=${debuggerWait}`,
-            context.asAbsolutePath(path.join('server', 'main.lua'))
+            context.asAbsolutePath(path.join(
+                'server',
+                'main.lua',
+            ))
         ]
     };
-    let client = new node_1.LanguageClient('Lua', 'Lua', serverOptions, clientOptions);
+
+    let client = new LanguageClient(
+        'Lua',
+        'Lua',
+        serverOptions,
+        clientOptions
+    );
+
     client.registerProposedFeatures();
     client.start();
+
     return client;
 }
-function activate(context) {
+
+export function activate(context: ExtensionContext) {
     registerCustomCommands(context);
-    function didOpenTextDocument(document) {
+    function didOpenTextDocument(document: TextDocument): void {
         // We are only interested in language mode text
         if (document.languageId !== 'lua' || (document.uri.scheme !== 'file' && document.uri.scheme !== 'untitled')) {
             return;
         }
+
         let uri = document.uri;
-        let folder = vscode_1.workspace.getWorkspaceFolder(uri);
+        let folder = Workspace.getWorkspaceFolder(uri);
         // Untitled files go to a default client.
-        if (folder == null && vscode_1.workspace.workspaceFolders == null && !defaultClient) {
+        if (folder == null && Workspace.workspaceFolders == null && !defaultClient) {
             defaultClient = start(context, [
                 { scheme: 'file', language: 'lua' }
             ], null);
             return;
         }
+
         // Files outside a folder can't be handled. This might depend on the language.
         // Single file languages like JSON might handle files outside the workspace folders.
         if (!folder) {
@@ -119,6 +173,7 @@ function activate(context) {
         }
         // If we have nested workspace folders we only start a server on the outer most workspace folder.
         folder = getOuterMostWorkspaceFolder(folder);
+
         if (!clients.has(folder.uri.toString())) {
             let client = start(context, [
                 { scheme: 'file', language: 'lua', pattern: `${folder.uri.fsPath}/**/*` }
@@ -126,7 +181,8 @@ function activate(context) {
             clients.set(folder.uri.toString(), client);
         }
     }
-    function didCloseTextDocument(document) {
+
+    function didCloseTextDocument(document: TextDocument): void {
         let uri = document.uri;
         if (clients.has(uri.toString())) {
             let client = clients.get(uri.toString());
@@ -136,10 +192,11 @@ function activate(context) {
             }
         }
     }
-    vscode_1.workspace.onDidOpenTextDocument(didOpenTextDocument);
+
+    Workspace.onDidOpenTextDocument(didOpenTextDocument);
     //Workspace.onDidCloseTextDocument(didCloseTextDocument);
-    vscode_1.workspace.textDocuments.forEach(didOpenTextDocument);
-    vscode_1.workspace.onDidChangeWorkspaceFolders((event) => {
+    Workspace.textDocuments.forEach(didOpenTextDocument);
+    Workspace.onDidChangeWorkspaceFolders((event) => {
         for (let folder of event.removed) {
             let client = clients.get(folder.uri.toString());
             if (client) {
@@ -149,9 +206,9 @@ function activate(context) {
         }
     });
 }
-exports.activate = activate;
-function deactivate() {
-    let promises = [];
+
+export function deactivate(): Thenable<void> | undefined {
+    let promises: Thenable<void>[] = [];
     if (defaultClient) {
         promises.push(defaultClient.stop());
     }
@@ -160,5 +217,3 @@ function deactivate() {
     }
     return Promise.all(promises).then(() => undefined);
 }
-exports.deactivate = deactivate;
-//# sourceMappingURL=languageserver.js.map

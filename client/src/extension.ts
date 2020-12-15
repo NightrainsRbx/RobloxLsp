@@ -1,44 +1,37 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.deactivate = exports.activate = void 0;
-const vscode = require("vscode");
-const languageserver = require("./languageserver");
-const fs = require("fs");
-const path = require("path");
-const express = require("express");
-const fetch = require("node-fetch");
-let server;
-const fetchData = (url, handler) => __awaiter(void 0, void 0, void 0, function* () {
+import * as vscode from 'vscode'
+import * as languageserver from './languageserver';
+
+import * as fs from 'fs';
+import * as path from 'path';
+import * as express from 'express';
+import * as fetch from 'node-fetch';
+
+import { Server } from 'http';
+
+let server: Server | undefined;
+
+const fetchData = async (url: string, handler: (data: string) => void) => {
     try {
         fetch.default(url)
             .then(res => res.text())
             .then(body => handler(body));
-    }
-    catch (err) {
+    } catch (err) {
         vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
     }
-});
-function writeToFile(path, content) {
+};
+
+function writeToFile(path: string, content: string) {
     try {
         fs.writeFileSync(path, content);
-    }
-    catch (err) {
+    } catch (err) {
         vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
     }
 }
-function updateRobloxAPI(context) {
+
+function updateRobloxAPI(context: vscode.ExtensionContext) {
     fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/version.txt', (lastVersion) => {
         try {
-            const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), 'utf8');
+            const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), 'utf8')
             if (currentVersion != lastVersion) {
                 fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/AutocompleteMetadata.xml', (data) => {
                     writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'AutocompleteMetadata.xml')), data);
@@ -52,12 +45,12 @@ function updateRobloxAPI(context) {
                 writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), lastVersion);
                 vscode.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://clonetrooper1019.github.io/Roblox-API-History.html)`);
             }
-        }
-        catch (err) {
+        } catch (err) {
             vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
         }
     });
 }
+
 function startPluginServer() {
     try {
         let lastUpdate = "";
@@ -65,7 +58,7 @@ function startPluginServer() {
         app.use('/update', express.json({
             limit: '10mb',
         }));
-        app.post('/update', (req, res) => __awaiter(this, void 0, void 0, function* () {
+        app.post('/update', async (req, res) => {
             if (!req.body) {
                 res.status(400);
                 res.json({
@@ -87,13 +80,12 @@ function startPluginServer() {
                     "datamodel": req.body.DataModel
                 });
                 lastUpdate = req.body.DataModel;
-            }
-            catch (err) {
+            } catch (err) {
                 vscode.window.showErrorMessage(err);
             }
             res.status(200);
-            res.json({ success: true });
-        }));
+            res.json({success: true});
+        });
         app.get("/last", (req, res) => {
             res.send(lastUpdate);
         });
@@ -104,53 +96,60 @@ function startPluginServer() {
             //     vscode.window.showInformationMessage(`Started Roblox LSP Plugin Server on port ${port}`);
             // });
         }
-    }
-    catch (err) {
+    } catch (err) {
         vscode.window.showErrorMessage(`Failed to launch Roblox LSP plugin server: ${err}`);
     }
 }
-let luadoc = require('../3rd/vscode-lua-doc/extension.js');
-function activate(context) {
+
+let luadoc = require('../3rd/vscode-lua-doc/extension.js')
+
+interface LuaDocExtensionContext extends vscode.ExtensionContext {
+    readonly ViewType: string;
+    readonly OpenCommand: string;
+}
+
+export function activate(context: vscode.ExtensionContext) {
     languageserver.activate(context);
+
     try {
         if (vscode.extensions.getExtension("sumneko.lua") != undefined) {
             vscode.window.showErrorMessage("The extension [Lua](https://marketplace.visualstudio.com/items?itemName=sumneko.lua) by sumneko is enabled, please disable it so that Roblox LSP can work properly.");
         }
-    }
-    catch (err) {
+    } catch (err) {
         vscode.window.showErrorMessage(err);
     }
+
     if (vscode.workspace.getConfiguration().get("Lua.runtime.version") == "Luau") {
         updateRobloxAPI(context);
         startPluginServer();
     }
-    let luadocContext = {
-        subscriptions: context.subscriptions,
-        workspaceState: context.workspaceState,
-        globalState: context.globalState,
-        extensionPath: context.extensionPath + '/client/3rd/vscode-lua-doc',
-        asAbsolutePath: context.asAbsolutePath,
-        storagePath: context.storagePath,
-        globalStoragePath: context.globalStoragePath,
-        logPath: context.logPath,
-        extensionUri: context.extensionUri,
-        storageUri: context.storageUri,
-        globalStorageUri: context.globalStorageUri,
-        logUri: context.logUri,
+
+    let luadocContext: LuaDocExtensionContext = {
+        subscriptions:                 context.subscriptions,
+        workspaceState:                context.workspaceState,
+        globalState:                   context.globalState,
+        extensionPath:                 context.extensionPath + '/client/3rd/vscode-lua-doc',
+        asAbsolutePath:                context.asAbsolutePath,
+        storagePath:                   context.storagePath,
+        globalStoragePath:             context.globalStoragePath,
+        logPath:                       context.logPath,
+        extensionUri:                  context.extensionUri,
+        storageUri:                    context.storageUri,
+        globalStorageUri:              context.globalStorageUri,
+        logUri:                        context.logUri,
         environmentVariableCollection: context.environmentVariableCollection,
-        extensionMode: context.extensionMode,
-        ViewType: 'lua-doc',
-        OpenCommand: 'extension.lua.doc',
+        extensionMode:                 context.extensionMode,
+        ViewType:                      'lua-doc',
+        OpenCommand:                   'extension.lua.doc',
     };
+
     luadoc.activate(luadocContext);
 }
-exports.activate = activate;
-function deactivate() {
+
+export function deactivate() {
     languageserver.deactivate();
     if (server != undefined) {
         server.close();
         server = undefined;
     }
 }
-exports.deactivate = deactivate;
-//# sourceMappingURL=extension.js.map
