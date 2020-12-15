@@ -5,7 +5,6 @@ local config = require 'config'
 --- @param params table
 --- @return table
 return function (lsp, params)
-    output("w", params)
     if not config.config.signatureHelp.enable then
         return
     end
