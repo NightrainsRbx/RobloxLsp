@@ -109,7 +109,7 @@ interface LuaDocExtensionContext extends vscode.ExtensionContext {
 }
 
 async function openUpdatesWindow(context: vscode.ExtensionContext) {
-    if (context.globalState.get("sawVersionLog", false) == false) {
+    if (context.globalState.get("sawVersionLog1", false) == false) {
         const panel = vscode.window.createWebviewPanel(
             'robloxlspUpdates', // Identifies the type of the webview. Used internally
             'Roblox LSP Updates', // Title of the panel displayed to the user
@@ -128,9 +128,11 @@ async function openUpdatesWindow(context: vscode.ExtensionContext) {
                 <center><img src="https://t3.rbxcdn.com/7bdf9c64b9c096d7db26bf8927213f2a", witdh="300" height="300"></center>
                 <h1 style="font-size:3rem; font-weight:100">Roblox LSP Updates!</h1>
                 <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
-                <h2 style="font-size:2rem; font-weight:100">Latest Updates (0.15.0)</h2>
+                <h2 style="font-size:2rem; font-weight:100">Latest Updates (0.15.0/1)</h2>
                 <li style="font-size:1rem">Added a Color Picker and Previewer for Color3 constructors.</li>
                 <li style="font-size:1rem">Improved Semantic Highlighting for table fields.</li>
+                <li style="font-size:1rem">On type end autocompletion.</li>
+                <li style="font-size:1rem">View DevHub Documentation in Hover.</li>
                 <li style="font-size:1rem">Fixed problem when folding blocks.</li>
                 <li style="font-size:1rem">Support for functions variants in Signature Help</li>
                 <p style="font-size:1rem">Report any bug or question here: <a href="https://github.com/NightrainsRbx/RobloxLsp/issues">https://github.com/NightrainsRbx/RobloxLsp/issues</a></p>
@@ -181,7 +183,7 @@ async function openUpdatesWindow(context: vscode.ExtensionContext) {
             </div>
         </body>
         </html>`;
-        await context.globalState.update("sawVersionLog", true);
+        await context.globalState.update("sawVersionLog1", true);
     }
 }
 
