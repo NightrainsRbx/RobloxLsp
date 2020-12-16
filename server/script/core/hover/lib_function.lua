@@ -2,6 +2,7 @@
 local lang = require 'language'
 local config = require 'config'
 local client = require 'client'
+local rbxApi = require 'rbxapi'
 
 local function formatDefault(value)
     if type(value) == "string" then
@@ -240,10 +241,17 @@ local function buildDoc(lib)
     if lib.web then
         return lang.script(lib.web, doc)
     end
-    local fmt = getDocFormater()
-    if fmt then
-        return ('[%s](%s)'):format(lang.script.HOVER_VIEW_DOCUMENTS, lang.script(fmt, 'pdf-' .. doc))
+    if lib.className then
+        if rbxApi:isInstance(lib.className) then
+            return ('[%s](%s/%s/%s)'):format(lang.script.HOVER_VIEW_DOCUMENTS, "https://developer.roblox.com/en-us/api-reference/function", lib.className, lib.name)
+        else
+            return ('[%s](%s/%s)'):format(lang.script.HOVER_VIEW_DOCUMENTS, "https://developer.roblox.com/en-us/api-reference/datatype", lib.className)
+        end
     end
+    -- local fmt = getDocFormater()
+    -- if fmt then
+    --     return ('[%s](%s)'):format(lang.script.HOVER_VIEW_DOCUMENTS, lang.script(fmt, 'pdf-' .. doc))
+    -- end
 end
 
 local function buildFromVariants(lib, select)
@@ -282,7 +290,7 @@ return function (name, lib, object, select, overloads)
     local returns = buildLibReturns(lib)
     local enum, rawEnum = buildEnum(lib)
     local tip = buildDescription(lib)
-    -- local doc = buildDoc(lib)
+    local doc = buildDoc(lib)
     local hover = {
         label = ('function %s(%s)%s'):format(name, argStr:gsub("self: any[, ]*", ""), returns),
         name = name,
@@ -292,7 +300,7 @@ return function (name, lib, object, select, overloads)
         enum = enum,
         rawEnum = rawEnum,
         argLabel = argLabel,
-        --doc = doc,
+        doc = doc,
         args = args,
     }
     return overloads and {hover} or hover

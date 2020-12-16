@@ -4,6 +4,7 @@ local fs = require 'bee.filesystem'
 local rojo = require 'rojo'
 local config = require 'config'
 local rpc = require 'rpc'
+local lang = require 'language'
 
 local rbxApi = {}
 
@@ -942,13 +943,13 @@ function rbxApi:getMembers(members, methods, className)
             end
         end
         if #tags > 0 then
-            docs = docs or ""
-            docs = docs .. "\n\n" .. "tags: " .. table.concat(tags, ", ") .. "."
+            docs = (docs or "") .. "\n\n" .. "tags: " .. table.concat(tags, ", ") .. "."
         end
         if self.CorrectReturns[className] and self.CorrectReturns[className][member.Name] then
             correctType = self.CorrectReturns[className][member.Name]
         end
         if member.MemberType == "Property" then
+            docs = (docs or "") .. ('\n\n[%s](%s/%s/%s)'):format(lang.script.HOVER_VIEW_DOCUMENTS, "https://developer.roblox.com/en-us/api-reference/property", className, member.Name)
             data[member.Name] = {
                 name = member.Name,
                 type = correctType or fixType(
@@ -1039,7 +1040,8 @@ function rbxApi:getMembers(members, methods, className)
                 description = docs,
                 variants = variants,
                 enums = enums,
-                hidden = hidden
+                hidden = hidden,
+                className = className
             }
         elseif member.MemberType == "Event" then
             self.EventsParameters[member.Name] = self.EventsParameters[member.Name] or {}
@@ -1079,6 +1081,7 @@ function rbxApi:getMembers(members, methods, className)
                     }
                 end
             end
+            docs = (docs or "") .. ('\n\n[%s](%s/%s/%s)'):format(lang.script.HOVER_VIEW_DOCUMENTS, "https://developer.roblox.com/en-us/api-reference/event", className, member.Name)
             data[member.Name] = {
                 parentClass = className,
                 name = member.Name,
