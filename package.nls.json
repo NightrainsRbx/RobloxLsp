@@ -10,6 +10,7 @@
     "config.completion.callSnippet.Parentheses": "Only autocompletes parentheses.",
     "config.completion.displayContext": "Previewing the relevant code snippet of the suggestion may help you understand the usage of the suggestion. The number set indicates the number of intercepted lines in the code fragment. If it is set to `0`, this feature can be disabled.",
     "config.completion.enable": "Enable completion.",
+    "config.completion.endAutocompletion": "Enable on type `end` autocompletion like in Roblox Studio.\n\n(`editor.formatOnType` must be enabled to work.)",
     "config.completion.serverPort": "The port used to connect to the Roblox Studio Plugin. Set to 0 to disable.",
     "config.completion.fastAutocompletion": "Disable it if autocompletion doesn't work properly.",
     "config.completion.keywordSnippet": "Shows keyword syntax snippets.",

@@ -1311,7 +1311,7 @@ return function (vm, text, pos, oldText)
     State = {}
     State.lsp = vm.lsp
     local callback, list = makeList(source, pos, word)
-    searchSpecialEnd(word, pos, text, callback)
+    -- searchSpecialEnd(word, pos, text, callback)
     searchCallArg(vm, source, word, callback, pos, text)
     searchSource(vm, source, word, callback, pos, text)
     searchSpecial(vm, source, word, callback, pos, text)

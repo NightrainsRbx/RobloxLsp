@@ -77,6 +77,12 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
+				"Lua.completion.endAutocompletion": {
+					"default": true,
+					"markdownDescription": "%config.completion.endAutocompletion%",
+					"scope": "resource",
+					"type": "boolean"
+				},
 				"Lua.completion.keywordSnippet": {
 					"default": "Replace",
 					"enum": [

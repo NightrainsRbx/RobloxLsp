@@ -166,7 +166,7 @@ local function unary(list, start, finish, level)
     return expSplit(list, start, finish, level+1)
 end
 
-local function checkMissEnd(start)
+local function checkMissEnd(start, source)
     if not State.MissEndErr then
         return
     end
@@ -177,6 +177,7 @@ local function checkMissEnd(start)
         return
     end
     err.info.related = { start, finish }
+    State.MissedEnd[#State.MissedEnd+1] = {source, start = start, finish = finish}
     pushError {
         type   = 'MISS_END',
         start  = start,
@@ -835,7 +836,7 @@ local Defs = {
         if obj.argFinish > obj.finish then
             obj.argFinish = obj.finish
         end
-        checkMissEnd(start)
+        checkMissEnd(start, obj)
         if type(obj[1]) == "table" and obj[1].type == "returnType" then
             obj.emmys = obj.emmys or {}
             for _, tp in pairs(buildEmmy(table.pick(obj, 1))) do
@@ -860,7 +861,7 @@ local Defs = {
         if obj.argFinish > obj.finish then
             obj.argFinish = obj.finish
         end
-        checkMissEnd(start)
+        checkMissEnd(start, obj)
         local ret = (arg and arg[2] or {})
         if type(obj[1]) == "table" and obj[1].type == "returnType" then
             for _, tp in pairs(buildEmmy(table.pick(obj, 1))) do
@@ -895,7 +896,7 @@ local Defs = {
                 finish = name.finish,
             }
         end
-        checkMissEnd(start)
+        checkMissEnd(start, obj)
         local ret = (arg and arg[2] or {})
         if type(obj[1]) == "table" and obj[1].type == "returnType" then
             for _, tp in pairs(buildEmmy(table.pick(obj, 1))) do
@@ -1426,7 +1427,7 @@ local Defs = {
     Do = function (start, action, finish)
         action.start  = start
         action.finish = finish - 1
-        checkMissEnd(start)
+        checkMissEnd(start, action)
         return action
     end,
     Break = function (finish, ...)
@@ -1658,7 +1659,7 @@ local Defs = {
         local max = #obj
         obj.finish = obj[max] - 1
         obj[max]   = nil
-        checkMissEnd(start)
+        checkMissEnd(start, obj)
         return obj
     end,
     Loop = function (start, arg, min, max, step, ...)
@@ -1674,7 +1675,7 @@ local Defs = {
         local max = #obj
         obj.finish = obj[max] - 1
         obj[max]   = nil
-        checkMissEnd(start)
+        checkMissEnd(start, obj)
         return obj
     end,
     In = function (start, arg, exp, ...)
@@ -1688,7 +1689,7 @@ local Defs = {
         local max = #obj
         obj.finish = obj[max] - 1
         obj[max]   = nil
-        checkMissEnd(start)
+        checkMissEnd(start, obj)
         local ret = {}
         for i, tp in ipairs(arg) do
             if tp.type == "paramType" then
@@ -1709,7 +1710,7 @@ local Defs = {
         local max = #obj
         obj.finish = obj[max] - 1
         obj[max]   = nil
-        checkMissEnd(start)
+        checkMissEnd(start, obj)
         return obj
     end,
     Repeat = function (start, ...)

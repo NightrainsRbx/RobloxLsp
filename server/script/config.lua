@@ -128,6 +128,7 @@ local ConfigTemplate = {
         enable             = {true,      Boolean},
         serverPort         = {27843,     Integer},
         fastAutocompletion = {true,      Boolean},
+        endAutocompletion  = {true,      Boolean},
         callSnippet        = {'Disable', String},
         keywordSnippet     = {'Replace', String},
         displayContext     = {6,         Integer},

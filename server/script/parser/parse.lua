@@ -26,6 +26,7 @@ return function (self, lua, mode, version)
         Dots = {true},
         Version = version,
         Comments = {},
+        MissedEnd = {},
         Lua = lua,
     }
     ast.init(State, Errs)
@@ -40,5 +41,5 @@ return function (self, lua, mode, version)
     if #res > 0 and type(res[#res]) == "table" then
         res[#res].last = true
     end
-    return res, Errs, State.Comments
+    return res, Errs, State.Comments, State.MissedEnd
 end
