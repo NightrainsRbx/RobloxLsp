@@ -22,7 +22,7 @@ return function (lsp, params)
     local hover = hovers[1]
     local desc = {}
     -- desc[#desc+1] = hover.description
-    desc[#desc+1] = hover.doc
+    -- desc[#desc+1] = hover.doc
 
     local active = 0
     local signatures = {}

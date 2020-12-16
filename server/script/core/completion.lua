@@ -1182,7 +1182,7 @@ local function makeList(source, pos, word)
             local snipType = config.config.completion.callSnippet
             if snipType ~= 'Disable' then
                 local snipData = table.deepCopy(data)
-                snipData.insertText = data.snip
+                snipData.insertText = data.snip:gsub("%: [%w%<%>]+", "")
                 snipData.kind = CompletionItemKind.Snippet
                 snipData.label = snipData.label .. '()'
                 snipData.snip = nil
