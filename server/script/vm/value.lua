@@ -46,6 +46,7 @@ local function create (tp, source, literal)
         self:setType(tp, 1.0)
     end
     Watch[self] = true
+    listMgr.valueList[id] = self
     return self
 end
 

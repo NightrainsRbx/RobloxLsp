@@ -60,99 +60,6 @@ local LIBS = {
     ["package"] = true
 }
 
-local function getDucumentation(name, value)
-    if value:getType() == 'function' then
-        local lib = value:getLib()
-        local hover
-        if lib then
-            hover = getFunctionHoverAsLib(name, lib)
-        else
-            local emmy = value:getEmmy()
-            if emmy and emmy.type == 'emmy.functionType' then
-                hover = getFunctionHoverAsEmmy(name, emmy)
-            else
-                local func = value:getFunction()
-                local text
-                if func and State.lsp and State.lsp.getText then
-                    text = State.lsp:getText(func:getUri())
-                end
-                hover = getFunctionHover(name, func, nil, nil, text)
-            end
-        end
-        if not hover then
-            return nil
-        end
-        local text = ([[
-```lua
-%s
-```
-%s
-```lua
-%s
-```
-%s
-]]):format(hover.label or '', hover.description or '', hover.enum or '', hover.doc or '')
-        return {
-            kind = 'markdown',
-            value = text,
-        }
-    end
-    local lib = value:getLib()
-    if lib then
-        return {
-            kind = 'markdown',
-            value = lib.description,
-        }
-    end
-    local comment = value:getComment()
-    if comment then
-        return {
-            kind = 'markdown',
-            value = comment,
-        }
-    end
-    return nil
-end
-
-local function getDetail(value)
-    local literal = value:getLiteral()
-    local tp = type(literal)
-    local detals = {}
-    if value:getType() ~= 'any' then
-        detals[#detals+1] = ('(%s)'):format(value:getType())
-    end
-    if tp == 'boolean' then
-        detals[#detals+1] = (' = %q'):format(literal)
-    elseif tp == 'string' then
-        detals[#detals+1] =  (' = %q'):format(literal)
-    elseif tp == 'number' then
-        if math.type(literal) == 'integer' then
-            detals[#detals+1] =  (' = %q'):format(literal)
-        else
-            local str = (' = %.16f'):format(literal)
-            local dot = str:find('.', 1, true) or 0
-            local suffix = str:find('[0]+$', dot + 2)
-            if suffix then
-                detals[#detals+1] =  str:sub(1, suffix - 1)
-            else
-                detals[#detals+1] =  str
-            end
-        end
-    end
-    if value:getType() == 'function' then
-        ---@type emmyFunction
-        local func = value:getFunction()
-        local overLoads = func and func:getEmmyOverLoads()
-        if overLoads then
-            detals[#detals+1] = lang.script('HOVER_MULTI_PROTOTYPE', #overLoads + 1)
-        end
-    end
-    if #detals == 0 then
-        return nil
-    end
-    return table.concat(detals)
-end
-
 local function isMethod(func)
     if not func then
         return
@@ -238,8 +145,8 @@ end
 
 local function getValueData(cata, name, value, pos, source, parent)
     local data = {
-        documentation = getDucumentation(name, value),
-        detail = getDetail(value),
+        -- documentation = getDocumentation(name, value),
+        -- detail = getDetail(value),
         kind = getKind(cata, value, parent),
         snip = getFunctionSnip(name, value, source),
     }
@@ -356,7 +263,7 @@ local function searchFieldsByInfo(parent, word, source, map, srcMap)
         end
         if matchKey(word, k) then
             map[k] = v
-            srcMap[k] = src
+            srcMap[k] = src or v.source
         end
     end, source.uri)
 end
@@ -400,7 +307,7 @@ local function searchFieldsByChild(parent, word, source, map, srcMap)
         end
         if matchKey(word, k) then
             map[k] = v
-            srcMap[k] = src
+            srcMap[k] = src or v.source
         end
     end, source.uri)
 end
@@ -426,21 +333,8 @@ local function searchFields(vm, source, word, callback, pos)
     if parent:get 'ENV' then
         defaultKind = CompletionItemKind.Variable
     end
-    if #word == 0 then
-        for k, v in sortPairs(map) do
-            if v:getType() ~= "RBXScriptSignal" then
-                callback(k, srcMap[k], defaultKind, getValueData('field', k, v, pos, source, parent))
-            end
-        end
-        for k, v in sortPairs(map) do
-            if v:getType() == "RBXScriptSignal" then
-                callback(k, srcMap[k], defaultKind, getValueData('field', k, v, pos, source))
-            end
-        end
-    else
-        for k, v in sortPairs(map) do
-            callback(k, srcMap[k], defaultKind, getValueData('field', k, v, pos, source, parent))
-        end
+    for k, v in sortPairs(map) do
+        callback(k, srcMap[k], defaultKind, getValueData('field', k, v, pos, source, parent))
     end
 end
 
@@ -1109,35 +1003,6 @@ local function searchSpecialConnectSnip(vm, pos, text, callback)
     end
 end
 
-local function searchSpecialEnd(word, pos, text, callback)
-    if word == "then" then
-        local match1 = nil
-        for match in ("\n"..text:sub(1, pos)):gmatch("%s[%w_]*if.-then") do
-            match1 = match
-        end
-        if match1 and not match1:match("^%s*elseif") then
-            goto COMPLETE
-        end
-        return
-    elseif text:sub(pos, pos) == ")" then
-        local match1 = ("\n"..text:sub(1, pos)):match("\n( *)[%w%p ]*function%s*[%w%s:_]*%([%w_:,%s]*%)$")
-        if match1 and not text:sub(pos + 1):match("^%s-\n" .. match1 .. "end") then
-            goto COMPLETE
-        end
-        return
-    else
-        return
-    end
-    ::COMPLETE::
-    callback("end", nil, CompletionItemKind.Snippet, {
-        textEdit = {
-            start = pos + 1,
-            finish = pos,
-            newText = "\n\t${0}\nend",
-        },
-    })
-end
-
 local function searchSpecial(vm, source, word, callback, pos, text)
     searchSpecialHashSign(vm, pos, text, callback)
     searchSpecialConnectSnip(vm, pos, text, callback)
@@ -1146,7 +1011,11 @@ end
 local function makeList(source, pos, word)
     local list = {}
     local mark = {}
-    return function (name, src, kind, data)
+    return function (name, srcId, kind, data)
+        local src = nil
+        if type(srcId) == "table" then
+            src = srcId
+        end
         if src == source then
             return
         end
@@ -1172,6 +1041,13 @@ local function makeList(source, pos, word)
             data.data = {
                 uri    = src.uri,
                 offset = src.start,
+                name = name,
+                id = src.id
+            }
+        elseif srcId then
+            data.data = {
+                name = name,
+                id = srcId
             }
         end
         -- if data.kind == CompletionItemKind.Method then
@@ -1311,17 +1187,11 @@ return function (vm, text, pos, oldText)
     State = {}
     State.lsp = vm.lsp
     local callback, list = makeList(source, pos, word)
-    -- searchSpecialEnd(word, pos, text, callback)
     searchCallArg(vm, source, word, callback, pos, text)
     searchSource(vm, source, word, callback, pos, text)
     searchSpecial(vm, source, word, callback, pos, text)
-    if #list == 0 then
-        if not State.ignoreText then
-            searchAllWords(vm, source, word, callback, pos)
-        end
-        if #list == 0 then
-            return nil
-        end
-    end
+    table.sort(list, function(a, b)
+        return a.kind < b.kind
+    end)
     return list
 end

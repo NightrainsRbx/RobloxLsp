@@ -96,13 +96,14 @@ end
 local lastResponse = {}
 
 local function matchLastResponse(word, uri, position)
-    if  lastResponse[3] == uri
-    and position >= lastResponse[4]
-    and lastResponse[1]
-    and ((#lastResponse[1] > 0
-    and word:sub(1, #lastResponse[1]) == lastResponse[1])
-    or  lastResponse[1] == ":"
-    or  lastResponse[1] == ".")
+    if
+        lastResponse[3] == uri
+        and position >= lastResponse[4]
+        and lastResponse[1]
+        and ((#lastResponse[1] > 0
+        and word:sub(1, #lastResponse[1]) == lastResponse[1])
+        or  lastResponse[1] == ":"
+        or  lastResponse[1] == ".")
     then
         return true
     end
