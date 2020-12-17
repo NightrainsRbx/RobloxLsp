@@ -64,7 +64,10 @@ return function (lsp, params)
         if not simple then
             return
         end
-        if #simple == 4 and simple[1][1] == "Color3" then
+        if #simple >= 4 and simple[1][1] == "Color3" then
+            if simple[3].type ~= "name" or simple[4].type ~= "call" then
+                return
+            end
             local funcName = simple[3][1]
             local callArgs = simple[4]
             if COLOR3_CONSTRUCTORS[funcName] then

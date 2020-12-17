@@ -57,7 +57,10 @@ return function (lsp, params)
         if not simple then
             return
         end
-        if #simple == 4 and simple[1][1] == "Color3" then
+        if #simple >= 4 and simple[1][1] == "Color3" then
+            if simple[3].type ~= "name" or simple[4].type ~= "call" then
+                return
+            end
             local callArgs = simple[4]
             if
                 table.equal(params.range, getRange(simple[1].start, simple[1].start + 1, lines))
