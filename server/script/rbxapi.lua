@@ -949,7 +949,11 @@ function rbxApi:getMembers(members, methods, className)
             correctType = self.CorrectReturns[className][member.Name]
         end
         if member.MemberType == "Property" then
-            docs = (docs or "") .. ('\n\n[%s](%s/%s/%s)'):format(lang.script.HOVER_VIEW_DOCUMENTS, "https://developer.roblox.com/en-us/api-reference/property", className, member.Name)
+            if self:isInstance(className) then
+                docs = (docs or "") .. ('\n\n[%s](%s/%s/%s)'):format(lang.script.HOVER_VIEW_DOCUMENTS, "https://developer.roblox.com/en-us/api-reference/property", className, member.Name)
+            else
+                docs = (docs or "") .. ('\n\n[%s](%s/%s)'):format(lang.script.HOVER_VIEW_DOCUMENTS, "https://developer.roblox.com/en-us/api-reference/datatype", className)
+            end
             data[member.Name] = {
                 name = member.Name,
                 type = correctType or fixType(
