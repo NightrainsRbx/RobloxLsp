@@ -201,15 +201,18 @@ function mt:doTypedFunction(source)
             if not className then
                 return
             end
+            local path = nil
             if funcName[1] == "GetService" then
                 if not (rbxApi:isA(object:getType(), "ServiceProvider") and rbxApi.Services[className]) then
                     return
                 end
+                path = "/" .. className
             elseif not rbxApi.ClassNames[className] then
                 return
             end
             local returns = createMulti()
             local value = self:createLibValue(className, source)
+            value._lib.path = path
             returns:push(value)
             return returns
         elseif #args > 1 and (funcName[1] == "FindFirstChild" or funcName[1] == "WaitForChild") then

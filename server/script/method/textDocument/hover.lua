@@ -54,7 +54,8 @@ return function (lsp, params)
 %s
 ```
 %s
-]]):format(hover.label or '', hover.overloads or '', hover.description or '', hover.enum or '', hover.doc or '')
+%s
+]]):format(hover.label or '', hover.overloads or '', hover.description or '', hover.enum or '', hover.doc or '', hover.path or '')
 
     local response = {
         contents = {

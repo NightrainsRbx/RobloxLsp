@@ -235,11 +235,11 @@ local function getValueHover(source, name, value, lib)
         tp = 'global'
     elseif source:get 'simple' then
         local simple = source:get 'simple'
-        if simple[1]:get 'global' then
-            tp = 'global'
-        else
+        -- if simple[1]:get 'global' then
+        --     tp = '(global) field'
+        -- else
             tp = 'field'
-        end
+        -- end
     else
         tp = 'field'
     end
@@ -249,7 +249,7 @@ local function getValueHover(source, name, value, lib)
         text = ('%s %s: %s'):format(tp, name, unpackTable(value))
     else
         if literal == nil then
-            if class and not OriginTypes[class] and not rbxApi:getTypes(class) then
+            if class and not OriginTypes[class] and not rbxApi:getTypes()[class] then
                 text = ('%s %s: %s %s'):format(tp, name, valueType, unpackTable(value))
             else
                 text = ('%s %s: %s'):format(tp, name, valueType)
@@ -263,10 +263,15 @@ local function getValueHover(source, name, value, lib)
     if #tips > 0 then
         tip = table.concat(tips, '\n\n-------------\n\n')
     end
+    local path = nil
+    if lib and lib.path then
+        path = ("game%s\n"):format(lib.path:gsub("%/", "."))
+    end
 
     return {
         label = text,
         description = tip,
+        path = path
     }
 end
 

@@ -376,7 +376,7 @@ function mt:matchPath(baseUri, input)
     return list, map
 end
 
-function mt:searchPath(baseUri, str)
+function mt:searchPath(baseUri, str, searchScripts)
     str = fn.getFileName(fs.path(str))
     if self.searched[baseUri] and self.searched[baseUri][str] then
         return self.searched[baseUri][str]
@@ -387,7 +387,12 @@ function mt:searchPath(baseUri, str)
     for i, luapath in ipairs(config.config.runtime.path) do
         searchers[i] = luapath:gsub('%?', str)
     end
-
+    if searchScripts then
+        searchers[#searchers+1] = str .. ".server.lua"
+        searchers[#searchers+1] = str .. ".client.lua"
+        searchers[#searchers+1] = str .. "/init.server.lua"
+        searchers[#searchers+1] = str .. "/init.client.lua"
+    end
     local uri = self:findPath(baseUri, searchers)
     if uri then
         if not self.searched[baseUri] then

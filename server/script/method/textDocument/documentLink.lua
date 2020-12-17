@@ -55,7 +55,9 @@ return function (lsp, params)
                         if last.type == "name" then
                             start, finish = last.start, last.finish
                         elseif last.type == "call" then
-                            if callArgs[1][#callArgs[1] - 1].type == "name" then
+                            if last[1] and last[1].type == "string" then
+                                start, finish = last[1].start, last[1].finish
+                            elseif callArgs[1][#callArgs[1] - 1].type == "name" then
                                 start, finish = callArgs[1][#callArgs[1] - 1].start, last.finish
                             end
                         end

@@ -227,6 +227,27 @@ local function parseFunction(callback, vm, source)
     end
 end
 
+local function parseScriptUri(callback, vm, source)
+    local value = source:bindValue()
+    if value and vm.lsp then
+        local path = vm:findPathByScript(value)
+        if path then
+            local ws = vm.lsp:findWorkspaceFor(vm:getUri())
+            if not ws then
+                return
+            end
+            local scriptUri = ws:searchPath(vm:getUri(), path, true)
+            if scriptUri then
+                callback{
+                    start = 0,
+                    finish = math.huge,
+                    uri = scriptUri
+                }
+            end
+        end
+    end
+end
+
 local function makeList(source)
     local list = {}
     local mark = {}
@@ -268,6 +289,7 @@ return function (vm, pos, mode)
     end
     if source:bindValue() then
         isGlobal = parseValue(callback, vm, source)
+        parseScriptUri(callback, vm, source)
     end
     if source:bindLabel() then
         parseLabel(callback, vm, source:bindLabel())
