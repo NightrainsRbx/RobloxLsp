@@ -1494,11 +1494,11 @@ return function (vm, lines, uri, errs)
         }
     end)
     -- 不允许定义首字母小写的全局变量（很可能是拼错或者漏删）
-    session:doDiagnostics(session.searchLowercaseGlobal, 'lowercase-global', function ()
-        return {
-            message = lang.script.DIAG_LOWERCASE_GLOBAL,
-        }
-    end)
+    -- session:doDiagnostics(session.searchLowercaseGlobal, 'lowercase-global', function ()
+    --     return {
+    --         message = lang.script.DIAG_LOWERCASE_GLOBAL,
+    --     }
+    -- end)
     -- 未定义的变量（重载了 `_ENV`）
     session:doDiagnostics(session.searchUndefinedEnvChild, 'undefined-env-child', function (key)
         if vm.envType == '_ENV' then
