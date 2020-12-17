@@ -21,7 +21,7 @@ return {
     ['set-const']                = 'Error',
     ['set-for-state']            = 'Warning',
     ['undefined-rbx-member']     = 'Warning',
-    ['deprecated-rbx-member']    = 'Information',
+    ['deprecated-rbx-member']    = 'Hint',
     ['incorrect-call-arguments'] = 'Warning',
     ['invalid-rbx-classname']    = 'Warning',
     ['unknown-symbol']           = 'Warning',

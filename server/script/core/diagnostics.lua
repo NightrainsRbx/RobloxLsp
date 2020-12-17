@@ -1392,6 +1392,7 @@ return function (vm, lines, uri, errs)
         end
         return {
             message = lang.script('DIAG_DEP_RBX_MEMBER', member, class, replace or ""),
+            tags = {DiagnosticTag.Deprecated},
         }
     end)
 
