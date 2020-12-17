@@ -482,7 +482,9 @@ function mt:findPathByScript(script)
             break
         end
     end
-    return path:gsub("%/", ".")
+    path = path:gsub("%/", ".")
+    script._modulePath = path
+    return path
 end
 
 function mt:isRoact(value, path, requireValue)

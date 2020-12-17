@@ -33,6 +33,12 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
+				"Lua.misc.goToScriptLink": {
+					"default": true,
+					"markdownDescription": "%config.misc.goToScriptLink%",
+					"scope": "resource",
+					"type": "boolean"
+				},
 				"Lua.completion.callSnippet": {
 					"default": "Disable",
 					"enum": [

@@ -147,6 +147,7 @@ local ConfigTemplate = {
     },
     misc = {
         color3Picker    = {true,      Boolean},
+        goToScriptLink  = {true,      Boolean},
     },
     plugin = {
         enable          = {false, Boolean},

@@ -3,6 +3,7 @@
     "config.color.mode.Grammar": "Grammar color.",
     "config.color.mode.Semantic": "Semantic color (Testing. Your color theme must support semantic coloring to be effective.).",
     "config.misc.color3Picker": "Enable Color Picker and Preview for Color3 functions.",
+    "config.misc.goToScriptLink": "If enabled, shows a link to the source script when requiring a module.",
     "config.completion.callSnippet": "Shows function call snippets or parentheses.",
     "config.completion.callSnippet.Both": "Shows `function name` and `call snippet`.",
     "config.completion.callSnippet.Disable": "Only shows `function name`.",

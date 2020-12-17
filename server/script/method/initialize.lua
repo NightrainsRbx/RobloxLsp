@@ -35,6 +35,7 @@ return function (lsp, params)
             renameProvider = true,
             documentSymbolProvider = true,
             documentHighlightProvider = true,
+            documentLinkProvider = true,
             colorProvider = true,
             codeActionProvider = true,
             -- foldingRangeProvider = true,
