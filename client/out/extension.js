@@ -131,8 +131,7 @@ function openUpdatesWindow(context) {
                 <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
                 <h2 style="font-size:2rem; font-weight:100">Latest Updates (0.15.0/1)</h2>
                 <li style="font-size:1rem">Added a Color Picker and Previewer for Color3 constructors.</li>
-                <li style="font-size:1rem">Improved Semantic Highlighting for table fields.</li>
-                <li style="font-size:1rem">On type end autocompletion.</li>
+                <li style="font-size:1rem">On type end autocompletion. (Requires editor.formatOnType to be enabled)</li>
                 <li style="font-size:1rem">View DevHub Documentation in Hover.</li>
                 <li style="font-size:1rem">Fixed problem when folding blocks.</li>
                 <li style="font-size:1rem">Support for functions variants in Signature Help</li>
