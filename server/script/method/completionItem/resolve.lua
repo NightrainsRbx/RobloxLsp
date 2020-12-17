@@ -106,13 +106,13 @@ return function (lsp, item)
     if not item.data then
         return item
     end
-    local id = item.data.id
-    if documentationCache[id] then
-        item.documentation = documentationCache[id].documentation
-        item.detail = documentationCache[id].detail
-    else
-        local value = listMgr.valueList[id]
-        if value then
+    local value = listMgr.resolveValues[item.data.name]
+    if value then
+        local srcId = value.source
+        if documentationCache[srcId] then
+            item.documentation = documentationCache[srcId].documentation
+            item.detail = documentationCache[srcId].detail
+        else
             item.documentation = getDocumentation(item.data.name, value)
             item.detail = getDetail(value)
             if cacheItems > 500 then
@@ -120,7 +120,7 @@ return function (lsp, item)
                 cacheItems = 0
             end
             cacheItems = cacheItems + 1
-            documentationCache[id] = {
+            documentationCache[srcId] = {
                 documentation = item.documentation,
                 detail = item.detail
             }

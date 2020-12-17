@@ -2,6 +2,7 @@ local findSource = require 'core.find_source'
 local getFunctionHover = require 'core.hover.function'
 local getFunctionHoverAsLib = require 'core.hover.lib_function'
 local getFunctionHoverAsEmmy = require 'core.hover.emmy_function'
+local listMgr = require 'vm.list'
 local sourceMgr = require 'vm.source'
 local config = require 'config'
 local matchKey = require 'core.matchKey'
@@ -150,6 +151,7 @@ local function getValueData(cata, name, value, pos, source, parent)
         kind = getKind(cata, value, parent),
         snip = getFunctionSnip(name, value, source),
     }
+    listMgr.resolveValues[name] = value
     if cata == 'field' then
         if not parser:grammar(name, 'Name') then
             if source:get 'simple' and source:get 'simple' [1] ~= source then
@@ -257,13 +259,12 @@ local function searchFieldsByInfo(parent, word, source, map, srcMap)
                 --     return
                 end
             end
-        end
-        if source:get 'object' and v:getType() ~= 'function' then
+        elseif source:get 'object' then
             return
         end
         if matchKey(word, k) then
             map[k] = v
-            srcMap[k] = src or v.source
+            srcMap[k] = src
         end
     end, source.uri)
 end
@@ -301,13 +302,12 @@ local function searchFieldsByChild(parent, word, source, map, srcMap)
                 --     return
                 end
             end
-        end
-        if source:get 'object' and v:getType() ~= 'function' then
+        elseif source:get 'object'  then
             return
         end
         if matchKey(word, k) then
             map[k] = v
-            srcMap[k] = src or v.source
+            srcMap[k] = src
         end
     end, source.uri)
 end
@@ -1011,11 +1011,7 @@ end
 local function makeList(source, pos, word)
     local list = {}
     local mark = {}
-    return function (name, srcId, kind, data)
-        local src = nil
-        if type(srcId) == "table" then
-            src = srcId
-        end
+    return function (name, src, kind, data)
         if src == source then
             return
         end
@@ -1041,13 +1037,11 @@ local function makeList(source, pos, word)
             data.data = {
                 uri    = src.uri,
                 offset = src.start,
-                name = name,
-                id = src.id
+                name = name
             }
-        elseif srcId then
+        else
             data.data = {
-                name = name,
-                id = srcId
+                name = name
             }
         end
         -- if data.kind == CompletionItemKind.Method then
@@ -1184,6 +1178,7 @@ return function (vm, text, pos, oldText)
             return nil
         end
     end
+    listMgr.resolveValues = {}
     State = {}
     State.lsp = vm.lsp
     local callback, list = makeList(source, pos, word)
