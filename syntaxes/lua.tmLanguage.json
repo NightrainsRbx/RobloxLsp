@@ -172,18 +172,21 @@
                             "name": "storage.type.annotation.lua"
                         }
                     },
-                    "end": "((([\\w]+) +([\\w]+))?([\\w]+)?([.\\S ]+)?)?\\n",
+                    "end": "(\\w+\\.[\\w.]+)?((([\\w]+) +([\\w]+))?([\\w]+)?([.\\S ]+)?)?\\n",
                     "endCaptures": {
-                        "3": {
-                            "name": "variable.parameter.lua"
+                        "1": {
+                            "name": "string.lua"
                         },
                         "4": {
-                            "name": "support.type.lua"
+                            "name": "variable.parameter.lua"
                         },
                         "5": {
                             "name": "support.type.lua"
                         },
                         "6": {
+                            "name": "support.type.lua"
+                        },
+                        "7": {
                             "name": "comment.line.lua"
                         }
                     }
@@ -234,7 +237,7 @@
 					"name": "support.type.lua"
 				}
 			},
-            "match": "\\b(global|local|field)\\b (game)?([\\w.]+): (\\w+)?"
+            "match": "\\b(global|local|field)\\b \\*?(game)?([\\w.]+): (\\w+)?"
         },
         {
             "name": "keyword.local.lua",

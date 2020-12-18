@@ -664,7 +664,12 @@ function mt:setEmmy(emmy)
     if not emmy then
         return
     end
-    if emmy.type == 'emmy.class' then
+    if emmy.type == "emmy.module" then
+        if not emmy.value then
+            return
+        end
+        self:mergeValue(emmy.value)
+    elseif emmy.type == 'emmy.class' then
         ---@type EmmyClass
         local emmyClass = emmy
         emmyClass:setValue(self)

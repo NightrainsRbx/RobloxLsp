@@ -1912,6 +1912,14 @@ local Defs = {
         EmmyFunctionType.type = 'emmyOverLoad'
         return EmmyFunctionType
     end,
+    EmmyModule = function (start, str, finish)
+        return {
+            [1] = str,
+            type = "emmyModule",
+            start = start,
+            finish = finish
+        }
+    end,
     EmmyIncomplete = function (emmyName)
         emmyName.type = 'emmyIncomplete'
         return emmyName

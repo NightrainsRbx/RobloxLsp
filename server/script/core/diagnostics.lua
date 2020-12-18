@@ -1151,6 +1151,17 @@ function mt:checkEmmyType(source, callback)
     end
 end
 
+function mt:checkEmmyModule(source, callback)
+    local ws = self.vm.lsp:findWorkspaceFor(self.vm:getUri())
+    if not ws then
+        return
+    end
+    local scriptUri = ws:searchPath(self.vm:getUri(), source[1])
+    if not scriptUri then
+        callback(source.start, source.finish, lang.script.DIAG_MOD_NOT_FOUND)
+    end
+end
+
 function mt:checkEmmyAlias(source, callback)
     local class = source:get 'emmy.alias'
     if not class then
@@ -1277,6 +1288,8 @@ function mt:searchEmmyLua(callback)
             self:checkEmmyParam(source, callback, mark)
         elseif source.type == 'emmyField' then
             self:checkEmmyField(source, callback, mark)
+        elseif source.type == "emmyModule" then
+            self:checkEmmyModule(source, callback)
         end
     end)
 end

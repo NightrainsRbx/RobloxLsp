@@ -240,13 +240,13 @@ function mt:callRequire(func, values)
             scriptPath = self:findPathByScript(value)
             if scriptPath then
                 value = self:createValue('string', self:getDefaultSource(), scriptPath)
-                goto CONTINUE
+                -- goto CONTINUE
             end
         end
-        valueIndex = 2
-        value = values[valueIndex]
+        -- valueIndex = 2
+        -- value = values[valueIndex]
     end
-    ::CONTINUE::
+    -- ::CONTINUE::
     if not value then
         value = self:createValue('any', self:getDefaultSource())
         values[valueIndex] = value

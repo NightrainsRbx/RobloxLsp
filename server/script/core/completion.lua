@@ -47,7 +47,7 @@ for _, k in ipairs(KEYS) do
     KEYMAP[k] = true
 end
 
-local EMMY_KEYWORD = {'class', 'type', 'alias', 'param', 'return', 'field', 'generic', 'vararg', 'language', 'see', 'overload'}
+local EMMY_KEYWORD = {'module', 'class', 'type', 'alias', 'param', 'return', 'field', 'generic', 'vararg', 'language', 'see', 'overload'}
 
 local LIBS = {
     ["math"] = true,
@@ -568,65 +568,6 @@ local function searchEmmyFunctionParam(vm, source, word, callback)
     end
 end
 
-local function searchSource(vm, source, word, callback, pos, text)
-    if KEYMAP[word] then
-        searchKeyWords(vm, source, word, callback, text)
-        return
-    end
-    if source.type == 'keyword' then
-        searchAsKeyowrd(vm, source, word, callback, pos, text)
-        return
-    elseif source.type == 'type' then
-        searchEmmyClass(vm, source, word, callback)
-        State.ignoreText = true
-        return
-    end
-    if source:get 'table index' then
-        searchAsIndex(vm, source, word, callback, pos)
-        return
-    end
-    if source:get 'arg' then
-        searchAsArg(vm, source, word, callback)
-        return
-    end
-    if source:get 'global' then
-        searchAsGlobal(vm, source, word, callback, pos, text)
-        return
-    end
-    if source:action() == 'local' then
-        searchAsLocal(vm, source, word, callback)
-        return
-    end
-    if source:bindLocal() then
-        searchAsGlobal(vm, source, word, callback, pos, text)
-        return
-    end
-    if source:get 'simple'
-    and (source.type == 'name' or source.type == '.' or source.type == ':') then
-        searchAsSuffix(vm, source, word, callback, pos)
-        return
-    end
-    if source:bindFunction() then
-        searchFunction(vm, source, word, pos, callback)
-        return
-    end
-    if source.type == 'emmyIncomplete' then
-        searchEmmyKeyword(vm, source, word, callback)
-        State.ignoreText = true
-        return
-    end
-    if source:get 'emmy class' then
-        searchEmmyClass(vm, source, word, callback)
-        State.ignoreText = true
-        return
-    end
-    if source:get 'emmy function' then
-        searchEmmyFunctionParam(vm, source, word, callback)
-        State.ignoreText = true
-        return
-    end
-end
-
 local function buildTextEdit(start, finish, str, quo)
     local text, lquo, rquo, label, filterText
     if quo == nil then
@@ -679,6 +620,99 @@ local function buildTextEdit(start, finish, str, quo)
             },
         }
     }
+end
+
+local function searchEmmyModule(vm, source, word, callback)
+    if not vm.lsp then
+        return
+    end
+    local ws = vm.lsp:findWorkspaceFor(vm.uri)
+    if not ws then
+        return
+    end
+    local list, map = ws:matchPath(vm.uri, source[1])
+    if not list then
+        return
+    end
+    for _, str in ipairs(list) do
+        local data = {
+            label = str,
+            textEdit = {
+                start = source.start,
+                finish = source.finish,
+                newText = str,
+            },
+            documentation = {
+                value = map[str],
+                kind  = 'markdown',
+            }
+        }
+        callback(str, nil, CompletionItemKind.Reference, data)
+    end
+end
+
+local function searchSource(vm, source, word, callback, pos, text)
+    if KEYMAP[word] then
+        searchKeyWords(vm, source, word, callback, text)
+        return
+    end
+    if source.type == 'keyword' then
+        searchAsKeyowrd(vm, source, word, callback, pos, text)
+        return
+    elseif source.type == 'type' then
+        searchEmmyClass(vm, source, word, callback)
+        State.ignoreText = true
+        return
+    end
+    if source:get 'table index' then
+        searchAsIndex(vm, source, word, callback, pos)
+        return
+    end
+    if source:get 'arg' then
+        searchAsArg(vm, source, word, callback)
+        return
+    end
+    if source:get 'global' then
+        searchAsGlobal(vm, source, word, callback, pos, text)
+        return
+    end
+    if source:action() == 'local' then
+        searchAsLocal(vm, source, word, callback)
+        return
+    end
+    if source:bindLocal() then
+        searchAsGlobal(vm, source, word, callback, pos, text)
+        return
+    end
+    if source:get 'simple'
+    and (source.type == 'name' or source.type == '.' or source.type == ':') then
+        searchAsSuffix(vm, source, word, callback, pos)
+        return
+    end
+    if source:bindFunction() then
+        searchFunction(vm, source, word, pos, callback)
+        return
+    end
+    if source.type == 'emmyIncomplete' then
+        searchEmmyKeyword(vm, source, word, callback)
+        State.ignoreText = true
+        return
+    end
+    if source.type == 'emmyModule' then
+        searchEmmyModule(vm, source, word, callback)
+        State.ignoreText = true
+        return
+    end
+    if source:get 'emmy class' then
+        searchEmmyClass(vm, source, word, callback)
+        State.ignoreText = true
+        return
+    end
+    if source:get 'emmy function' then
+        searchEmmyFunctionParam(vm, source, word, callback)
+        State.ignoreText = true
+        return
+    end
 end
 
 --- @param vm VM
@@ -766,9 +800,8 @@ local function searchEnumAsLib(vm, source, word, callback, pos, args, lib, text)
     end
 
     -- 搜索特殊函数
-    if lib.special == 'require' then
-        local index = config.isLuau() and 2 or 1
-        if select == index then
+    if not config.isLuau() and lib.special == 'require' then
+        if select == 1 then
             searchInRequire(vm, source, callback)
         end
     end
@@ -1163,6 +1196,7 @@ return function (vm, text, pos, oldText)
         [':']              = true,
         ['emmyName']       = true,
         ['emmyIncomplete'] = true,
+        ['emmyModule']     = true,
         ['call']           = true,
         ['function']       = true,
         ['localfunction']  = true,

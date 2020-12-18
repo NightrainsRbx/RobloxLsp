@@ -34,10 +34,6 @@ special = 'require'
 [[.args]]
 name = 'module'
 type = {'ModuleScript', 'integer'}
-``````````
-name = 'path'
-type = 'string'
-optional = 'self'
 [[.returns]]
 type = any
 

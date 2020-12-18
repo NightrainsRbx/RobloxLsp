@@ -606,6 +606,7 @@ EmmyBody        <-  'class'    %s+ EmmyClass    -> EmmyClass
                 /   'language' %s+ EmmyLanguage -> EmmyLanguage
                 /   'see'      %s+ EmmySee      -> EmmySee
                 /   'overload' %s+ EmmyOverLoad -> EmmyOverLoad
+                /   'module'   %s+ EmmyModule   -> EmmyModule
                 /   EmmyIncomplete
 
 EmmyName        <-  ({} {[a-zA-Z_] [a-zA-Z0-9_.]*})
@@ -681,6 +682,7 @@ EmmyFunctionArg <-  MustEmmyName %s* ':' %s* EmmyType
 
 EmmySee         <-  {} MustEmmyName %s* '#' %s* MustEmmyName {}
 EmmyOverLoad    <-  EmmyFunctionType
+EmmyModule      <-  ({} {([a-zA-Z_] [a-zA-Z0-9_.]+ / '.' !'.')*} {})
 ]]
 
 grammar 'Lua' [[

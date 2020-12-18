@@ -142,6 +142,7 @@ end
 local EMMY_TYPE = {
     ['emmy.class']        = true,
     ['emmy.type']         = true,
+    ['emmy.module']       = true,
     ['emmy.arrayType']    = true,
     ['emmy.tableType']    = true,
     ['emmy.functionType'] = true,

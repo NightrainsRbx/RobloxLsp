@@ -46,7 +46,7 @@ local function buildLibArgs(lib, object, select)
             name = ('%s: '):format(arg.name)
         end
         if type(arg.type) == 'table' then
-            name = name .. table.concat(arg.type, '/')
+            name = name .. table.concat(arg.type, '|')
         else
             name = name .. (arg.type or 'any')
         end
@@ -110,7 +110,7 @@ local function buildLibReturns(lib)
             strs[#strs+1] = ('%s: '):format(rtn.name)
         end
         if type(rtn.type) == 'table' then
-            strs[#strs+1] = table.concat(rtn.type, '/')
+            strs[#strs+1] = table.concat(rtn.type, '|')
         else
             strs[#strs+1] = rtn.type or 'any'
         end

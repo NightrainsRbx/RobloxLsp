@@ -40,6 +40,8 @@ function mt:doEmmy(action)
         self:doEmmySee(action)
     elseif tp == 'emmyOverLoad' then
         self:doEmmyOverLoad(action)
+    elseif tp == 'emmyModule' then
+        self:doEmmyModule(action)
     elseif tp == 'emmyIncomplete' then
         self:doEmmyIncomplete(action)
     elseif tp == 'emmyComment' then
@@ -144,6 +146,20 @@ function mt:doEmmyType(action)
         self.lsp.global:markGet(self:getUri())
     end
     return type
+end
+
+function mt:doEmmyModule(action)
+    if not type(action[1]) == "string" then
+        return
+    end
+    self:instantSource(action)
+    local strValue = self:createValue("string", action, action[1])
+    local module = {
+        type = "emmy.module",
+        value = self:tryRequireOne(action[1], strValue, "require")
+    }
+    action:set('emmy.module', module)
+    self._emmy = module
 end
 
 function mt:doEmmyAlias(action)
