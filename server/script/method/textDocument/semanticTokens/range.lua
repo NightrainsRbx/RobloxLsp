@@ -271,6 +271,10 @@ return function (lsp, params)
             timerCache[uri] = nil
             local start  = getOffset(lines, text, params.range.start)
             local finish = getOffset(lines, text, params.range['end'])
+            if lsp.firstLoad[uri] then
+                lsp.firstLoad[uri] = nil
+                start, finish = 0, math.huge
+            end
             local tokens = resolveTokens(vm, start, finish, lines)
             response {
                 data = tokens,

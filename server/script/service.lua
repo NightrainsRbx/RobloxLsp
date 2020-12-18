@@ -264,12 +264,14 @@ function mt:open(uri, version, text)
     if not self:isLua(uri) then
         return
     end
+    self.firstLoad[uri] = true
     self:saveText(uri, version, text)
     self._files:open(uri, text)
 end
 
 ---@param uri uri
 function mt:close(uri)
+    self.firstLoad[uri] = nil
     self._files:close(uri)
     if self._files:isLibrary(uri) then
         return
@@ -1119,5 +1121,6 @@ return function ()
     session.emmy   = emmyMgr()
     ---@type Workspace[]
     session.workspaces = {}
+    session.firstLoad = {}
     return session
 end
