@@ -25,6 +25,11 @@ function mt:getArgString(source)
         if source and source:getType() == "string" then
             return source:getLiteral()
         end
+    elseif source.type == "binary" then
+        source = self:getBinary(source)
+        if source and source:getType() == "source" then
+            return source:getLiteral()
+        end
     end
 end
 
