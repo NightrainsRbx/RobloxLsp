@@ -1212,13 +1212,14 @@ local Defs = {
             [1]    = str,
         }
     end,
-    IndexType = function (start, str1, _, str2, finish)
+    ModuleType = function (start, str, _, nameType, finish, generics)
         return {
-            type   = 'indexType',
+            type   = 'moduleType',
             start  = start,
             finish = finish - 1,
-            [1]    = str1,
-            [2]    = str2
+            generics = generics,
+            [1]    = str,
+            [2]    = nameType
         }
     end,
     FuncType = function (start, args, returns, finish)
@@ -1270,35 +1271,86 @@ local Defs = {
     FieldTypeList = function (...)
         local list = {...}
         local hasIndexer = false
-        for _, field in pairs(list) do
-            if field.type == "fieldType2" then
-                if hasIndexer then
+        local wantField = true
+        for i, field in pairs(list) do
+            if type(field) == "number" then
+                if wantField then
                     pushError {
-                        type = 'MULTIPLE_TABLE_INDEXER',
+                        type = 'MISS_FIELD',
+                        start = field - 1,
+                        finish = field - 1,
+                    }
+                end
+                wantField = true
+                list[i] = nil
+            else
+                if not wantField then
+                    pushError {
+                        type = 'MISS_SYMBOL',
                         start = field.start,
+                        finish = field.start,
+                        info = {
+                            symbol = ',',
+                        }
+                    }
+                end
+                wantField = false
+                if field.type == "fieldType2" then
+                    if hasIndexer then
+                        pushError {
+                            type = 'MULTIPLE_TABLE_INDEXER',
+                            start = field.start,
+                            finish = field.finish,
+                        }
+                    else
+                        hasIndexer = true
+                    end
+                elseif field.type == "fieldType3" and #list > 1 then
+                    pushError {
+                        type = 'EXPECTED_FIELD_COLON',
+                        start = field.finish,
                         finish = field.finish,
                     }
-                else
-                    hasIndexer = true
                 end
-            elseif field.type == "fieldType3" and #list > 1 then
-                pushError {
-                    type = 'EXPECTED_FIELD_COLON',
-                    start = field.finish,
-                    finish = field.finish,
-                }
             end
         end
         return list
     end,
     TypeList = function(...)
         local types = {...}
-        return {
+        local obj = {
             type = "typeList",
             start = table.pick(types, 1),
             finish = table.pick(types, #types),
             types = types
         }
+        local wantType = true
+        for i, v in pairs(types) do
+            if type(v) == "number" then
+                if wantType then
+                    pushError {
+                        type = 'MISS_TYPE',
+                        start = v - 1,
+                        finish = v - 1,
+                    }
+                end
+                wantType = true
+                types[i] = nil
+            else
+                if not wantType then
+                    pushError {
+                        type = 'MISS_SYMBOL',
+                        start = v.start,
+                        finish = v.start,
+                        info = {
+                            symbol = ',',
+                        }
+                    }
+                end
+                wantType = false
+            end
+        end
+        return obj
     end,
     VarType = function(colon, ...)
         if State.Version ~= "Luau" then
@@ -1361,9 +1413,33 @@ local Defs = {
             finish = finish,
             info = info
         }
-        for _, v in pairs(info) do
-            if v.type == "name" then
-                v.type = "nameType"
+        local wantType = true
+        for i, v in ipairs(info) do
+            if type(v) == "number" then
+                if wantType then
+                    pushError {
+                        type = 'MISS_TYPE',
+                        start = v - 1,
+                        finish = v - 1,
+                    }
+                end
+                wantType = true
+                info[i] = nil
+            else
+                if not wantType then
+                    pushError {
+                        type = 'MISS_SYMBOL',
+                        start = start + 1,
+                        finish = v.start - 1,
+                        info = {
+                            symbol = ',',
+                        }
+                    }
+                end
+                wantType = false
+                if v.type == "name" then
+                    v.type = "nameType"
+                end
             end
         end
         return obj

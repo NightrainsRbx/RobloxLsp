@@ -336,7 +336,7 @@
             "name": "support.type.lua"
         },
         {
-			"match": "(Enum)\\.?(\\w*)\\.?(\\w*)",
+			"match": "(Enum)\\.(\\w*)\\.?(\\w*)",
 			"captures": {
 				"1": {
 					"name": "variable.other.enummember.lua"

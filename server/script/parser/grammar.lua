@@ -377,7 +377,7 @@ Type        <-  Sp (UnTypeUnit (TypeOp (UnTypeUnit / {} -> DirtyExp))*)
             ->  Exp
 UnTypeUnit  <-  TypeUnit
             /   UnaryOp+ (TypeUnit / {} -> DirtyExp)
-TypeUnit    <-  IndexType
+TypeUnit    <-  ModuleType
             /   Typeof
             /   NameType
             /   FuncType
@@ -391,25 +391,25 @@ TypeSimple  <-  Sp ({} PL Type DirtyPR Optional)
 Typeof      <-  Sp ({} 'typeof' PL DirtyExp NeedPR {} Optional)
             ->  Typeof
 
-Generics1   <-  Sp ({} '<' Sp (Name / Sp COMMA)+ Sp '>' {})
+Generics1   <-  Sp ({} '<' Sp (Name / Sp COMMA {})+ Sp '>' {})
             ->  Generics
-Generics2   <-  Sp ({} '<' Sp (Type / Sp COMMA)+ Sp '>' {})
+Generics2   <-  Sp ({} '<' Sp (Type / Sp COMMA {})+ Sp '>' {})
             ->  Generics
 
-TypeList    <-  ({} PL (Type / Sp COMMA)* NeedPR {} Optional)
+TypeList    <-  ({} PL (Type / Sp COMMA {})* NeedPR {} Optional)
             ->  TypeList
 
 NameType    <-  Sp ({} NameBody {} Generics2? Optional)
             ->  NameType
-IndexType   <-  Sp ({} NameBody DOT NameBody {} Optional)
-            ->  IndexType
+ModuleType  <-  Sp ({} NameBody DOT NameType {})
+            ->  ModuleType
 FuncType    <-  Sp ({} TypeList Sp '->' (TypeList / Type) {})
             ->  FuncType
 
 FieldType   <-  Sp ({} Name COLON Type {}) ->  FieldType1
             /   Sp ({} BL Type DirtyBR COLON Type {}) ->  FieldType2
             /   Sp ({} Type {}) ->  FieldType3
-FieldList   <-  (FieldType / Sp COMMA)*
+FieldList   <-  (FieldType / Sp COMMA {})*
             ->  FieldTypeList
 TableType   <-  Sp ({} TL FieldList DirtyTR Optional)
             ->  TableType
