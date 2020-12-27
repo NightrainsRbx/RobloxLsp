@@ -1,4 +1,5 @@
 local DiagnosticDefaultSeverity = require 'constant.DiagnosticDefaultSeverity'
+local rpc = require 'rpc'
 
 local function Boolean(v)
     if type(v) == 'boolean' then
@@ -188,32 +189,35 @@ local function setConfig(self, config, other)
                 local region = ConfigTemplate[c]
                 if region then
                     local info = region[k]
-                    if not info then
-                        return
-                    end
-                    local suc, v = info[2](v)
-                    if suc then
-                        Config[c][k] = v
-                    else
-                        Config[c][k] = info[1]
+                    if info then
+                        local suc, v = info[2](v)
+                        if suc then
+                            Config[c][k] = v
+                        else
+                            Config[c][k] = info[1]
+                        end
                     end
                 end
             end
         end
         for k, v in pairs(other) do
             local info = OtherTemplate[k]
-            if not info then
-                return
-            end
-            local suc, v = info[2](v)
-            if suc then
-                Other[k] = v
-            else
-                Other[k] = info[1]
+            if info then
+                local suc, v = info[2](v)
+                if suc then
+                    Other[k] = v
+                else
+                    Other[k] = info[1]
+                end
             end
         end
         log.debug('Config update: ', table.dump(Config), table.dump(Other))
-    end, log.error)
+    end, function(err)
+        rpc:notify('window/showMessage', {
+            type = 1,
+            message = "Error Loading Config: " .. err,
+        })
+    end)
 end
 
 init()

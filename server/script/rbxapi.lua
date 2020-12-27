@@ -1230,7 +1230,7 @@ local function datamodelJsonDeprecated()
     for path in fs.current_path():list_directory() do
         if path:string():match("%.datamodel%.json$") then
             rpc:notify('window/showMessage', {
-                type = 3,
+                type = 2,
                 message = "Using .datamodel.json file is deprecated, you can now sync directly with Roblox Studio. [Learn more](https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745)",
             })
             break
