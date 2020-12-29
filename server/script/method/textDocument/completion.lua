@@ -36,16 +36,40 @@ local function finishCompletion(lsp, params, lines)
     return items
 end
 
-local function findWord(position, text)
-    local word = text
-    for i = position, 1, -1 do
-        local c = text:sub(i, i)
-        if not c:find '[%w_]' then
-            word = text:sub(i+1, position)
-            break
+local function isSpace(char)
+    if char == ' '
+    or char == '\n'
+    or char == '\r'
+    or char == '\t' then
+        return true
+    end
+    return false
+end
+
+local function skipSpace(text, offset)
+    for i = offset, 1, -1 do
+        local char = text:sub(i, i)
+        if not isSpace(char) then
+            return i
         end
     end
-    return word:match('^([%w_]*)')
+    return 0
+end
+
+local function findWord(text, offset)
+    for i = offset, 1, -1 do
+        if not text:sub(i, i):match '[%w_]' then
+            if i == offset then
+                return nil
+            end
+            return text:sub(i+1, offset), i+1
+        end
+    end
+    return text:sub(1, offset), 1
+end
+
+local function isInString(text, offset)
+    return text:sub(offset - 1, offset - 1):match("[\"']")
 end
 
 local function fastCompletion(lsp, params, position, text, oldText)
@@ -95,20 +119,6 @@ end
 
 local lastResponse = {}
 
-local function matchLastResponse(word, uri, position)
-    if
-        lastResponse[3] == uri
-        and position >= lastResponse[4]
-        and lastResponse[1]
-        and ((#lastResponse[1] > 0
-        and word:sub(1, #lastResponse[1]) == lastResponse[1])
-        or  lastResponse[1] == ":"
-        or  lastResponse[1] == ".")
-    then
-        return true
-    end
-end
-
 --- @param lsp LSP
 --- @param params table
 --- @return table
@@ -123,22 +133,36 @@ return function (lsp, params)
     local position = lines:positionAsChar(params.position.line + 1, params.position.character)
     local trigger = params.context and params.context.triggerCharacter
 
+    local items = nil
+
+    local word, start = findWord(text, skipSpace(text, position))
     if config.config.completion.fastAutocompletion then
-        local word = findWord(position, text)
-        if not trigger then
-            trigger = word
-        end
-        if word and #word > 1 and word ~= "then" and matchLastResponse(word, uri, position) then
-            lastResponse[1] = word
-            return lastResponse[2], position
+        if word and lastResponse then
+            if  lastResponse.start == start
+            and lastResponse.firstChar == word:sub(1, 1)
+            and lastResponse.uri == uri
+            and lastResponse.timePassed > 0.01
+            and not isInString(text, start) then
+                items = lastResponse.result
+            end
         end
     end
-
-    lastResponse = {}
-    local items = fastCompletion(lsp, params, position, text, oldText)
+    local timePassed = nil
+    if not items then
+        local clock  = os.clock()
+        items = fastCompletion(lsp, params, position, text, oldText)
+        timePassed = os.clock() - clock
+    end
     if not items then
         return nil
     end
+    lastResponse = {
+        timePassed = timePassed or lastResponse.timePassed,
+        start = start,
+        firstChar = word and word:sub(1, 1) or "",
+        uri = uri,
+        result = table.deepCopy(items),
+    }
     -- TODO 在协议阶段将 `insertText` 转化为 `textEdit` ，
     -- 以避免不同客户端对 `insertText` 实现的不一致。
     -- 重构后直接在 core 中使用 `textEdit` 。
@@ -168,8 +192,6 @@ return function (lsp, params)
         isIncomplete = false,
         items = items,
     }
-
-    lastResponse = {trigger, response, uri, position}
 
     return response
 end
