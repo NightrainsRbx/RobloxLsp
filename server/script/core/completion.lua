@@ -1097,6 +1097,9 @@ local function makeList(source, pos, word)
                 elseif snipType == 'Parentheses' then
                     snipData.kind = CompletionItemKind.Function
                     snipData.insertText = snipData.insertText:gsub("%(.-%)", "($1)")
+                    snipData.command = {
+                        command = "editor.action.triggerParameterHints"
+                    }
                     list[#list] = snipData
                 end
             end
