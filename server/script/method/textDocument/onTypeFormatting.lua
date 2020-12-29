@@ -1,20 +1,16 @@
 local parser = require 'parser'
 local config = require 'config'
 
-local function getRange(start, finish, lines)
-    local start_row,  start_col  = lines:rowcol(start)
-    local finish_row, finish_col = lines:rowcol(finish)
-    return {
-        start = {
-            line = start_row - 1,
-            character = start_col - 1,
-        },
-        ['end'] = {
-            line = finish_row - 1,
-            -- 这里不用-1，因为前端期待的是匹配完成后的位置
-            character = finish_col,
-        },
-    }
+local function findKeywordOrParen(text, offset)
+    for i = offset, 1, -1 do
+        if not text:sub(i, i):match '[%w%)]' then
+            if i == offset then
+                return nil
+            end
+            return text:sub(i+1, offset)
+        end
+    end
+    return text:sub(1, offset)
 end
 
 --- @param lsp LSP
@@ -28,7 +24,12 @@ return function (lsp, params)
     local text = lsp:getText(uri)
     local lines = parser:lines(text, 'utf8')
     local position = lines:position(params.position.line + 1, params.position.character)
-    local ast, _, _, missedEnds = parser:parse(text, "Lua")
+    local offset = text:sub(1, position):find("\r\n[\t ]*$")
+    local key = findKeywordOrParen(text, offset - 1)
+    if key ~= "then" and key ~= "do" and key ~= ")" then
+        return
+    end
+    local _, _, _, missedEnds = parser:parse(text, "Lua")
     local action, closer = nil, 0
     for _, source in pairs(missedEnds) do
         if position > source.start and position > source.finish and source.finish > closer then
@@ -51,7 +52,7 @@ return function (lsp, params)
                 range = {
                     start = {
                         line = params.position.line,
-                        character = params.position.character + 1
+                        character = 0
                     },
                     ["end"] = {
                         line = params.position.line,
