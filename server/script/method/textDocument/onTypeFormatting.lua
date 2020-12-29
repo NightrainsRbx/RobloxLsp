@@ -25,6 +25,9 @@ return function (lsp, params)
     local lines = parser:lines(text, 'utf8')
     local position = lines:position(params.position.line + 1, params.position.character)
     local offset = text:sub(1, position):find("\r\n[\t ]*$")
+    if not offset then
+        return
+    end
     local key = findKeywordOrParen(text, offset - 1)
     if key ~= "then" and key ~= "do" and key ~= ")" then
         return
