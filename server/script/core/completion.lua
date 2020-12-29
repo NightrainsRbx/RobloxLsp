@@ -318,6 +318,9 @@ local function searchFields(vm, source, word, callback, pos)
     if not parent then
         return
     end
+    if source:get 'in index' then
+        return
+    end
     local map = {}
     local srcMap = {}
     local current = parent
