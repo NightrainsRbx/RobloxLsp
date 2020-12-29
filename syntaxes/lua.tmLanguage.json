@@ -290,22 +290,8 @@
             "name": "keyword.operator.lua"
         },
         {
-            "match": "(?<![^.]\\.|:)\\b(workspace|game|script|plugin|shared|_G|_VERSION|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
+            "match": "(?<![^.]\\.|:)\\b(workspace|game|script|plugin|shared|_G|_VERSION|true|false|nil|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
             "name": "constant.language.lua"
-        },
-        {
-            "match": "\\b(true)|(false)|(nil)\\b",
-            "captures": {
-                "1": {
-					"name": "constant.language.boolean.true.lua"
-                },
-                "2": {
-					"name": "constant.language.boolean.false.lua"
-                },
-                "3": {
-					"name": "constant.language.nil.lua"
-				}
-            }
         },
         {
             "match": "(?<![^.]\\.|:)\\b(self)\\b",
