@@ -246,16 +246,16 @@ local function getValueHover(source, name, value, lib)
 
     local text
     if valueType == 'table' then
-        text = ('%s %s: %s'):format(tp, name, unpackTable(value))
+        text = ('\f%s %s: %s'):format(tp, name, unpackTable(value))
     else
         if literal == nil then
             if class and not OriginTypes[class] and not rbxApi:getTypes()[class] then
-                text = ('%s %s: %s %s'):format(tp, name, valueType, unpackTable(value))
+                text = ('\f%s %s: %s %s'):format(tp, name, valueType, unpackTable(value))
             else
-                text = ('%s %s: %s'):format(tp, name, valueType)
+                text = ('\f%s %s: %s'):format(tp, name, valueType)
             end
         else
-            text = ('%s %s: %s = %s'):format(tp, name, valueType, literal)
+            text = ('\f%s %s: %s = %s'):format(tp, name, valueType, literal)
         end
     end
 

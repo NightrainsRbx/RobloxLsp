@@ -123,7 +123,7 @@ end
 
 local function buildValueReturns(func)
     if not func then
-        return '\n  -> any'
+        return '\n  \f-> any'
     end
     if not func:get 'hasReturn' then
         return ''
@@ -169,7 +169,7 @@ local function buildValueReturns(func)
     if #strs == 0 then
         strs[1] = 'any'
     end
-    return '\n  -> ' .. table.concat(strs)
+    return '\n  \f-> ' .. table.concat(strs)
 end
 
 ---@param func emmyFunction

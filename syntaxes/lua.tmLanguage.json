@@ -237,15 +237,15 @@
 					"name": "support.type.lua"
 				}
 			},
-            "match": "\\b(global|local|field)\\b \\*?(game)?([\\w.]+): (\\w+)?"
+            "match": "\f\\b(global|local|field)\\b \\*?(game)?([\\w.]+): (\\w+)?"
         },
         {
             "name": "keyword.local.lua",
 			"match": "\\blocal\\b"
         },
         {
-            "begin": "-> ",
-            "end": "\\n",
+            "begin": "\\f-> ",
+            "end": "\\f",
             "patterns": [
                 {
                     "match": "(\\w+): (\\w+(\\.)?\\w+)",
@@ -290,8 +290,20 @@
             "name": "keyword.operator.lua"
         },
         {
-            "match": "(?<![^.]\\.|:)\\b(workspace|game|script|plugin|shared|_G|_VERSION|true|false|nil|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
+            "match": "(?<![^.]\\.|:)\\b(workspace|game|script|plugin|shared|_G|_VERSION|math\\.(pi|huge))\\b|(?<![.])\\.{3}(?!\\.)",
             "name": "constant.language.lua"
+        },
+        {
+            "match": "\\btrue\\b",
+            "name": "constant.language.boolean.true.lua"
+        },
+        {
+            "match": "\\bfalse\\b",
+            "name": "constant.language.boolean.false.lua"
+        },
+        {
+            "match": "\\bnil\\b",
+            "name": "constant.language.nil.lua"
         },
         {
             "match": "(?<![^.]\\.|:)\\b(self)\\b",

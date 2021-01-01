@@ -56,9 +56,9 @@ local function buildEmmyReturns(emmy)
         rtns[#rtns+1] = rtn:getType()
     end)
     if #rtns == 0 then
-        return '\n  -> ' .. 'any'
+        return '\n  \f-> ' .. 'any'
     else
-        return '\n  -> ' .. table.concat(rtns)
+        return '\n  \f-> ' .. table.concat(rtns)
     end
 end
 
@@ -106,7 +106,7 @@ local function buildEnum(lib)
         strs[#strs+1] = ('\n%s: %s'):format(name, tp or 'any')
         for _, enum in ipairs(enums) do
             if enum.default then
-                strs[#strs+1] = '\n  -> '
+                strs[#strs+1] = '\n  \f-> '
             else
                 strs[#strs+1] = '\n   | '
             end

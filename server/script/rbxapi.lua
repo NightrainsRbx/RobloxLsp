@@ -1077,7 +1077,7 @@ function rbxApi:getMembers(members, methods, className)
 ```lua
 %s
 ```
-                ]]):format("-> " .. table.concat(self.EventsParameters[member.Name][className], ", ")) .. "\n\n" .. docs
+                ]]):format("\f-> " .. table.concat(self.EventsParameters[member.Name][className], ", ")) .. "\n\n" .. docs
                 for _, param in pairs(self.EventsParameters[member.Name][className]) do
                     params[#params+1] = param:gsub("%:.+", "")
                     waitFunc.returns[#waitFunc.returns+1] = {

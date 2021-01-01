@@ -126,7 +126,7 @@ local function buildLibReturns(lib)
             strs[#strs+1] = ']'
         end
     end
-    return '\n  -> ' .. table.concat(strs)
+    return '\n  \f-> ' .. table.concat(strs)
 end
 
 local function buildEnum(lib)
@@ -173,7 +173,7 @@ local function buildEnum(lib)
         raw[name] = {}
         for _, enum in ipairs(enums) do
             if enum.default then
-                strs[#strs+1] = '\n  -> '
+                strs[#strs+1] = '\n  \f-> '
             else
                 strs[#strs+1] = '\n   | '
             end
@@ -260,7 +260,7 @@ local function buildFromVariants(lib, select)
         local hover = {}
         local returns = ""
         if lib.returns and lib.returns[1] then
-            returns = "\n  -> " .. lib.returns[1].type
+            returns = "\n  \f-> " .. lib.returns[1].type
         end
         hover.argStr = variant
         hover.name = lib.name
