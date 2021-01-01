@@ -168,8 +168,11 @@ local function searchFiles(parentPath, tree)
             end
             local success, model = pcall(json.decode, readFile(parentPath))
             if success then
-                tree.children = tree.children or {}
-                table.merge(tree.children, inspectModel(model))
+                local modelChildren = inspectModel(model)
+                if modelChildren then
+                    tree.children = tree.children or {}
+                    table.merge(tree.children, modelChildren)
+                end
             end
         end
     end
