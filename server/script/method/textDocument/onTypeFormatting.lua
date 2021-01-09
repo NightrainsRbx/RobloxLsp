@@ -70,15 +70,28 @@ return function (lsp, params)
             {
                 range = {
                     start = {
-                        line = params.position.line + 1,
-                        character = 0
+                        line = params.position.line,
+                        character = params.position.character + 1
                     },
                     ["end"] = {
                         line = params.position.line + 1,
                         character = 0
                     }
                 },
-                newText = spaces .. "end\n"
+                newText = "\n" .. spaces .. "end" .. text:sub(position + 1):match("(.-)\n") .. "\n"
+            },
+            {
+                range = {
+                    start = {
+                        line = params.position.line,
+                        character = params.position.character
+                    },
+                    ["end"] = {
+                        line = params.position.line,
+                        character = params.position.character + 1
+                    },
+                    newText = ""
+                }
             }
         }
     end
