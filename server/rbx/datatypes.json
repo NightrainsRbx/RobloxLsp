@@ -1720,6 +1720,20 @@
                 }
             ],
             "Name": "DockWidgetPluginGuiInfo"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [],
+                    "ReturnType": {
+                        "Category": "",
+                        "Name": "CatalogSearchParams"
+                    }
+                }
+            ],
+            "Name": "CatalogSearchParams"
         }
     ],
     "DataTypes": [
@@ -4080,6 +4094,14 @@
                         "Category": "",
                         "Name": "boolean"
                     }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "CollisionGroup",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "string"
+                    }
                 }
             ],
             "Name": "RaycastParams"
@@ -4244,6 +4266,67 @@
                 }
             ],
             "Name": "Region3int16"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Property",
+                    "Name": "SearchKeyword",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "MinPrice",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "MaxPrice",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "SortType",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "CatalogSortType"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "CategoryFilter",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "CatalogCategoryFilter"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "BundleType",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "Array<Enum.BundleType>"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "AssetTypes",
+                    "ValueType": {
+                        "Category": "",
+                        "Name": "Array<Enum.AssetType>"
+                    }
+                }
+            ],
+            "Name": "CatalogSearchParams"
         }
     ]
 }
