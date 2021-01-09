@@ -49,6 +49,9 @@ function updateRobloxAPI(context) {
                 fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/API-Dump.json', (data) => {
                     writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'API-Dump.json')), data);
                 });
+                fetchData('https://raw.githubusercontent.com/NightrainsRbx/RobloxLsp/master/server/rbx/datatypes.json', (data) => {
+                    writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'datatypes.json')), data);
+                });
                 writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), lastVersion);
                 vscode.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://clonetrooper1019.github.io/Roblox-API-History.html)`);
             }
