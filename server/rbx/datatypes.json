@@ -3289,7 +3289,7 @@
             "Members": [
                 {
                     "MemberType": "Function",
-                    "Name": "getEnums",
+                    "Name": "GetEnums",
                     "Parameters": [
                         {
                             "Name": "self",
