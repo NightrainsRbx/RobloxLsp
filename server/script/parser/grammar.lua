@@ -340,7 +340,7 @@ CallArgList <-  Sp ({} (COMMA {} / Exp)+ {})
 NameList    <-  (MustName ParamType? (COMMA MustName ParamType?)*)
             ->  List
 
-ArgList     <-  (DOTS -> DotsAsArg / (Name ParamType?) / Sp {} COMMA)*
+ArgList     <-  ((DOTS -> DotsAsArg ParamType?) / (Name ParamType?) / Sp {} COMMA)*
             ->  ArgList
 
 Table       <-  Sp ({} TL TableFields? DirtyTR)
@@ -385,6 +385,7 @@ TypeUnit    <-  ModuleType
             /   NameType
             /   FuncType
             /   TableType
+            /   VariadicType
             /   TypeSimple
 
 TypeSimple  <-  Sp ({} PL Type DirtyPR Optional)
@@ -408,6 +409,9 @@ ModuleType  <-  Sp ({} NameBody DOT NameType {})
             ->  ModuleType
 FuncType    <-  Sp ({} TypeList Sp '->' (TypeList / Type) {})
             ->  FuncType
+VariadicType    
+            <-  Sp ({} DOTS Type {})
+            ->  VariadicType
 
 FieldType   <-  Sp ({} Name COLON Type {}) ->  FieldType1
             /   Sp ({} BL Type DirtyBR COLON Type {}) ->  FieldType2

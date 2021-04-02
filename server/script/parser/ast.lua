@@ -1019,8 +1019,11 @@ local Defs = {
                 list[#list+1] = obj
                 if obj.type == '...' then
                     if i < max then
-                        local a = args[i+1]
+                        local a = args[max - 1]
                         local b = args[max]
+                        if type(b) ~= "number" and b.type == "paramType" then
+                            break
+                        end
                         pushError {
                             type = 'ARGS_AFTER_DOTS',
                             start = type(a) == 'number' and a or a.start,
@@ -1268,6 +1271,15 @@ local Defs = {
             value = value
         }
     end,
+    VariadicType = function (start, dots, type, finish)
+        return {
+            type = "variadicType",
+            start = start,
+            finish = finish,
+            dots = dots,
+            value = type
+        }
+    end,
     FieldTypeList = function (...)
         local list = {...}
         local hasIndexer = false
@@ -1347,6 +1359,17 @@ local Defs = {
                         }
                     }
                 end
+                if v.type == "variadicType" then
+                    if i < #types then
+                        local a = types[#types - 1]
+                        local b = types[#types]
+                        pushError {
+                            type = 'ARGS_AFTER_DOTS',
+                            start = type(a) == 'number' and a or a.start,
+                            finish = type(b) == 'number' and b or b.finish,
+                        }
+                    end
+                end
                 wantType = false
             end
         end
@@ -1383,6 +1406,7 @@ local Defs = {
         end
         return {
             type = "paramType",
+            start = colon.start,
             info = ...
         }
     end,
