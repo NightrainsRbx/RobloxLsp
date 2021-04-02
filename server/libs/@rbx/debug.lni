@@ -18,3 +18,11 @@ name = 'label'
 type = 'string'
 
 [profileend]
+
+[info]
+[[.args]]
+name = 'level'
+type = 'number'
+``````````
+name = 'options'
+type = 'string'

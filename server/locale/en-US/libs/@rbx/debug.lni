@@ -3,3 +3,6 @@ description = 'Opens a microprofiler label.'
 
 [profileend]
 description = 'Closes the top microprofiler label.'
+
+[info]
+description = 'Returns debug information about a given stack frame or function object based on the options string (that can contain characters nslfa).'
