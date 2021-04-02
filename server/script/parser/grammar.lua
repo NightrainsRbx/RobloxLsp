@@ -293,8 +293,11 @@ DirtyName   <-  {} -> DirtyName
 grammar 'Exp' [[
 Exp         <-  (UnUnit (BinaryOp (UnUnit / {} -> DirtyExp))*)
             ->  Exp
-UnUnit      <-  ExpUnit
-            /   UnaryOp+ (ExpUnit / {} -> DirtyExp)
+UnUnit      <-  Assert
+            /   UnaryOp+ (Assert / {} -> DirtyExp)
+Assert  <-  ({} ExpUnit LABEL Type {})
+            ->  TypeAssert
+            /   ExpUnit
 ExpUnit     <-  Nil
             /   Boolean
             /   String
