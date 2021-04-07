@@ -295,9 +295,8 @@ Exp         <-  (UnUnit (BinaryOp (UnUnit / {} -> DirtyExp))*)
             ->  Exp
 UnUnit      <-  Assert
             /   UnaryOp+ (Assert / {} -> DirtyExp)
-Assert  <-  ({} ExpUnit LABEL Type {})
+Assert      <-  (ExpUnit (LABEL Type)?)
             ->  TypeAssert
-            /   ExpUnit
 ExpUnit     <-  Nil
             /   Boolean
             /   String

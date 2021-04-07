@@ -1512,19 +1512,20 @@ local Defs = {
         }
         return obj
     end,
-    TypeAssert = function (start, exp, tp, finish)
-        if State.Version ~= "Luau" then
-            pushError {
-                type = 'UNSUPPORT_SYMBOL',
-                start = start,
-                finish = finish,
-                version = 'Luau',
-                info = {
-                    version = State.Version,
-                }
-            }
-        end
-        exp.assert = tp
+    TypeAssert = function (exp)
+        -- if State.Version ~= "Luau" then
+        --     pushError {
+        --         type = 'UNSUPPORT_SYMBOL',
+        --         start = start,
+        --         finish = finish,
+        --         version = 'Luau',
+        --         info = {
+        --             version = State.Version,
+        --         }
+        --     }
+        -- end
+        -- exp.assert = tp
+        -- return exp
         return exp
     end,
     DoBody = function (...)
