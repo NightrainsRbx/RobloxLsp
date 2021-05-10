@@ -468,6 +468,9 @@ name = 'type'
 enum = '"thread"'
 ``````````
 name = 'type'
+enum = '"vector"'
+``````````
+name = 'type'
 enum = '"userdata"'
 
 ["_VERSION Luau"]

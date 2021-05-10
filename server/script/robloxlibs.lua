@@ -86,6 +86,10 @@ local function generateTestez(globals)
                 },
                 [8] = {
                     name = "typeName",
+                    enum = '"vector"'
+                },
+                [9] = {
+                    name = "typeName",
                     enum = '"userdata"'
                 }
             },
