@@ -110,6 +110,9 @@ return function (lsp, params)
             end
             t:remove()
             timerCache[uri] = nil
+            if not vm.sources then
+                return
+            end
             local start  = getOffset(lines, text, params.range.start)
             local finish = getOffset(lines, text, params.range['end'])
             if lsp.firstLoad[uri] then

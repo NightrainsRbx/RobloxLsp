@@ -84,7 +84,9 @@ return function (lsp, params)
             end
             t:remove()
             timerCache[uri] = nil
-
+            if not vm.sources then
+                return
+            end
             local tokens = resolveTokens(vm, lines)
             --local tokens = testTokens(vm, lines)
             response {
