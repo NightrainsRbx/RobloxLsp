@@ -1489,7 +1489,17 @@
                 {
                     "MemberType": "Function",
                     "Name": "fromIsoDate",
-                    "Parameters": [],
+                    "Parameters": [
+                        {
+                            "Name": "isoDate",
+                            "Type": {
+                                "Category": "",
+                                "Name": [
+                                    "string"
+                                ]
+                            }
+                        }
+                    ],
                     "ReturnType": {
                         "Category": "",
                         "Name": "DateTime"
@@ -3961,7 +3971,7 @@
                 },
                 {
                     "MemberType": "Function",
-                    "Name": "FromLocalTime",
+                    "Name": "FormatLocalTime",
                     "Parameters": [
                         {
                             "Name": "self",
