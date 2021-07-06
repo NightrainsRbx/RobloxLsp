@@ -785,7 +785,7 @@
         <string name="Name">TorsionSpringConstraint</string>
         <string name="ClassCategory">Constraints</string>
         <string name="ExplorerOrder">30</string>
-        <string name="ExplorerImageIndex">124</string>
+        <string name="ExplorerImageIndex">125</string>
         <string name="PreferredParent">BasePart</string>
       </Properties>
       <Item class="ReflectionMetadataProperties">
@@ -2542,6 +2542,15 @@
         <string name="ExplorerImageIndex">11</string>
       </Properties>
     </Item>
+    
+    <Item class="ReflectionMetadataClass">
+      <Properties>
+        <string name="Name">VoiceSource</string>
+        <string name="ClassCategory">Sounds</string>
+        <string name="ExplorerOrder">10</string>
+        <string name="ExplorerImageIndex">11</string>
+      </Properties>
+    </Item>
 
     <Item class="ReflectionMetadataClass">
       <Properties>
@@ -3813,10 +3822,6 @@
         <string name="ExplorerOrder">510</string>
         <string name="ExplorerImageIndex">33</string>
       </Properties>
-      <Item class="ReflectionMetadataYieldFunctions">
-        <Item class="ReflectionMetadataMember">
-        </Item>
-      </Item>
     </Item>
 
     <Item class="ReflectionMetadataClass">
@@ -4564,28 +4569,28 @@
         <Item class="ReflectionMetadataMember">
           <Properties>
             <string name="Name">Origin Orientation</string>
-            <string name="summary">Rotate the object around its pivot.</string>
+            <string name="summary">Rotate the object around its pivot. Call object:PivotTo(...) to move the object in this way via scripts.</string>
             <string name="PropertyOrder">400</string>
           </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
           <Properties>
             <string name="Name">Origin Position</string>
-            <string name="summary">Translate the object by its pivot.</string>
+            <string name="summary">Translate the object by its pivot. Call object:PivotTo(...) to move the object in this way via scripts.</string>
             <string name="PropertyOrder">300</string>
           </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
             <Properties>
                 <string name="Name">Pivot Offset Position</string>
-                <string name="summary">Where the pivot is relative to the object.</string>
+                <string name="summary">Where the pivot is relative to the object. Set this via scripts using the part.PivotOffset property.</string>
                 <string name="PropertyOrder">300</string>
             </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
             <Properties>
                 <string name="Name">Pivot Offset Orientation</string>
-                <string name="summary">How the pivot is oriented relative to the object.</string>
+                <string name="summary">How the pivot is oriented relative to the object. Set this via scripts using the part.PivotOffset property.</string>
                 <string name="PropertyOrder">400</string>
             </Properties>
         </Item>
@@ -5032,26 +5037,36 @@
       </Properties>
       <Item class="ReflectionMetadataProperties">
         <Item class="ReflectionMetadataMember">
-          <string name="Name">MaxTorque</string>
-          <string name="summary">The maximum torque that will be exerted on the Part in each axis</string>
+          <Properties>
+            <string name="Name">MaxTorque</string>
+            <string name="summary">The maximum torque that will be exerted on the Part in each axis</string>
+          </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
-          <string name="Name">maxTorque</string>
-          <bool name="Deprecated">true</bool>
-          <string name="summary">Use MaxTorque instead</string>
+          <Properties>
+            <string name="Name">maxTorque</string>
+            <bool name="Deprecated">true</bool>
+            <string name="summary">Use MaxTorque instead</string>
+          </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
-          <string name="Name">P</string>
-          <string name="summary">The amount of power we add to the system.  The higher the power, the quicker the force will achieve its goal.</string>
+          <Properties>
+            <string name="Name">P</string>
+            <string name="summary">The amount of power we add to the system.  The higher the power, the quicker the force will achieve its goal.</string>
+          </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
-          <string name="Name">AngularVelocity</string>
-          <string name="summary">The rotational velocity this system tries to achieve.  How quickly the system reaches this velocity is defined by P.</string>
+          <Properties>
+            <string name="Name">AngularVelocity</string>
+            <string name="summary">The rotational velocity this system tries to achieve.  How quickly the system reaches this velocity is defined by P.</string>
+          </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
-          <string name="Name">angularVelocity</string>
-          <bool name="Deprecated">true</bool>
-          <string name="summary">Use AngularVelocity instead</string>
+          <Properties>
+            <string name="Name">angularVelocity</string>
+            <bool name="Deprecated">true</bool>
+            <string name="summary">Use AngularVelocity instead</string>
+          </Properties>
         </Item>
       </Item>
     </Item>
@@ -5066,13 +5081,17 @@
       </Properties>
       <Item class="ReflectionMetadataProperties">
         <Item class="ReflectionMetadataMember">
-          <string name="Name">Force</string>
-          <string name="summary">The continual force exerted on an object, defined in each axis.</string>
+         <Properties>
+            <string name="Name">Force</string>
+            <string name="summary">The continual force exerted on an object, defined in each axis.</string>
+          </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
-          <string name="Name">force</string>
-          <bool name="Deprecated">true</bool>
-          <string name="summary">Use Force instead</string>
+          <Properties>
+            <string name="Name">force</string>
+            <bool name="Deprecated">true</bool>
+            <string name="summary">Use Force instead</string>
+          </Properties>
         </Item>
       </Item>
     </Item>
@@ -5232,10 +5251,10 @@
     <Item class="ReflectionMetadataClass">
       <Properties>
         <string name="Name">RenderingTest</string>
-        <string name="Insertable">false</string>
+        <string name="Insertable">true</string>
         <string name="ClassCategory">Scripting</string>
         <string name="ExplorerOrder">40</string>
-        <string name="summary">dummy summary</string>
+        <string name="summary">A utility for enacting performance and regression tests on the rendering pipeline</string>
         <string name="ExplorerImageIndex">5</string>
       </Properties>
     </Item>
@@ -5348,14 +5367,14 @@
         <Item class="ReflectionMetadataMember">
             <Properties>
                 <string name="Name">World Pivot Position</string>
-                <string name="summary">Where the pivot is in world space.</string>
+                <string name="summary">Where the pivot is in world space. Set this via scripts using the model.WorldPivot property.</string>
                 <string name="PropertyOrder">300</string>
             </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
             <Properties>
                 <string name="Name">World Pivot Orientation</string>
-                <string name="summary">How the pivot is oriented in world space.</string>
+                <string name="summary">How the pivot is oriented in world space. Set this via scripts using the model.WorldPivot property.</string>
                 <string name="PropertyOrder">400</string>
             </Properties>
         </Item>
@@ -6263,7 +6282,22 @@
         <Item class="ReflectionMetadataMember">
           <Properties>
             <string name="Name">CanCollide</string>
+            <string name="PropertyOrder">1000</string>
             <string name="summary">Determines whether physical interactions with other Parts are respected.  If true, will collide and react with physics to other Parts.  If false, other parts will pass thru instead of colliding</string>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">CanQuery</string>
+            <string name="PropertyOrder">1001</string>
+            <string name="summary">Determines whether spatial queries such as raycasts can hit this part. If false, in addition to CanCollide, all spatial queries will ignore this part.</string>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">CanTouch</string>
+            <string name="PropertyOrder">1002</string>
+            <string name="summary">Determines whether this part will fire the touch events of other parts.  If false, it will not cause other touch events to fire, nor can it create its own touch listener.</string>
           </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
@@ -6352,6 +6386,12 @@
                 <string name="summary">How fast the Part is traveling in studs/second. This property is NOT recommended to be modified directly, unless there is good reason.  Otherwise, try using a BodyForce to move a Part.</string>
             </Properties>
         </Item>
+      <Item class="ReflectionMetadataMember">
+        <Properties>
+          <string name="Name">Size</string>
+          <string name="summary">The size of the part in studs.</string>
+        </Properties>
+      </Item>
         <Item class="ReflectionMetadataMember">
             <Properties>
                 <string name="Name">Position</string>
@@ -6628,12 +6668,16 @@
       </Properties>
       <Item class="ReflectionMetadataProperties">
         <Item class="ReflectionMetadataMember">
-          <string name="Name">Enabled</string>
-          <string name="summary">Whether or not this should be displayed.</string>
+          <Properties>
+            <string name="Name">Enabled</string>
+            <string name="summary">Whether or not this should be displayed.</string>
+          </Properties>
         </Item>
         <Item class="ReflectionMetadataMember">
-          <string name="Name">ZIndexBehavior</string>
-          <string name="summary">Controls the behavior of the ZIndex property for descendants of this object. It can be set to Global (Default) or Sibling.</string>
+          <Properties>
+            <string name="Name">ZIndexBehavior</string>
+            <string name="summary">Controls the behavior of the ZIndex property for descendants of this object. It can be set to Global (Default) or Sibling.</string>
+          </Properties>
         </Item>
       </Item>
     </Item>
@@ -6779,6 +6823,16 @@
             <string name="summary">Specifies the amount of influence lighting has on the surface gui. A value of 0 is unlit, 1 is fully lit. Fractional values blend from unlit to lit.</string>
             <double name="UIMinimum">0</double>
             <double name="UIMaximum">1</double>
+            <double name="UINumTicks">2000</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">Brightness</string>
+            <string name="summary">Specifies the amount of light this gui emits when LightInfluence is 0.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">10</double>
+            <double name="UINumTicks">2000</double>
           </Properties>
         </Item>
       </Item>
@@ -7075,7 +7129,6 @@
       <Properties>
         <string name="Name">ScrollingFrame</string>
         <string name="ClassCategory">GUI</string>
-        <string name="summary">Studio.App.RobloxRibbonMainWindow.ScrollingFrameTooltip</string>
         <string name="ExplorerOrder">150</string>
         <string name="ExplorerImageIndex">48</string>
         <string name="PreferredParent">GuiBase2d</string>
@@ -7195,6 +7248,42 @@
             <string name="summary">Deprecated. Use TextColor3 instead</string>
           </Properties>
         </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">LineHeight</string>
+            <string name="summary">A ratio of TextSize for how far lines should be placed apart.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">3</double>
+            <double name="UINumTicks">300</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">TextSize</string>
+            <string name="summary">The height of a line of text in pixels.</string>
+            <double name="UIMinimum">1</double>
+            <double name="UIMaximum">100</double>
+            <double name="UINumTicks">99</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">TextTransparency</string>
+            <string name="summary">Controls the transparency of the text.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">1</double>
+            <double name="UINumTicks">100</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">TextStrokeTransparency</string>
+            <string name="summary">Controls the transparency of the outline around the text. Multiplied with TextTransparency.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">1</double>
+            <double name="UINumTicks">100</double>
+          </Properties>
+        </Item>
       </Item>
     </Item>
     <Item class="ReflectionMetadataClass">
@@ -7214,6 +7303,42 @@
             <string name="summary">Deprecated. Use TextColor3 instead</string>
           </Properties>
         </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">LineHeight</string>
+            <string name="summary">A ratio of TextSize for how far lines should be placed apart.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">3</double>
+            <double name="UINumTicks">300</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">TextSize</string>
+            <string name="summary">The height of a line of text in pixels.</string>
+            <double name="UIMinimum">1</double>
+            <double name="UIMaximum">100</double>
+            <double name="UINumTicks">99</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">TextTransparency</string>
+            <string name="summary">Controls the transparency of the text.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">1</double>
+            <double name="UINumTicks">100</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">TextStrokeTransparency</string>
+            <string name="summary">Controls the transparency of the outline around the text. Multiplied with TextTransparency.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">1</double>
+            <double name="UINumTicks">100</double>
+          </Properties>
+        </Item>
       </Item>
     </Item>
     <Item class="ReflectionMetadataClass">
@@ -7231,6 +7356,42 @@
             <string name="Name">TextColor</string>
             <bool name="Deprecated">true</bool>
             <string name="summary">Deprecated. Use TextColor3 instead</string>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">LineHeight</string>
+            <string name="summary">A ratio of TextSize for how far lines should be placed apart.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">3</double>
+            <double name="UINumTicks">300</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">TextSize</string>
+            <string name="summary">The height of a line of text in pixels.</string>
+            <double name="UIMinimum">1</double>
+            <double name="UIMaximum">100</double>
+            <double name="UINumTicks">99</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">TextTransparency</string>
+            <string name="summary">Controls the transparency of the text.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">1</double>
+            <double name="UINumTicks">100</double>
+          </Properties>
+        </Item>
+        <Item class="ReflectionMetadataMember">
+          <Properties>
+            <string name="Name">TextStrokeTransparency</string>
+            <string name="summary">Controls the transparency of the outline around the text. Multiplied with TextTransparency.</string>
+            <double name="UIMinimum">0</double>
+            <double name="UIMaximum">1</double>
+            <double name="UINumTicks">100</double>
           </Properties>
         </Item>
       </Item>
