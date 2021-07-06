@@ -24,7 +24,7 @@ return function (lsp, params)
     local text = lsp:getText(uri)
     local lines = parser:lines(text, 'utf8')
     local position = lines:position(params.position.line + 1, params.position.character)
-    local offset = text:sub(1, position):find("\r\n[\t ]*$")
+    local offset = text:sub(1, position):find("\r?\n[\t ]*$")
     if not offset then
         return
     end
