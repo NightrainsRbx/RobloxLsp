@@ -1,0 +1,21 @@
+<default>
+version = 'Luau'
+type = 'function'
+parent = {
+    1 = {
+        type = 'global',
+        name = 'task',
+    },
+    2 = {
+        type = 'library',
+        name = 'task',
+    }
+}
+
+[defer]
+
+[desynchronize]
+
+[spawn]
+
+[synchronize]

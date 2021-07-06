@@ -3825,6 +3825,33 @@
                 },
                 {
                     "MemberType": "Function",
+                    "Name": "ConnectParallel",
+                    "Parameters": [
+                        {
+                            "Name": "self",
+                            "Type": {
+                                "Category": "",
+                                "Name": "any"
+                            }
+                        },
+                        {
+                            "Name": "func",
+                            "Type": {
+                                "Category": "",
+                                "Name": "function"
+                            }
+                        }
+                    ],
+                    "Tags": [
+                        "Hidden"
+                    ],
+                    "ReturnType": {
+                        "Category": "",
+                        "Name": "RBXScriptConnection"
+                    }
+                },
+                {
+                    "MemberType": "Function",
                     "Name": "wait",
                     "Deprecated": true,
                     "Parameters": [
