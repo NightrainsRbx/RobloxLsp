@@ -1,116 +1,80 @@
-local fs = require 'bee.filesystem'
+local rpc = require 'rpc'
 
 local log = {}
 
-log.file = nil
-log.start_time = os.time() - os.clock()
-log.size = 0
-log.max_size = 100 * 1024 * 1024
+local prefix_len = #ROOT:string()
 
 local function trim_src(src)
-    src = src:sub(log.prefix_len + 3, -5)
+    src = src:sub(prefix_len + 3, -5)
     src = src:gsub('^[/\\]+', '')
     src = src:gsub('[\\/]+', '.')
     return src
 end
 
-local function init_log_file()
-    if not log.file then
-        log.file = io.open(log.path, 'w')
-        if not log.file then
-            return
-        end
-        log.file:write('')
-        log.file:close()
-        log.file = io.open(log.path, 'ab')
-        if not log.file then
-            return
-        end
-        log.file:setvbuf 'no'
-    end
-end
+--[[
+    Minics how Roblox deals with many args by adding a space inbetween each arg.
 
-local function push_log(level, ...)
-    if not log.path then
-        return
-    end
-    if log.size > log.max_size then
-        return
-    end
+    Examples:
+    log.info('Hello', 'World') -> 'Hello World'
+    log.info('Hello ', 'World') -> 'Hello  World' (Notice the 2 spaces.)
+]]
+local function HandleMessageArgs(level, ...)
+
+    -- Pack all the args into a table
     local t = table.pack(...)
+
+    -- Convert each to a string
     for i = 1, t.n do
         t[i] = tostring(t[i])
     end
-    local str = table.concat(t, '\t', 1, t.n)
+
+    -- Gather where the message came from originally.
+    local ScriptInfo = debug.getinfo(3, 'Sl')
+
+    local str = '['..trim_src(ScriptInfo.source)..':'..ScriptInfo.currentline..'] '.. table.concat(t, ' ', 1, t.n)
+
+    -- If the level is an error, attach the stack to the message.
     if level == 'error' then
-        str = str .. '\n' .. debug.traceback(nil, 3)
-        io.stderr:write(str .. '\n')
+        str = str..'\n'..debug.traceback(nil, 3)
     end
-    init_log_file()
-    if not log.file then
-        return
-    end
-    local sec, ms = math.modf(log.start_time + os.clock())
-    local timestr = os.date('%Y-%m-%d %H:%M:%S', sec)
-    local info = debug.getinfo(3, 'Sl')
-    local buf
-    if info and info.currentline > 0 then
-        buf = ('[%s.%03.f][%s][%s:%s]: %s\n'):format(timestr, ms * 1000, level, trim_src(info.source), info.currentline, str)
-    else
-        buf = ('[%s.%03.f][%s]: %s\n'):format(timestr, ms * 1000, level, str)
-    end
-    log.file:write(buf)
-    log.size = log.size + #buf
-    if log.size > log.max_size then
-        log.file:write('[REACH MAX SIZE]')
-    end
+
     return str
 end
 
 function log.info(...)
-    push_log('info', ...)
+    rpc:notify('window/logMessage', {
+        type = 3,
+        message = HandleMessageArgs('info', ...)
+    })
+
 end
 
 function log.debug(...)
-    push_log('debug', ...)
-end
+    -- TODO: Add a setting to the client side to toggle if debug messages should show or not.
 
-function log.trace(...)
-    push_log('trace', ...)
+    -- rpc:notify('window/logMessage', {
+    --     type = 4,
+    --     message = HandleMessageArgs('debug', ...)
+    -- })
 end
 
 function log.warn(...)
-    push_log('warn', ...)
+    rpc:notify('window/logMessage', {
+        type = 2,
+        message = HandleMessageArgs('warn', ...)
+    })
 end
 
 function log.error(...)
-    return push_log('error', ...)
+    rpc:notify('window/logMessage', {
+        type = 1,
+        message = HandleMessageArgs('error', ...)
+    })
 end
 
 function log.init(root, path)
-    local lastBuf
-    if log.file then
-        log.file:close()
-        log.file = nil
-        local file = io.open(log.path, 'rb')
-        if file then
-            lastBuf = file:read 'a'
-            file:close()
-        end
-    end
-    log.path = path:string()
-    log.prefix_len = #root:string()
-    log.size = 0
-    if not fs.exists(path:parent_path()) then
-        fs.create_directories(path:parent_path())
-    end
-    if lastBuf then
-        init_log_file()
-        if log.file then
-            log.file:write(lastBuf)
-            log.size = log.size + #lastBuf
-        end
-    end
+    -- log.path = path:string()
+    -- log.prefix_len = #root:string()
 end
 
 return log
