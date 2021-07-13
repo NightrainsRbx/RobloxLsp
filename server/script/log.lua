@@ -74,9 +74,4 @@ function log.error(...)
     })
 end
 
-function log.init(root, path)
-    -- log.path = path:string()
-    -- log.prefix_len = #root:string()
-end
-
 return log

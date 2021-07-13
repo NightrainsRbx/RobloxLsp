@@ -144,9 +144,6 @@ function mt:init(rootUri)
     end
     log.info('Workspace inited, root: ', self.root)
     log.info('Workspace inited, uri: ', rootUri)
-    local logPath = ROOT / 'log' / (rootUri:gsub('[/:]+', '_') .. '.log')
-    log.info('Log path: ', logPath)
-    log.init(ROOT, logPath)
 end
 
 function mt:isComplete()
