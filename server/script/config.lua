@@ -90,6 +90,21 @@ local function Or(...)
     end
 end
 
+-- Just a copy and paste from the utility script.
+-- This is a fix for the early log.debug stuff at the start
+function table.deepCopy(a)
+    local t = {}
+    for k, v in pairs(a) do
+        if type(v) == 'table' then
+            t[k] = table.deepCopy(v)
+        else
+            t[k] = v
+        end
+    end
+    return t
+end
+
+
 local ConfigTemplate = {
     runtime = {
         version         = {'Luau', String},
@@ -108,7 +123,7 @@ local ConfigTemplate = {
         ignore            = {{},   Str2Hash ';'},
         disable           = {{},   Str2Hash ';'},
         severity          = {
-            table.deepCopy(DiagnosticDefaultSeverity),
+            table.deepCopy(DiagnosticDefaultSeverity) or {},
             Hash(String, String),
         },
     },
@@ -154,6 +169,9 @@ local ConfigTemplate = {
         enable          = {false, Boolean},
         path            = {'.vscode/lua-plugin/*.lua', String},
     },
+    logging = {
+        showDebugMessages = {false, Boolean}
+    }
 }
 
 local OtherTemplate = {

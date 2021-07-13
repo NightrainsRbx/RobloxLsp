@@ -1,4 +1,5 @@
 local rpc = require 'rpc'
+local config = require 'config'
 
 local log = {}
 
@@ -31,6 +32,7 @@ local function HandleMessageArgs(level, ...)
     -- Gather where the message came from originally.
     local ScriptInfo = debug.getinfo(3, 'Sl')
 
+    -- Combine everything into a message
     local str = '['..trim_src(ScriptInfo.source)..':'..ScriptInfo.currentline..'] '.. table.concat(t, ' ', 1, t.n)
 
     -- If the level is an error, attach the stack to the message.
@@ -50,12 +52,12 @@ function log.info(...)
 end
 
 function log.debug(...)
-    -- TODO: Add a setting to the client side to toggle if debug messages should show or not.
-
-    -- rpc:notify('window/logMessage', {
-    --     type = 4,
-    --     message = HandleMessageArgs('debug', ...)
-    -- })
+    if config.config.logging.showDebugMessages then
+        rpc:notify('window/logMessage', {
+            type = 4,
+            message = HandleMessageArgs('debug', ...)
+        })
+    end
 end
 
 function log.warn(...)
