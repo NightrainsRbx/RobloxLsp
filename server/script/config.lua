@@ -123,7 +123,7 @@ local ConfigTemplate = {
         ignore            = {{},   Str2Hash ';'},
         disable           = {{},   Str2Hash ';'},
         severity          = {
-            table.deepCopy(DiagnosticDefaultSeverity) or {},
+            table.deepCopy(DiagnosticDefaultSeverity),
             Hash(String, String),
         },
     },
