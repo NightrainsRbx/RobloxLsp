@@ -45,5 +45,6 @@
     "config.workspace.maxPreload": "Max preloaded files.",
     "config.workspace.preloadFileSize": "Skip files larger than this value (KB) when preloading.",
     "config.workspace.useGitIgnore": "Ignore files list in `.gitignore` .",
-    "config.zzzzzz.cat": "DONT TOUCH ME, LET ME SLEEP >_<"
+    "config.zzzzzz.cat": "DONT TOUCH ME, LET ME SLEEP >_<",
+    "config.logging.showDebugMessages": "Shows debug messages in the output."
 }

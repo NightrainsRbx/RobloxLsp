@@ -11,7 +11,6 @@ collectgarbage("setpause", 100)
 collectgarbage("setstepmul", 1000)
 
 log = require 'log'
-log.init(ROOT, ROOT / 'log' / 'service.log')
 log.info('Lua Lsp startup, root: ', ROOT)
 log.debug('ROOT:', ROOT:string())
 ac = {}
