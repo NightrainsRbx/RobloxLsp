@@ -1328,6 +1328,14 @@ local Defs = {
         end
         return list
     end,
+    TypeIdTag = function(start, name, colon, finish)
+        return {
+            type = "typeIdTag",
+            name = name,
+            start = start,
+            finish = finish,
+        }
+    end,
     TypeList = function(...)
         local types = {...}
         local obj = {
@@ -1347,6 +1355,9 @@ local Defs = {
                     }
                 end
                 wantType = true
+                types[i] = nil
+            elseif v.type == "typeIdTag" then
+                -- Ignore name tags on types, they're for extra readability only
                 types[i] = nil
             else
                 if not wantType then
