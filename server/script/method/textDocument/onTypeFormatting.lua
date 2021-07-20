@@ -1,18 +1,6 @@
 local parser = require 'parser'
 local config = require 'config'
 
-local function findKeywordOrParen(text, offset)
-    for i = offset, 1, -1 do
-        if not text:sub(i, i):match '[%w%)]' then
-            if i == offset then
-                return nil
-            end
-            return text:sub(i+1, offset)
-        end
-    end
-    return text:sub(1, offset)
-end
-
 --- @param lsp LSP
 --- @param params table
 --- @return any
@@ -24,11 +12,12 @@ return function (lsp, params)
     local text = lsp:getText(uri)
     local lines = parser:lines(text, 'utf8')
     local position = lines:position(params.position.line + 1, params.position.character)
-    local offset = text:sub(1, position):find("\r?\n[\t ]*$")
+    local offset = text:sub(1, position - 1):find("\r?\n[\t ]*$")
     if not offset then
         return
     end
-    local key = findKeywordOrParen(text, offset - 1)
+    local key = text:sub(1, offset - 1):match("%)$") 
+             or text:sub(1, offset - 1):match("%w+$")
     if key ~= "then" and key ~= "do" and key ~= ")" then
         return
     end
@@ -59,7 +48,7 @@ return function (lsp, params)
                     },
                     ["end"] = {
                         line = params.position.line,
-                        character = params.position.character + 1
+                        character = params.position.character
                     }
                 },
                 newText = "\nend"
