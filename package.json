@@ -568,6 +568,11 @@
 					"markdownDescription": "%config.zzzzzz.cat%",
 					"scope": "resource",
 					"type": "boolean"
+				},
+				"Lua.logging.showDebugMessages": {
+					"default": false,
+					"markdownDescription": "%config.logging.showDebugMessages%",
+					"type": "boolean"
 				}
 			},
 			"title": "Lua",
