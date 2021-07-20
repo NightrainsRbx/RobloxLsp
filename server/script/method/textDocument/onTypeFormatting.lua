@@ -1,6 +1,7 @@
 local parser = require 'parser'
 local config = require 'config'
 
+
 --- @param lsp LSP
 --- @param params table
 --- @return any
