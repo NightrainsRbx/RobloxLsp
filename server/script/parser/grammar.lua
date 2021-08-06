@@ -399,6 +399,11 @@ Generics1   <-  Sp ({} '<' Sp (Name / Sp COMMA {})+ Sp '>' {})
 Generics2   <-  Sp ({} '<' Sp (Type / Sp COMMA {})+ Sp '>' {})
             ->  Generics
 
+TypeIdTag   <-  ({} Name Sp COLON {})
+            ->  TypeIdTag
+FuncTypeList
+            <-  ({} PL ((TypeIdTag? Sp Type) / Sp COMMA {})* NeedPR {} Optional)
+            ->  TypeList
 TypeList    <-  ({} PL (Type / Sp COMMA {})* NeedPR {} Optional)
             ->  TypeList
 
