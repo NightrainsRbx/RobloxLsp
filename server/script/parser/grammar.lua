@@ -411,7 +411,7 @@ NameType    <-  Sp ({} NameBody {} Generics2? Optional)
             ->  NameType
 ModuleType  <-  Sp ({} NameBody DOT NameType {})
             ->  ModuleType
-FuncType    <-  Sp ({} TypeList Sp '->' (TypeList / Type) {})
+FuncType    <-  Sp ({} FuncTypeList Sp '->' (TypeList / Type) {})
             ->  FuncType
 VariadicType    
             <-  Sp ({} DOTS Type {})
