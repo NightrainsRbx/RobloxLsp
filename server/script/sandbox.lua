@@ -10,6 +10,7 @@ local function standard(loaded, env)
         'math',
         'utf8',
         'debug',
+        'task',
     } do
         r[s] = _G[s]
         loaded[s] = _G[s]
