@@ -112,7 +112,7 @@ local function insertLibrary(results, name, uri)
             end
         end
     end
-    if uri:match("%.spec%.lua$") then
+    if uri:match("%.spec%.lua$") or uri:match("%.spec%/init%.lua$") then
         for _, lib in pairs(defaultlibs.testez) do
             if name == "*" or lib.name == name then
                 results[#results+1] = lib
