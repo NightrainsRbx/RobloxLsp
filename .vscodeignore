@@ -3,4 +3,6 @@
 **/*.map
 **/tsconfig.json
 server/log
+server/script/output.lua
 .gitignore
+TODO-LIST

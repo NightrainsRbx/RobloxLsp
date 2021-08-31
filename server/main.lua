@@ -45,7 +45,9 @@ METAPATH = METAPATH and expanduser(METAPATH) or (ROOT:string() .. '/meta')
 debug.setcstacklimit(200)
 collectgarbage('generational', 10, 50)
 -- collectgarbage('incremental', 120, 120, 0)
--- output = require 'output'
+output = function(...)
+    return require('output')(...)
+end
 log = require 'log'
 log.init(ROOT, fs.path(LOGPATH) / 'service.log')
 log.info('Lua Lsp startup, root: ', ROOT)
