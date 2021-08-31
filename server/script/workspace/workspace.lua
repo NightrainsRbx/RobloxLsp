@@ -8,7 +8,6 @@ local platform   = require 'bee.platform'
 local await      = require 'await'
 local proto      = require 'proto.proto'
 local lang       = require 'language'
-local library    = require 'library'
 local sp         = require 'bee.subprocess'
 local timer      = require 'timer'
 local progress   = require 'progress'
@@ -149,9 +148,9 @@ function m.getLibraryMatchers()
         })
         librarys[m.normalize(path)] = true
     end
-    if library.metaPath then
-        librarys[m.normalize(library.metaPath)] = true
-    end
+    -- if library.metaPath then
+    --     librarys[m.normalize(library.metaPath)] = true
+    -- end
     m.libraryMatchers = {}
     for path in pairs(librarys) do
         if fs.exists(fs.path(path)) then

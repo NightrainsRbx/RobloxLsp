@@ -8,7 +8,6 @@ local proto     = require 'proto.proto'
 local define    = require 'proto.define'
 local workspace = require 'workspace'
 local config    = require 'config'
-local library   = require 'library'
 local markdown  = require 'provider.markdown'
 local client    = require 'provider.client'
 local furi      = require 'file-uri'
@@ -70,7 +69,7 @@ local function updateConfig()
 
     if not util.equal(oldConfig.runtime, newConfig.runtime)
     or not util.equal(oldConfig.typeChecking, newConfig.typeChecking) then
-        library.init()
+        rbxlibs.init()
         workspace.reload()
         semantic.refresh()
     end
@@ -107,7 +106,7 @@ end
 
 proto.on('initialize', function (params)
     client.init(params)
-    library.init()
+    rbxlibs.init()
     workspace.init(params.rootUri)
     return {
         capabilities = cap.getIniter(),
