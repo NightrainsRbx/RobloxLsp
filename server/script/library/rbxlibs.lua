@@ -894,6 +894,7 @@ function m.init()
         }
         util.setTypeParent(m.global[constructor.Name])
     end
+    require("vm").flushCache()
 end
 
 return m
