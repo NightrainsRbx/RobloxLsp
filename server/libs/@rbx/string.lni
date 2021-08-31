@@ -1,0 +1,26 @@
+<default>
+version = 'Luau'
+type = 'function'
+parent = {
+    1 = {
+        type = 'global',
+        name = 'string',
+    },
+    2 = {
+        type = 'library',
+        name = 'string',
+    },
+    3 = {
+        type = 'object',
+        name = 'string',
+    }
+}
+
+[split]
+[[.args]]
+type = 'string'
+``````````
+name = 'separator'
+type = 'string'
+[[.returns]]
+type = 'table'

@@ -1,0 +1,5 @@
+/server/log/*
+/server/script/output.lua
+/client/node_modules
+/.vscode/settings.json
+TODO.txt

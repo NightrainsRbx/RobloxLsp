@@ -1,0 +1,644 @@
+{
+	"activationEvents": [
+		"onLanguage:lua",
+		"onWebviewPanel:lua-doc",
+		"onCommand:extension.lua.doc"
+	],
+	"author": "Nightrains",
+	"categories": [
+		"Linters",
+		"Programming Languages",
+		"Snippets"
+	],
+	"contributes": {
+		"configuration": {
+			"properties": {
+				"Lua.color.mode": {
+					"default": "Semantic",
+					"enum": [
+						"Grammar",
+						"Semantic"
+					],
+					"markdownDescription": "%config.color.mode%",
+					"markdownEnumDescriptions": [
+						"%config.color.mode.Grammar%",
+						"%config.color.mode.Semantic%"
+					],
+					"scope": "resource",
+					"type": "string"
+				},
+				"Lua.misc.color3Picker": {
+					"default": true,
+					"markdownDescription": "%config.misc.color3Picker%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.misc.goToScriptLink": {
+					"default": true,
+					"markdownDescription": "%config.misc.goToScriptLink%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.completion.callSnippet": {
+					"default": "Disable",
+					"enum": [
+						"Disable",
+						"Both",
+						"Replace",
+						"Parentheses"
+					],
+					"markdownDescription": "%config.completion.callSnippet%",
+					"markdownEnumDescriptions": [
+						"%config.completion.callSnippet.Disable%",
+						"%config.completion.callSnippet.Both%",
+						"%config.completion.callSnippet.Replace%",
+						"%config.completion.callSnippet.Parentheses%"
+					],
+					"scope": "resource",
+					"type": "string"
+				},
+				"Lua.completion.enable": {
+					"default": true,
+					"markdownDescription": "%config.completion.enable%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.completion.displayContext": {
+					"default": 6,
+					"markdownDescription": "%config.completion.displayContext%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"Lua.completion.serverPort": {
+					"default": 27843,
+					"markdownDescription": "%config.completion.serverPort%",
+					"scope": "resource",
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 65535
+				},
+				"Lua.completion.fastAutocompletion": {
+					"default": true,
+					"markdownDescription": "%config.completion.fastAutocompletion%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.completion.endAutocompletion": {
+					"default": true,
+					"markdownDescription": "%config.completion.endAutocompletion%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.completion.keywordSnippet": {
+					"default": "Replace",
+					"enum": [
+						"Disable",
+						"Both",
+						"Replace"
+					],
+					"markdownDescription": "%config.completion.keywordSnippet%",
+					"markdownEnumDescriptions": [
+						"%config.completion.keywordSnippet.Disable%",
+						"%config.completion.keywordSnippet.Both%",
+						"%config.completion.keywordSnippet.Replace%"
+					],
+					"scope": "resource",
+					"type": "string"
+				},
+				"Lua.diagnostics.disable": {
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.diagnostics.disable%",
+					"scope": "resource",
+					"type": "array"
+				},
+				"Lua.diagnostics.enable": {
+					"default": true,
+					"markdownDescription": "%config.diagnostics.enable%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.diagnostics.syntax": {
+					"default": true,
+					"markdownDescription": "%config.diagnostics.syntax%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.diagnostics.globals": {
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.diagnostics.globals%",
+					"scope": "resource",
+					"type": "array"
+				},
+				"Lua.diagnostics.ignore": {
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.diagnostics.ignore%",
+					"scope": "resource",
+					"type": "array"
+				},
+				"Lua.diagnostics.severity": {
+					"markdownDescription": "%config.diagnostics.severity%",
+					"properties": {
+						"ambiguity-1": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-index": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-method": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"emmy-lua": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"empty-block": {
+							"default": "Hint",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"global-in-nil-env": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"lowercase-global": {
+							"default": "Information",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"newfield-call": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"newline-call": {
+							"default": "Information",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"redefined-local": {
+							"default": "Hint",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"redundant-parameter": {
+							"default": "Hint",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"redundant-value": {
+							"default": "Hint",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"set-const": {
+							"default": "Error",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"set-for-state": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"trailing-space": {
+							"default": "Hint",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-env-child": {
+							"default": "Information",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-global": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unused-function": {
+							"default": "Hint",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unused-label": {
+							"default": "Hint",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unused-local": {
+							"default": "Hint",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unused-vararg": {
+							"default": "Hint",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-rbx-member": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"incorrect-call-arguments": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"deprecated-rbx-member": {
+							"default": "Information",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"invalid-rbx-classname": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unknown-symbol": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"missing-module-return": {
+							"default": "Warning",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						}
+					},
+					"scope": "resource",
+					"title": "severity",
+					"type": "object"
+				},
+				"Lua.hover.enable": {
+					"default": true,
+					"markdownDescription": "%config.hover.enable%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.hover.viewNumber": {
+					"default": true,
+					"markdownDescription": "%config.hover.viewNumber%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.hover.viewString": {
+					"default": true,
+					"markdownDescription": "%config.hover.viewString%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.hover.viewStringMax": {
+					"default": 1000,
+					"markdownDescription": "%config.hover.viewStringMax%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"Lua.runtime.path": {
+					"default": [
+						"?.lua",
+						"?/init.lua",
+						"?/?.lua"
+					],
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.runtime.path%",
+					"scope": "resource",
+					"type": "array"
+				},
+				"Lua.runtime.version": {
+					"default": "Luau",
+					"enum": [
+						"Luau",
+						"Lua 5.1",
+						"Lua 5.2",
+						"Lua 5.3",
+						"Lua 5.4",
+						"LuaJIT"
+					],
+					"markdownDescription": "%config.runtime.version%",
+					"scope": "resource",
+					"type": "string"
+				},
+				"Lua.signatureHelp.enable": {
+					"default": true,
+					"markdownDescription": "%config.signatureHelp.enable%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.workspace.ignoreDir": {
+					"default": [
+						".vscode"
+					],
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.workspace.ignoreDir%",
+					"scope": "resource",
+					"type": "array"
+				},
+				"Lua.workspace.ignoreSubmodules": {
+					"default": true,
+					"markdownDescription": "%config.workspace.ignoreSubmodules%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.workspace.rojoProjectFile": {
+					"default": "default",
+					"markdownDescription": "%config.workspace.rojoProjectFile%",
+					"scope": "resource",
+					"type": "string"
+				},
+				"Lua.workspace.loadMode": {
+					"default": "All Files",
+					"enum": [
+						"All Files",
+						"Rojo Project"
+					],
+					"markdownDescription": "%config.workspace.loadMode%",
+					"markdownEnumDescriptions": [
+						"%config.workspace.loadMode.allFiles%",
+						"%config.workspace.loadMode.rojoProject%"
+					],
+					"scope": "resource",
+					"type": "string"
+				},
+				"Lua.workspace.library": {
+					"markdownDescription": "%config.workspace.library%",
+					"scope": "resource",
+					"type": "object"
+				},
+				"Lua.workspace.maxPreload": {
+					"default": 300,
+					"markdownDescription": "%config.workspace.maxPreload%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"Lua.workspace.preloadFileSize": {
+					"default": 100,
+					"markdownDescription": "%config.workspace.preloadFileSize%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"Lua.workspace.useGitIgnore": {
+					"default": true,
+					"markdownDescription": "%config.workspace.useGitIgnore%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.zzzzzz.cat": {
+					"default": false,
+					"markdownDescription": "%config.zzzzzz.cat%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"Lua.logging.showDebugMessages": {
+					"default": false,
+					"markdownDescription": "%config.logging.showDebugMessages%",
+					"type": "boolean"
+				}
+			},
+			"title": "Lua",
+			"type": "object"
+		},
+		"grammars": [
+			{
+				"language": "lua",
+				"path": "./syntaxes/lua.tmLanguage.json",
+				"scopeName": "source.lua"
+			}
+		],
+		"semanticTokenScopes": [
+			{
+				"language": "lua",
+				"scopes": {
+					"interface.declaration": [
+						"entity.name.function.lua"
+					],
+					"namespace.deprecated": [
+						"entity.name.label"
+					],
+					"namespace.readonly": [
+						"constant.language.lua"
+					],
+					"namespace.static": [
+						"support.function.lua"
+					],
+					"parameter.declaration": [
+						"variable.parameter"
+					],
+					"property.declaration": [
+						"entity.other.attribute"
+					],
+					"variable": [
+						"variable.other.lua"
+					]
+				}
+			}
+		]
+	},
+	"description": "Roblox Luau Language Server forked from Lua by sumneko.",
+	"displayName": "Roblox LSP",
+	"engines": {
+		"vscode": "^1.23.0"
+	},
+	"icon": "images/logo.png",
+	"keywords": [
+		"Roblox",
+		"Luau",
+		"LSP",
+		"GoTo Definition",
+		"IntelliSense"
+	],
+	"license": "MIT",
+	"main": "./client/out/extension",
+	"name": "robloxlsp",
+	"publisher": "Nightrains",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/NightrainsRbx/RobloxLsp"
+	},
+	"version": "0.15.11",
+	"__metadata": {
+		"id": "169d2b9c-69d2-482a-aee2-ea6c33ed4e89",
+		"publisherDisplayName": "Nightrains",
+		"publisherId": "e1e7384e-2406-4940-a937-5fad58f8815e"
+	}
+}

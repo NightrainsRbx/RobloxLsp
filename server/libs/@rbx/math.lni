@@ -1,0 +1,63 @@
+<default>
+version = 'Luau'
+type = 'function'
+parent = {
+    1 = {
+        type = 'global',
+        name = 'math',
+    },
+    2 = {
+        type = 'library',
+        name = 'math',
+    }
+}
+
+[clamp]
+[[.args]]
+type = 'number'
+``````````
+name = 'min'
+type = 'number'
+``````````
+name = 'max'
+type = 'number'
+[[.returns]]
+type = 'number'
+
+[noise]
+parent = {
+    1 = {
+        type = 'global',
+        name = 'math',
+    },
+    2 = {
+        type = 'library',
+        name = 'math',
+    },
+}
+[[.args]]
+name = 'x'
+type = 'number'
+``````````
+name = 'y'
+type = 'number'
+``````````
+name = 'z'
+type = 'number'
+[[.returns]]
+type = 'number'
+
+[sign]
+[[.args]]
+name = 'x'
+type = 'number'
+[[.returns]]
+type = 'number'
+
+[round]
+[[.args]]
+name = 'x'
+type = 'number'
+[[.returns]]
+type = 'integer'
+

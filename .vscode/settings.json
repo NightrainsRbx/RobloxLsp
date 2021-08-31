@@ -1,0 +1,9 @@
+{
+    "Lua.runtime.version": "Lua 5.4",
+    "Lua.diagnostics.disable": [
+        "lowercase-global",
+    ],
+    "Lua.workspace.ignoreDir": [
+        "client"
+    ]
+}

@@ -1,0 +1,17 @@
+[graphemes]
+description = [[
+Returns an iterator function so that
+```lua
+for first, last in utf8.graphemes(str) do 
+	local grapheme = s:sub(first, last) 
+	-- body
+end
+```
+will iterate the grapheme clusters of the string.
+]]
+
+[nfcnormalize]
+description = 'Converts the input string to Normal Form C, which tries to convert decomposed characters into composed characters.'
+
+[nfdnormalize]
+description = 'Converts the input string to Normal Form D, which tries to break up composed characters into decomposed characters.'

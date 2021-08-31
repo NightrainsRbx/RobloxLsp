@@ -1,0 +1,26 @@
+{
+	"name": "lsp-sample-client",
+	"description": "VSCode part of a language server",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"version": "0.0.1",
+	"publisher": "vscode",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"engines": {
+		"vscode": "^1.52.0"
+	},
+	"dependencies": {
+		"@types/node": "^13.13.15",
+		"@types/vscode": "^1.52.0",
+		"vscode-languageclient": "^7.0.0",
+		"express": "^4.17.1",
+		"node-fetch": "^2.6.1"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.9",
+		"@types/node-fetch": "^2.5.7"
+	}
+}

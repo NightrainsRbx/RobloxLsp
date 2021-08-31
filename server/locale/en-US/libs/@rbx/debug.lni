@@ -1,0 +1,14 @@
+[profilebegin]
+description = 'Opens a microprofiler label.'
+
+[profileend]
+description = 'Closes the top microprofiler label.'
+
+[info]
+description = 'Returns debug information about a given stack frame or function object based on the options string (that can contain characters nslfa).'
+
+[setmemorycategory]
+description = 'Sets the memory category tag of the current thread. Future allocations performed by this thread will use this tag.'
+
+[resetmemorycategory]
+description = 'Resets the memory category tag of the current thread to the default auto-assigned tag that was based on script name.'

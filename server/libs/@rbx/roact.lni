@@ -1,0 +1,323 @@
+<default>
+type = 'class'
+parent = {}
+
+[Roact]
+
+[RoactBinding]
+
+[RoactComponent]
+
+[RoactContext]
+
+[RoactElement]
+
+[RoactFragment]
+
+[RoactTree]
+
+<default>
+type = 'function'
+parent = {
+    1 = {
+        type = 'object',
+        name = 'Roact'
+    }
+}
+
+[createElement]
+[[.args]]
+name = 'component'
+type = {'string', 'function', 'RoactComponent'}
+``````````
+name = 'props'
+type = 'table'
+optional = 'after'
+``````````
+name = 'children'
+type = 'table'
+optional = 'after'
+[[.returns]]
+type = 'RoactElement'
+
+[createFragment]
+[[.args]]
+name = 'elements'
+type = 'table'
+[[.returns]]
+type = 'RoactFragment'
+
+[mount]
+[[.args]]
+name = 'element'
+type = 'RoactElement'
+``````````
+name = 'parent'
+type = 'Instance'
+optional = 'after'
+``````````
+name = 'key'
+type = 'string'
+optional = 'after'
+[[.returns]]
+type = 'RoactTree'
+
+[update]
+[[.args]]
+name = 'tree'
+type = 'RoactTree'
+``````````
+name = 'element'
+type = 'RoactElement'
+[[.returns]]
+type = 'RoactTree'
+
+[unmount]
+[[.args]]
+name = 'tree'
+type = 'RoactTree'
+
+[oneChild]
+[[.args]]
+name = 'children'
+type = 'table'
+[[.returns]]
+type = {'RoactElement', 'nil'}
+
+[createBinding]
+[[.args]]
+name = 'initialValue'
+type = 'any'
+[[.returns]]
+type = 'RoactBinding'
+``````````
+type = 'function'
+args = {
+    1 = {
+        name = 'newValue',
+        type = 'any'
+    }
+}
+
+[joinBindings]
+[[.args]]
+name = 'bindings'
+type = 'table'
+[[.returns]]
+type = 'RoactBinding'
+
+[createRef]
+[[.returns]]
+type = 'RoactReference'
+
+[createContext]
+[[.args]]
+name = 'defaultValue'
+type = 'any'
+[[.returns]]
+type = 'RoactContext'
+
+[setGlobalConfig]
+[[.args]]
+name = 'configValues'
+type = 'Dictionary'
+
+[Children]
+type = 'table'
+
+[Ref]
+type = 'any'
+
+[Event]
+type = 'table'
+
+[Change]
+type = 'table'
+
+[None]
+type = 'any'
+
+[Component]
+type = 'RoactComponent'
+
+[PureComponent]
+type = 'RoactComponent'
+
+[Portal]
+type = 'RoactComponent'
+
+<default>
+type = 'function'
+parent = {
+    1 = {
+        type = 'object',
+        name = 'RoactBinding'
+    }
+}
+
+[getValue]
+[[.args]]
+name = 'self'
+type = 'any'
+[[.returns]]
+type = 'any'
+
+[map]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'mappingFunction'
+type = 'function'
+[[.returns]]
+type = 'RoactBinding'
+
+<default>
+type = 'function'
+parent = {
+    1 = {
+        type = 'object',
+        name = 'RoactComponent'
+    }
+}
+
+[extend]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'name'
+type = 'string'
+[[.returns]]
+type = 'RoactComponent'
+
+[defaultProps]
+type = 'Dictionary'
+
+[init]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'initialProps'
+type = 'Dictionary'
+
+[render]
+[[.args]]
+name = 'self'
+type = 'any'
+[[.returns]]
+type = {'RoactElement', 'nil'}
+
+[setState]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'state'
+type = {'function', 'table'}
+
+[shouldUpdate]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'nextProps'
+type = 'table'
+``````````
+name = 'nextState'
+type = 'table'
+[[.returns]]
+type = 'boolean'
+
+[validateProps]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'props'
+type = 'Dictionary'
+[[.returns]]
+type = 'boolean'
+``````````
+type = 'string'
+
+[getElementTraceback]
+[[.args]]
+name = 'self'
+type = 'any'
+[[.returns]]
+type = {'string', 'nil'}
+
+[didMount]
+[[.args]]
+name = 'self'
+type = 'any'
+
+[willUnmount]
+[[.args]]
+name = 'self'
+type = 'any'
+
+[willUpdate]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'nextProps'
+type = 'table'
+``````````
+name = 'nextState'
+type = 'table'
+
+[didUpdate]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'previousProps'
+type = 'table'
+``````````
+name = 'previousState'
+type = 'table'
+
+[getDerivedStateFromProps]
+[[.args]]
+name = 'self'
+type = 'any'
+``````````
+name = 'nextProps'
+type = 'table'
+``````````
+name = 'lastState'
+type = 'table'
+[[.returns]]
+type = 'table'
+
+<default>
+parent = {
+    1 = {
+        type = 'object',
+        name = 'RoactContext'
+    }
+}
+
+[Consumer]
+type = 'RoactComponent'
+
+[Provider]
+type = 'RoactProvider'
+
+<default>
+parent = {
+    1 = {
+        type = 'object',
+        name = 'RoactElement'
+    }
+}
+
+[component]
+type = 'RoactComponent'
+
+[props]
+type = 'Dictionary'
