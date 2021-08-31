@@ -869,14 +869,15 @@ local Defs = {
             [2]    = nameType
         }
     end,
-    FuncType = function (start, args, returns, finish)
+    FuncType = function (start, args, returns, optional, finish)
         args.funcargs = true
         return {
             type = "type.function",
             start = start,
-            finish = finish,
+            finish = finish or optional,
             args = args,
-            returns = returns
+            returns = returns,
+            optional = finish and optional
         }
     end,
     TableType = function (start, fields, finish, optional)

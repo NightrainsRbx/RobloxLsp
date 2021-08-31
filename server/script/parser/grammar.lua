@@ -440,7 +440,7 @@ ModuleType  <-  Sp ({} (Name -> Single) DOT (NameType / %nil) {})
             ->  ModuleType
 NameType    <-  Sp ({} NameBody Generics2 {} Optional?)
             ->  NameType
-FuncType    <-  Sp ({} ArgTypeList ARROW (Type / VariadicType / TypeList) {})
+FuncType    <-  Sp ({} ArgTypeList ARROW (Type / VariadicType / TypeList Optional?) {})
             ->  FuncType
 VariadicType    
             <-  Sp ({} DOTS Type {})
