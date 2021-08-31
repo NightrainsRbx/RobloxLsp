@@ -18,7 +18,7 @@ type ENV = {
 
 type Expectation = {
     a: (typeName: string) -> Expectation,
-    a: (typeName: string) -> Expectation,
+    an: (typeName: string) -> Expectation,
     ok: () -> Expectation,
     equal: (otherValue: any) -> Expectation,
     throw: (message: string?) -> Expectation,
