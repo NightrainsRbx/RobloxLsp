@@ -536,7 +536,7 @@ end
 
 local function checkField(ast, word, start, offset, parent, oop, results)
     if parent.tag == '_ENV' or parent.special == '_G' then
-        local refs = vm.getGlobalSets '*'
+        local refs = vm.getGlobalSets('*', ast.uri)
         checkFieldOfRefs(refs, ast, word, start, offset, parent, oop, results)
     else
         local refs = vm.getFields(parent, 0)
