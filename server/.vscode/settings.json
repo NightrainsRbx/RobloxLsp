@@ -1,0 +1,28 @@
+{
+    "Lua.runtime.version": "Lua 5.4",
+    "Lua.workspace.ignoreDir": [
+        "server/meta",
+        "server/locale",
+        "locale",
+    ],
+    "Lua.diagnostics.globals": [
+        "ERR",
+        "OUT",
+        "IN",
+        "log",
+        "ac",
+        "_G",
+        "GC",
+        "ID",
+        "DEVELOP",
+        "DBGPORT",
+        "DBGWAIT",
+        "TEST"
+    ],
+    "Lua.hover.previewFields": 10,
+    "Lua.diagnostics.disable": [
+        "undefined-field"
+    ],
+    // "Lua.develop.enable": true,
+    // "Lua.misc.parameters": "--dbgport=11413"
+}

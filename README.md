@@ -7,21 +7,19 @@ Make sure you don't have both [Lua](https://marketplace.visualstudio.com/items?i
 ## More Info
 https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745
 
-[VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Nightrains.robloxlsp)
+## Install In VSCode
+https://marketplace.visualstudio.com/items?itemName=Nightrains.robloxlsp
 
-## Feature
+## Features
 
-- [x] Exact Roblox Environment
-- [x] Support for Luau Syntax
-- [x] Roblox Classes and Datatypes
+- [x] Exact Luau Environment
+- [x] Full Luau Typechecking and Intellisense
 - [x] Support for [Rojo](https://github.com/Roblox/rojo)
-- [x] Support for Roact, Rodux, TestEz, AeroGameFramework and Knit
-- [x] Autocompletion of Datamodel descendants
-- [x] Auto-updatable API
-- [x] Intellisense for Modules
-- [x] Custom Diagnostics for Roblox Classes
+- [x] Support for Third-Party libraries like Roact, Rodux, TestEz, etc.
 - [x] Color3 Preview and Picker
-
+- [x] Auto-completion of game descendants
+- [x] Auto-updatable API
+- [x] Inlay Hints
 - [x] Goto Definition
 - [x] Find All References
 - [x] Hover
@@ -48,6 +46,7 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 ## Credit
 
 * [lua-language-server](https://github.com/sumneko/lua-language-server)
+* [vscode-luau](https://github.com/Dekkonot/vscode-luau)
 * [bee.lua](https://github.com/actboy168/bee.lua)
 * [luamake](https://github.com/actboy168/luamake)
 * [lni](https://github.com/actboy168/lni)
@@ -59,14 +58,14 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 * [lua.tmbundle](https://github.com/textmate/lua.tmbundle)
 * [EmmyLua](https://emmylua.github.io)
 * [lua-glob](https://github.com/sumneko/lua-glob)
-* [JSON4Lua](http://github.com/craigmj/json4lua/)
 * [utility](https://github.com/sumneko/utility)
-* [vscode-lua-doc](https://github.com/actboy168/vscode-lua-doc)
+* [json.lua](https://github.com/actboy168/json.lua)
 
 ## Acknowledgement
 
 * [sumneko](https://github.com/sumneko)
 * [actboy168](https://github.com/actboy168)
+* [Dekkonot](https://github.com/Dekkonot)
 * [Dmitry Sannikov](https://github.com/dasannikov)
 * [Jayden Charbonneau](https://github.com/Reshiram110)
 * [Stjepan Bakrac](https://github.com/z16)
@@ -76,3 +75,8 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 * [Allen Shaw](https://github.com/shuxiao9058)
 * [Bartel](https://github.com/Letrab)
 * [Ruin0x11](https://github.com/Ruin0x11)
+* [uhziel](https://github.com/uhziel)
+* [火凌之](https://github.com/PhoenixZeng)
+* [CppCXY](https://github.com/CppCXY)
+* [Ketho](https://github.com/Ketho)
+* [Folke Lemaitre](https://github.com/folke)

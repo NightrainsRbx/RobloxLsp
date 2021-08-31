@@ -1,5 +1,6 @@
-local fs = require 'bee.filesystem'
-local lni = require 'lni'
+local fs      = require 'bee.filesystem'
+local util    = require 'utility'
+local lloader = require 'locale-loader'
 
 local function supportLanguage()
     local list = {}
@@ -11,15 +12,14 @@ local function supportLanguage()
     return list
 end
 
-local function osLanguage()
-    return LANG:lower()
-end
-
 local function getLanguage(id)
     local support = supportLanguage()
     -- 检查是否支持语言
     if support[id] then
         return id
+    end
+    if not id then
+        return 'en-us'
     end
     -- 根据语言的前2个字母来找近似语言
     for _, lang in ipairs(support) do
@@ -28,16 +28,16 @@ local function getLanguage(id)
         end
     end
     -- 使用英文
-    return 'enUS'
+    return 'en-us'
 end
 
 local function loadFileByLanguage(name, language)
-    local path = ROOT / 'locale' / language / (name .. '.lni')
-    local buf = io.load(path)
+    local path = ROOT / 'locale' / language / (name .. '.lua')
+    local buf = util.loadFile(path:string())
     if not buf then
         return {}
     end
-    local suc, tbl = xpcall(lni, log.error, buf, path:string())
+    local suc, tbl = xpcall(lloader, log.error, buf, path:string())
     if not suc then
         return {}
     end
@@ -86,8 +86,8 @@ local function formatAsTable(str, ...)
 end
 
 local function loadLang(name, language)
-    local tbl = loadFileByLanguage(name, 'en-US')
-    if language ~= 'en-US' then
+    local tbl = loadFileByLanguage(name, 'en-us')
+    if language ~= 'en-us' then
         local other = loadFileByLanguage(name, language)
         for k, v in pairs(other) do
             tbl[k] = v
@@ -100,6 +100,9 @@ local function loadLang(name, language)
         end,
         __call = function (self, key, ...)
             local str = self[key]
+            if not ... then
+                return str
+            end
             local suc, res
             if type(...) == 'table' then
                 suc, res = pcall(formatAsTable, str, ...)
@@ -119,18 +122,21 @@ local function loadLang(name, language)
     })
 end
 
-local function init()
-    local id = osLanguage()
-    local language = getLanguage(id)
-    log.info(('VSC language: %s'):format(id))
-    log.info(('LS  language: %s'):format(language))
-    return setmetatable({ id = language }, {
-        __index = function (self, name)
-            local tbl = loadLang(name, language)
-            self[name] = tbl
-            return tbl
-        end,
-    })
-end
-
-return init()
+return setmetatable({
+    id = 'en-us',
+}, {
+    __index = function (self, name)
+        local tbl = loadLang(name, self.id)
+        self[name] = tbl
+        return tbl
+    end,
+    __call = function (self, id)
+        local language = getLanguage(id)
+        log.info(('VSC language: %s'):format(id))
+        log.info(('LS  language: %s'):format(language))
+        for k in pairs(self) do
+            self[k] = nil
+        end
+        self.id = language
+    end,
+})

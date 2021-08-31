@@ -1,17 +1,25 @@
-return function (me, other)
-    if me == other then
-        return true
+---@param input string
+---@param other string
+---@param fast  boolean
+---@return boolean isMatch
+---@return number  deviation
+return function (input, other, fast)
+    if input == other then
+        return true, 0
     end
-    if me == '' then
-        return true
+    if input == '' then
+        return true, 0
     end
-    if #me > #other then
-        return false
+    if #input > #other then
+        return false, 0
     end
-    local lMe = me:lower()
+    local lMe = input:lower()
     local lOther = other:lower()
     if lMe == lOther:sub(1, #lMe) then
-        return true
+        return true, 0
+    end
+    if fast and input:sub(1, 1) ~= other:sub(1, 1) then
+        return false, 0
     end
     local chars = {}
     for i = 1, #lOther do
@@ -23,8 +31,8 @@ return function (me, other)
         if chars[c] and chars[c] > 0 then
             chars[c] = chars[c] - 1
         else
-            return false
+            return false, 0
         end
     end
-    return true
+    return true, 1
 end
