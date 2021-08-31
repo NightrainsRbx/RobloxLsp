@@ -92,11 +92,11 @@ local function searchFile(parent, parentPath, filePath)
         for childPath in path:list_directory() do
             local childName = tostring(childPath:filename())
             if rojo:scriptClass(childName) then
-                if childName == "init.lua" then
+                local name = removeLuaExtension(childName)
+                if name == "init" then
                     parent.value[1] = rojo:scriptClass(childName)
                     parent.value.file = tostring(childPath)
                 else
-                    local name = removeLuaExtension(childName)
                     parent.value.child[name] = {
                         name = name,
                         type = "type.library",
