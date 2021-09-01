@@ -739,7 +739,8 @@ end
 function m.loadApi()
     if not m.Api then
         local apiDump = json.decode(util.loadFile(ROOT / "rbx" / "API-Dump.json"))
-        local dataTypes = json.decode(util.loadFile(ROOT / "rbx" / "DataTypes.json"))
+        local dataTypes = json.decode(util.loadFile(ROOT / "rbx" / "datatypes.json")
+                                   or util.loadFile(ROOT / "rbx" / "DataTypes.json"))
         applyCorrections(apiDump)
         for key, value in pairs(dataTypes) do
             apiDump[key] = value
