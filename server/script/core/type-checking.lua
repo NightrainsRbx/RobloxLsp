@@ -37,11 +37,10 @@ local inferOptions = {
 }
 
 local function buildType(tp)
-    local str = guide.buildTypeAnn(tp)
-    -- if #str > 80 then
-    --     return str:sub(1, 80) .. "..."
-    -- end
-    return str
+    if config.config.typeChecking.showFullType then
+        tp = m.normalizeType(tp)
+    end
+    return guide.buildTypeAnn(tp)
 end
 
 local function getSimpleString(source)

@@ -1188,6 +1188,12 @@
 					},
 					"scope": "resource",
 					"type": "object"
+				},
+				"robloxLsp.typeChecking.showFullType": {
+					"default": false,
+					"markdownDescription": "%config.typeChecking.showFullType%",
+					"scope": "resource",
+					"type": "boolean"
 				}
 			},
 			"title": "Roblox LSP",
@@ -1214,7 +1220,8 @@
 		],
 		"semanticTokenModifiers": [
 			{
-				"id": "primitive"
+				"id": "primitive",
+				"description": "primitive types"
 			}
 		],
 		"semanticTokenScopes": [

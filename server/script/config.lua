@@ -208,6 +208,7 @@ local ConfigTemplate = {
             util.shallowCopy(define.TypeCheckingOptions),
             Hash(String, Boolean),
         },
+        showFullType    = {false,       Boolean},
     }
 }
 
