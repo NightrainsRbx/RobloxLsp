@@ -1447,6 +1447,7 @@ function m.getVisibleRefs(obj, main)
     if obj ~= mainNode then
         return obj.ref
     end
+    local hasTypeAnn = obj.typeAnn
     local mainFunc = m.getParentFunction(main)
     local refs = {}
     local same = nil
@@ -1455,11 +1456,21 @@ function m.getVisibleRefs(obj, main)
             same = ref
             goto CONTINUE
         end
-        if m.isSet(ref) then
-            if ref.start > main.finish then
+        local node = ref
+        while node.next do
+            node = node.next
+            if not node then
                 goto CONTINUE
             end
-            local refFunc = m.getParentFunction(ref)
+        end
+        if m.isSet(node) then
+            if hasTypeAnn then
+                goto CONTINUE
+            end
+            if node.start > main.finish then
+                goto CONTINUE
+            end
+            local refFunc = m.getParentFunction(node)
             if refFunc ~= mainFunc and not m.hasParent(mainFunc, refFunc) then
                 goto CONTINUE
             end
@@ -1751,7 +1762,9 @@ end
 ---@param obj parser.guide.object
 ---@return parser.guide.object
 function m.getObjectValue(obj)
+    local paren = false
     while obj.type == 'paren' do
+        paren = true
         obj = obj.exp
         if not obj then
             return nil
@@ -1791,6 +1804,9 @@ function m.getObjectValue(obj)
         end
     end
     if obj.type == 'select' then
+        return obj
+    end
+    if paren then
         return obj
     end
     return nil
@@ -2395,6 +2411,17 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
         if status.options.skipType then
             return false
         end
+        -- if status.main then
+        --     local node = status.main
+        --     while node do
+        --         if node == obj or m.getObjectValue(node) == obj then
+        --             pushQueue(obj.typeAssert, start, true)
+        --             break
+        --         end
+        --         node = node.node-- or node.exp
+        --     end
+        --     return true
+        -- end
         pushQueue(obj.typeAssert, start, true)
         return true
     else
@@ -2405,12 +2432,6 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
             obj = obj.exp
             if not obj then
                 return false
-            end
-        end
-        if not status.options.skipType then
-            local value = m.getObjectValue(obj)
-            if value and value.typeAssert then
-                return true
             end
         end
         if obj.type == "type.library" then
@@ -3304,18 +3325,15 @@ function m.checkSameSimpleAsSetValue(status, ref, start, pushQueue)
         return
     end
     local obj
-    if parent.type == 'local' then
+    if     parent.type == 'local'
+    or     parent.type == 'setglobal'
+    or     parent.type == 'setlocal' then
         obj = parent
+    elseif parent.type == 'setfield' then
+        obj = parent.field
+    elseif parent.type == 'setmethod' then
+        obj = parent.method
     end
-    -- if     parent.type == 'local'
-    -- or     parent.type == 'setglobal'
-    -- or     parent.type == 'setlocal' then
-    --     obj = parent
-    -- elseif parent.type == 'setfield' then
-    --     obj = parent.field
-    -- elseif parent.type == 'setmethod' then
-    --     obj = parent.method
-    -- end
     if not obj then
         return
     end
@@ -3663,6 +3681,12 @@ end
 
 function m.pushResult(status, mode, ref, simple)
     local results = status.results
+    while ref.type == "paren" do
+        ref = ref.exp
+        if not ref then
+            return
+        end
+    end
     if mode == 'def' then
         if m.typeAnnTypes[ref.type] then
             results[#results+1] = ref
@@ -4012,14 +4036,11 @@ function m.searchSameFields(status, simple, mode)
     end
     local function pushQueue(obj, start, force)
         if obj.typeAssert then
-            return
+            obj = obj.typeAssert
         end
         if obj.type == 'getlocal'
         or obj.type == 'setlocal' then
             obj = obj.node
-            if obj.typeAssert then
-                return
-            end
         end
         if appendQueue(obj, start, force) == false then
             -- no need to process the rest if obj is already locked
@@ -4409,7 +4430,8 @@ end
 function m.buildTypeAnn(typeUnit, mark)
     mark = mark or {}
     if mark[typeUnit] then
-        return mark[typeUnit] == true and "<CYCLE>" or mark[typeUnit]
+        return "<CYCLE>"
+        -- return mark[typeUnit] == true and "<CYCLE>" or mark[typeUnit]
     end
     mark[typeUnit] = true
     local text = ""
@@ -5144,12 +5166,6 @@ function m.searchInfer(status, obj)
         end
         obj = value
     end
-    while obj.type == 'paren' do
-        obj = obj.exp
-        if not obj then
-            return
-        end
-    end
     if not obj then
         return
     end
@@ -5220,6 +5236,10 @@ end
 --- 穿透 `setmetatable` 。
 function m.requestDefinition(obj, interface, deep, options)
     local status = m.status(nil, nil, interface, deep, options)
+
+    if options and options.onlyDef then
+        status.main = obj
+    end
     -- 根据 field 搜索定义
     m.searchRefs(status, obj, 'def')
 
@@ -5229,6 +5249,7 @@ end
 ---@param filterKey nil|string|table
 function m.requestFields(obj, interface, deep, filterKey, options)
     local status = m.status(nil, obj, interface, deep, options)
+
     if options and options.onlyDef then
         m.searchFields(status, obj, filterKey, "deffield")
     else

@@ -131,7 +131,7 @@ local function makeSignatures(call, pos)
         index = 1
     end
     local signs = {}
-    local defs = vm.getDefs(node, 0)
+    local defs = vm.getDefs(node, 0, {onlyDef = true})
     local mark = {}
     for _, src in ipairs(defs) do
         src = guide.getObjectValue(src) or src
