@@ -4,7 +4,7 @@
 	"patterns": [
 		{
 			"begin": "\\b(?:(local)\\s*)?(function)\\s*([a-zA-Z_]\\w*(?:[.:]([a-zA-Z_]\\w*))*)?\\(",
-			"end": "\\)(?:\\s*(:)\\s*(.+?)(?=\\s*\\b(?:([^\\w.,<])|\\)>)\\s*\\w|\\s*$))?",
+			"end": "\\)(?:\\s*(:)\\s*(.+?)(?=\\s*\\b(?:([^\\w.,<])|\\)>)\\s*\\w|\\s*)$)?",
 			"beginCaptures": {
 				"1": {
 					"name": "storage.modifier.local.lua"
@@ -209,11 +209,11 @@
 					"name": "constant.language.lua"
 				},
 				{
-					"match":"\\b(bit32\\.(?:arshift|band|bnot|bor|btest|bxor|extract|lrotate|lshift|replace|rrotate|rshift)|coroutine\\.(?:create|isyieldable|resume|running|status|wrap|yield)|debug\\.(?:loadmodule|profilebegin|profileend|traceback)|math\\.(?:abs|acos|asin|atan|atan2|ceil|clamp|cos|cosh|deg|exp|floor|fmod|frexp|ldexp|log|log10|max|min|modf|noise|pow|rad|random|randomseed|round|sign|sin|sinh|sqrt|tan|tanh)|os\\.(?:clock|date|difftime|time)|string\\.(?:byte|char|find|format|gmatch|gsub|len|lower|match|pack|packsize|rep|reverse|split|sub|unpack|upper)|table\\.(?:concat|create|find|foreach|foreachi|getn|insert|maxn|move|pack|remove|sort|unpack)|utf8\\.(?:char|codepoint|codes|graphemes|len|nfcnormalize|nfdnormalize|offset))\\b",
+					"match":"\\b(bit32\\.(?:arshift|band|bnot|bor|btest|bxor|extract|lrotate|lshift|replace|rrotate|rshift)|coroutine\\.(?:create|isyieldable|resume|running|status|wrap|yield)|debug\\.(?:loadmodule|profilebegin|profileend|traceback)|math\\.(?:abs|acos|asin|atan|atan2|ceil|clamp|cos|cosh|deg|exp|floor|fmod|frexp|ldexp|log|log10|max|min|modf|noise|pow|rad|random|randomseed|round|sign|sin|sinh|sqrt|tan|tanh)|os\\.(?:clock|date|difftime|time)|string\\.(?:byte|char|find|format|gmatch|gsub|len|lower|match|pack|packsize|rep|reverse|split|sub|unpack|upper)|table\\.(?:concat|create|find|foreach|foreachi|getn|insert|maxn|move|pack|remove|sort|unpack)|task\\.(?:spawn|synchronize|desynchronize|wait|defer|delay)|utf8\\.(?:char|codepoint|codes|graphemes|len|nfcnormalize|nfdnormalize|offset))\\b",
 					"name": "support.function.lua"
 				},
 				{
-					"match": "\\b(bit32|coroutine|debug|math|math\\.huge|math\\.pi|os|string|table|utf8|utf8\\.charpattern)\\b",
+					"match": "\\b(bit32|coroutine|debug|math(\\.(huge|pi))?|os|string|table|task|utf8(\\.charpattern)?)\\b",
 					"name": "support.constant.lua"
 				}
 			]
@@ -388,20 +388,12 @@
 				},
 				{
 					"begin": "--",
-					"end": "$",
+					"end": "\\n",
 					"name": "comment.line.double-dash.lua",
 					"patterns": [
 						{
 							"match": "@\\w+",
 							"name": "storage.type.class.lua"
-						},
-						{
-							"match": "!(strict|nonstrict|nocheck)\\s*$",
-							"name": "markup.bold.lua"
-						},
-						{
-							"match": "!nolint(?:\\s+[a-zA-Z_]\\w*)\\s*$",
-							"name": "markup.bold.lua"
 						}
 					]
 				}
@@ -410,7 +402,7 @@
 		"type_literal": {
 			"patterns": [
 				{
-					"match": "(\\?)",
+					"match": "([\\?|\\||\\&])",
 					"name": "keyword.operator.type.lua"
 				},
 				{
@@ -459,7 +451,7 @@
 					"contentName": "meta.parameter.type.variable"
 				},
 				{
-					"match": "\\b(nil|string|number|boolean|thread|userdata|any)\\b",
+					"match": "\\b(nil|string|number|boolean|thread|userdata|symbol|any)\\b",
 					"name": "support.type.primitive.lua"
 				},
 				{
