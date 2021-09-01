@@ -3681,12 +3681,6 @@ end
 
 function m.pushResult(status, mode, ref, simple)
     local results = status.results
-    while ref.type == "paren" do
-        ref = ref.exp
-        if not ref then
-            return
-        end
-    end
     if mode == 'def' then
         if m.typeAnnTypes[ref.type] then
             results[#results+1] = ref
