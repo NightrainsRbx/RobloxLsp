@@ -71,10 +71,10 @@ export type Roact = Readonly<{
         Consumer: Roact.Component
     },
     setGlobalConfig: (configValues: {
-        typeChecks: boolean,
-        internalTypeChecks: boolean,
-        elementTracing: boolean,
-        propValidation: boolean
+        typeChecks: boolean?,
+        internalTypeChecks: boolean?,
+        elementTracing: boolean?,
+        propValidation: boolean?
     }) -> (),
 
     Children: Roact.Symbol,
