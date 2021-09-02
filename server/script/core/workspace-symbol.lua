@@ -1,6 +1,6 @@
 local files    = require 'files'
 local guide    = require 'core.guide'
-local matchKey = require 'core.matchkey'
+local matchKey = require 'core.match-key'
 local define   = require 'proto.define'
 local await    = require 'await'
 

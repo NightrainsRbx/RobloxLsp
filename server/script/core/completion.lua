@@ -1,7 +1,7 @@
 local define       = require 'proto.define'
 local files        = require 'files'
 local guide        = require 'core.guide'
-local matchKey     = require 'core.matchkey'
+local matchKey     = require 'core.match-key'
 local vm           = require 'vm'
 local getHover     = require 'core.hover'
 local config       = require 'config'
