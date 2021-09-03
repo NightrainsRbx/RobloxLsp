@@ -1267,8 +1267,7 @@ local function checkFunction(source, pushResult)
             pushResult {
                 start = ret.start,
                 finish = ret.finish,
-                message = lang.script('TYPE_INCONVERTIBLE', buildType(returnType), buildType(returnTypeAnn)),
-                data = m.saveTypes(returnType, returnTypeAnn)
+                message = lang.script('TYPE_INCONVERTIBLE', buildType(returnType), buildType(returnTypeAnn))
             }
         end
     end
