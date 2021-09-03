@@ -362,7 +362,7 @@ function m.init()
     local parser = require("parser")
     m.global = {}
     m.testez = {}
-    for tbl, file in pairs({[m.global] = "env.luau", [m.testez] = "testez.luau"}) do
+    for tbl, file in pairs({[m.global] = "env.luau", [m.testez] = "3rd/testez.luau"}) do
         local state = parser:compile(util.loadFile(ROOT / "def" / file), "lua")
         state.ast.uri = tostring(ROOT / "def" / file)
         local env
