@@ -938,6 +938,7 @@ local function checkTypeAlias(source, pushResult)
         }
     end
     if source.generics then
+        local names = {}
         for _, generic in ipairs(source.generics) do
             local other = guide.getTypeAlias(source, generic[1])
             if other or rbxlibs.object[generic[1]] then
@@ -948,6 +949,15 @@ local function checkTypeAlias(source, pushResult)
                     related = other
                 }
             end
+            if names[generic[1]] then
+                pushResult {
+                    start = generic.start,
+                    finish = generic.finish,
+                    message = lang.script('TYPE_REDEFINED', generic[1]),
+                    related = names[generic[1]]
+                }
+            end
+            names[generic[1]] = generic
         end
     end
 end
