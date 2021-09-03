@@ -103,7 +103,7 @@ function updateRobloxAPI(context: vscode.ExtensionContext) {
 }
 
 async function openUpdatesWindow(context: vscode.ExtensionContext) {
-    if (context.globalState.get("sawVersionLogNew", false) == false) {
+    if (context.globalState.get("sawVersionLogNew2", false) == false) {
         const panel = vscode.window.createWebviewPanel(
             'robloxlspUpdates',
             'Roblox LSP Updates',
@@ -124,8 +124,15 @@ async function openUpdatesWindow(context: vscode.ExtensionContext) {
                 <p style="font-size:1rem">More info: <a href="https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745">https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745</a></p>
                 <p style="font-size:1rem">Report any bug or question here: <a href="https://github.com/NightrainsRbx/RobloxLsp/issues">https://github.com/NightrainsRbx/RobloxLsp/issues</a></p>
                 <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
+                <h2 style="font-size:2rem; font-weight:100">1.1.0</h2>
+                <li style="font-size:1rem">Added support for Promise, Rodux and Roact-Rodux.</li>
+                <li style="font-size:1rem">Improved type inference based on cursor position and type asserts.</li>
+                <li style="font-size:1rem">Added setting "robloxLsp.typeChecking.showFullType".</li>
+                <h2 style="font-size:2rem; font-weight:100">1.0.2 to 1.0.6</h2>
+                <li style="font-size:1rem">Added code folding to table types.</li>
+                <li style="font-size:1rem">Improved syntax highlighting and fixed problems with comments.</li>
+                <li style="font-size:1rem">Fixed some bugs.</li>
                 <h2 style="font-size:2rem; font-weight:100">1.0.0</h2>
-
                 <li style="font-size:1rem">Roblox LSP got updated to Lua by sumneko 1.21.3! This version has new features like inlay hints, plugins, external libraries and more.</li>
                 <li style="font-size:1rem">Much faster, stable and intelligent.</li>
                 <li style="font-size:1rem">All features have been reworked and improved.</li>
@@ -149,7 +156,7 @@ async function openUpdatesWindow(context: vscode.ExtensionContext) {
             </div>
         </body>
         </html>`;
-        await context.globalState.update("sawVersionLogNew", true);
+        await context.globalState.update("sawVersionLogNew2", true);
     }
 }
 
