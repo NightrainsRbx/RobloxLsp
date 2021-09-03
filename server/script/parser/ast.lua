@@ -981,10 +981,12 @@ local Defs = {
     TypeList = function(start, list, finish)
         local wantType = true
         local lastStart = start + 1
+        local lastComma = nil
         local types = {}
         for i = 1, #list do
             local v = list[i]
             if v.type == "," then
+                lastComma = v.start
                 if wantType then
                     PushError {
                         type = 'MISS_TYPE',
@@ -1019,6 +1021,16 @@ local Defs = {
                 wantType = false
             end
             lastStart = v.finish + 1
+        end
+        if wantType and lastComma then
+            PushError {
+                type   = 'UNEXPECT_SYMBOL',
+                start  = lastComma,
+                finish = lastComma,
+                info   = {
+                    symbol = ',',
+                }
+            }
         end
         return {
             type = "type.list",
