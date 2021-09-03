@@ -918,11 +918,11 @@ end
 
 local function checkTypeAlias(source, pushResult)
     if checkSelfRecursiveTypeAlias(source, source.value) then
-        pushResult(
-            source.start,
-            source.finish,
-            lang.script('TYPE_ALIAS_RECURSIVE')
-        )
+        pushResult {
+            start = source.start,
+            finish = source.finish,
+            message = lang.script('TYPE_ALIAS_RECURSIVE')
+        }
         return
     end
     local other = guide.getTypeAlias(source, source.name[1])
@@ -930,23 +930,23 @@ local function checkTypeAlias(source, pushResult)
         other = nil
     end
     if other or rbxlibs.object[source.name[1]] then
-        pushResult(
-            source.name.start,
-            source.name.finish,
-            lang.script('TYPE_REDEFINED', source.name[1]),
-            other
-        )
+        pushResult {
+            start = source.name.start,
+            finish = source.name.finish,
+            message = lang.script('TYPE_REDEFINED', source.name[1]),
+            related = other
+        }
     end
     if source.generics then
         for _, generic in ipairs(source.generics) do
             local other = guide.getTypeAlias(source, generic[1])
             if other or rbxlibs.object[generic[1]] then
-                pushResult(
-                    generic.start,
-                    generic.finish,
-                    lang.script('TYPE_REDEFINED', generic[1]),
-                    other
-                )
+                pushResult {
+                    start = generic.start,
+                    finish = generic.finish,
+                    message = lang.script('TYPE_REDEFINED', generic[1]),
+                    related = other
+                }
             end
         end
     end
@@ -956,13 +956,12 @@ local function checkCallFunction(func, call, pushResult)
     local argCount = m.getArgCount(func.args)
     if not call.args  then
         if argCount > 0 then
-            pushResult(
-                call.start,
-                call.finish,
-                lang.script('TYPE_ARGUMENT_COUNT', argCount, "none"),
-                nil,
-                0
-            )
+            pushResult {
+                start = call.start,
+                finish = call.finish,
+                message = lang.script('TYPE_ARGUMENT_COUNT', argCount, "none"),
+                argChecked = 0
+            }
             return false
         end
         return true
@@ -1009,33 +1008,30 @@ local function checkCallFunction(func, call, pushResult)
             end
         end
         if not m.compareTypes(otherType, argType) then
-            pushResult(
-                tuple and tuple.start or other.start,
-                tuple and tuple.finish or other.finish,
-                lang.script('TYPE_INCONVERTIBLE', buildType(otherType), buildType(argType)),
-                nil,
-                argChecked
-            )
+            pushResult {
+                start = tuple and tuple.start or other.start,
+                finish = tuple and tuple.finish or other.finish,
+                message = lang.script('TYPE_INCONVERTIBLE', buildType(otherType), buildType(argType)),
+                argChecked = argChecked
+            }
             return false
         end
     end
     if #callArgs > argChecked or #callArgs < argCount then
         if #callArgs > argChecked and argChecked ~= argCount then
-            pushResult(
-                call.args.start,
-                call.args.finish,
-                lang.script('TYPE_ARGUMENT_COUNT_OR', argCount, argChecked, #callArgs),
-                nil,
-                argChecked
-            )
+            pushResult {
+                start = call.args.start,
+                finish = call.args.finish,
+                message = lang.script('TYPE_ARGUMENT_COUNT_OR', argCount, argChecked, #callArgs),
+                argChecked = argChecked
+            }
         else
-            pushResult(
-                call.args.start,
-                call.args.finish,
-                lang.script('TYPE_ARGUMENT_COUNT', argCount, #callArgs),
-                nil,
-                argChecked
-            )
+            pushResult {
+                start = call.args.start,
+                finish = call.args.finish,
+                message = lang.script('TYPE_ARGUMENT_COUNT', argCount, #callArgs),
+                argChecked = argChecked
+            }
         end
         return false
     end
@@ -1061,8 +1057,8 @@ local function checkCall(source, pushResult)
             end
             if #funcs > 0 then
                 local results = {}
-                local function push(...)
-                    results[#results+1] = {...}
+                local function push(result)
+                    results[#results+1] = result
                 end
                 for _, v in ipairs(funcs) do
                     if checkCallFunction(v, source, push) then
@@ -1071,20 +1067,20 @@ local function checkCall(source, pushResult)
                 end
                 if #results > 0 then
                     table.sort(results, function(a, b)
-                        return a[5] > b[5]
+                        return a.argChecked > b.argChecked
                     end)
-                    results[1][3] = results[1][3] .. string.format(" Others %d overloads failed.", #results - 1)
-                    pushResult(table.unpack(results[1]))
+                    results[1].message = results[1].message .. string.format(" Others %d overloads failed.", #results - 1)
+                    pushResult(results[1])
                 end
                 return
             end
         end
         if not m.hasTypeName(funcType, "any") and not m.hasTypeName(funcType, "function") then
-            pushResult(
-                source.start,
-                source.finish,
-                lang.script('TYPE_CANNOT_CALL', buildType(funcType))
-            )
+            pushResult {
+                start = source.start,
+                finish = source.finish,
+                message = lang.script('TYPE_CANNOT_CALL', buildType(funcType))
+            }
         end
     end
 end
@@ -1096,11 +1092,11 @@ local function checkSetLocal(source, pushResult)
     local valueType = m.getType(source.value)
     local locType = source.loc.typeAnn.value
     if not m.compareTypes(valueType, locType) then
-        pushResult(
-            source.start,
-            source.value.finish,
-            lang.script('TYPE_INCONVERTIBLE', buildType(valueType), buildType(locType))
-        )
+        pushResult {
+            start = source.start,
+            finish = source.value.finish,
+            message = lang.script('TYPE_INCONVERTIBLE', buildType(valueType), buildType(locType)),
+        }
     end
 end
 
@@ -1113,11 +1109,11 @@ local function checkLocal(source, pushResult)
     local valueType = m.getType(source.value)
     source.typeAnn = typeAnn
     if not m.compareTypes(valueType, typeAnn.value) then
-        pushResult(
-            source.value.start,
-            source.value.finish,
-            lang.script('TYPE_INCONVERTIBLE', buildType(valueType), buildType(typeAnn.value))
-        )
+        pushResult {
+            start = source.value.start,
+            finish = source.value.finish,
+            message = lang.script('TYPE_INCONVERTIBLE', buildType(valueType), buildType(typeAnn.value))
+        }
     end
 end
 
@@ -1134,11 +1130,11 @@ local function checkGetField(source, pushResult, checkNoType)
         local nodeType = m.getType(source.node)
         local fieldType = m.searchFieldType(nodeType, key, stringType)
         if not fieldType then
-            pushResult(
-                field.start,
-                field.finish,
-                lang.script('TYPE_FIELD_NOT_FOUND', key, buildType(nodeType))
-            )
+            pushResult {
+                start = field.start,
+                finish = field.finish,
+                message = lang.script('TYPE_FIELD_NOT_FOUND', key, buildType(nodeType))
+            }
         else
             if fieldType.override then
                 fieldType = fieldType.override
@@ -1159,11 +1155,11 @@ local function checkGetField(source, pushResult, checkNoType)
         --         return
         --     end
         -- end
-        -- pushResult(
-        --     field.start,
-        --     field.finish,
-        --     lang.script('TYPE_FIELD_NOT_FOUND', key, buildType(nodeType))
-        -- )
+        -- pushResult {
+        --     start = field.start,
+        --     finish = field.finish,
+        --     message = lang.script('TYPE_FIELD_NOT_FOUND', key, buildType(nodeType))
+        -- }
     end
 end
 
@@ -1180,12 +1176,12 @@ local function checkGetIndex(source, pushResult)
         local indexType = m.getType(source.index)
         local fieldType = m.searchFieldType(nodeType, key, indexType)
         if not fieldType then
-            pushResult(
-                source.index.start,
-                source.index.finish,
-                key and lang.script('TYPE_FIELD_NOT_FOUND', key, buildType(nodeType))
-                    or lang.script('TYPE_INDEX_NOT_FOUND', buildType(indexType), buildType(nodeType))
-            )
+            pushResult {
+                start = source.index.start,
+                finish = source.index.finish,
+                message = key and lang.script('TYPE_FIELD_NOT_FOUND', key, buildType(nodeType))
+                               or lang.script('TYPE_INDEX_NOT_FOUND', buildType(indexType), buildType(nodeType))
+            }
         else
             if fieldType.override then
                 fieldType = fieldType.override
@@ -1202,11 +1198,11 @@ local function checkSetField(source, fieldType, pushResult)
     local field = source.field or source.method or source.index
     if (fieldType.parent and fieldType.parent.readOnly)
     or m.normalizeType(m.getType(source.node)).readOnly then
-        pushResult(
-            field.start,
-            field.finish,
-            lang.script('TYPE_FIELD_READ_ONLY', guide.getKeyName(field))
-        )
+        pushResult {
+            start = field.start,
+            finish = field.finish,
+            message = lang.script('TYPE_FIELD_READ_ONLY', guide.getKeyName(field))
+        }
         return
     end
     local valueType = m.getType(source.value)
@@ -1214,11 +1210,11 @@ local function checkSetField(source, fieldType, pushResult)
         return
     end
     if not m.compareTypes(valueType, fieldType) then
-        pushResult(
-            source.value.start,
-            source.value.finish,
-            lang.script('TYPE_INCONVERTIBLE', buildType(valueType), buildType(fieldType))
-        )
+        pushResult {
+            start = source.value.start,
+            finish = source.value.finish,
+            message = lang.script('TYPE_INCONVERTIBLE', buildType(valueType), buildType(fieldType))
+        }
     end
 end
 
@@ -1226,14 +1222,14 @@ local function checkFunction(source, pushResult)
     if not source.returnTypeAnn then
         return
     end
-    local returnTypeAnn = m.normalizeType(source.returnTypeAnn.value)
+    local returnTypeAnn = source.returnTypeAnn.value
     if not source.returns then
         if not m.compareTypes(nilType, returnTypeAnn) then
-            pushResult(
-                source.keyword[3],
-                source.finish,
-                lang.script('TYPE_INCONVERTIBLE', "nil", buildType(returnTypeAnn))
-            )
+            pushResult {
+                start = source.keyword[3],
+                finish = source.finish,
+                message = lang.script('TYPE_INCONVERTIBLE', "nil", buildType(returnTypeAnn))
+            }
         end
         return
     end
@@ -1258,11 +1254,12 @@ local function checkFunction(source, pushResult)
             end
         end
         if not m.compareTypes(returnType, returnTypeAnn) then
-            pushResult(
-                ret.start,
-                ret.finish,
-                lang.script('TYPE_INCONVERTIBLE', buildType(returnType), buildType(returnTypeAnn))
-            )
+            pushResult {
+                start = ret.start,
+                finish = ret.finish,
+                message = lang.script('TYPE_INCONVERTIBLE', buildType(returnType), buildType(returnTypeAnn)),
+                data = m.saveTypes(returnType, returnTypeAnn)
+            }
         end
     end
 end
@@ -1273,11 +1270,11 @@ local function checkTypeName(source, pushResult)
     end
     if rbxlibs.object[source[1]] then
         if source.generics then
-            pushResult(
-                source.generics.start,
-                source.generics.finish,
-                lang.script('TYPE_GENERIC_COUNT', 0, #source.generics)
-            )
+            pushResult {
+                start = source.generics.start,
+                finish = source.generics.finish,
+                message = lang.script('TYPE_GENERIC_COUNT', 0, #source.generics)
+            }
         end
         return
     end
@@ -1292,25 +1289,25 @@ local function checkTypeName(source, pushResult)
         end
         if source.generics then
             if #source.generics ~= genericCount then
-                pushResult(
-                    source.generics.start,
-                    source.generics.finish,
-                    lang.script('TYPE_GENERIC_COUNT', genericCount, #source.generics)
-                )
+                pushResult {
+                    start = source.generics.start,
+                    finish = source.generics.finish,
+                    message = lang.script('TYPE_GENERIC_COUNT', genericCount, #source.generics)
+                }
             end
         elseif genericCount > 0 then
-            pushResult(
-                source.start,
-                source.finish,
-                lang.script('TYPE_GENERIC_COUNT', genericCount, "none")
-            )
+            pushResult {
+                start = source.start,
+                finish = source.finish,
+                message = lang.script('TYPE_GENERIC_COUNT', genericCount, "none")
+            }
         end
     else
-        pushResult(
-            source.start,
-            source.finish,
-            lang.script('TYPE_UNDEFINED', source[1])
-        )
+        pushResult {
+            start = source.start,
+            finish = source.finish,
+            message = lang.script('TYPE_UNDEFINED', source[1])
+        }
     end
 end
 
@@ -1320,11 +1317,11 @@ local function checkBinary(source, pushResult)
         return
     end
     if not guide.getBinaryReturn(m.getTypeNames(source[1]), m.getTypeNames(source[2]), op) then
-        pushResult(
-            source.start,
-            source.finish,
-            lang.script('TYPE_BINARY', buildType(m.getType(source[1])), buildType(m.getType(source[2])), op)
-        )
+        pushResult {
+            start = source.start,
+            finish = source.finish,
+            message = lang.script('TYPE_BINARY', buildType(m.getType(source[1])), buildType(m.getType(source[2])), op)
+        }
     end
 end
 
@@ -1339,11 +1336,11 @@ local function checkUnary(source, pushResult)
     end
     if (op == "#" and not (tp["table"] or tp["string"]))
     or (op == "-" and not tp["number"]) then
-        pushResult(
-            source.start,
-            source.finish,
-            lang.script('TYPE_UNARY', buildType(m.getType(source[1])), op)
-        )
+        pushResult {
+            start = source.start,
+            finish = source.finish,
+            message = lang.script('TYPE_UNARY', buildType(m.getType(source[1])), op)
+        }
     end
 end
 
@@ -1391,7 +1388,14 @@ local function checkTypecheckModeAt(ast, offset)
     return true
 end
 
-local function check(ast, pushResult)
+function m.check(uri)
+    local ast = files.getAst(uri)
+    if not ast then
+        return
+    end
+
+    ast = ast.ast
+
     m.strict = config.config.typeChecking.mode == "Strict"
     m.cache = getCache(tostring(m.strict))
     m.options = util.mergeTable(
@@ -1399,7 +1403,23 @@ local function check(ast, pushResult)
         config.config.typeChecking.options
     )
 
+    local results = {}
+
+    local function pushResult(result)
+        result.code = "type-checking"
+        result.level = define.DiagnosticSeverity.Warning
+        result.related = result.related and {
+            {
+                start = result.related.start,
+                finish = result.related.finish,
+                uri = guide.getUri(result.related)
+            }
+        } or nil
+        results[#results+1] = result
+    end
+
     local skipNodes = {}
+
     guide.eachSourceType(ast, "type.alias", function (source)
         if checkTypecheckModeAt(ast, source.start) then
             checkTypeAlias(source, pushResult)
@@ -1513,29 +1533,8 @@ local function check(ast, pushResult)
             checkUnary(source, pushResult)
         end
     end)
-end
 
-return function (uri)
-    local results = {}
-    local ast = files.getAst(uri)
-    if not ast then
-        return
-    end
-    check(ast.ast, function (start, finish, message, related)
-        results[#results+1] = {
-            message = message,
-            start = start,
-            finish = finish,
-            level = 2,
-            code = "type-checking",
-            related = related and {
-                {
-                    start = related.start,
-                    finish = related.finish,
-                    uri = guide.getUri(related)
-                }
-            } or nil
-        }
-    end)
     return results
 end
+
+return m

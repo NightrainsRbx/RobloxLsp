@@ -67,7 +67,7 @@ return function (uri, response)
     end
 
     if config.config.typeChecking.mode ~= "Disabled" then
-        response(require("core.type-checking")(uri))
+        response(require("core.type-checking").check(uri))
     end
     if config.config.diagnostics.enable then
         for _, name in ipairs(diagList) do
