@@ -83,6 +83,7 @@ m.childMap = {
     ['unary']       = {1},
     ['type.ann']    = {'value'},
     ['type.alias']  = {'name', 'value', 'generics'},
+    ['type.assert'] = {1, 2},
     ['...']         = {'typeAnn'},
 
     ['type.list']     = {"#"},
@@ -637,9 +638,6 @@ function m.addChilds(list, obj, map)
                 end
             end
         end
-    end
-    if obj.typeAssert then
-        list[#list+1] = obj.typeAssert
     end
 end
 
@@ -1388,6 +1386,9 @@ local function buildSimpleList(obj, max)
         or     cur.type == "unary" then
             list[i] = cur
             break
+        elseif cur.type == "type.assert" then
+            list[i] = cur
+            break
         else
             return nil
         end
@@ -1421,7 +1422,8 @@ function m.getSimple(obj, max)
     or obj.type == 'doc.class'
     or obj.type == 'doc.type.name'
     or obj.type == 'doc.see.name'
-    or obj.type == 'doc.see.field' then
+    or obj.type == 'doc.see.field'
+    or obj.type == 'type.assert' then
         simpleList = buildSimpleList(obj, max)
     elseif obj.type == 'field'
     or     obj.type == 'method' then
@@ -2284,7 +2286,7 @@ end
 --             goto CONTINUE
 --         end
 --         local key = type(index) == "number" and "#" or index
---         if key == "typeAssert" or (childMap and util.tableHas(childMap, key)) then
+--         if (childMap and util.tableHas(childMap, key)) then
 --             local valueCopy = util.shallowCopy(value)
 --             valueCopy.parent = copy
 --             mark[value] = valueCopy
@@ -2321,7 +2323,7 @@ function m.copyTypeWithGenerics(obj, generics, mark)
             goto CONTINUE
         end
         local key = type(index) == "number" and "#" or index
-        if key == "typeAssert" or (childMap and util.tableHas(childMap, key)) then
+        if childMap and util.tableHas(childMap, key) then
             for _, source in ipairs(generics.sources) do
                 if value == source or m.hasParent(source, value) then
                     copy[index] = m.copyTypeWithGenerics(value, generics, mark)
@@ -2407,23 +2409,6 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
         end
         pushQueue(obj.typeAnn.value, start, true)
         return true
-    elseif obj.typeAssert then
-        if status.options.skipType then
-            return false
-        end
-        -- if status.main then
-        --     local node = status.main
-        --     while node do
-        --         if node == obj or m.getObjectValue(node) == obj then
-        --             pushQueue(obj.typeAssert, start, true)
-        --             break
-        --         end
-        --         node = node.node-- or node.exp
-        --     end
-        --     return true
-        -- end
-        pushQueue(obj.typeAssert, start, true)
-        return true
     else
         if status.options.fullType then
             mode = "ref"
@@ -2434,7 +2419,14 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
                 return false
             end
         end
-        if obj.type == "type.library" then
+        if obj.type == "type.assert" then
+            if status.options.skipType then
+                pushQueue(obj[1], start, true)
+            else
+                pushQueue(obj[2], start, true)
+            end
+            return true
+        elseif obj.type == "type.library" then
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.name" then
             if mode == "ref" then
@@ -4029,9 +4021,6 @@ function m.searchSameFields(status, simple, mode)
         return true
     end
     local function pushQueue(obj, start, force)
-        if obj.typeAssert then
-            obj = obj.typeAssert
-        end
         if obj.type == 'getlocal'
         or obj.type == 'setlocal' then
             obj = obj.node
@@ -4671,8 +4660,8 @@ function m.inferCheckTypeAnn(status, source)
     local typeAnn = source.typeAnn or (source.parent and source.parent.typeAnn)
     if typeAnn then
         typeAnn = typeAnn.value
-    elseif source.typeAssert then
-        typeAnn = source.typeAssert
+    elseif source.type == "type.assert" then
+        typeAnn = source[2]
     elseif m.typeAnnTypes[source.type] then
         typeAnn = source
     else

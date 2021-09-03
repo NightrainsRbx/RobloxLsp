@@ -306,6 +306,10 @@ local vmMap = {
     ['type.ann'] = function (obj)
         Compile(obj.value, obj)
     end,
+    ['type.assert'] = function (obj)
+        Compile(obj[1], obj)
+        Compile(obj[2], obj)
+    end,
     ['type.name'] = function (obj)
         if obj.parent.type ~= "type.module" then
             local typeAlias = guide.getParentType(obj, "type.alias")
@@ -595,7 +599,6 @@ function Compile(obj, parent)
     end
     Compiled[obj] = true
     obj.parent = parent
-    Compile(obj.typeAssert, obj)
     local f = vmMap[obj.type]
     if not f then
         return

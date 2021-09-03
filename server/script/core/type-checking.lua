@@ -174,7 +174,7 @@ function m.checkDefinition(source, simple, other)
     if not source then
         return false
     end
-    if source.typeAssert then
+    if source.type == "type.assert" then
         return true
     end
     if not simple then

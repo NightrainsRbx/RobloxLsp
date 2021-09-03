@@ -76,8 +76,7 @@ local function getSelect(vararg, index)
         start  = vararg.start,
         finish = vararg.finish,
         vararg = vararg,
-        index  = index,
-        typeAssert = vararg.typeAssert
+        index  = index
     }
 end
 
@@ -1042,13 +1041,13 @@ local Defs = {
     end,
     TypeAssert = function (exp, type)
         if exp and type then
-            local exp = exp
-            while exp and exp.type == "paren" do
-                exp = exp.exp
-            end
-            if exp then
-                exp.typeAssert = type
-            end
+            return {
+                type = "type.assert",
+                start = exp.start,
+                finish = type.finish,
+                exp,
+                type
+            }
         end
         return exp
     end,
