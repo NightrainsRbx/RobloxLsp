@@ -5,14 +5,14 @@ export type Promise.Static = Readonly<{
         executor: (
             resolve: function,
             reject: function,
-            onCancel: (abortHandler: function?) -> boolean,
+            onCancel: (abortHandler: function?) -> boolean
         ) -> ()
     ) -> Promise,
     defer: (
         deferExecutor: (
             resolve: function,
             reject: function,
-            onCancel: (abortHandler: function?) -> boolean,
+            onCancel: (abortHandler: function?) -> boolean
         ) -> ()
     ) -> Promise,
     try: (callback: function, ...any) -> Promise,
