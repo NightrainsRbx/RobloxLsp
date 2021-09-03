@@ -42,9 +42,7 @@ local function typeHint(uri, edits, start, finish)
         end
         local infer = vm.getInferType(source, 0)
 
-        if  not source.value
-        and infer == 'any'
-        or  infer == 'nil' then
+        if not source.value and (infer == 'any' or infer == 'nil') then
             return
         end
         if #infer > 30 then
