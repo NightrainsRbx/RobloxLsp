@@ -360,7 +360,7 @@
 				},
 				{
 					"match": "(?<=\\.)([a-zA-Z_]\\w*)\\b",
-					"name": "variable.property.js"
+					"name": "variable.property.lua"
 				},
 				{
 					"match": "\\b(Axes|BrickColor|CFrame|Color3|ColorSequence|ColorSequenceKeypoint|DateTime|DockWidgetPluginGuiInfo|Faces|Instance|NumberRange|NumberSequence|NumberSequenceKeypoint|OverlapParams|PathWaypoint|PhysicalProperties|Random|Ray|RaycastParams|Rect|Region3|Region3int16|TweenInfo|UDim|UDim2|Vector2|Vector2int16|Vector3|Vector3int16)\\b\\.?(\\b[a-zA-Z_]\\w*(?=\\())?",
@@ -375,7 +375,7 @@
 				},
 				{
 					"match": "\\b([a-zA-Z_]\\w*)\\b",
-					"name": "variable.other.readwrite.js"
+					"name": "variable.other.readwrite.lua"
 				}
 			]
 		},
@@ -477,7 +477,7 @@
 						},
 						{
 							"match": "(?<!:\\s*|->\\s*)\\b([a-zA-Z_]\\w*)\\b",
-							"name": "variable.property.js"
+							"name": "variable.property.lua"
 						},
 						{
 							"include": "#type_literal"
@@ -520,10 +520,10 @@
 							"name": "storage"
 						},
 						"2": {
-							"name": "variable.other.readwrite.js"
+							"name": "variable.other.readwrite.lua"
 						},
 						"3": {
-							"name": "variable.property.js"
+							"name": "variable.property.lua"
 						},
 						"4": {
 							"name": "keyword.operator.type.lua"
