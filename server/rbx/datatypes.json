@@ -1423,7 +1423,7 @@
                         {
                             "Name": "unixTimestamp",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         }
                     ],
@@ -1438,7 +1438,7 @@
                         {
                             "Name": "unixTimestampMillis",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         }
                     ],
@@ -1454,49 +1454,49 @@
                             "Default": "1970",
                             "Name": "year",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "1",
                             "Name": "month",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "1",
                             "Name": "day",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "hour",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "minute",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "second",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "millisecond",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         }
                     ],
@@ -1512,49 +1512,49 @@
                             "Default": "1970",
                             "Name": "year",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "1",
                             "Name": "month",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "1",
                             "Name": "day",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "hour",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "minute",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "second",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "millisecond",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         }
                     ],
@@ -1811,28 +1811,28 @@
                             "Name": "floatXSize",
                             "Default": "0",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Name": "floatYSize",
                             "Default": "0",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Name": "minWidth",
                             "Default": "0",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         },
                         {
                             "Name": "minHeight",
                             "Default": "0",
                             "Type": {
-                                "Name": "integer"
+                                "Name": "int"
                             }
                         }
                     ],
@@ -3576,14 +3576,14 @@
                     "MemberType": "Property",
                     "Name": "UnixTimestamp",
                     "ValueType": {
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "UnixTimestampMillis",
                     "ValueType": {
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
@@ -3855,28 +3855,28 @@
                     "MemberType": "Property",
                     "Name": "FloatingXSize",
                     "ValueType": {
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "FloatingYSize",
                     "ValueType": {
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "MinWidth",
                     "ValueType": {
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "MinHeight",
                     "ValueType": {
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 }
             ],
