@@ -828,6 +828,22 @@ local function buildDataModel()
     replicateToPlayer(game.value.child)
 end
 
+local function loadMeta()
+    local parser = require("parser")
+    local state = parser:compile(util.loadFile(ROOT / "def" / "meta.luau"), "lua")
+    for _, object in ipairs(state.ast.types[1].value) do
+        local meta = {}
+        for _, field in ipairs(object.value) do
+            meta[#meta+1] = {
+                type = "type.meta",
+                method = field.key[1],
+                value = field.value
+            }
+        end
+        m.object[object.key[1]].meta = meta
+    end
+end
+
 function m.init()
     defaultlibs = defaultlibs or require("library.defaultlibs")
     if not defaultlibs.initialized then
@@ -866,6 +882,7 @@ function m.init()
             child = parseMembers(dataType, true)
         }
     end
+    loadMeta()
     local typeofEnums = {}
     for tp in pairs(m.object) do
         if tp == "Instance" or not m.ClassNames[tp] and tp ~= "any" then
