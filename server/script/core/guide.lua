@@ -162,6 +162,27 @@ m.typeAnnTypes = {
     ["type.library"] = true
 }
 
+m.binaryMeta = {
+    ["+"] = "__add",
+    ["-"] = "__sub",
+    ["*"] = "__mul",
+    ["/"] = "__div",
+    ["%"] = "__mod",
+    ["^"] = "__pow",
+    ["=="] = "__eq",
+    ["~="] = "__eq",
+    ["<"] = "__lt",
+    [">"] = "__lt",
+    ["<="] = "__le",
+    [">="] = "__le",
+    [".."] = "__concat"
+}
+
+m.unaryMeta = {
+    ["-"] = "__unm",
+    ["#"] = "__len"
+}
+
 local NIL = setmetatable({'<nil>'}, { __tostring = function () return 'nil' end })
 
 --- 是否是字面量
@@ -1006,11 +1027,16 @@ function m.getSimpleName(obj)
     return m.getKeyName(obj)
 end
 
+local makeNameTypeCache = {}
+
 local function makeNameType(tp)
-    return {
-        [1] = tp,
-        type = "type.name"
-    }
+    if not makeNameTypeCache[tp] then
+        makeNameTypeCache[tp] = {
+            [1] = tp,
+            type = "type.name"
+        }
+    end
+    return makeNameTypeCache[tp]
 end
 
 function m.searchLibraryChildren(obj)
@@ -1367,6 +1393,9 @@ local function buildSimpleList(obj, max)
         elseif cur.type == 'string' then
             list[i] = cur
             break
+        elseif cur.type == 'number' then
+            list[i] = cur
+            break
         elseif cur.type == '...' then
             list[i] = cur
             break
@@ -1415,6 +1444,7 @@ function m.getSimple(obj, max)
     or obj.type == 'call'
     or obj.type == 'table'
     or obj.type == 'string'
+    or obj.type == 'number'
     or obj.type == '...'
     or obj.type == "binary"
     or obj.type == "unary"
@@ -1738,6 +1768,42 @@ function m.checkStatusDepth(status)
         logWarn('status.depth overflow')
     end
     return false
+end
+
+function m.searchMeta(status, obj)
+    if not obj then
+        return
+    end
+    while obj.type == 'paren' do
+        obj = obj.exp
+        if not obj then
+            return nil
+        end
+    end
+    if m.isLiteral(obj.type) then
+        if rbxlibs.object[obj.type].meta then
+            for _, meta in pairs(rbxlibs.object[obj.type].meta) do
+                status.results[#status.results+1] = meta
+            end
+        end
+        return
+    end
+    local cache, makeCache = m.getRefCache(status, obj, "meta")
+    if cache then
+        for i = 1, #cache do
+            status.results[#status.results+1] = cache[i]
+        end
+        return
+    end
+    local simple = m.getSimple(obj)
+    if not simple then
+        return
+    end
+    m.searchSameFields(status, simple, "meta")
+    m.cleanResults(status.results)
+    if makeCache then
+        makeCache(status.results)
+    end
 end
 
 function m.searchFields(status, obj, key, mode)
@@ -2429,7 +2495,7 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
         elseif obj.type == "type.library" then
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.name" then
-            if mode == "ref" then
+            if mode ~= "def" then
                 local typeAlias = obj.typeAlias
                 local isModule = obj.parent and obj.parent.type == "type.module" or false
                 if isModule then
@@ -2466,20 +2532,35 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
                     end)
                 end
             end
+            if mode == "meta" then
+                if not (obj.parent and obj.parent.type == "type.module") then
+                    local libObject = rbxlibs.object[obj[1]]
+                    if libObject and libObject.meta then
+                        for _, meta in ipairs(libObject.meta) do
+                            m.pushResult(status, mode, meta)
+                        end
+                    end
+                end
+            end
         elseif obj.type == "type.module" then
-            if mode == "ref" then
+            if mode ~= "def" then
                 pushQueue(obj[2], start, true)
             end
         elseif obj.type == "type.table" then
             for _, field in ipairs(obj) do
                 pushQueue(field, start + 1)
             end
+            if mode == "meta" then
+                for _, meta in ipairs(rbxlibs.object["table"].meta) do
+                    m.pushResult(status, mode, meta)
+                end
+            end
         elseif obj.type == "type.field"
         or     obj.type == "type.index" then
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.inter"
         or     obj.type == "type.union" then
-            if mode == "ref" then
+            if mode ~= "def" then
                 for _, tp in ipairs(obj) do
                     pushQueue(tp, start, true)
                 end
@@ -2491,11 +2572,6 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
                 status.main = obj.value
             end
             pushQueue(obj.value, start, true)
-            -- local newStatus = m.status(status, obj.value)
-            -- m.searchRefs(newStatus, obj.value, mode)
-            -- for _, ref in ipairs(newStatus.results) do
-            --     pushQueue(ref, start, true)
-            -- end
         elseif obj.type ~= "type.function" then
             return false
         end
@@ -2837,11 +2913,10 @@ local function checkSameSimpleAndMergeLibrarySpecialReturns(status, results, sou
             local parent = args[1]
             if parent then
                 local newStatus = m.status(status)
-                newStatus.share = {
-                    count = 0,
-                    cacheLock = {},
-                }
+                local valueMark = newStatus.share.valueMark
+                newStatus.share.valueMark = nil
                 m.searchRefs(newStatus, parent, "def")
+                newStatus.share.valueMark = valueMark
                 for _, def in ipairs(newStatus.results) do
                     def = m.getObjectValue(def) or def
                     if def.type == "type.name" then
@@ -3530,111 +3605,81 @@ local function hasTypeName(doc, name)
     return false
 end
 
-function m.checkSameSimpleInString(status, ref, start, pushQueue, mode)
-    -- 特殊处理 ('xxx').xxx 的形式
-    if  ref.type ~= 'string'
-    and not hasTypeName(ref, 'string') then
-        return
+function m.checkSameSimpleInLiteral(status, ref, start, pushQueue, mode)
+    if mode == "meta" and m.isLiteral(ref) then
+        if rbxlibs.object[ref.type].meta then
+            for _, meta in pairs(rbxlibs.object[ref.type].meta) do
+                status.results[#status.results+1] = meta
+            end
+        end
+        return true
+    else
+        if  ref.type ~= 'string'
+        and not hasTypeName(ref, 'string') then
+            return
+        end
+        for _, child in pairs(rbxlibs.object["string"].child) do
+            pushQueue(child, start + 1)
+        end
+        return true
     end
-    for _, child in pairs(rbxlibs.object["string"].child) do
-        pushQueue(child, start + 1)
+end
+
+local function typeCheckFunctionCall(status, func, callArgs)
+    local typeChecker = require("core.type-checking")
+    typeChecker.init()
+    typeChecker.options["union-bivariance"] = true
+    typeChecker.strict = true
+    local varargs = nil
+    local argsCount = #callArgs
+    for i = 1, m.getTypeCount(func.args) do
+        local arg = func.args[i]
+        if arg and arg.type == "type.variadic" then
+            varargs = arg.value
+        end
+        local argType = varargs or arg
+        if not argType then
+            break
+        end
+        local other = callArgs[i]
+        if not other then
+            break
+        end
+        local otherType = m.getType(status, other)
+        if otherType.parent and i == argsCount then
+            if otherType.parent.type == "type.list" then
+                for j = 2, #otherType.parent do
+                    if otherType.parent[j].type == "type.variadic" then
+                        for _ = i + j - 1, #func.args do
+                            callArgs[#callArgs+1] = otherType.parent[j].value
+                        end
+                    else
+                        if #callArgs == #func.args then
+                            break
+                        end
+                        callArgs[#callArgs+1] = otherType.parent[j]
+                    end
+                end
+            elseif otherType.parent.type == "type.variadic" then
+                for _ = i + 1, #func.args do
+                    callArgs[#callArgs+1] = otherType
+                end
+            end
+        end
+        if not typeChecker.compareTypes(otherType, argType) then
+            typeChecker.init()
+            return false
+        end
     end
+    typeChecker.init()
     return true
 end
 
-function m.getBinaryReturn(tp1, tp2, op)
-    if tp1["any"] or tp2["any"] then
-        return "any"
-    end
-    if op == "+" or op == "-" then
-        if tp1["Vector3"] and tp2["Vector3"] then
-            return "Vector3"
-        end
-        if tp1["Vector2"] and tp2["Vector2"] then
-            return "Vector2"
-        end
-        if tp1["Vector3int16"] and tp2["Vector3in16"] then
-            return "Vector3in16"
-        end
-        if tp1["Vector2int16"] and tp2["Vector2in16"] then
-            return "Vector2in16"
-        end
-        if tp1["UDim"] and tp2["UDim"] then
-            return "UDim"
-        end
-        if tp1["UDim2"] and tp2["UDim2"] then
-            return "UDim2"
-        end
-        if tp1["CFrame"] and tp2["Vector3"] then
-            return "CFrame"
-        end
-    elseif op == "*" or op == "/" then
-        if (tp1["Vector3"] and (tp2["Vector3"] or tp2["number"]))
-        or (tp2["Vector3"] and (tp1["Vector3"] or tp1["number"])) then
-            return "Vector3"
-        end
-        if (tp1["Vector2"] and (tp2["Vector2"] or tp2["number"]))
-        or (tp2["Vector2"] and (tp1["Vector2"] or tp1["number"])) then
-            return "Vector2"
-        end
-        if (tp1["Vector3int16"] and (tp2["Vector3in16"] or tp2["number"]))
-        or (tp2["Vector3in16"] and (tp1["Vector3in16"] or tp1["number"])) then
-            return "Vector3in16"
-        end
-        if (tp1["Vector2int16"] and (tp2["Vector2in16"] or tp2["number"]))
-        or (tp2["Vector2in16"] and (tp1["Vector2in16"] or tp1["number"])) then
-            return "Vector2in16"
-        end
-    end
-    if op == "*" then
-        if tp1["CFrame"] and tp2["Vector3"] then
-            return "Vector3"
-        end
-        if tp1["CFrame"] and tp2["CFrame"] then
-            return "CFrame"
-        end
-    end
-    if op == ".." then
-        if (tp1["string"] or tp1["number"]) and (tp2["string"] or tp2["number"]) then
-            return "string"
-        end
-    elseif op == ">" or op == "<" or op == "<=" or op == ">=" then
-        if (tp1["string"] and tp2["string"])
-        or (tp1["number"] and tp2["number"]) then
-            return "boolean"
-        end
-    elseif tp1["number"] and tp2["number"] then
-        return "number"
-    end
-end
-
-function m.checkBinaryUnaryMark(status, a, mark)
-    if not status.share.binaryUnaryMark then
-        status.share.binaryUnaryMark = {}
-    end
-    local result = status.share.binaryUnaryMark[a]
-    if mark then
-        status.share.binaryUnaryMark[a] = mark
-    end
-    return result
-end
-
 function m.checkSameSimpleInBinaryOrUnary(status, source, start, pushQueue, mode)
-    if source.type ~= "binary" and source.type ~= "unary" then
-        source = m.getObjectValue(source)
-        if not source then
-            return
-        end
-    end
-    if source.type == "binary" then
-        if m.checkBinaryUnaryMark(status, source.parent, true) then
-            return
-        end
+    source = m.getObjectValue(source) or source
+    if source.type == "binary" or source.type == "unary" then
         local op = source.op.type
-        if op == "=="
-        or op == "~=" then
-            pushQueue(makeNameType("boolean"), start, true)
-        elseif op == "or" or op == "and" then
+        if op == "or" or op == "and" then
             for i = op == "and" and 2 or 1, 2 do
                 local newStatus = m.status(status)
                 m.searchRefs(newStatus, source[i], mode)
@@ -3643,29 +3688,54 @@ function m.checkSameSimpleInBinaryOrUnary(status, source, start, pushQueue, mode
                     pushQueue(obj, start, true)
                 end
             end
-        else
-            local rtnType = m.getBinaryReturn(
-                m.getTypeNames(status, source[1]),
-                m.getTypeNames(status, source[2]),
-                op
-            )
-            if rtnType then
-                pushQueue(makeNameType(rtnType), start, true)
-            end
-        end
-    elseif source.type == "unary" then
-        if m.checkBinaryUnaryMark(status, source.parent, true) then
-            return
-        end
-        local op = source.op.type
-        if op == "not" then
+        elseif op == "not" then
             pushQueue(makeNameType("boolean"), start, true)
         else
-            local tp = m.getTypeNames(status, source[1])
-            if op == "#" and (tp["table"] or tp["string"]) then
-                pushQueue(makeNameType("number"), start, true)
-            elseif op == "-" and tp["number"] then
-                pushQueue(makeNameType("number"), start, true)
+            if not status.share.valueMark then
+                status.share.valueMark = {}
+            end
+            local valueMark = util.shallowCopy(status.share.valueMark)
+            local tp1 = m.getType(status, source[1])
+            local tp2 = m.getType(status, source[2])
+            status.share.valueMark = valueMark
+            local foundMeta = false
+            if (tp1 and tp2) or (source.type == "unary" and tp1) then
+                local newStatus = m.status(status)
+                if op == "/" then
+                    newStatus.xd = true
+                end
+                for i = 1, 2 do
+                    newStatus.main = source[i]
+                    m.searchMeta(newStatus, source[i])
+                    for _, meta in ipairs(newStatus.results) do
+                        if (source.type == "binary" and m.binaryMeta or m.unaryMeta)[op] == meta.method then
+                            foundMeta = true
+                            local funcs = {}
+                            if meta.value.type == "type.function" then
+                                funcs[#funcs+1] = meta.value
+                            elseif meta.value.type == "type.inter" then
+                                m.getAllValuesInType(meta.value, nil, funcs)
+                            end
+                            for _, func in ipairs(funcs) do
+                                func = m.getTypeValue(newStatus, func)
+                                if func.type == "type.function" and typeCheckFunctionCall(newStatus, func, {tp1, tp2}) then
+                                    local results = {}
+                                    checkSameSimpleAndMergeTypeAnnReturns(newStatus, results, func, 1)
+                                    for _, result in ipairs(results) do
+                                        pushQueue(result, start, true)
+                                    end
+                                    break
+                                end
+                            end
+                        end
+                    end
+                    if foundMeta or source.type == "unary" then
+                        break
+                    end
+                end
+            end
+            if not foundMeta and (op == "==" or op == "~=") then
+                pushQueue(makeNameType("boolean"), start, true)
             end
         end
     end
@@ -3843,6 +3913,10 @@ function m.pushResult(status, mode, ref, simple)
         elseif ref.type == 'doc.field' then
             results[#results+1] = ref
         end
+    elseif mode == 'meta' then
+        if ref.type == "type.meta" then
+            results[#results+1] = ref
+        end
     end
 end
 
@@ -3909,7 +3983,7 @@ function m.checkSameSimple(status, simple, ref, start, force, mode, pushQueue)
         local skipInfer = m.checkSameSimpleByBindDocs(status, ref, i, pushQueue, cmode)
                     or    m.checkSameSimpleByDoc(status, ref, i, pushQueue, cmode)
                     or    m.checkSameSimpleByTypeAnn(status, ref, i, pushQueue, cmode)
-                    or    m.checkSameSimpleInString(status, ref, i, pushQueue, cmode)
+                    or    m.checkSameSimpleInLiteral(status, ref, i, pushQueue, cmode)
         -- 检查自己是字符串的分支情况
         if not skipInfer and not skipSearch then
             -- 穿透 self:func 与 mt:func
@@ -3928,9 +4002,9 @@ function m.checkSameSimple(status, simple, ref, start, force, mode, pushQueue)
             m.checkSameSimpleInParamSelf(status, ref, i, pushQueue)
             -- 自己是 call 的情况
             m.checkSameSimpleInCall(status, ref, i, pushQueue, cmode)
-            -- 检查形如 for k,v in pairs()/ipairs() do end 的情况
             m.checkSameSimpleInCallbackParam(status, ref, i, pushQueue)
             m.checkSameSimpleInBinaryOrUnary(status, ref, i, pushQueue, cmode)
+            -- 检查形如 for k,v in pairs()/ipairs() do end 的情况
             m.checkSameSimpleAsKeyOrValueInForPairs(status, ref, i, pushQueue)
             if cmode == 'ref' then
                 -- 检查形如 { a = f } 的情况
@@ -4590,38 +4664,50 @@ function m.hasType(status, source, type)
     return false
 end
 
-function m.getTypeNames(status, source)
+-- TODO: Add Cache
+function m.getType(status, source)
     if not source then
         return
     end
-    while source.type == 'paren' do
-        source = source.exp
-        if not source then
-            return
-        end
-    end
+    source = m.getObjectValue(source) or source
     if m.isLiteral(source) then
-        return {[source.type] = true}
+        return makeNameType(source.type)
+    elseif m.typeAnnTypes[source.type] then
+        local tp = m.getTypeValue(status, source)
+        return tp
     end
-    local names = {}
     local newStatus = m.status(status, source)
     m.searchRefs(newStatus, source, "def")
+    local union = {
+        type = "type.union"
+    }
     for _, def in ipairs(newStatus.results) do
         def = m.getObjectValue(def) or def
-        if m.typeAnnTypes[def.type] then
-            def = m.getTypeValue(newStatus, def) or def
-            if def.type == "type.name" then
-                names[def[1]] = true
-            elseif def.type == "type.table" then
-                names["table"] = true
-            elseif def.type == "type.function" then
-                names["function"] = true
-            end
-        elseif m.isLiteral(def) then
-            names[def.type] = true
+        if m.isLiteral(def) then
+            union[#union+1] = makeNameType(def.type)
+        elseif m.typeAnnTypes[def.type] then
+            local tp = m.getTypeValue(status, def)
+            union[#union+1] = tp
         end
     end
-    return names
+    if #union == 0 then
+        return
+    elseif #union == 1 then
+        union = union[1]
+    end
+    return union
+end
+
+function m.getTypeCount(list)
+    local number = 0
+    for _, arg in ipairs(list) do
+        if arg.type == "type.variadic" then
+            number = math.huge
+        else
+            number = number + 1
+        end
+    end
+    return number
 end
 
 function m.isSameValue(status, a, b)
@@ -5247,6 +5333,14 @@ function m.requestInfer(obj, interface, deep, options)
     local status = m.status(nil, obj, interface, deep, options)
 
     m.searchInfer(status, obj)
+
+    return status.results, status.share.count
+end
+
+function m.requestMeta(obj, interface, deep, options)
+    local status = m.status(nil, obj, interface, deep, options)
+
+    m.searchMeta(status, obj)
 
     return status.results, status.share.count
 end

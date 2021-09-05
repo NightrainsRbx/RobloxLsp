@@ -13,17 +13,17 @@ type META = {
         __add: (number, number) -> number,
         __sub: (number, number) -> number,
         __mul:
-            ((number, number) -> number),
-            -- & ((number, Vector3) -> Vector3)
-            -- & ((number, Vector2) -> Vector2)
-            -- & ((number, Vector3int16) -> Vector3int16)
-            -- & ((number, Vector2int16) -> Vector2int16),
+            ((number, number) -> number)
+            & ((number, Vector3) -> Vector3)
+            & ((number, Vector2) -> Vector2)
+            & ((number, Vector3int16) -> Vector3int16)
+            & ((number, Vector2int16) -> Vector2int16),
         __div:
-            ((number, number) -> number),
-            -- & ((number, Vector3) -> Vector3)
-            -- & ((number, Vector2) -> Vector2)
-            -- & ((number, Vector3int16) -> Vector3int16)
-            -- & ((number, Vector2int16) -> Vector2int16),
+            ((number, number) -> number)
+            & ((number, Vector3) -> Vector3)
+            & ((number, Vector2) -> Vector2)
+            & ((number, Vector3int16) -> Vector3int16)
+            & ((number, Vector2int16) -> Vector2int16),
         __mod: (number, number) -> number,
         __pow: (number, number) -> number,
         __lt: (number, number) -> boolean,
@@ -72,7 +72,7 @@ type META = {
         __mul:
             ((CFrame, CFrame) -> CFrame)
             & ((CFrame, Vector3) -> Vector3),
-        __add: (CFrame, Vector3) -> Vector3,
-        __sub: (CFrame, Vector3) -> Vector3,
+        __add: (CFrame, Vector3) -> CFrame,
+        __sub: (CFrame, Vector3) -> CFrame,
     }
 }

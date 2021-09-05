@@ -59,18 +59,6 @@ local function getSimpleString(source)
     return nil
 end
 
-local function getTypeCount(list)
-    local number = 0
-    for _, arg in ipairs(list) do
-        if arg.type == "type.variadic" then
-            number = math.huge
-        else
-            number = number + 1
-        end
-    end
-    return number
-end
-
 local function isIndexValue(obj)
     if obj.original then
         obj = obj.original
@@ -380,23 +368,6 @@ function m.getType(source)
     return tp
 end
 
-function m.getTypeNames(source, names)
-    names = names or {}
-    local tp = m.normalizeType(m.getType(source))
-    if tp.type == "type.name" then
-        names[tp[1]] = true
-    elseif tp.type == "type.table" then
-        names["table"] = true
-    elseif tp.type == "type.function" then
-        names["function"] = true
-    elseif tp.type == "type.union" and m.options["union-bivariance"] then
-        for _, value in ipairs(guide.getAllValuesInType(tp)) do
-            m.getTypeNames(value, names)
-        end
-    end
-    return names
-end
-
 function m.hasTypeAnn(source, checkArgs)
     if guide.typeAnnTypes[source.type] then
         return true
@@ -676,7 +647,7 @@ function m.compareTypes(a, b, mark)
     elseif b.type == "type.list" then
         local a = a.type == "type.list" and a or {a}
         local varargsA, varargsB = nil, nil
-        for i = 1, getTypeCount(b) do
+        for i = 1, guide.getTypeCount(b) do
             if varargsA and varargsB then
                 break
             end
@@ -724,7 +695,7 @@ function m.compareTypes(a, b, mark)
         end
         if a.type == "type.function" then
             if a.args then
-                if #a.args > getTypeCount(b.args) then
+                if #a.args > guide.getTypeCount(b.args) then
                     return false
                 end
                 if not m.compareTypes(a.args, b.args, mark) then
@@ -980,7 +951,7 @@ local function checkCallFunction(func, call, pushResult)
     local argChecked = 0
     local tuple = nil
     local varargs = nil
-    for i = 1, getTypeCount(func.args) do
+    for i = 1, guide.getTypeCount(func.args) do
         local arg = func.args[i]
         if arg and arg.type == "type.variadic" then
             varargs = arg.value
@@ -1048,15 +1019,14 @@ local function checkCallFunction(func, call, pushResult)
     return true
 end
 
-local function checkCall(source, pushResult)
-    if not source.node then
+local function checkCall(source, pushResult, funcType)
+    if not source.node and not funcType then
         return
     end
-    if m.hasTypeAnn(source.node, true) then
-        local funcType = m.normalizeType(m.getType(source.node))
+    if funcType or m.hasTypeAnn(source.node, true) then
+        funcType = m.normalizeType(funcType or m.getType(source.node))
         if funcType.type == "type.function" then
-            checkCallFunction(funcType, source, pushResult)
-            return
+            return checkCallFunction(funcType, source, pushResult)
         elseif funcType.type == "type.inter" or (m.options["union-bivariance"] and funcType.type == "type.union") then
             local funcs = {}
             for _, value in ipairs(guide.getAllValuesInType(funcType)) do
@@ -1072,7 +1042,7 @@ local function checkCall(source, pushResult)
                 end
                 for _, v in ipairs(funcs) do
                     if checkCallFunction(v, source, push) then
-                        return
+                        return true
                     end
                 end
                 if #results > 0 then
@@ -1082,7 +1052,7 @@ local function checkCall(source, pushResult)
                     results[1].message = results[1].message .. string.format(" Others %d overloads failed.", #results - 1)
                     pushResult(results[1])
                 end
-                return
+                return true
             end
         end
         if not m.hasTypeName(funcType, "any") and not m.hasTypeName(funcType, "function") then
@@ -1322,15 +1292,48 @@ end
 
 local function checkBinary(source, pushResult)
     local op = source.op.type
-    if op == "==" or op == "~=" or op == "and" or op == "or" then
+    if op == "and" or op == "or" then
         return
     end
-    if not guide.getBinaryReturn(m.getTypeNames(source[1]), m.getTypeNames(source[2]), op) then
+    if m.hasTypeName(m.getType(source[1]), "any")
+    or m.hasTypeName(m.getType(source[2]), "any") then
+        return
+    end
+    local results = {}
+    local function push(result)
+        results[#results+1] = result
+    end
+    local call = {
+        args = source,
+        start = source.start,
+        finish = source.finish
+    }
+    local foundMeta = false
+    for i = 1, 2 do
+        local metamethods = guide.requestMeta(source[i], vm.interface, 0, inferOptions)
+        for _, meta in ipairs(metamethods) do
+            if guide.binaryMeta[op] == meta.method then
+                foundMeta = true
+                if checkCall(call, push, meta.value) and m.options["union-bivariance"] then
+                    return
+                end
+            end
+        end
+        if foundMeta then
+            break
+        end
+    end
+    if not foundMeta then
+        if op == "==" or op == "~=" then
+            return
+        end
         pushResult {
             start = source.start,
             finish = source.finish,
-            message = lang.script('TYPE_BINARY', buildType(m.getType(source[1])), buildType(m.getType(source[2])), op)
+            message = lang.script("TYPE_BINARY", buildType(m.getType(source[1])), buildType(m.getType(source[2])), op)
         }
+    elseif #results > 0 then
+        pushResult(results[1])
     end
 end
 
@@ -1339,18 +1342,20 @@ local function checkUnary(source, pushResult)
     if op == "not" then
         return
     end
-    local tp = m.getTypeNames(source[1])
-    if tp["any"] then
+    if m.hasTypeName(m.getType(source[1]), "any") then
         return
     end
-    if (op == "#" and not (tp["table"] or tp["string"]))
-    or (op == "-" and not tp["number"]) then
-        pushResult {
-            start = source.start,
-            finish = source.finish,
-            message = lang.script('TYPE_UNARY', buildType(m.getType(source[1])), op)
-        }
+    local metamethods = guide.requestMeta(source[1], vm.interface, 0, inferOptions)
+    for _, meta in ipairs(metamethods) do
+        if guide.unaryMeta[op] == meta.method then
+            return
+        end
     end
+    pushResult {
+        start = source.start,
+        finish = source.finish,
+        message = lang.script("TYPE_UNARY", buildType(m.getType(source[1])), op)
+    }
 end
 
 local function getCache(mode)
@@ -1397,6 +1402,15 @@ local function checkTypecheckModeAt(ast, offset)
     return true
 end
 
+function m.init()
+    m.strict = config.config.typeChecking.mode == "Strict"
+    m.cache = getCache(tostring(m.strict))
+    m.options = util.mergeTable(
+        util.shallowCopy(define.TypeCheckingOptions),
+        config.config.typeChecking.options
+    )
+end
+
 function m.check(uri)
     local ast = files.getAst(uri)
     if not ast then
@@ -1404,13 +1418,7 @@ function m.check(uri)
     end
 
     ast = ast.ast
-
-    m.strict = config.config.typeChecking.mode == "Strict"
-    m.cache = getCache(tostring(m.strict))
-    m.options = util.mergeTable(
-        util.shallowCopy(define.TypeCheckingOptions),
-        config.config.typeChecking.options
-    )
+    m.init()
 
     local results = {}
 
