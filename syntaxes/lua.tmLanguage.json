@@ -229,14 +229,6 @@
 					"name": "keyword.control.lua"
 				},
 				{
-					"match":"(?<![:.])\\s*\\b(self)\\b",
-					"captures": {
-						"1": {
-							"name": "variable.language.self.lua"
-						}
-					}
-				},
-				{
 					"match": "\\b(__add|__call|__concat|__div|__eq|__index|__le|__len|__lt|__metatable|__mod|__mode|__mul|__newindex|__pow|__sub|__tostring|__unm)\\b",
 					"name": "variable.language.metamethod.lua"
 				},
@@ -254,7 +246,7 @@
 				},
 				{
 					"match": "\\b(and|or|not)\\b",
-					"name": "keyword.operator.logical.lua"
+					"name": "keyword.operator.logical.lua keyword.operator.wordlike.lua"
 				},
 				{
 					"match": "(\\+=|-=|/=|\\*=|%=|\\^=|\\.\\.=|=)",
@@ -372,6 +364,10 @@
 							"name": "support.function.lua"
 						}
 					}
+				},
+				{
+					"match":"\\b(self)\\b",
+					"name": "variable.language.self.lua"
 				},
 				{
 					"match": "\\b([a-zA-Z_]\\w*)\\b",
