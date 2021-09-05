@@ -1004,32 +1004,39 @@ local function checkEqualEnumInString(ast, text, offset, results)
     checkEqualEnumLeft(ast, text, offset, source, results)
 end
 
-local function checkConnectFunction(ast, text, offset, results)
+
+local function checkCallbackFunction(ast, text, offset, results)
     local source = guide.eachSourceContain(ast.ast, offset, function (src)
-        if src.type == "callargs" then
-            local sm = guide.getSimpleName(src.parent.node)
-            if sm == "Connect" or sm == "ConnectParallel" then
-                return src
-            end
+        if src.parent and src.parent.type == "callargs" then
+            return src
         end
     end)
-    if source then
-        if not ((#source == 1 and source[1].type == "getglobal") or (#source == 2 and source[2].type == "getglobal"))  then
-            return
-        end
-        local def = vm.getDefs(source.parent.node.node)[1]
-        if def and def.type == "type.library" then
-            if def.value.params then
-                local params = {}
-                for _, param in ipairs(def.value.params) do
-                    params[#params+1] = param.paramName[1]
+    if source and source.type == "getglobal" and matchKey(source[1], "function") then
+        local call, argIndex = guide.getCallAndArgIndex(source)
+        for _, def in ipairs(vm.getDefs(call.node, 0)) do
+            if def.type == "type.function" then
+                local callback = def.args[argIndex]
+                if callback then
+                    callback = guide.getObjectValue(callback) or callback
                 end
-                if #params > 0 then
-                    results[#results+1] = {
-                        label       = ("function(%s)"):format(table.concat(params, ", ")),
-                        kind        = define.CompletionItemKind.Snippet,
-                        insertText = ("function(%s)\n\t${0}\nend"):format(table.concat(params, ", ")),
-                    }
+                if callback and callback.type == "type.function" then
+                    local params = {}
+                    for _, param in ipairs(callback.args) do
+                        if param.paramName then
+                            params[#params+1] = param.paramName[1]
+                        elseif param.type == "type.variadic" then
+                            params[#params+1] = "..."
+                        else
+                            break
+                        end
+                    end
+                    if #params > 0 then
+                        results[#results+1] = {
+                            label       = ("function(%s)"):format(table.concat(params, ", ")),
+                            kind        = define.CompletionItemKind.Snippet,
+                            insertText = ("function(%s)\n\t${0}\nend"):format(table.concat(params, ", ")),
+                        }
+                    end
                 end
             end
         end
@@ -1076,7 +1083,7 @@ local function trySpecial(ast, text, offset, results)
     checkLenPlusOne(ast, text, offset, results)
     -- type(o) ==
     checkEqualEnum(ast, text, offset, results)
-    checkConnectFunction(ast, text, offset, results)
+    checkCallbackFunction(ast, text, offset, results)
 end
 
 local function tryIndex(ast, text, offset, results)
