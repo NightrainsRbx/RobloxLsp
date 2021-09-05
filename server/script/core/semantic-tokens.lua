@@ -83,6 +83,12 @@ Care['getlocal'] = function (source, results)
         return
     end
     -- 4. 函数的参数
+
+    -- 6. 函数调用
+    if  source.parent.type == 'call'
+    and source.parent.node == source then
+        return
+    end
     if loc.parent and loc.parent.type == 'funcargs' then
         results[#results+1] = {
             start      = source.start,
@@ -90,11 +96,6 @@ Care['getlocal'] = function (source, results)
             type       = define.TokenTypes.parameter,
             modifiers  = define.TokenModifiers.declaration,
         }
-        return
-    end
-    -- 6. 函数调用
-    if  source.parent.type == 'call'
-    and source.parent.node == source then
         return
     end
     -- 7. 其他
