@@ -1021,7 +1021,7 @@ local function checkCallbackFunction(ast, text, offset, results)
                         callback = callback.typeAnn
                     end
                     callback = guide.getObjectValue(callback) or callback
-                    if callback.type ~= "type.function" then
+                    if guide.typeAnnTypes[callback.type] and callback.type ~= "type.function" then
                         for _, infer in ipairs(vm.getInfers(callback, 0, {fullType = true})) do
                             if infer.source and infer.source.type == "type.function" then
                                 callback = infer.source
