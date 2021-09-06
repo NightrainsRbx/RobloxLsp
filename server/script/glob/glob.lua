@@ -85,10 +85,7 @@ function mt:__call(path)
     if self.options.ignoreCase then
         path = path:lower()
     end
-<<<<<<< HEAD
-=======
     path = path:gsub('^[/\\]+', '')
->>>>>>> origin/master
     for _, refused in ipairs(self.refused) do
         if refused(path) then
             return false

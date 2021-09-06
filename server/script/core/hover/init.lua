@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-return require 'core.hover.hover'
-=======
 local files      = require 'files'
 local guide      = require 'core.guide'
 local vm         = require 'vm'
@@ -286,4 +283,3 @@ return {
     get   = getHover,
     byUri = getHoverByUri,
 }
->>>>>>> origin/master

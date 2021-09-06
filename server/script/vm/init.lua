@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-return require 'vm.vm'
-=======
 local vm = require 'vm.vm'
 require 'vm.getGlobals'
 require 'vm.getDocs'
@@ -15,4 +12,3 @@ require 'vm.getLinks'
 require 'vm.guideInterface'
 require 'vm.getType'
 return vm
->>>>>>> origin/master

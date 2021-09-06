@@ -1,12 +1,5 @@
 {
     "Lua.runtime.version": "Lua 5.4",
-<<<<<<< HEAD
-    "Lua.diagnostics.disable": [
-        "lowercase-global",
-    ],
-    "Lua.workspace.ignoreDir": [
-        "client"
-=======
     "Lua.workspace.ignoreDir": [
         "server/meta",
         "server/locale",
@@ -29,6 +22,5 @@
     "Lua.hover.previewFields": 10,
     "Lua.diagnostics.disable": [
         "undefined-field",
->>>>>>> origin/master
     ]
 }

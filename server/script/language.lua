@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-local fs = require 'bee.filesystem'
-local lni = require 'lni'
-=======
 local fs      = require 'bee.filesystem'
 local util    = require 'utility'
 local lloader = require 'locale-loader'
->>>>>>> origin/master
 
 local function supportLanguage()
     local list = {}
@@ -17,25 +12,15 @@ local function supportLanguage()
     return list
 end
 
-<<<<<<< HEAD
-local function osLanguage()
-    return LANG:lower()
-end
-
-=======
->>>>>>> origin/master
 local function getLanguage(id)
     local support = supportLanguage()
     -- 检查是否支持语言
     if support[id] then
         return id
     end
-<<<<<<< HEAD
-=======
     if not id then
         return 'en-us'
     end
->>>>>>> origin/master
     -- 根据语言的前2个字母来找近似语言
     for _, lang in ipairs(support) do
         if lang:sub(1, 2) == id:sub(1, 2) then
@@ -43,18 +28,6 @@ local function getLanguage(id)
         end
     end
     -- 使用英文
-<<<<<<< HEAD
-    return 'enUS'
-end
-
-local function loadFileByLanguage(name, language)
-    local path = ROOT / 'locale' / language / (name .. '.lni')
-    local buf = io.load(path)
-    if not buf then
-        return {}
-    end
-    local suc, tbl = xpcall(lni, log.error, buf, path:string())
-=======
     return 'en-us'
 end
 
@@ -65,7 +38,6 @@ local function loadFileByLanguage(name, language)
         return {}
     end
     local suc, tbl = xpcall(lloader, log.error, buf, path:string())
->>>>>>> origin/master
     if not suc then
         return {}
     end
@@ -114,13 +86,8 @@ local function formatAsTable(str, ...)
 end
 
 local function loadLang(name, language)
-<<<<<<< HEAD
-    local tbl = loadFileByLanguage(name, 'en-US')
-    if language ~= 'en-US' then
-=======
     local tbl = loadFileByLanguage(name, 'en-us')
     if language ~= 'en-us' then
->>>>>>> origin/master
         local other = loadFileByLanguage(name, language)
         for k, v in pairs(other) do
             tbl[k] = v
@@ -133,12 +100,9 @@ local function loadLang(name, language)
         end,
         __call = function (self, key, ...)
             local str = self[key]
-<<<<<<< HEAD
-=======
             if not ... then
                 return str
             end
->>>>>>> origin/master
             local suc, res
             if type(...) == 'table' then
                 suc, res = pcall(formatAsTable, str, ...)
@@ -158,23 +122,6 @@ local function loadLang(name, language)
     })
 end
 
-<<<<<<< HEAD
-local function init()
-    local id = osLanguage()
-    local language = getLanguage(id)
-    log.info(('VSC language: %s'):format(id))
-    log.info(('LS  language: %s'):format(language))
-    return setmetatable({ id = language }, {
-        __index = function (self, name)
-            local tbl = loadLang(name, language)
-            self[name] = tbl
-            return tbl
-        end,
-    })
-end
-
-return init()
-=======
 return setmetatable({
     id = 'en-us',
 }, {
@@ -193,4 +140,3 @@ return setmetatable({
         self.id = language
     end,
 })
->>>>>>> origin/master

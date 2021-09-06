@@ -4,10 +4,7 @@ exports.deactivate = exports.activate = void 0;
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
-<<<<<<< HEAD
-=======
 const vscode = require("vscode");
->>>>>>> origin/master
 const vscode_1 = require("vscode");
 const node_1 = require("vscode-languageclient/node");
 let defaultClient;
@@ -18,19 +15,11 @@ function registerCustomCommands(context) {
         if (data.action == 'add') {
             let value = config.get(data.key);
             value.push(data.value);
-<<<<<<< HEAD
-            config.update(data.key, value);
-            return;
-        }
-        if (data.action == 'set') {
-            config.update(data.key, data.value);
-=======
             config.update(data.key, value, data.global);
             return;
         }
         if (data.action == 'set') {
             config.update(data.key, data.value, data.global);
->>>>>>> origin/master
             return;
         }
     }));
@@ -76,16 +65,10 @@ function start(context, documentSelector, folder) {
         },
     };
     let config = vscode_1.workspace.getConfiguration(undefined, folder);
-<<<<<<< HEAD
-    let develop = config.get("Lua.develop.enable");
-    let debuggerPort = config.get("Lua.develop.debuggerPort");
-    let debuggerWait = config.get("Lua.develop.debuggerWait");
-=======
     let develop = config.get("robloxLsp.develop.enable");
     let debuggerPort = config.get("robloxLsp.develop.debuggerPort");
     let debuggerWait = config.get("robloxLsp.develop.debuggerWait");
     let commandParam = config.get("robloxLsp.misc.parameters");
->>>>>>> origin/master
     let command;
     let platform = os.platform();
     switch (platform) {
@@ -105,18 +88,6 @@ function start(context, documentSelector, folder) {
         command: command,
         args: [
             '-E',
-<<<<<<< HEAD
-            '-e',
-            `DEVELOP=${develop};DBGPORT=${debuggerPort};DBGWAIT=${debuggerWait}`,
-            context.asAbsolutePath(path.join('server', 'main.lua'))
-        ]
-    };
-    let client = new node_1.LanguageClient('Lua', 'Lua', serverOptions, clientOptions);
-    client.registerProposedFeatures();
-    client.start();
-    return client;
-}
-=======
             context.asAbsolutePath(path.join('server', 'main.lua')),
             `--develop=${develop}`,
             `--dbgport=${debuggerPort}`,
@@ -249,7 +220,6 @@ function onDecorations(client) {
         }
     });
 }
->>>>>>> origin/master
 function activate(context) {
     registerCustomCommands(context);
     function didOpenTextDocument(document) {
@@ -274,14 +244,9 @@ function activate(context) {
         // If we have nested workspace folders we only start a server on the outer most workspace folder.
         folder = getOuterMostWorkspaceFolder(folder);
         if (!clients.has(folder.uri.toString())) {
-<<<<<<< HEAD
-            let client = start(context, [
-                { scheme: 'file', language: 'lua', pattern: `${folder.uri.fsPath}/**/*` }
-=======
             let pattern = folder.uri.fsPath.replace(/(\[|\])/g, '[$1]') + '/**/*';
             let client = start(context, [
                 { scheme: 'file', language: 'lua', pattern: pattern }
->>>>>>> origin/master
             ], folder);
             clients.set(folder.uri.toString(), client);
         }

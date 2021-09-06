@@ -1,11 +1,8 @@
 import * as path from 'path';
 import * as os from 'os';
 import * as fs from 'fs';
-<<<<<<< HEAD
-=======
 import * as vscode from 'vscode';
 import * as types from 'vscode-languageserver-types';
->>>>>>> origin/master
 import {
     workspace as Workspace,
     ExtensionContext,
@@ -14,11 +11,8 @@ import {
     TextDocument,
     WorkspaceFolder,
     Uri,
-<<<<<<< HEAD
-=======
     window,
     TextEditor,
->>>>>>> origin/master
 } from 'vscode';
 import {
     LanguageClient,
@@ -36,19 +30,11 @@ function registerCustomCommands(context: ExtensionContext) {
         if (data.action == 'add') {
             let value: any[] = config.get(data.key);
             value.push(data.value);
-<<<<<<< HEAD
-            config.update(data.key, value);
-            return;
-        }
-        if (data.action == 'set') {
-            config.update(data.key, data.value);
-=======
             config.update(data.key, value, data.global);
             return;
         }
         if (data.action == 'set') {
             config.update(data.key, data.value, data.global);
->>>>>>> origin/master
             return;
         }
     }))
@@ -87,11 +73,7 @@ function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
     return folder;
 }
 
-<<<<<<< HEAD
-function start(context: ExtensionContext, documentSelector: DocumentSelector, folder: WorkspaceFolder): LanguageClient {
-=======
 function start(context: ExtensionContext, documentSelector: DocumentSelector, folder: WorkspaceFolder) {
->>>>>>> origin/master
     // Options to control the language client
     let clientOptions: LanguageClientOptions = {
         // Register the server for plain text documents
@@ -104,16 +86,10 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
     };
 
     let config = Workspace.getConfiguration(undefined, folder);
-<<<<<<< HEAD
-    let develop: boolean = config.get("Lua.develop.enable");
-    let debuggerPort: number = config.get("Lua.develop.debuggerPort");
-    let debuggerWait: boolean = config.get("Lua.develop.debuggerWait");
-=======
     let develop: boolean = config.get("robloxLsp.develop.enable");
     let debuggerPort: number = config.get("robloxLsp.develop.debuggerPort");
     let debuggerWait: boolean = config.get("robloxLsp.develop.debuggerWait");
     let commandParam: string = config.get("robloxLsp.misc.parameters");
->>>>>>> origin/master
     let command: string;
     let platform: string = os.platform();
     switch (platform) {
@@ -155,14 +131,6 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
         command: command,
         args: [
             '-E',
-<<<<<<< HEAD
-            '-e',
-            `DEVELOP=${develop};DBGPORT=${debuggerPort};DBGWAIT=${debuggerWait}`,
-            context.asAbsolutePath(path.join(
-                'server',
-                'main.lua',
-            ))
-=======
             context.asAbsolutePath(path.join(
                 'server',
                 'main.lua',
@@ -171,7 +139,6 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
             `--dbgport=${debuggerPort}`,
             `--dbgwait=${debuggerWait}`,
             commandParam,
->>>>>>> origin/master
         ]
     };
 
@@ -182,10 +149,6 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
         clientOptions
     );
 
-<<<<<<< HEAD
-    client.registerProposedFeatures();
-    client.start();
-=======
     // client.registerProposedFeatures();
     client.start();
     client.onReady().then(() => {
@@ -193,16 +156,10 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
         onDecorations(client);
         statusBar(client);
     });
->>>>>>> origin/master
 
     return client;
 }
 
-<<<<<<< HEAD
-export function activate(context: ExtensionContext) {
-    registerCustomCommands(context);
-    function didOpenTextDocument(document: TextDocument): void {
-=======
 let barCount = 0;
 function statusBar(client: LanguageClient) {
     let bar = window.createStatusBarItem();
@@ -333,7 +290,6 @@ function onDecorations(client: LanguageClient) {
 export function activate(context: ExtensionContext) {
     registerCustomCommands(context);
     function didOpenTextDocument(document: TextDocument) {
->>>>>>> origin/master
         // We are only interested in language mode text
         if (document.languageId !== 'lua' || (document.uri.scheme !== 'file' && document.uri.scheme !== 'untitled')) {
             return;
@@ -358,14 +314,9 @@ export function activate(context: ExtensionContext) {
         folder = getOuterMostWorkspaceFolder(folder);
 
         if (!clients.has(folder.uri.toString())) {
-<<<<<<< HEAD
-            let client = start(context, [
-                { scheme: 'file', language: 'lua', pattern: `${folder.uri.fsPath}/**/*` }
-=======
             let pattern: string = folder.uri.fsPath.replace(/(\[|\])/g, '[$1]') + '/**/*';
             let client = start(context, [
                 { scheme: 'file', language: 'lua', pattern: pattern }
->>>>>>> origin/master
             ], folder);
             clients.set(folder.uri.toString(), client);
         }
