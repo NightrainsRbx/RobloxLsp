@@ -160,7 +160,7 @@ async function openUpdatesWindow(context: vscode.ExtensionContext) {
             </div>
         </body>
         </html>`;
-        await context.globalState.update("sawVersionLogNew2", true);
+        await context.globalState.update("sawVersionLogNew3", true);
     }
 }
 

@@ -166,7 +166,7 @@ function openUpdatesWindow(context) {
             </div>
         </body>
         </html>`;
-            yield context.globalState.update("sawVersionLogNew2", true);
+            yield context.globalState.update("sawVersionLogNew3", true);
         }
     });
 }
