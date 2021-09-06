@@ -44,6 +44,11 @@ local parser = m.P {
 }
 
 ---@class gitignore
+---@field pattern string[]
+---@field options table
+---@field errors table[]
+---@field matcher table
+---@field interface function[]
 local mt = {}
 mt.__index = mt
 mt.__name = 'gitignore'
@@ -111,6 +116,7 @@ function mt:checkDirectory(catch, path, matcher)
 end
 
 function mt:simpleMatch(path)
+    path = self:getRelativePath(path)
     for i = #self.matcher, 1, -1 do
         local matcher = self.matcher[i]
         local catch = matcher(path)
@@ -142,18 +148,51 @@ function mt:finishMatch(path)
     return false
 end
 
-function mt:scan(callback)
+function mt:getRelativePath(path)
+    local root = self.options.root or ''
+    if self.options.ignoreCase then
+        path = path:lower()
+        root = root:lower()
+    end
+    path = path:gsub('^[/\\]+', ''):gsub('[/\\]+', '/')
+    root = root:gsub('^[/\\]+', ''):gsub('[/\\]+', '/')
+    if path:sub(1, #root) == root then
+        path = path:sub(#root + 1)
+        path = path:gsub('^[/\\]+', '')
+    end
+    return path
+end
+
+function mt:scan(path, callback)
     local files = {}
     if type(callback) ~= 'function' then
         callback = nil
     end
     local list = {}
-    local result = self:callInterface('list', '')
-    if type(result) ~= 'table' then
-        return files
+
+    local function check(current)
+        local fileType = self:callInterface('type', current)
+        if fileType == 'file' then
+            if callback then
+                callback(current)
+            end
+            files[#files+1] = current
+        elseif fileType == 'directory' then
+            local result = self:callInterface('list', current)
+            if type(result) == 'table' then
+                for _, path in ipairs(result) do
+                    local filename = path:match '([^/\\]+)[/\\]*$'
+                    if  filename
+                    and filename ~= '.'
+                    and filename ~= '..' then
+                        list[#list+1] = path
+                    end
+                end
+            end
+        end
     end
-    for _, path in ipairs(result) do
-        list[#list+1] = path:match '([^/\\]+)[/\\]*$'
+    if not self:simpleMatch(path) then
+        check(path)
     end
     while #list > 0 do
         local current = list[#list]
@@ -162,34 +201,14 @@ function mt:scan(callback)
         end
         list[#list] = nil
         if not self:simpleMatch(current) then
-            local fileType = self:callInterface('type', current)
-            if fileType == 'file' then
-                if callback then
-                    callback(current)
-                end
-                files[#files+1] = current
-            elseif fileType == 'directory' then
-                local result = self:callInterface('list', current)
-                if type(result) == 'table' then
-                    for _, path in ipairs(result) do
-                        local filename = path:match '([^/\\]+)[/\\]*$'
-                        if  filename
-                        and filename ~= '.'
-                        and filename ~= '..' then
-                            list[#list+1] = current .. '/' .. filename
-                        end
-                    end
-                end
-            end
+            check(current)
         end
     end
     return files
 end
 
 function mt:__call(path)
-    if self.options.ignoreCase then
-        path = path:lower()
-    end
+    path = self:getRelativePath(path)
     return self:finishMatch(path)
 end
 
@@ -202,18 +221,18 @@ return function (pattern, options, interface)
         interface = {},
     }, mt)
 
+    if type(options) == 'table' then
+        for op, val in pairs(options) do
+            self:setOption(op, val)
+        end
+    end
+
     if type(pattern) == 'table' then
         for _, pat in ipairs(pattern) do
             self:addPattern(pat)
         end
     else
         self:addPattern(pattern)
-    end
-
-    if type(options) == 'table' then
-        for op, val in pairs(options) do
-            self:setOption(op, val)
-        end
     end
 
     if type(interface) == 'table' then

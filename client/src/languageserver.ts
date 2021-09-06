@@ -1,6 +1,8 @@
 import * as path from 'path';
 import * as os from 'os';
 import * as fs from 'fs';
+import * as vscode from 'vscode';
+import * as types from 'vscode-languageserver-types';
 import {
     workspace as Workspace,
     ExtensionContext,
@@ -9,6 +11,8 @@ import {
     TextDocument,
     WorkspaceFolder,
     Uri,
+    window,
+    TextEditor,
 } from 'vscode';
 import {
     LanguageClient,
@@ -26,11 +30,11 @@ function registerCustomCommands(context: ExtensionContext) {
         if (data.action == 'add') {
             let value: any[] = config.get(data.key);
             value.push(data.value);
-            config.update(data.key, value);
+            config.update(data.key, value, data.global);
             return;
         }
         if (data.action == 'set') {
-            config.update(data.key, data.value);
+            config.update(data.key, data.value, data.global);
             return;
         }
     }))
@@ -69,7 +73,7 @@ function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
     return folder;
 }
 
-function start(context: ExtensionContext, documentSelector: DocumentSelector, folder: WorkspaceFolder): LanguageClient {
+function start(context: ExtensionContext, documentSelector: DocumentSelector, folder: WorkspaceFolder) {
     // Options to control the language client
     let clientOptions: LanguageClientOptions = {
         // Register the server for plain text documents
@@ -82,9 +86,10 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
     };
 
     let config = Workspace.getConfiguration(undefined, folder);
-    let develop: boolean = config.get("Lua.develop.enable");
-    let debuggerPort: number = config.get("Lua.develop.debuggerPort");
-    let debuggerWait: boolean = config.get("Lua.develop.debuggerWait");
+    let develop: boolean = config.get("robloxLsp.develop.enable");
+    let debuggerPort: number = config.get("robloxLsp.develop.debuggerPort");
+    let debuggerWait: boolean = config.get("robloxLsp.develop.debuggerWait");
+    let commandParam: string = config.get("robloxLsp.misc.parameters");
     let command: string;
     let platform: string = os.platform();
     switch (platform) {
@@ -126,12 +131,14 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
         command: command,
         args: [
             '-E',
-            '-e',
-            `DEVELOP=${develop};DBGPORT=${debuggerPort};DBGWAIT=${debuggerWait}`,
             context.asAbsolutePath(path.join(
                 'server',
                 'main.lua',
-            ))
+            )),
+            `--develop=${develop}`,
+            `--dbgport=${debuggerPort}`,
+            `--dbgwait=${debuggerWait}`,
+            commandParam,
         ]
     };
 
@@ -142,15 +149,147 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
         clientOptions
     );
 
-    client.registerProposedFeatures();
+    // client.registerProposedFeatures();
     client.start();
+    client.onReady().then(() => {
+        onCommand(client);
+        onDecorations(client);
+        statusBar(client);
+    });
 
     return client;
 }
 
+let barCount = 0;
+function statusBar(client: LanguageClient) {
+    let bar = window.createStatusBarItem();
+    bar.text = 'Roblox LSP';
+    barCount ++;
+    bar.command = 'Lua.statusBar:' + barCount;
+    Commands.registerCommand(bar.command, () => {
+        client.sendNotification('$/status/click');
+    })
+    client.onNotification('$/status/show', (params) => {
+        bar.show();
+    })
+    client.onNotification('$/status/hide', (params) => {
+        bar.hide();
+    })
+    client.onNotification('$/status/report', (params) => {
+        bar.text    = params.text;
+        bar.tooltip = params.tooltip;
+    })
+}
+
+function onCommand(client: LanguageClient) {
+    client.onNotification('$/command', (params) => {
+        Commands.executeCommand(params.command, params.data);
+    });
+}
+
+function isDocumentInClient(textDocuments: TextDocument, client: LanguageClient): boolean {
+    let selectors = client.clientOptions.documentSelector;
+    if (!DocumentSelector.is(selectors)) {{
+        return false;
+    }}
+    if (vscode.languages.match(selectors, textDocuments)) {
+        return true;
+    }
+    return false;
+}
+
+function onDecorations(client: LanguageClient) {
+    let textType = window.createTextEditorDecorationType({})
+
+    function notifyVisibleRanges(textEditor: TextEditor) {
+        if (!isDocumentInClient(textEditor.document, client)) {
+            return;
+        }
+        let uri:    types.DocumentUri = client.code2ProtocolConverter.asUri(textEditor.document.uri);
+        let ranges: types.Range[] = [];
+        for (let index = 0; index < textEditor.visibleRanges.length; index++) {
+            const range = textEditor.visibleRanges[index];
+            ranges[index] = client.code2ProtocolConverter.asRange(new vscode.Range(
+                Math.max(range.start.line - 3, 0),
+                range.start.character,
+                Math.min(range.end.line + 3, textEditor.document.lineCount - 1),
+                range.end.character
+            ));
+        }
+        for (let index = ranges.length; index > 1; index--) {
+            const current = ranges[index];
+            const before = ranges[index - 1];
+            if (current.start.line > before.end.line) {
+                continue;
+            }
+            if (current.start.line == before.end.line && current.start.character > before.end.character) {
+                continue;
+            }
+            ranges.pop();
+            before.end = current.end;
+        }
+        client.sendNotification('$/didChangeVisibleRanges', {
+            uri:    uri,
+            ranges: ranges,
+        })
+    }
+
+    for (let index = 0; index < window.visibleTextEditors.length; index++) {
+        notifyVisibleRanges(window.visibleTextEditors[index]);
+    }
+
+    window.onDidChangeVisibleTextEditors((params: TextEditor[]) => {
+        for (let index = 0; index < params.length; index++) {
+            notifyVisibleRanges(params[index]);
+        }
+    })
+
+    window.onDidChangeTextEditorVisibleRanges((params: vscode.TextEditorVisibleRangesChangeEvent) => {
+        notifyVisibleRanges(params.textEditor);
+    })
+
+    client.onNotification('$/hint', (params) => {
+        let uri:        types.URI = params.uri;
+        for (let index = 0; index < window.visibleTextEditors.length; index++) {
+            const editor = window.visibleTextEditors[index];
+            if (editor.document.uri.toString() == uri && isDocumentInClient(editor.document, client)) {
+                let textEditor = editor;
+                let edits:  types.TextEdit[] = params.edits
+                let options: vscode.DecorationOptions[] = [];
+                for (let index = 0; index < edits.length; index++) {
+                    const edit = edits[index];
+                    options[index] = {
+                        hoverMessage:  edit.newText,
+                        range:         client.protocol2CodeConverter.asRange(edit.range),
+                        renderOptions: {
+                            light: {
+                                after: {
+                                    contentText:     edit.newText,
+                                    color:           '#888888',
+                                    backgroundColor: '#EEEEEE;border-radius: 4px; padding: 0px 2px;',
+                                    fontWeight:      '400; font-size: 12px; line-height: 1;',
+                                }
+                            },
+                            dark: {
+                                after: {
+                                    contentText:     edit.newText,
+                                    color:           '#888888',
+                                    backgroundColor: '#333333;border-radius: 4px; padding: 0px 2px;',
+                                    fontWeight:      '400; font-size: 12px; line-height: 1;',
+                                }
+                            }
+                        }
+                    }
+                }
+                textEditor.setDecorations(textType, options);
+            }
+        }
+    })
+}
+
 export function activate(context: ExtensionContext) {
     registerCustomCommands(context);
-    function didOpenTextDocument(document: TextDocument): void {
+    function didOpenTextDocument(document: TextDocument) {
         // We are only interested in language mode text
         if (document.languageId !== 'lua' || (document.uri.scheme !== 'file' && document.uri.scheme !== 'untitled')) {
             return;
@@ -175,8 +314,9 @@ export function activate(context: ExtensionContext) {
         folder = getOuterMostWorkspaceFolder(folder);
 
         if (!clients.has(folder.uri.toString())) {
+            let pattern: string = folder.uri.fsPath.replace(/(\[|\])/g, '[$1]') + '/**/*';
             let client = start(context, [
-                { scheme: 'file', language: 'lua', pattern: `${folder.uri.fsPath}/**/*` }
+                { scheme: 'file', language: 'lua', pattern: pattern }
             ], folder);
             clients.set(folder.uri.toString(), client);
         }

@@ -9,24 +9,18 @@
                         {
                             "Name": "className",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "string"
-                                ]
+                                "Name": "string"
                             }
                         },
                         {
+                            "Default": "nil",
                             "Name": "parent",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Instance"
-                                ]
+                                "Name": "Instance"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Instance"
                     }
                 }
@@ -42,24 +36,17 @@
                         {
                             "Name": "Origin",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "Direction",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Ray"
                     }
                 }
@@ -75,15 +62,32 @@
                         {
                             "Name": "value",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "..."
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
+                        "Name": "NumberRange"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "min",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "max",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
                         "Name": "NumberRange"
                     }
                 }
@@ -99,24 +103,18 @@
                         {
                             "Name": "position",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "action",
                             "Type": {
                                 "Category": "Enum",
-                                "Name": [
-                                    "PathWaypointAction"
-                                ]
+                                "Name": "PathWaypointAction"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "PathWaypoint"
                     }
                 }
@@ -130,7 +128,6 @@
                     "Name": "Red",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -139,7 +136,6 @@
                     "Name": "Yellow",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -148,7 +144,6 @@
                     "Name": "Blue",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -157,7 +152,6 @@
                     "Name": "Gray",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -166,7 +160,6 @@
                     "Name": "DarkGray",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -175,7 +168,6 @@
                     "Name": "White",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -184,7 +176,6 @@
                     "Name": "random",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -193,7 +184,6 @@
                     "Name": "Green",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -202,7 +192,6 @@
                     "Name": "Black",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -213,15 +202,11 @@
                         {
                             "Name": "paletteValue",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "BrickColor"
                     }
                 },
@@ -230,17 +215,70 @@
                     "Name": "new",
                     "Parameters": [
                         {
-                            "Name": "value",
+                            "Name": "val",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "..."
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
+                        "Name": "BrickColor"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "r",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "g",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "b",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "BrickColor"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "val",
+                            "Type": {
+                                "Name": "string"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "BrickColor"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "color",
+                            "Type": {
+                                "Name": "Color3"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
                         "Name": "BrickColor"
                     }
                 }
@@ -255,25 +293,20 @@
                     "Parameters": [
                         {
                             "Name": "x",
+                            "Default": "0",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "y",
+                            "Default": "0",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector2"
                     }
                 }
@@ -289,24 +322,17 @@
                         {
                             "Name": "x",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "y",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector2int16"
                     }
                 }
@@ -323,35 +349,25 @@
                             "Default": "0",
                             "Name": "red",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "green",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "blue",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Color3"
                     }
                 },
@@ -362,33 +378,23 @@
                         {
                             "Name": "hue",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "saturation",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "value",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Color3"
                     }
                 },
@@ -399,15 +405,21 @@
                         {
                             "Name": "color",
                             "Type": {
-                                "Category": "",
                                 "Name": "Color3"
                             }
                         }
                     ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    "TupleReturns": [
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        }
+                    ]
                 },
                 {
                     "MemberType": "Function",
@@ -417,35 +429,25 @@
                             "Default": "0",
                             "Name": "red",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "green",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "blue",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Color3"
                     }
                 }
@@ -461,24 +463,17 @@
                         {
                             "Name": "Scale",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "Offset",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "UDim"
                     }
                 }
@@ -492,17 +487,55 @@
                     "Name": "new",
                     "Parameters": [
                         {
-                            "Name": "value",
+                            "Name": "material",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "..."
-                                ]
+                                "Category": "Enum",
+                                "Name": "Material"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
+                        "Name": "PhysicalProperties"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "density",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "friction",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "elasticy",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "frictionWeight",
+                            "Default": "nil",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "elasticyWeight",
+                            "Default": "nil",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
                         "Name": "PhysicalProperties"
                     }
                 }
@@ -518,15 +551,11 @@
                         {
                             "Name": "axes",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Tuple"
-                                ]
+                                "Name": "Tuple"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Axes"
                     }
                 }
@@ -542,24 +571,17 @@
                         {
                             "Name": "min",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "max",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Region3"
                     }
                 }
@@ -575,24 +597,17 @@
                         {
                             "Name": "min",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3int16"
-                                ]
+                                "Name": "Vector3int16"
                             }
                         },
                         {
                             "Name": "max",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3int16"
-                                ]
+                                "Name": "Vector3int16"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Region3int16"
                     }
                 }
@@ -608,24 +623,17 @@
                         {
                             "Name": "xScale",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "yScale",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "UDim2"
                     }
                 },
@@ -636,24 +644,17 @@
                         {
                             "Name": "xOffset",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "yOffset",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "UDim2"
                     }
                 },
@@ -662,17 +663,52 @@
                     "Name": "new",
                     "Parameters": [
                         {
-                            "Name": "other",
+                            "Name": "x",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "..."
-                                ]
+                                "Name": "UDim"
+                            }
+                        },
+                        {
+                            "Name": "y",
+                            "Type": {
+                                "Name": "UDim"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
+                        "Name": "UDim2"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "xScale",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "xOffset",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "yScale",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "yOffset",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
                         "Name": "UDim2"
                     }
                 }
@@ -688,33 +724,23 @@
                         {
                             "Name": "rx",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "ry",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "rz",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -725,33 +751,23 @@
                         {
                             "Name": "rx",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "ry",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "rz",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -762,42 +778,29 @@
                         {
                             "Name": "pos",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "vX",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "vY",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "vZ",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -808,24 +811,17 @@
                         {
                             "Name": "v",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "r",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -836,33 +832,23 @@
                         {
                             "Name": "rx",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "ry",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "rz",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -873,33 +859,23 @@
                         {
                             "Name": "rx",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "ry",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "rz",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -910,33 +886,31 @@
                         {
                             "Name": "at",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "target",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "up",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Vector3"
-                                ]
+                                "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
+                        "Name": "CFrame"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [],
+                    "ReturnType": {
                         "Name": "CFrame"
                     }
                 },
@@ -945,17 +919,193 @@
                     "Name": "new",
                     "Parameters": [
                         {
-                            "Name": "value",
+                            "Name": "pos",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "..."
-                                ]
+                                "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
+                        "Name": "CFrame"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "pos",
+                            "Type": {
+                                "Name": "Vector3"
+                            }
+                        },
+                        {
+                            "Name": "lookAt",
+                            "Type": {
+                                "Name": "Vector3"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "CFrame"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "x",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "y",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "z",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "CFrame"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "x",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "y",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "z",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "qX",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "qY",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "qZ",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "qW",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "CFrame"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "x",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "y",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "z",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "R00",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "R01",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "R02",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "R10",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "R11",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "R12",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "R20",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "R21",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "R22",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
                         "Name": "CFrame"
                     }
                 }
@@ -971,15 +1121,11 @@
                         {
                             "Name": "normalIds",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Tuple"
-                                ]
+                                "Name": "Tuple"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Faces"
                     }
                 }
@@ -993,17 +1139,52 @@
                     "Name": "new",
                     "Parameters": [
                         {
-                            "Name": "value",
+                            "Name": "min",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "..."
-                                ]
+                                "Name": "Vector2"
+                            }
+                        },
+                        {
+                            "Name": "max",
+                            "Type": {
+                                "Name": "Vector2"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
+                        "Name": "Rect"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "minX",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "minY",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "maxX",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "maxY",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
                         "Name": "Rect"
                     }
                 }
@@ -1020,14 +1201,11 @@
                             "Name": "normal",
                             "Type": {
                                 "Category": "Enum",
-                                "Name": [
-                                    "NormalId"
-                                ]
+                                "Name": "NormalId"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -1039,14 +1217,11 @@
                             "Name": "axis",
                             "Type": {
                                 "Category": "Enum",
-                                "Name": [
-                                    "Axis"
-                                ]
+                                "Name": "Axis"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -1059,14 +1234,11 @@
                             "Name": "normal",
                             "Type": {
                                 "Category": "Enum",
-                                "Name": [
-                                    "NormalId"
-                                ]
+                                "Name": "NormalId"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -1079,14 +1251,11 @@
                             "Name": "axis",
                             "Type": {
                                 "Category": "Enum",
-                                "Name": [
-                                    "Axis"
-                                ]
+                                "Name": "Axis"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -1098,35 +1267,25 @@
                             "Default": "0",
                             "Name": "x",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "y",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "z",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 }
@@ -1143,35 +1302,25 @@
                             "Default": "0",
                             "Name": "x",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "y",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "z",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3int16"
                     }
                 }
@@ -1186,16 +1335,13 @@
                     "Parameters": [
                         {
                             "Name": "seed",
+                            "Default": "nil",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Random"
                     }
                 }
@@ -1212,10 +1358,7 @@
                             "Default": "1.0",
                             "Name": "time",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
@@ -1223,9 +1366,7 @@
                             "Name": "easingStyle",
                             "Type": {
                                 "Category": "Enum",
-                                "Name": [
-                                    "EasingStyle"
-                                ]
+                                "Name": "EasingStyle"
                             }
                         },
                         {
@@ -1233,44 +1374,32 @@
                             "Name": "easingDirection",
                             "Type": {
                                 "Category": "Enum",
-                                "Name": [
-                                    "EasingDirection"
-                                ]
+                                "Name": "EasingDirection"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "repeatCount",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Default": "false",
                             "Name": "reverses",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "bool"
-                                ]
+                                "Name": "bool"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "delayTime",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "TweenInfo"
                     }
                 }
@@ -1284,7 +1413,6 @@
                     "Name": "now",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "DateTime"
                     }
                 },
@@ -1295,15 +1423,11 @@
                         {
                             "Name": "unixTimestamp",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "DateTime"
                     }
                 },
@@ -1314,15 +1438,11 @@
                         {
                             "Name": "unixTimestampMillis",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "DateTime"
                     }
                 },
@@ -1334,75 +1454,53 @@
                             "Default": "1970",
                             "Name": "year",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "1",
                             "Name": "month",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "1",
                             "Name": "day",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "hour",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "minute",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "second",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "millisecond",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "DateTime"
                     }
                 },
@@ -1414,75 +1512,53 @@
                             "Default": "1970",
                             "Name": "year",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "1",
                             "Name": "month",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "1",
                             "Name": "day",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "hour",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "minute",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "second",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
                         {
                             "Default": "0",
                             "Name": "millisecond",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "DateTime"
                     }
                 },
@@ -1493,15 +1569,11 @@
                         {
                             "Name": "isoDate",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "string"
-                                ]
+                                "Name": "string"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "DateTime"
                     }
                 }
@@ -1515,17 +1587,50 @@
                     "Name": "new",
                     "Parameters": [
                         {
-                            "Name": "args",
+                            "Name": "n",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "..."
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
+                        "Name": "NumberSequence"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "n0",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "n1",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "NumberSequence"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "keypoints",
+                            "Type": {
+                                "Name": "Array",
+                                "Generic": "NumberSequenceKeypoint"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
                         "Name": "NumberSequence"
                     }
                 }
@@ -1539,17 +1644,50 @@
                     "Name": "new",
                     "Parameters": [
                         {
-                            "Name": "args",
+                            "Name": "c",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "..."
-                                ]
+                                "Name": "Color3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
+                        "Name": "ColorSequence"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "c0",
+                            "Type": {
+                                "Name": "Color3"
+                            }
+                        },
+                        {
+                            "Name": "c1",
+                            "Type": {
+                                "Name": "Color3"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "ColorSequence"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "keypoints",
+                            "Type": {
+                                "Name": "Array",
+                                "Generic": "ColorSequenceKeypoint"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
                         "Name": "ColorSequence"
                     }
                 }
@@ -1565,34 +1703,24 @@
                         {
                             "Name": "time",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "value",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name":  "number"
                             }
                         },
                         {
                             "Name": "envelop",
                             "Default": "nil",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "NumberSequenceKeypoint"
                     }
                 }
@@ -1608,24 +1736,17 @@
                         {
                             "Name": "time",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "number"
-                                ]
+                                "Name": "number"
                             }
                         },
                         {
                             "Name": "color",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "Color3"
-                                ]
+                                "Name": "Color3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "ColorSequenceKeypoint"
                     }
                 }
@@ -1639,7 +1760,6 @@
                     "Name": "new",
                     "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "RaycastParams"
                     }
                 }
@@ -1651,80 +1771,72 @@
                 {
                     "MemberType": "Function",
                     "Name": "new",
+                    "Parameters": [],
+                    "ReturnType": {
+                        "Name": "OverlapParams"
+                    }
+                }
+            ],
+            "Name": "OverlapParams"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
                     "Parameters": [
-                        {   
+                        {
                             "Name": "initDockState",
                             "Default": "Right",
                             "Type": {
                                 "Category": "Enum",
-                                "Name": [
-                                    "InitialDockState"
-                                ]
+                                "Name": "InitialDockState"
                             }
                         },
-                        {   
+                        {
                             "Name": "initEnabled",
                             "Default": "false",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "boolean"
-                                ]
+                                "Name": "boolean"
                             }
                         },
-                        {   
+                        {
                             "Name": "overrideEnabledRestore",
                             "Default": "false",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "boolean"
-                                ]
+                                "Name": "boolean"
                             }
                         },
-                        {   
+                        {
                             "Name": "floatXSize",
                             "Default": "0",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
-                        {   
+                        {
                             "Name": "floatYSize",
                             "Default": "0",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
-                        {   
+                        {
                             "Name": "minWidth",
                             "Default": "0",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         },
-                        {   
+                        {
                             "Name": "minHeight",
                             "Default": "0",
                             "Type": {
-                                "Category": "",
-                                "Name": [
-                                    "integer"
-                                ]
+                                "Name": "int"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "DockWidgetPluginGuiInfo"
                     }
                 }
@@ -1754,22 +1866,13 @@
                     "Name": "ClosestPoint",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "point",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -1777,7 +1880,6 @@
                     "MemberType": "Property",
                     "Name": "Origin",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -1785,7 +1887,6 @@
                     "MemberType": "Property",
                     "Name": "Unit",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Ray"
                     }
                 },
@@ -1794,22 +1895,13 @@
                     "Name": "Distance",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "point",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -1817,7 +1909,6 @@
                     "MemberType": "Property",
                     "Name": "Direction",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 }
@@ -1830,7 +1921,6 @@
                     "MemberType": "Property",
                     "Name": "Max",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -1838,7 +1928,6 @@
                     "MemberType": "Property",
                     "Name": "Min",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 }
@@ -1851,7 +1940,6 @@
                     "MemberType": "Property",
                     "Name": "Position",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -1872,7 +1960,6 @@
                     "MemberType": "Property",
                     "Name": "r",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -1880,7 +1967,6 @@
                     "MemberType": "Property",
                     "Name": "Name",
                     "ValueType": {
-                        "Category": "",
                         "Name": "string"
                     }
                 },
@@ -1888,7 +1974,6 @@
                     "MemberType": "Property",
                     "Name": "Number",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -1896,7 +1981,6 @@
                     "MemberType": "Property",
                     "Name": "Color",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Color3"
                     }
                 },
@@ -1904,7 +1988,6 @@
                     "MemberType": "Property",
                     "Name": "b",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -1912,7 +1995,6 @@
                     "MemberType": "Property",
                     "Name": "g",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 }
@@ -1925,7 +2007,6 @@
                     "MemberType": "Property",
                     "Name": "Y",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -1933,7 +2014,6 @@
                     "MemberType": "Property",
                     "Name": "X",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -1941,7 +2021,6 @@
                     "MemberType": "Property",
                     "Name": "Unit",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector2"
                     }
                 },
@@ -1949,7 +2028,6 @@
                     "MemberType": "Property",
                     "Name": "Magnitude",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -1958,29 +2036,19 @@
                     "Name": "Lerp",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector2"
                             }
                         },
                         {
                             "Name": "alpha",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector2"
                     }
                 },
@@ -1989,22 +2057,13 @@
                     "Name": "Cross",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "other",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector2"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2013,22 +2072,13 @@
                     "Name": "Dot",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector2"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2037,7 +2087,6 @@
                     "Name": "y",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2046,7 +2095,6 @@
                     "Name": "x",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2055,7 +2103,6 @@
                     "Name": "unit",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector2"
                     }
                 },
@@ -2064,7 +2111,6 @@
                     "Name": "magnitude",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2074,29 +2120,19 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector2"
                             }
                         },
                         {
                             "Name": "alpha",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector2"
                     }
                 }
@@ -2109,7 +2145,6 @@
                     "MemberType": "Property",
                     "Name": "R",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2117,7 +2152,6 @@
                     "MemberType": "Property",
                     "Name": "B",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2125,55 +2159,43 @@
                     "MemberType": "Property",
                     "Name": "G",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
                 {
                     "MemberType": "Function",
                     "Name": "ToHSV",
-                    "Parameters": [
+                    "Parameters": [],
+                    "TupleReturns": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
                         }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    ]
                 },
                 {
                     "MemberType": "Function",
                     "Name": "Lerp",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "color",
                             "Type": {
-                                "Category": "",
                                 "Name": "Color3"
                             }
                         },
                         {
                             "Name": "alpha",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Color3"
                     }
                 },
@@ -2182,7 +2204,6 @@
                     "Name": "r",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2191,7 +2212,6 @@
                     "Name": "g",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2200,7 +2220,6 @@
                     "Name": "b",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2210,29 +2229,19 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "color",
                             "Type": {
-                                "Category": "",
                                 "Name": "Color3"
                             }
                         },
                         {
                             "Name": "alpha",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Color3"
                     }
                 }
@@ -2245,7 +2254,6 @@
                     "MemberType": "Property",
                     "Name": "Scale",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2253,7 +2261,6 @@
                     "MemberType": "Property",
                     "Name": "Offset",
                     "ValueType": {
-                        "Category": "",
                         "Name": "int"
                     }
                 }
@@ -2266,7 +2273,6 @@
                     "MemberType": "Property",
                     "Name": "ElasticityWeight",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2274,7 +2280,6 @@
                     "MemberType": "Property",
                     "Name": "Elasticity",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2282,7 +2287,6 @@
                     "MemberType": "Property",
                     "Name": "Density",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2290,7 +2294,6 @@
                     "MemberType": "Property",
                     "Name": "FrictionWeight",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2298,7 +2301,6 @@
                     "MemberType": "Property",
                     "Name": "Friction",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 }
@@ -2311,7 +2313,6 @@
                     "MemberType": "Property",
                     "Name": "Z",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -2319,7 +2320,6 @@
                     "MemberType": "Property",
                     "Name": "Y",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -2327,7 +2327,6 @@
                     "MemberType": "Property",
                     "Name": "Top",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -2335,7 +2334,6 @@
                     "MemberType": "Property",
                     "Name": "Left",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -2343,7 +2341,6 @@
                     "MemberType": "Property",
                     "Name": "X",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -2351,7 +2348,6 @@
                     "MemberType": "Property",
                     "Name": "Right",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -2359,7 +2355,6 @@
                     "MemberType": "Property",
                     "Name": "Bottom",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -2367,7 +2362,6 @@
                     "MemberType": "Property",
                     "Name": "Front",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -2375,7 +2369,6 @@
                     "MemberType": "Property",
                     "Name": "Back",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 }
@@ -2388,7 +2381,6 @@
                     "MemberType": "Property",
                     "Name": "CFrame",
                     "ValueType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -2397,22 +2389,13 @@
                     "Name": "ExpandToGrid",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "Region",
                             "Type": {
-                                "Category": "",
                                 "Name": "int"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Region3"
                     }
                 },
@@ -2420,7 +2403,6 @@
                     "MemberType": "Property",
                     "Name": "Size",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 }
@@ -2433,7 +2415,6 @@
                     "MemberType": "Property",
                     "Name": "Y",
                     "ValueType": {
-                        "Category": "",
                         "Name": "UDim"
                     }
                 },
@@ -2442,29 +2423,19 @@
                     "Name": "Lerp",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "goal",
                             "Type": {
-                                "Category": "",
                                 "Name": "UDim2"
                             }
                         },
                         {
                             "Name": "alpha",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "UDim2"
                     }
                 },
@@ -2472,7 +2443,6 @@
                     "MemberType": "Property",
                     "Name": "Height",
                     "ValueType": {
-                        "Category": "",
                         "Name": "UDim"
                     }
                 },
@@ -2480,7 +2450,6 @@
                     "MemberType": "Property",
                     "Name": "X",
                     "ValueType": {
-                        "Category": "",
                         "Name": "UDim"
                     }
                 },
@@ -2488,7 +2457,6 @@
                     "MemberType": "Property",
                     "Name": "Width",
                     "ValueType": {
-                        "Category": "",
                         "Name": "UDim"
                     }
                 }
@@ -2501,7 +2469,6 @@
                     "MemberType": "Property",
                     "Name": "Z",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2509,7 +2476,6 @@
                     "MemberType": "Property",
                     "Name": "Y",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2517,7 +2483,6 @@
                     "MemberType": "Property",
                     "Name": "X",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2526,22 +2491,13 @@
                     "Name": "PointToObjectSpace",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v3",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2549,7 +2505,6 @@
                     "MemberType": "Property",
                     "Name": "YVector",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2557,7 +2512,6 @@
                     "MemberType": "Property",
                     "Name": "XVector",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2565,7 +2519,6 @@
                     "MemberType": "Property",
                     "Name": "ZVector",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2573,7 +2526,6 @@
                     "MemberType": "Property",
                     "Name": "Position",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2581,7 +2533,6 @@
                     "MemberType": "Property",
                     "Name": "RightVector",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2590,90 +2541,66 @@
                     "Name": "VectorToWorldSpace",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v3",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
                 {
                     "MemberType": "Function",
                     "Name": "ToAxisAngle",
-                    "Parameters": [
+                    "Parameters": [],
+                    "TupleReturns": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
+                            "Name": "Vector3"
+                        },
+                        {
+                            "Name": "number"
                         }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    ]
                 },
                 {
                     "MemberType": "Function",
                     "Name": "ToOrientation",
-                    "Parameters": [
+                    "Parameters": [],
+                    "TupleReturns": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
                         }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    ]
                 },
                 {
                     "MemberType": "Function",
                     "Name": "ToEulerAnglesYXZ",
-                    "Parameters": [
+                    "Parameters": [],
+                    "TupleReturns": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
                         }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    ]
                 },
                 {
                     "MemberType": "Function",
                     "Name": "Inverse",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -2681,7 +2608,6 @@
                     "MemberType": "Property",
                     "Name": "UpVector",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2690,70 +2616,77 @@
                     "Name": "Lerp",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "goal",
                             "Type": {
-                                "Category": "",
                                 "Name": "CFrame"
                             }
                         },
                         {
                             "Name": "alpha",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
                 {
                     "MemberType": "Function",
                     "Name": "GetComponents",
-                    "Parameters": [
+                    "Parameters": [],
+                    "TupleReturns": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
                         }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    ]
                 },
                 {
                     "MemberType": "Function",
                     "Name": "VectorToObjectSpace",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v3",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2761,7 +2694,6 @@
                     "MemberType": "Property",
                     "Name": "LookVector",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2770,22 +2702,13 @@
                     "Name": "PointToWorldSpace",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v3",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2794,22 +2717,13 @@
                     "Name": "ToWorldSpace",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "cf",
                             "Type": {
-                                "Category": "",
                                 "Name": "CFrame"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -2818,56 +2732,37 @@
                     "Name": "ToObjectSpace",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "cf",
                             "Type": {
-                                "Category": "",
                                 "Name": "CFrame"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
                 {
                     "MemberType": "Function",
                     "Name": "ToEulerAnglesXYZ",
-                    "Parameters": [
+                    "Parameters": [],
+                    "TupleReturns": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
                         }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    ]
                 },
                 {
                     "MemberType": "Function",
                     "Name": "Orthonormalize",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFRame"
                     }
                 },
@@ -2876,7 +2771,6 @@
                     "Name": "z",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2885,7 +2779,6 @@
                     "Name": "y",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2894,7 +2787,6 @@
                     "Name": "x",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -2904,22 +2796,13 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v3",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2928,7 +2811,6 @@
                     "Name": "p",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2937,7 +2819,6 @@
                     "Deprecated": true,
                     "Name": "rightVector",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2947,22 +2828,13 @@
                     "Name": "vectorToWorldSpace",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v3",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -2970,35 +2842,22 @@
                     "MemberType": "Function",
                     "Name": "toAxisAngle",
                     "Deprecated": true,
-                    "Parameters": [
+                    "Parameters": [],
+                    "TupleReturns": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
+                            "Name": "Vector3"
+                        },
+                        {
+                            "Name": "number"
                         }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    ]
                 },
                 {
                     "MemberType": "Function",
                     "Name": "inverse",
                     "Deprecated": true,
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -3007,7 +2866,6 @@
                     "Name": "upVector",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -3017,29 +2875,19 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "goal",
                             "Type": {
-                                "Category": "",
                                 "Name": "CFrame"
                             }
                         },
                         {
                             "Name": "alpha",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -3049,22 +2897,13 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v3",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -3073,7 +2912,6 @@
                     "Name": "lookVector",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -3083,22 +2921,13 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "v3",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -3108,22 +2937,13 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "cf",
                             "Type": {
-                                "Category": "",
                                 "Name": "CFrame"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -3133,22 +2953,13 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "cf",
                             "Type": {
-                                "Category": "",
                                 "Name": "CFrame"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "CFrame"
                     }
                 },
@@ -3156,37 +2967,62 @@
                     "MemberType": "Function",
                     "Name": "toEulerAnglesXYZ",
                     "Deprecated": true,
-                    "Parameters": [
+                    "Parameters": [],
+                    "TupleReturns": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
                         }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    ]
                 },
                 {
                     "MemberType": "Function",
                     "Name": "components",
                     "Deprecated": true,
-                    "Parameters": [
+                    "Parameters": [],
+                    "TupleReturns": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
                         }
-                    ],
-                    "ReturnType": {
-                        "Category": "",
-                        "Name": "Tuple"
-                    }
+                    ]
                 }
             ],
             "Name": "CFrame"
@@ -3197,7 +3033,6 @@
                     "MemberType": "Property",
                     "Name": "Bottom",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -3205,7 +3040,6 @@
                     "MemberType": "Property",
                     "Name": "Top",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -3213,7 +3047,6 @@
                     "MemberType": "Property",
                     "Name": "Front",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -3221,7 +3054,6 @@
                     "MemberType": "Property",
                     "Name": "Left",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -3229,7 +3061,6 @@
                     "MemberType": "Property",
                     "Name": "Right",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -3237,7 +3068,6 @@
                     "MemberType": "Property",
                     "Name": "Back",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 }
@@ -3247,10 +3077,24 @@
         {
             "Members": [
                 {
+                    "MemberType": "Function",
+                    "Name": "IsA",
+                    "Parameters": [
+                        {
+                            "Name": "enumName",
+                            "Type": {
+                                "Name": "string"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "bool"
+                    }
+                },
+                {
                     "MemberType": "Property",
                     "Name": "EnumType",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Enum"
                     }
                 },
@@ -3258,7 +3102,6 @@
                     "MemberType": "Property",
                     "Name": "Value",
                     "ValueType": {
-                        "Category": "",
                         "Name": "int"
                     }
                 },
@@ -3266,7 +3109,6 @@
                     "MemberType": "Property",
                     "Name": "Name",
                     "ValueType": {
-                        "Category": "",
                         "Name": "string"
                     }
                 }
@@ -3278,18 +3120,10 @@
                 {
                     "MemberType": "Function",
                     "Name": "GetEnumItems",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
-                        "Name": "Array"
+                        "Name": "Array",
+                        "Generic": "EnumItem"
                     }
                 }
             ],
@@ -3300,18 +3134,10 @@
                 {
                     "MemberType": "Function",
                     "Name": "GetEnums",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
-                        "Name": "Array"
+                        "Name": "Array",
+                        "Generic": "Enum"
                     }
                 }
             ],
@@ -3323,7 +3149,6 @@
                     "MemberType": "Property",
                     "Name": "Max",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector2"
                     }
                 },
@@ -3331,7 +3156,6 @@
                     "MemberType": "Property",
                     "Name": "Min",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector2"
                     }
                 },
@@ -3339,7 +3163,6 @@
                     "MemberType": "Property",
                     "Name": "Height",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3347,7 +3170,6 @@
                     "MemberType": "Property",
                     "Name": "Width",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 }
@@ -3360,7 +3182,6 @@
                     "MemberType": "Property",
                     "Name": "Z",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3368,7 +3189,6 @@
                     "MemberType": "Property",
                     "Name": "Y",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3376,7 +3196,6 @@
                     "MemberType": "Property",
                     "Name": "X",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3384,7 +3203,6 @@
                     "MemberType": "Property",
                     "Name": "Unit",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -3392,7 +3210,6 @@
                     "MemberType": "Property",
                     "Name": "Magnitude",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3401,22 +3218,13 @@
                     "Name": "Dot",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "other",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3425,29 +3233,19 @@
                     "Name": "Lerp",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "goal",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "alpha",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -3456,22 +3254,13 @@
                     "Name": "Cross",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "other",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -3480,29 +3269,19 @@
                     "Name": "FuzzyEq",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "other",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "epsilon",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -3512,29 +3291,19 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "goal",
                             "Type": {
-                                "Category": "",
                                 "Name": "Vector3"
                             }
                         },
                         {
                             "Name": "alpha",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -3543,7 +3312,6 @@
                     "Deprecated": true,
                     "Name": "z",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3552,7 +3320,6 @@
                     "Deprecated": true,
                     "Name": "y",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3561,7 +3328,6 @@
                     "Deprecated": true,
                     "Name": "x",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3570,7 +3336,6 @@
                     "Deprecated": true,
                     "Name": "unit",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -3579,7 +3344,6 @@
                     "Deprecated": true,
                     "Name": "magnitude",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 }
@@ -3593,30 +3357,28 @@
                     "Name": "NextInteger",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "min",
                             "Type": {
-                                "Category": "",
                                 "Name": "int"
                             }
                         },
                         {
                             "Name": "max",
                             "Type": {
-                                "Category": "",
                                 "Name": "int"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "int"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "NextNumber",
+                    "Parameters": [],
+                    "ReturnType": {
+                        "Name": "number"
                     }
                 },
                 {
@@ -3624,46 +3386,27 @@
                     "Name": "NextNumber",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "min",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         },
                         {
                             "Name": "max",
                             "Type": {
-                                "Category": "",
                                 "Name": "number"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
                 {
                     "MemberType": "Function",
                     "Name": "Clone",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Random"
                     }
                 }
@@ -3676,7 +3419,6 @@
                     "MemberType": "Property",
                     "Name": "DelayTime",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3684,7 +3426,6 @@
                     "MemberType": "Property",
                     "Name": "Time",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3700,7 +3441,6 @@
                     "MemberType": "Property",
                     "Name": "RepeatCount",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -3716,7 +3456,6 @@
                     "MemberType": "Property",
                     "Name": "Reverses",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 }
@@ -3728,17 +3467,8 @@
                 {
                     "MemberType": "Function",
                     "Name": "Disconnect",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "void"
                     }
                 },
@@ -3746,7 +3476,6 @@
                     "MemberType": "Property",
                     "Name": "Connected",
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 },
@@ -3754,17 +3483,8 @@
                     "MemberType": "Function",
                     "Name": "disconnect",
                     "Deprecated": true,
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "void"
                     }
                 },
@@ -3773,7 +3493,6 @@
                     "Name": "connected",
                     "Deprecated": true,
                     "ValueType": {
-                        "Category": "",
                         "Name": "bool"
                     }
                 }
@@ -3785,17 +3504,8 @@
                 {
                     "MemberType": "Function",
                     "Name": "Wait",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Variant"
                     }
                 },
@@ -3804,22 +3514,13 @@
                     "Name": "Connect",
                     "Parameters": [
                         {
-                            "Name": "self",
+                            "Name": "callback",
                             "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
-                            "Name": "func",
-                            "Type": {
-                                "Category": "",
                                 "Name": "function"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "RBXScriptConnection"
                     }
                 },
@@ -3828,16 +3529,8 @@
                     "Name": "ConnectParallel",
                     "Parameters": [
                         {
-                            "Name": "self",
+                            "Name": "callback",
                             "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
-                            "Name": "func",
-                            "Type": {
-                                "Category": "",
                                 "Name": "function"
                             }
                         }
@@ -3846,7 +3539,6 @@
                         "Hidden"
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "RBXScriptConnection"
                     }
                 },
@@ -3854,17 +3546,8 @@
                     "MemberType": "Function",
                     "Name": "wait",
                     "Deprecated": true,
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "Variant"
                     }
                 },
@@ -3874,22 +3557,13 @@
                     "Deprecated": true,
                     "Parameters": [
                         {
-                            "Name": "self",
+                            "Name": "callback",
                             "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
-                            "Name": "func",
-                            "Type": {
-                                "Category": "",
                                 "Name": "function"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "RBXScriptConnection"
                     }
                 }
@@ -3902,66 +3576,37 @@
                     "MemberType": "Property",
                     "Name": "UnixTimestamp",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "UnixTimestampMillis",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
                     "MemberType": "Function",
                     "Name": "ToUniversalTime",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "table"
                     }
                 },
                 {
                     "MemberType": "Function",
                     "Name": "ToLocalTime",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "table"
                     }
                 },
                 {
                     "MemberType": "Function",
                     "Name": "ToIsoDate",
-                    "Parameters": [
-                        {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        }
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "string"
                     }
                 },
@@ -3970,29 +3615,19 @@
                     "Name": "FormatUniversalTime",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "format",
                             "Type": {
-                                "Category": "",
                                 "Name": "string"
                             }
                         },
                         {
                             "Name": "locale",
                             "Type": {
-                                "Category": "",
                                 "Name": "string"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "string"
                     }
                 },
@@ -4001,29 +3636,19 @@
                     "Name": "FormatLocalTime",
                     "Parameters": [
                         {
-                            "Name": "self",
-                            "Type": {
-                                "Category": "",
-                                "Name": "any"
-                            }
-                        },
-                        {
                             "Name": "format",
                             "Type": {
-                                "Category": "",
                                 "Name": "string"
                             }
                         },
                         {
                             "Name": "locale",
                             "Type": {
-                                "Category": "",
                                 "Name": "string"
                             }
                         }
                     ],
                     "ReturnType": {
-                        "Category": "",
                         "Name": "string"
                     }
                 }
@@ -4036,8 +3661,8 @@
                     "MemberType": "Property",
                     "Name": "Keypoints",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "Array<NumberSequenceKeypoint>"
+                        "Name": "Array",
+                        "Generic": "NumberSequenceKeypoint"
                     }
                 }
             ],
@@ -4049,8 +3674,8 @@
                     "MemberType": "Property",
                     "Name": "Keypoints",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "Array<ColorSequenceKeypoint>"
+                        "Name": "Array",
+                        "Generic": "ColorSequenceKeypoint"
                     }
                 }
             ],
@@ -4062,7 +3687,6 @@
                     "MemberType": "Property",
                     "Name": "Envelope",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -4070,7 +3694,6 @@
                     "MemberType": "Property",
                     "Name": "Time",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -4078,7 +3701,6 @@
                     "MemberType": "Property",
                     "Name": "Value",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 }
@@ -4091,7 +3713,6 @@
                     "MemberType": "Property",
                     "Name": "Time",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -4099,7 +3720,6 @@
                     "MemberType": "Property",
                     "Name": "Value",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 }
@@ -4112,23 +3732,21 @@
                     "MemberType": "Property",
                     "Name": "FilterDescendantsInstances",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "Array<Instance>"
+                        "Name": "Objects"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "FilterType",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "Enum.RaycastFilterType"
+                        "Category": "Enum",
+                        "Name": "RaycastFilterType"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "IgnoreWater",
                     "ValueType": {
-                        "Category": "",
                         "Name": "boolean"
                     }
                 },
@@ -4136,7 +3754,6 @@
                     "MemberType": "Property",
                     "Name": "CollisionGroup",
                     "ValueType": {
-                        "Category": "",
                         "Name": "string"
                     }
                 }
@@ -4147,9 +3764,49 @@
             "Members": [
                 {
                     "MemberType": "Property",
+                    "Name": "FilterDescendantsInstances",
+                    "ValueType": {
+                        "Name": "Objects"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "FilterType",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "RaycastFilterType"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "IgnoreWater",
+                    "ValueType": {
+                        "Name": "boolean"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "CollisionGroup",
+                    "ValueType": {
+                        "Name": "string"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "MaxParts",
+                    "ValueType": {
+                        "Name": "number"
+                    }
+                }
+            ],
+            "Name": "OverlapParams"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Property",
                     "Name": "Instance",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Instance"
                     }
                 },
@@ -4157,7 +3814,6 @@
                     "MemberType": "Property",
                     "Name": "Position",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 },
@@ -4173,7 +3829,6 @@
                     "MemberType": "Property",
                     "Name": "Normal",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3"
                     }
                 }
@@ -4186,7 +3841,6 @@
                     "MemberType": "Property",
                     "Name": "InitialEnabled",
                     "ValueType": {
-                        "Category": "",
                         "Name": "boolean"
                     }
                 },
@@ -4194,7 +3848,6 @@
                     "MemberType": "Property",
                     "Name": "InitialEnabledShouldOverrideRestore",
                     "ValueType": {
-                        "Category": "",
                         "Name": "boolean"
                     }
                 },
@@ -4202,32 +3855,28 @@
                     "MemberType": "Property",
                     "Name": "FloatingXSize",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "FloatingYSize",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "MinWidth",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "MinHeight",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "integer"
+                        "Name": "int"
                     }
                 }
             ],
@@ -4239,7 +3888,6 @@
                     "MemberType": "Property",
                     "Name": "X",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -4247,7 +3895,6 @@
                     "MemberType": "Property",
                     "Name": "Y",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 }
@@ -4260,7 +3907,6 @@
                     "MemberType": "Property",
                     "Name": "X",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -4268,7 +3914,6 @@
                     "MemberType": "Property",
                     "Name": "Y",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -4276,7 +3921,6 @@
                     "MemberType": "Property",
                     "Name": "Z",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 }
@@ -4289,7 +3933,6 @@
                     "MemberType": "Property",
                     "Name": "Min",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3int16"
                     }
                 },
@@ -4297,7 +3940,6 @@
                     "MemberType": "Property",
                     "Name": "Max",
                     "ValueType": {
-                        "Category": "",
                         "Name": "Vector3int16"
                     }
                 }
@@ -4310,7 +3952,6 @@
                     "MemberType": "Property",
                     "Name": "SearchKeyword",
                     "ValueType": {
-                        "Category": "",
                         "Name": "string"
                     }
                 },
@@ -4318,7 +3959,6 @@
                     "MemberType": "Property",
                     "Name": "MinPrice",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -4326,7 +3966,6 @@
                     "MemberType": "Property",
                     "Name": "MaxPrice",
                     "ValueType": {
-                        "Category": "",
                         "Name": "number"
                     }
                 },
@@ -4350,16 +3989,16 @@
                     "MemberType": "Property",
                     "Name": "BundleType",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "Array<Enum.BundleType>"
+                        "Name": "Array",
+                        "Generic": "Enum.BundleType"
                     }
                 },
                 {
                     "MemberType": "Property",
                     "Name": "AssetTypes",
                     "ValueType": {
-                        "Category": "",
-                        "Name": "Array<Enum.AssetType>"
+                        "Name": "Array",
+                        "Generic": "Enum.AssetType"
                     }
                 }
             ],

@@ -1,38 +1,101 @@
-local getName = require 'core.name'
+local guide    = require 'core.guide'
+local vm       = require 'vm'
 
-return function (source)
-    if not source then
-        return ''
-    end
-    local value = source:bindValue()
-    if not value then
-        return ''
-    end
-    local func = value:getFunction()
-    local declarat
-    if func and func:getSource() then
-        declarat = func:getSource().name
-    else
-        declarat = source
-    end
-    if not declarat then
-        -- 如果声明者没有给名字，则找一个合适的名字
-        local names = {}
-        value:eachInfo(function (info, src)
-            if info.type == 'local' or info.type == 'set' or info.type == 'return' then
-                if src.type == 'name' and src.uri == value.uri then
-                    names[#names+1] = src
-                end
-            end
-        end)
-        if #names == 0 then
-            return ''
-        end
-        table.sort(names, function (a, b)
-            return a.id < b.id
-        end)
-        return names[1][1] or ''
-    end
+local buildName
 
-    return getName(declarat, source)
+local function asLocal(source)
+    return guide.getKeyName(source)
 end
+
+local function asField(source, oop)
+    local class
+    if source.node.type ~= 'getglobal' then
+        class = vm.getClass(source.node, 0)
+    end
+    local node = class or guide.getKeyName(source.node) or '?'
+    local method = guide.getKeyName(source)
+    if oop then
+        return ('%s:%s'):format(node, method)
+    else
+        return ('%s.%s'):format(node, method)
+    end
+end
+
+local function asTableField(source)
+    if not source.field then
+        return
+    end
+    return guide.getKeyName(source.field)
+end
+
+local function asGlobal(source)
+    return guide.getKeyName(source)
+end
+
+local function asDocFunction(source)
+    local doc = guide.getParentType(source, 'doc.type')
+            or  guide.getParentType(source, 'doc.overload')
+    if not doc or not doc.bindSources then
+        return ''
+    end
+    for _, src in ipairs(doc.bindSources) do
+        local name = buildName(src)
+        if name ~= '' then
+            return name
+        end
+    end
+    return ''
+end
+
+local function asDocField(source)
+    return source.field[1]
+end
+
+function buildName(source, oop)
+    if oop == nil then
+        oop =  source.type == 'setmethod'
+            or source.type == 'getmethod'
+            or nil
+    end
+    if source.type == 'local' then
+        return asLocal(source) or '', oop
+    end
+    if source.type == 'getlocal'
+    or source.type == 'setlocal' then
+        return asLocal(source.node) or '', oop
+    end
+    if source.type == 'setglobal'
+    or source.type == 'getglobal' then
+        return asGlobal(source) or '', oop
+    end
+    if source.type == 'setmethod'
+    or source.type == 'getmethod' then
+        return asField(source, oop) or '', oop
+    end
+    if source.type == 'setfield'
+    or source.type == 'getfield' then
+        return asField(source, oop) or '', oop
+    end
+    if source.type == 'tablefield' then
+        return asTableField(source) or '', oop
+    end
+    if source.type == 'doc.type.function' then
+        return asDocFunction(source), oop
+    end
+    if source.type == 'doc.field' then
+        return asDocField(source), oop
+    end
+    if source.type == "type.field" then
+        return source.key[1], oop
+    end
+    if source.type == "type.library" then
+        return source.name, oop
+    end
+    local parent = source.parent
+    if parent then
+        return buildName(parent, oop)
+    end
+    return '', oop
+end
+
+return buildName

@@ -1,8 +1,12 @@
+local time         = require 'bee.time'
 local setmetatable = setmetatable
-local pairs = pairs
-local tableInsert = table.insert
-local mathMax = math.max
-local mathFloor = math.floor
+local mathMax      = math.max
+local mathFloor    = math.floor
+local monotonic    = time.monotonic
+local xpcall       = xpcall
+local logError     = log.error
+
+_ENV = nil
 
 local curFrame = 0
 local maxFrame = 0
@@ -42,7 +46,7 @@ local function mWakeup(self)
     end
     self._running = false
     if self._onTimer then
-        xpcall(self._onTimer, log.error, self)
+        xpcall(self._onTimer, logError, self)
     end
     if self._removed then
         return
@@ -91,41 +95,7 @@ local function onTick()
     freeQueue[#freeQueue + 1] = q
 end
 
-function ac.clock()
-    return curFrame / 1000.0
-end
-
-function ac.timer_size()
-    local n = 0
-    for _, ts in pairs(timer) do
-        n = n + #ts
-    end
-    return n
-end
-
-function ac.timer_all()
-    local tbl = {}
-    for _, ts in pairs(timer) do
-        for i, t in ipairs(ts) do
-            if t then
-                tbl[#tbl + 1] = t
-            end
-        end
-    end
-    return tbl
-end
-
-local function update(delta)
-    if curIndex ~= 0 then
-        curFrame = curFrame - 1
-    end
-    maxFrame = maxFrame + delta * 1000.0
-    while curFrame < maxFrame do
-        curFrame = curFrame + 1
-        onTick()
-    end
-end
-
+local m = {}
 local mt = {}
 mt.__index = mt
 mt.type = 'timer'
@@ -197,7 +167,7 @@ function mt:onTimer()
     self:_onTimer()
 end
 
-function ac.wait(timeout, onTimer)
+function m.wait(timeout, onTimer)
     local t = setmetatable({
         ['_timeout'] = mathMax(mathFloor(timeout * 1000.0), 1),
         ['_onTimer'] = onTimer,
@@ -207,7 +177,7 @@ function ac.wait(timeout, onTimer)
     return t
 end
 
-function ac.loop(timeout, onTimer)
+function m.loop(timeout, onTimer)
     local t = setmetatable({
         ['_timeout'] = mathFloor(timeout * 1000.0),
         ['_onTimer'] = onTimer,
@@ -216,9 +186,9 @@ function ac.loop(timeout, onTimer)
     return t
 end
 
-function ac.timer(timeout, count, onTimer)
+function m.timer(timeout, count, onTimer)
     if count == 0 then
-        return ac.loop(timeout, onTimer)
+        return m.loop(timeout, onTimer)
     end
     local t = setmetatable({
         ['_timeout'] = mathFloor(timeout * 1000.0),
@@ -229,48 +199,23 @@ function ac.timer(timeout, count, onTimer)
     return t
 end
 
-local function utimer_initialize(u)
-    if not u._timers then
-        u._timers = {}
+function m.clock()
+    return curFrame / 1000.0
+end
+
+local lastClock = monotonic()
+function m.update()
+    local currentClock = monotonic()
+    local delta = currentClock - lastClock
+    lastClock = currentClock
+    if curIndex ~= 0 then
+        curFrame = curFrame - 1
     end
-    if #u._timers > 0 then
-        return
+    maxFrame = maxFrame + delta
+    while curFrame < maxFrame do
+        curFrame = curFrame + 1
+        onTick()
     end
-    u._timers[1] = ac.loop(0.01, function()
-        local timers = u._timers
-        for i = #timers, 2, -1 do
-            if timers[i]._removed then
-                local len = #timers
-                timers[i] = timers[len]
-                timers[len] = nil
-            end
-        end
-        if #timers == 1 then
-            timers[1]:remove()
-            timers[1] = nil
-        end
-    end)
 end
 
-function ac.uwait(u, timeout, onTimer)
-    utimer_initialize(u)
-    local t = ac.wait(timeout, onTimer)
-    tableInsert(u._timers, t)
-    return t
-end
-
-function ac.uloop(u, timeout, onTimer)
-    utimer_initialize(u)
-    local t = ac.loop(timeout, onTimer)
-    tableInsert(u._timers, t)
-    return t
-end
-
-function ac.utimer(u, timeout, count, onTimer)
-    utimer_initialize(u)
-    local t = ac.timer(timeout, count, onTimer)
-    tableInsert(u._timers, t)
-    return t
-end
-
-return update
+return m

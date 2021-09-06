@@ -1,10 +1,19 @@
 {
 	"activationEvents": [
-		"onLanguage:lua",
-		"onWebviewPanel:lua-doc",
-		"onCommand:extension.lua.doc"
+		"onLanguage:lua"
 	],
 	"author": "Nightrains",
+	"capabilities": {
+		"untrustedWorkspaces": {
+			"description": "",
+			"restrictedConfigurations": [
+				"robloxLsp.develop.enable",
+				"robloxLsp.runtime.plugin",
+				"robloxLsp.misc.parameters"
+			],
+			"supported": "limited"
+		}
+	},
 	"categories": [
 		"Linters",
 		"Programming Languages",
@@ -13,7 +22,7 @@
 	"contributes": {
 		"configuration": {
 			"properties": {
-				"Lua.color.mode": {
+				"robloxLsp.color.mode": {
 					"default": "Semantic",
 					"enum": [
 						"Grammar",
@@ -27,69 +36,25 @@
 					"scope": "resource",
 					"type": "string"
 				},
-				"Lua.misc.color3Picker": {
-					"default": true,
-					"markdownDescription": "%config.misc.color3Picker%",
+				"robloxLsp.completion.callParenthesess": {
+					"default": false,
+					"markdownDescription": "%config.completion.callParenthesess%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.misc.goToScriptLink": {
-					"default": true,
-					"markdownDescription": "%config.misc.goToScriptLink%",
+				"robloxLsp.completion.displayContext": {
+					"default": 0,
+					"markdownDescription": "%config.completion.displayContext%",
 					"scope": "resource",
-					"type": "boolean"
+					"type": "integer"
 				},
-				"Lua.completion.callSnippet": {
-					"default": "Disable",
-					"enum": [
-						"Disable",
-						"Both",
-						"Replace",
-						"Parentheses"
-					],
-					"markdownDescription": "%config.completion.callSnippet%",
-					"markdownEnumDescriptions": [
-						"%config.completion.callSnippet.Disable%",
-						"%config.completion.callSnippet.Both%",
-						"%config.completion.callSnippet.Replace%",
-						"%config.completion.callSnippet.Parentheses%"
-					],
-					"scope": "resource",
-					"type": "string"
-				},
-				"Lua.completion.enable": {
+				"robloxLsp.completion.enable": {
 					"default": true,
 					"markdownDescription": "%config.completion.enable%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.completion.displayContext": {
-					"default": 6,
-					"markdownDescription": "%config.completion.displayContext%",
-					"scope": "resource",
-					"type": "integer"
-				},
-				"Lua.completion.serverPort": {
-					"default": 27843,
-					"markdownDescription": "%config.completion.serverPort%",
-					"scope": "resource",
-					"type": "integer",
-					"minimum": 0,
-					"maximum": 65535
-				},
-				"Lua.completion.fastAutocompletion": {
-					"default": true,
-					"markdownDescription": "%config.completion.fastAutocompletion%",
-					"scope": "resource",
-					"type": "boolean"
-				},
-				"Lua.completion.endAutocompletion": {
-					"default": true,
-					"markdownDescription": "%config.completion.endAutocompletion%",
-					"scope": "resource",
-					"type": "boolean"
-				},
-				"Lua.completion.keywordSnippet": {
+				"robloxLsp.completion.keywordSnippet": {
 					"default": "Replace",
 					"enum": [
 						"Disable",
@@ -105,7 +70,49 @@
 					"scope": "resource",
 					"type": "string"
 				},
-				"Lua.diagnostics.disable": {
+				"robloxLsp.completion.showParams": {
+					"default": true,
+					"markdownDescription": "%config.completion.showParams%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.completion.endAutocompletion": {
+					"default": false,
+					"markdownDescription": "%config.completion.endAutocompletion%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.completion.workspaceWord": {
+					"default": true,
+					"markdownDescription": "%config.completion.workspaceWord%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.completion.deprecatedMembers": {
+					"default": false,
+					"markdownDescription": "%config.completion.deprecatedMembers%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.develop.debuggerPort": {
+					"default": 11412,
+					"markdownDescription": "%config.develop.debuggerPort%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"robloxLsp.develop.debuggerWait": {
+					"default": false,
+					"markdownDescription": "%config.develop.debuggerWait%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.develop.enable": {
+					"default": false,
+					"markdownDescription": "%config.develop.enable%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.diagnostics.disable": {
 					"items": {
 						"type": "string"
 					},
@@ -113,19 +120,13 @@
 					"scope": "resource",
 					"type": "array"
 				},
-				"Lua.diagnostics.enable": {
+				"robloxLsp.diagnostics.enable": {
 					"default": true,
 					"markdownDescription": "%config.diagnostics.enable%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.diagnostics.syntax": {
-					"default": true,
-					"markdownDescription": "%config.diagnostics.syntax%",
-					"scope": "resource",
-					"type": "boolean"
-				},
-				"Lua.diagnostics.globals": {
+				"robloxLsp.diagnostics.globals": {
 					"items": {
 						"type": "string"
 					},
@@ -133,19 +134,456 @@
 					"scope": "resource",
 					"type": "array"
 				},
-				"Lua.diagnostics.ignore": {
-					"items": {
-						"type": "string"
+				"robloxLsp.diagnostics.neededFileStatus": {
+					"markdownDescription": "%config.diagnostics.neededFileStatus%",
+					"properties": {
+						"ambiguity-1": {
+							"default": "Any",
+							"description": "%config.diagnostics.ambiguity-1%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"circle-doc-class": {
+							"default": "Any",
+							"description": "%config.diagnostics.circle-doc-class%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"count-down-loop": {
+							"default": "Any",
+							"description": "%config.diagnostics.count-down-loop%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"deprecated": {
+							"default": "Opened",
+							"description": "%config.diagnostics.deprecated%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"doc-field-no-class": {
+							"default": "Any",
+							"description": "%config.diagnostics.doc-field-no-class%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-doc-class": {
+							"default": "Any",
+							"description": "%config.diagnostics.duplicate-doc-class%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-doc-field": {
+							"default": "Any",
+							"description": "%config.diagnostics.duplicate-doc-field%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-doc-param": {
+							"default": "Any",
+							"description": "%config.diagnostics.duplicate-doc-param%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-index": {
+							"default": "Any",
+							"description": "%config.diagnostics.duplicate-index%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-set-field": {
+							"default": "Any",
+							"description": "%config.diagnostics.duplicate-set-field%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"empty-block": {
+							"default": "Opened",
+							"description": "%config.diagnostics.empty-block%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"global-in-nil-env": {
+							"default": "Any",
+							"description": "%config.diagnostics.global-in-nil-env%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"lowercase-global": {
+							"default": "Any",
+							"description": "%config.diagnostics.lowercase-global%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"newfield-call": {
+							"default": "Any",
+							"description": "%config.diagnostics.newfield-call%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"newline-call": {
+							"default": "Any",
+							"description": "%config.diagnostics.newline-call%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"no-implicit-any": {
+							"default": "None",
+							"description": "%config.diagnostics.no-implicit-any%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"redefined-local": {
+							"default": "Opened",
+							"description": "%config.diagnostics.redefined-local%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"redundant-parameter": {
+							"default": "Opened",
+							"description": "%config.diagnostics.redundant-parameter%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"redundant-value": {
+							"default": "Opened",
+							"description": "%config.diagnostics.redundant-value%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"trailing-space": {
+							"default": "Opened",
+							"description": "%config.diagnostics.trailing-space%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unbalanced-assignments": {
+							"default": "Any",
+							"description": "%config.diagnostics.unbalanced-assignments%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-doc-class": {
+							"default": "Any",
+							"description": "%config.diagnostics.undefined-doc-class%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-doc-name": {
+							"default": "Any",
+							"description": "%config.diagnostics.undefined-doc-name%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-doc-module": {
+							"default": "Any",
+							"description": "%config.diagnostics.undefined-doc-module%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-doc-param": {
+							"default": "Any",
+							"description": "%config.diagnostics.undefined-doc-param%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-env-child": {
+							"default": "Any",
+							"description": "%config.diagnostics.undefined-env-child%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-global": {
+							"default": "Any",
+							"description": "%config.diagnostics.undefined-global%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unknown-diag-code": {
+							"default": "Any",
+							"description": "%config.diagnostics.unknown-diag-code%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unused-function": {
+							"default": "Opened",
+							"description": "%config.diagnostics.unused-function%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unused-local": {
+							"default": "Opened",
+							"description": "%config.diagnostics.unused-local%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unused-vararg": {
+							"default": "Opened",
+							"description": "%config.diagnostics.unused-vararg%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"invalid-class-name": {
+							"default": "Any",
+							"description": "%config.diagnostics.invalid-class-name%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						}
 					},
-					"markdownDescription": "%config.diagnostics.ignore%",
 					"scope": "resource",
-					"type": "array"
+					"title": "neededFileStatus",
+					"type": "object"
 				},
-				"Lua.diagnostics.severity": {
+				"robloxLsp.diagnostics.severity": {
 					"markdownDescription": "%config.diagnostics.severity%",
 					"properties": {
 						"ambiguity-1": {
 							"default": "Warning",
+							"description": "%config.diagnostics.ambiguity-1%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"circle-doc-class": {
+							"default": "Warning",
+							"description": "%config.diagnostics.circle-doc-class%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"count-down-loop": {
+							"default": "Warning",
+							"description": "%config.diagnostics.count-down-loop%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"deprecated": {
+							"default": "Hint",
+							"description": "%config.diagnostics.deprecated%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"doc-field-no-class": {
+							"default": "Warning",
+							"description": "%config.diagnostics.doc-field-no-class%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-doc-class": {
+							"default": "Warning",
+							"description": "%config.diagnostics.duplicate-doc-class%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-doc-field": {
+							"default": "Warning",
+							"description": "%config.diagnostics.duplicate-doc-field%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"duplicate-doc-param": {
+							"default": "Warning",
+							"description": "%config.diagnostics.duplicate-doc-param%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -157,6 +595,7 @@
 						},
 						"duplicate-index": {
 							"default": "Warning",
+							"description": "%config.diagnostics.duplicate-index%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -166,19 +605,9 @@
 							"scope": "resource",
 							"type": "string"
 						},
-						"duplicate-method": {
+						"duplicate-set-field": {
 							"default": "Warning",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"emmy-lua": {
-							"default": "Warning",
+							"description": "%config.diagnostics.duplicate-set-field%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -190,6 +619,7 @@
 						},
 						"empty-block": {
 							"default": "Hint",
+							"description": "%config.diagnostics.empty-block%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -201,6 +631,7 @@
 						},
 						"global-in-nil-env": {
 							"default": "Warning",
+							"description": "%config.diagnostics.global-in-nil-env%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -212,6 +643,7 @@
 						},
 						"lowercase-global": {
 							"default": "Information",
+							"description": "%config.diagnostics.lowercase-global%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -223,6 +655,7 @@
 						},
 						"newfield-call": {
 							"default": "Warning",
+							"description": "%config.diagnostics.newfield-call%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -234,6 +667,19 @@
 						},
 						"newline-call": {
 							"default": "Information",
+							"description": "%config.diagnostics.newline-call%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"no-implicit-any": {
+							"default": "Information",
+							"description": "%config.diagnostics.no-implicit-any%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -245,6 +691,7 @@
 						},
 						"redefined-local": {
 							"default": "Hint",
+							"description": "%config.diagnostics.redefined-local%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -256,6 +703,7 @@
 						},
 						"redundant-parameter": {
 							"default": "Hint",
+							"description": "%config.diagnostics.redundant-parameter%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -267,28 +715,7 @@
 						},
 						"redundant-value": {
 							"default": "Hint",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"set-const": {
-							"default": "Error",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"set-for-state": {
-							"default": "Warning",
+							"description": "%config.diagnostics.redundant-value%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -300,6 +727,67 @@
 						},
 						"trailing-space": {
 							"default": "Hint",
+							"description": "%config.diagnostics.trailing-space%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unbalanced-assignments": {
+							"default": "Warning",
+							"description": "%config.diagnostics.unbalanced-assignments%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-doc-class": {
+							"default": "Warning",
+							"description": "%config.diagnostics.undefined-doc-class%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-doc-name": {
+							"default": "Warning",
+							"description": "%config.diagnostics.undefined-doc-name%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-doc-module": {
+							"default": "Warning",
+							"description": "%config.diagnostics.undefined-doc-module%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-doc-param": {
+							"default": "Warning",
+							"description": "%config.diagnostics.undefined-doc-param%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -311,6 +799,19 @@
 						},
 						"undefined-env-child": {
 							"default": "Information",
+							"description": "%config.diagnostics.undefined-env-child%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-field": {
+							"default": "Warning",
+							"description": "%config.diagnostics.undefined-field%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -322,6 +823,19 @@
 						},
 						"undefined-global": {
 							"default": "Warning",
+							"description": "%config.diagnostics.undefined-global%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"unknown-diag-code": {
+							"default": "Waiting",
+							"description": "%config.diagnostics.unknown-diag-code%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -333,17 +847,7 @@
 						},
 						"unused-function": {
 							"default": "Hint",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"unused-label": {
-							"default": "Hint",
+							"description": "%config.diagnostics.unused-function%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -355,6 +859,7 @@
 						},
 						"unused-local": {
 							"default": "Hint",
+							"description": "%config.diagnostics.unused-local%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -366,6 +871,7 @@
 						},
 						"unused-vararg": {
 							"default": "Hint",
+							"description": "%config.diagnostics.unused-vararg%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -375,63 +881,9 @@
 							"scope": "resource",
 							"type": "string"
 						},
-						"undefined-rbx-member": {
+						"invalid-class-name": {
 							"default": "Warning",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"incorrect-call-arguments": {
-							"default": "Warning",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"deprecated-rbx-member": {
-							"default": "Information",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"invalid-rbx-classname": {
-							"default": "Warning",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"unknown-symbol": {
-							"default": "Warning",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"missing-module-return": {
-							"default": "Warning",
+							"description": "%config.diagnostics.invalid-class-name%",
 							"enum": [
 								"Error",
 								"Warning",
@@ -446,31 +898,109 @@
 					"title": "severity",
 					"type": "object"
 				},
-				"Lua.hover.enable": {
+				"robloxLsp.diagnostics.workspaceDelay": {
+					"default": 0,
+					"markdownDescription": "%config.diagnostics.workspaceDelay%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"robloxLsp.diagnostics.workspaceRate": {
+					"default": 100,
+					"markdownDescription": "%config.diagnostics.workspaceRate%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"robloxLsp.hint.enable": {
+					"default": false,
+					"markdownDescription": "%config.hint.enable%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.hint.paramName": {
+					"default": false,
+					"markdownDescription": "%config.hint.paramName%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.hint.paramType": {
+					"default": true,
+					"markdownDescription": "%config.hint.paramType%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.hint.setType": {
+					"default": false,
+					"markdownDescription": "%config.hint.setType%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.hint.variableType": {
+					"default": true,
+					"markdownDescription": "%config.hint.variableType%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.hint.returnType": {
+					"default": false,
+					"markdownDescription": "%config.hint.returnType%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.hover.enable": {
 					"default": true,
 					"markdownDescription": "%config.hover.enable%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.hover.viewNumber": {
+				"robloxLsp.hover.enumsLimit": {
+					"default": 5,
+					"markdownDescription": "%config.hover.enumsLimit%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"robloxLsp.hover.fieldInfer": {
+					"default": 3000,
+					"markdownDescription": "%config.hover.fieldInfer%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"robloxLsp.hover.previewFields": {
+					"default": 100,
+					"markdownDescription": "%config.hover.previewFields%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"robloxLsp.hover.viewNumber": {
 					"default": true,
 					"markdownDescription": "%config.hover.viewNumber%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.hover.viewString": {
+				"robloxLsp.hover.viewString": {
 					"default": true,
 					"markdownDescription": "%config.hover.viewString%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.hover.viewStringMax": {
+				"robloxLsp.hover.viewStringMax": {
 					"default": 1000,
 					"markdownDescription": "%config.hover.viewStringMax%",
 					"scope": "resource",
 					"type": "integer"
 				},
-				"Lua.runtime.path": {
+				"robloxLsp.intelliSense.searchDepth": {
+					"default": 0,
+					"markdownDescription": "%config.intelliSense.searchDepth%",
+					"scope": "resource",
+					"type": "integer"
+				},
+				"robloxLsp.misc.parameters": {
+					"default": "",
+					"markdownDescription": "%config.misc.parameters%",
+					"scope": "resource",
+					"type": "string"
+				},
+				"robloxLsp.runtime.path": {
 					"default": [
 						"?.lua",
 						"?/init.lua",
@@ -483,27 +1013,37 @@
 					"scope": "resource",
 					"type": "array"
 				},
-				"Lua.runtime.version": {
-					"default": "Luau",
-					"enum": [
-						"Luau",
-						"Lua 5.1",
-						"Lua 5.2",
-						"Lua 5.3",
-						"Lua 5.4",
-						"LuaJIT"
-					],
-					"markdownDescription": "%config.runtime.version%",
+				"robloxLsp.runtime.plugin": {
+					"default": ".vscode/lua/plugin.lua",
+					"markdownDescription": "%config.runtime.plugin%",
 					"scope": "resource",
 					"type": "string"
 				},
-				"Lua.signatureHelp.enable": {
+				"robloxLsp.signatureHelp.enable": {
 					"default": true,
 					"markdownDescription": "%config.signatureHelp.enable%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.workspace.ignoreDir": {
+				"robloxLsp.signatureHelp.documentation": {
+					"default": true,
+					"markdownDescription": "%config.signatureHelp.documentation%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.window.progressBar": {
+					"default": true,
+					"markdownDescription": "%config.window.progressBar%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.window.statusBar": {
+					"default": true,
+					"markdownDescription": "%config.window.statusBar%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.workspace.ignoreDir": {
 					"default": [
 						".vscode"
 					],
@@ -514,19 +1054,19 @@
 					"scope": "resource",
 					"type": "array"
 				},
-				"Lua.workspace.ignoreSubmodules": {
+				"robloxLsp.workspace.ignoreSubmodules": {
 					"default": true,
 					"markdownDescription": "%config.workspace.ignoreSubmodules%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.workspace.rojoProjectFile": {
+				"robloxLsp.workspace.rojoProjectFile": {
 					"default": "default",
 					"markdownDescription": "%config.workspace.rojoProjectFile%",
 					"scope": "resource",
 					"type": "string"
 				},
-				"Lua.workspace.loadMode": {
+				"robloxLsp.workspace.loadMode": {
 					"default": "All Files",
 					"enum": [
 						"All Files",
@@ -540,49 +1080,148 @@
 					"scope": "resource",
 					"type": "string"
 				},
-				"Lua.workspace.library": {
+				"robloxLsp.workspace.library": {
+					"items": {
+						"type": "string"
+					},
 					"markdownDescription": "%config.workspace.library%",
 					"scope": "resource",
-					"type": "object"
+					"type": "array"
 				},
-				"Lua.workspace.maxPreload": {
-					"default": 300,
+				"robloxLsp.workspace.maxPreload": {
+					"default": 1000,
 					"markdownDescription": "%config.workspace.maxPreload%",
 					"scope": "resource",
 					"type": "integer"
 				},
-				"Lua.workspace.preloadFileSize": {
+				"robloxLsp.workspace.preloadFileSize": {
 					"default": 100,
 					"markdownDescription": "%config.workspace.preloadFileSize%",
 					"scope": "resource",
 					"type": "integer"
 				},
-				"Lua.workspace.useGitIgnore": {
+				"robloxLsp.workspace.useGitIgnore": {
 					"default": true,
 					"markdownDescription": "%config.workspace.useGitIgnore%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.zzzzzz.cat": {
-					"default": false,
-					"markdownDescription": "%config.zzzzzz.cat%",
+				"robloxLsp.runtime.fileEncoding": {
+					"default": "utf8",
+					"enum": [
+						"utf8",
+						"ansi"
+					],
+					"markdownDescription": "%config.runtime.fileEncoding%",
+					"scope": "resource",
+					"type": "string"
+				},
+				"robloxLsp.misc.serviceAutoImport": {
+					"default": true,
+					"markdownDescription": "%config.misc.serviceAutoImport%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"Lua.logging.showDebugMessages": {
+				"robloxLsp.misc.color3Picker": {
+					"default": true,
+					"markdownDescription": "%config.misc.color3Picker%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.misc.goToScriptLink": {
+					"default": true,
+					"markdownDescription": "%config.misc.goToScriptLink%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.misc.serverPort": {
+					"default": 27843,
+					"markdownDescription": "%config.misc.serverPort%",
+					"scope": "resource",
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 65535
+				},
+				"robloxLsp.typeChecking.mode": {
+					"default": "Disabled",
+					"enum": [
+						"Disabled",
+						"Non Strict",
+						"Strict"
+					],
+					"markdownDescription": "%config.typeChecking.mode%",
+					"markdownEnumDescriptions": [
+						"%config.typeChecking.mode.disabled%",
+						"%config.typeChecking.mode.nonStrict%",
+						"%config.typeChecking.mode.strict%"
+					],
+					"scope": "resource",
+					"type": "string"
+				},
+				"robloxLsp.typeChecking.options": {
+					"markdownDescription": "%config.typeChecking.options%",
+					"properties": {
+						"union-bivariance": {
+							"default": false,
+							"description": "%config.typeChecking.options.union-bivariance%",
+							"scope": "resource",
+							"type": "boolean"
+						},
+						"ignore-extra-fields": {
+							"default": false,
+							"description": "%config.typeChecking.options.ignore-extra-fields%",
+							"scope": "resource",
+							"type": "boolean"
+						},
+						"infer-instance-from-unknown": {
+							"default": false,
+							"description": "%config.typeChecking.options.infer-instance-from-unknown%",
+							"scope": "resource",
+							"type": "boolean"
+						},
+						"recursive-get-type": {
+							"default": false,
+							"description": "%config.typeChecking.options.recursive-get-type%",
+							"scope": "resource",
+							"type": "boolean"
+						}
+					},
+					"scope": "resource",
+					"type": "object"
+				},
+				"robloxLsp.typeChecking.showFullType": {
 					"default": false,
-					"markdownDescription": "%config.logging.showDebugMessages%",
+					"markdownDescription": "%config.typeChecking.showFullType%",
+					"scope": "resource",
 					"type": "boolean"
 				}
 			},
-			"title": "Lua",
+			"title": "Roblox LSP",
 			"type": "object"
 		},
+		"languages": [
+			{
+				"id": "lua",
+				"aliases": [
+					"Luau"
+				],
+				"extensions": [
+					".lua",
+					".luau"
+				]
+			}
+		],
 		"grammars": [
 			{
 				"language": "lua",
 				"path": "./syntaxes/lua.tmLanguage.json",
 				"scopeName": "source.lua"
+			}
+		],
+		"semanticTokenModifiers": [
+			{
+				"id": "primitive",
+				"description": "primitive types"
 			}
 		],
 		"semanticTokenScopes": [
@@ -605,27 +1244,34 @@
 						"variable.parameter"
 					],
 					"property.declaration": [
-						"entity.other.attribute"
+						"variable.other.property.js"
 					],
 					"variable": [
 						"variable.other.lua"
+					],
+					"variable.abstract": [
+						"variable.other.constant.lua"
+					],
+					"variable.static": [
+						"variable.other.constant.lua"
+					],
+					"type.primitive": [
+						"support.type.primitive.lua"
 					]
 				}
 			}
 		]
 	},
-	"description": "Roblox Luau Language Server forked from Lua by sumneko.",
+	"description": "Roblox Luau Language Server.",
 	"displayName": "Roblox LSP",
 	"engines": {
 		"vscode": "^1.23.0"
 	},
 	"icon": "images/logo.png",
 	"keywords": [
-		"Roblox",
-		"Luau",
-		"LSP",
-		"GoTo Definition",
-		"IntelliSense"
+		"Lua",
+		"IntelliSense",
+		"EmmyLua"
 	],
 	"license": "MIT",
 	"main": "./client/out/extension",
@@ -635,7 +1281,7 @@
 		"type": "git",
 		"url": "https://github.com/NightrainsRbx/RobloxLsp"
 	},
-	"version": "0.15.11",
+	"version": "1.1.0",
 	"__metadata": {
 		"id": "169d2b9c-69d2-482a-aee2-ea6c33ed4e89",
 		"publisherDisplayName": "Nightrains",

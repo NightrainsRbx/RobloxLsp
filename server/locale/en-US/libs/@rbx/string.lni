@@ -1,2 +1,0 @@
-[split]
-description = 'Splits a string into parts based on the defined separator character(s), returning a table of ordered results. The default separator is comma `,`.'
