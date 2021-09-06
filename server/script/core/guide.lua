@@ -3027,18 +3027,14 @@ function m.getFullType(status, tp, mark)
     return tp
 end
 
-local anyType = {
-    type = "type.name",
-    [1] = "any"
-}
-
 local function typeCheckFunctionCall(status, func, callArgs)
     local typeChecker = require("core.type-checking")
     typeChecker.init()
     typeChecker.options["union-bivariance"] = true
     typeChecker.strict = true
     local varargs = nil
-    local argsCount = #callArgs
+    local callArgCount = #callArgs
+    local argChecked = 0
     for i = 1, m.getTypeCount(func.args) do
         local arg = func.args[i]
         if arg and arg.type == "type.variadic" then
@@ -3052,8 +3048,9 @@ local function typeCheckFunctionCall(status, func, callArgs)
         if not other then
             break
         end
-        local otherType = m.getType(status, other) or anyType
-        if otherType.parent and i == argsCount then
+        argChecked = argChecked + 1
+        local otherType = m.getType(status, other) or makeNameType("any")
+        if otherType.parent and i == callArgCount then
             if otherType.parent.type == "type.list" then
                 for j = 2, #otherType.parent do
                     if otherType.parent[j].type == "type.variadic" then
@@ -3079,6 +3076,9 @@ local function typeCheckFunctionCall(status, func, callArgs)
         end
     end
     typeChecker.init()
+    if #callArgs > argChecked or #callArgs < typeChecker.getArgCount(func.args) then
+        return false
+    end
     return true
 end
 
@@ -3099,7 +3099,8 @@ local function checkSameSimpleAndMergeTypeAnnReturns(status, results, source, in
         elseif source.type == "type.inter" then
             if source.returns then
                 returns[#returns+1] = source.returns
-            elseif args then
+            else
+                args = args or {}
                 for _, func in ipairs(m.getAllValuesInType(source)) do
                     func = m.getFullType(status, func) or func
                     if func.type == "type.function" and typeCheckFunctionCall(status, func, args) then
