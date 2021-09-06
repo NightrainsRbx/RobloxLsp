@@ -116,7 +116,7 @@ local function paramName(uri, edits, start, finish)
     local text = files.getText(uri)
     local mark = {}
     guide.eachSourceBetween(ast.ast, start, finish, function (source)
-        if source.type ~= 'call' then
+        if source.type ~= 'call' or not source.args then
             return
         end
         -- if not hasLiteralArgInCall(source) then
