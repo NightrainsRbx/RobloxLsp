@@ -4,6 +4,10 @@ exports.deactivate = exports.activate = void 0;
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
+<<<<<<< HEAD
+=======
+const vscode = require("vscode");
+>>>>>>> origin/master
 const vscode_1 = require("vscode");
 const node_1 = require("vscode-languageclient/node");
 let defaultClient;
@@ -14,11 +18,19 @@ function registerCustomCommands(context) {
         if (data.action == 'add') {
             let value = config.get(data.key);
             value.push(data.value);
+<<<<<<< HEAD
             config.update(data.key, value);
             return;
         }
         if (data.action == 'set') {
             config.update(data.key, data.value);
+=======
+            config.update(data.key, value, data.global);
+            return;
+        }
+        if (data.action == 'set') {
+            config.update(data.key, data.value, data.global);
+>>>>>>> origin/master
             return;
         }
     }));
@@ -64,9 +76,16 @@ function start(context, documentSelector, folder) {
         },
     };
     let config = vscode_1.workspace.getConfiguration(undefined, folder);
+<<<<<<< HEAD
     let develop = config.get("Lua.develop.enable");
     let debuggerPort = config.get("Lua.develop.debuggerPort");
     let debuggerWait = config.get("Lua.develop.debuggerWait");
+=======
+    let develop = config.get("robloxLsp.develop.enable");
+    let debuggerPort = config.get("robloxLsp.develop.debuggerPort");
+    let debuggerWait = config.get("robloxLsp.develop.debuggerWait");
+    let commandParam = config.get("robloxLsp.misc.parameters");
+>>>>>>> origin/master
     let command;
     let platform = os.platform();
     switch (platform) {
@@ -86,6 +105,7 @@ function start(context, documentSelector, folder) {
         command: command,
         args: [
             '-E',
+<<<<<<< HEAD
             '-e',
             `DEVELOP=${develop};DBGPORT=${debuggerPort};DBGWAIT=${debuggerWait}`,
             context.asAbsolutePath(path.join('server', 'main.lua'))
@@ -96,6 +116,140 @@ function start(context, documentSelector, folder) {
     client.start();
     return client;
 }
+=======
+            context.asAbsolutePath(path.join('server', 'main.lua')),
+            `--develop=${develop}`,
+            `--dbgport=${debuggerPort}`,
+            `--dbgwait=${debuggerWait}`,
+            commandParam,
+        ]
+    };
+    let client = new node_1.LanguageClient('Lua', 'Lua', serverOptions, clientOptions);
+    // client.registerProposedFeatures();
+    client.start();
+    client.onReady().then(() => {
+        onCommand(client);
+        onDecorations(client);
+        statusBar(client);
+    });
+    return client;
+}
+let barCount = 0;
+function statusBar(client) {
+    let bar = vscode_1.window.createStatusBarItem();
+    bar.text = 'Roblox LSP';
+    barCount++;
+    bar.command = 'Lua.statusBar:' + barCount;
+    vscode_1.commands.registerCommand(bar.command, () => {
+        client.sendNotification('$/status/click');
+    });
+    client.onNotification('$/status/show', (params) => {
+        bar.show();
+    });
+    client.onNotification('$/status/hide', (params) => {
+        bar.hide();
+    });
+    client.onNotification('$/status/report', (params) => {
+        bar.text = params.text;
+        bar.tooltip = params.tooltip;
+    });
+}
+function onCommand(client) {
+    client.onNotification('$/command', (params) => {
+        vscode_1.commands.executeCommand(params.command, params.data);
+    });
+}
+function isDocumentInClient(textDocuments, client) {
+    let selectors = client.clientOptions.documentSelector;
+    if (!node_1.DocumentSelector.is(selectors)) {
+        {
+            return false;
+        }
+    }
+    if (vscode.languages.match(selectors, textDocuments)) {
+        return true;
+    }
+    return false;
+}
+function onDecorations(client) {
+    let textType = vscode_1.window.createTextEditorDecorationType({});
+    function notifyVisibleRanges(textEditor) {
+        if (!isDocumentInClient(textEditor.document, client)) {
+            return;
+        }
+        let uri = client.code2ProtocolConverter.asUri(textEditor.document.uri);
+        let ranges = [];
+        for (let index = 0; index < textEditor.visibleRanges.length; index++) {
+            const range = textEditor.visibleRanges[index];
+            ranges[index] = client.code2ProtocolConverter.asRange(new vscode.Range(Math.max(range.start.line - 3, 0), range.start.character, Math.min(range.end.line + 3, textEditor.document.lineCount - 1), range.end.character));
+        }
+        for (let index = ranges.length; index > 1; index--) {
+            const current = ranges[index];
+            const before = ranges[index - 1];
+            if (current.start.line > before.end.line) {
+                continue;
+            }
+            if (current.start.line == before.end.line && current.start.character > before.end.character) {
+                continue;
+            }
+            ranges.pop();
+            before.end = current.end;
+        }
+        client.sendNotification('$/didChangeVisibleRanges', {
+            uri: uri,
+            ranges: ranges,
+        });
+    }
+    for (let index = 0; index < vscode_1.window.visibleTextEditors.length; index++) {
+        notifyVisibleRanges(vscode_1.window.visibleTextEditors[index]);
+    }
+    vscode_1.window.onDidChangeVisibleTextEditors((params) => {
+        for (let index = 0; index < params.length; index++) {
+            notifyVisibleRanges(params[index]);
+        }
+    });
+    vscode_1.window.onDidChangeTextEditorVisibleRanges((params) => {
+        notifyVisibleRanges(params.textEditor);
+    });
+    client.onNotification('$/hint', (params) => {
+        let uri = params.uri;
+        for (let index = 0; index < vscode_1.window.visibleTextEditors.length; index++) {
+            const editor = vscode_1.window.visibleTextEditors[index];
+            if (editor.document.uri.toString() == uri && isDocumentInClient(editor.document, client)) {
+                let textEditor = editor;
+                let edits = params.edits;
+                let options = [];
+                for (let index = 0; index < edits.length; index++) {
+                    const edit = edits[index];
+                    options[index] = {
+                        hoverMessage: edit.newText,
+                        range: client.protocol2CodeConverter.asRange(edit.range),
+                        renderOptions: {
+                            light: {
+                                after: {
+                                    contentText: edit.newText,
+                                    color: '#888888',
+                                    backgroundColor: '#EEEEEE;border-radius: 4px; padding: 0px 2px;',
+                                    fontWeight: '400; font-size: 12px; line-height: 1;',
+                                }
+                            },
+                            dark: {
+                                after: {
+                                    contentText: edit.newText,
+                                    color: '#888888',
+                                    backgroundColor: '#333333;border-radius: 4px; padding: 0px 2px;',
+                                    fontWeight: '400; font-size: 12px; line-height: 1;',
+                                }
+                            }
+                        }
+                    };
+                }
+                textEditor.setDecorations(textType, options);
+            }
+        }
+    });
+}
+>>>>>>> origin/master
 function activate(context) {
     registerCustomCommands(context);
     function didOpenTextDocument(document) {
@@ -120,8 +274,14 @@ function activate(context) {
         // If we have nested workspace folders we only start a server on the outer most workspace folder.
         folder = getOuterMostWorkspaceFolder(folder);
         if (!clients.has(folder.uri.toString())) {
+<<<<<<< HEAD
             let client = start(context, [
                 { scheme: 'file', language: 'lua', pattern: `${folder.uri.fsPath}/**/*` }
+=======
+            let pattern = folder.uri.fsPath.replace(/(\[|\])/g, '[$1]') + '/**/*';
+            let client = start(context, [
+                { scheme: 'file', language: 'lua', pattern: pattern }
+>>>>>>> origin/master
             ], folder);
             clients.set(folder.uri.toString(), client);
         }

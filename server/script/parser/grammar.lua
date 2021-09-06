@@ -4,7 +4,10 @@ local ast = require 'parser.ast'
 
 local scriptBuf = ''
 local compiled = {}
+<<<<<<< HEAD
 local parser
+=======
+>>>>>>> origin/master
 local defs = ast.defs
 
 -- goto 可以作为名字，合法性之后处理
@@ -44,6 +47,10 @@ defs.et = '\t'
 defs.ev = '\v'
 defs['nil'] = m.Cp() / function () return nil end
 defs['false'] = m.Cp() / function () return false end
+<<<<<<< HEAD
+=======
+defs['true'] = m.Cp() / function () return true end
+>>>>>>> origin/master
 defs.NotReserved = function (_, _, str)
     if RESERVED[str] then
         return false
@@ -58,6 +65,15 @@ defs.Reserved = function (_, _, str)
 end
 defs.None = function () end
 defs.np = m.Cp() / function (n) return n+1 end
+<<<<<<< HEAD
+=======
+defs.NoNil = function (o)
+    if o == nil then
+        return
+    end
+    return o
+end
+>>>>>>> origin/master
 
 m.setmaxstack(1000)
 
@@ -80,6 +96,7 @@ local function errorpos(pos, err)
 end
 
 grammar 'Comment' [[
+<<<<<<< HEAD
 Comment         <-  LongComment / '--' ShortComment
 LongComment     <-  ('--[' {} {:eq: '='* :} {} '['
                     {(!CommentClose .)*}
@@ -93,6 +110,17 @@ LongComment     <-  ('--[' {} {:eq: '='* :} {} '['
                 ->  CLongComment
 CommentClose    <-  ']' =eq ']'
 ShortComment    <-  (!%nl .)*
+=======
+Comment         <-  LongComment
+                /   '--' ShortComment
+LongComment     <-  ({} '--[' {} {:eq: '='* :} {} '[' %nl?
+                    {(!CommentClose .)*}
+                    ((CommentClose / %nil) {}))
+                ->  LongComment
+CommentClose    <-  {']' =eq ']'}
+ShortComment    <-  ({} {(!%nl .)*} {})
+                ->  ShortComment
+>>>>>>> origin/master
 ]]
 
 grammar 'Sp' [[
@@ -108,6 +136,7 @@ Rest        <-  (!%nl .)*
 
 AND         <-  Sp {'and'}    Cut
 BREAK       <-  Sp 'break'    Cut
+<<<<<<< HEAD
 CONTINUE    <-  Sp 'continue' Cut
 DO          <-  Sp 'do'       Cut
             /   Sp ({} 'then' Cut {}) -> ErrDo
@@ -120,10 +149,14 @@ FUNCTION    <-  Sp 'function' Cut
 GOTO        <-  Sp 'goto'     Cut
 IF          <-  Sp 'if'       Cut
 IN          <-  Sp 'in'       Cut
+=======
+FALSE       <-  Sp 'false'    Cut
+>>>>>>> origin/master
 LOCAL       <-  Sp 'local'    Cut
 NIL         <-  Sp 'nil'      Cut
 NOT         <-  Sp 'not'      Cut
 OR          <-  Sp {'or'}     Cut
+<<<<<<< HEAD
 REPEAT      <-  Sp 'repeat'   Cut
 RETURN      <-  Sp 'return'   Cut
 THEN        <-  Sp 'then'     Cut
@@ -131,6 +164,29 @@ THEN        <-  Sp 'then'     Cut
 TRUE        <-  Sp 'true'     Cut
 UNTIL       <-  Sp 'until'    Cut
 WHILE       <-  Sp 'while'    Cut
+=======
+RETURN      <-  Sp 'return'   Cut
+TRUE        <-  Sp 'true'     Cut
+CONTINUE    <-  Sp 'continue' Cut
+EXPORT      <-  Sp 'export'   Cut
+TYPE        <-  Sp 'type'     Cut
+
+DO          <-  Sp {} 'do'       {} Cut
+            /   Sp({} 'then'     {} Cut) -> ErrDo
+IF          <-  Sp {} 'if'       {} Cut
+ELSE        <-  Sp {} 'else'     {} Cut
+ELSEIF      <-  Sp {} 'elseif'   {} Cut
+END         <-  Sp {} 'end'      {} Cut
+FOR         <-  Sp {} 'for'      {} Cut
+FUNCTION    <-  Sp {} 'function' {} Cut
+IN          <-  Sp {} 'in'       {} Cut
+REPEAT      <-  Sp {} 'repeat'   {} Cut
+THEN        <-  Sp {} 'then'     {} Cut
+            /   Sp({} 'do'       {} Cut) -> ErrThen
+UNTIL       <-  Sp {} 'until'    {} Cut
+WHILE       <-  Sp {} 'while'    {} Cut
+
+>>>>>>> origin/master
 
 Esc         <-  '\' -> ''
                 EChar
@@ -155,12 +211,15 @@ EChar       <-  'a' -> ea
             /   'u{' Word* !'}' {}      -> MissTR
             /   {}                      -> ErrEsc
 
+<<<<<<< HEAD
 BOR         <-  Sp {'|'}
 BXOR        <-  Sp {'~'} !'='
 BAND        <-  Sp {'&'}
 Bshift      <-  Sp {BshiftList}
 BshiftList  <-  '<<'
             /   '>>'
+=======
+>>>>>>> origin/master
 Concat      <-  Sp {'..'}
 Adds        <-  Sp {AddsList}
 AddsList    <-  '+'
@@ -174,14 +233,21 @@ Unary       <-  Sp {} {UnaryList}
 UnaryList   <-  NOT
             /   '#'
             /   '-'
+<<<<<<< HEAD
             /   '~' !'='
 POWER       <-  Sp {'^'}
 
 BinaryOp    <-  Sp {} {'or'} Cut
+=======
+POWER       <-  Sp {'^'}
+
+BinaryOp    <-( Sp {} {'or'} Cut
+>>>>>>> origin/master
             /   Sp {} {'and'} Cut
             /   Sp {} {'<=' / '>=' / '<'!'<' / '>'!'>' / '~=' / '=='}
             /   Sp {} ({} '=' {}) -> ErrEQ
             /   Sp {} ({} '!=' {}) -> ErrUEQ
+<<<<<<< HEAD
             /   Sp {} {'|'}
             /   Sp {} {'~'}
             /   Sp {} {'&'}
@@ -191,6 +257,15 @@ BinaryOp    <-  Sp {} {'or'} Cut
             /   Sp {} {'*' / '//' / '/' / '%'}
             /   Sp {} {'^'}
 UnaryOp     <-  Sp {} {'not' Cut / '#' / '~' !'=' / '-' !'-'}
+=======
+            /   Sp {} {'..'} !'.'
+            /   Sp {} {'+' / '-'}
+            /   Sp {} {'*' / '/' / '%'}
+            /   Sp {} {'^'}
+            )-> BinaryOp
+UnaryOp     <-( Sp {} {'not' Cut / '#' / '-' !'-'}
+            )-> UnaryOp
+>>>>>>> origin/master
 
 PL          <-  Sp '('
 PR          <-  Sp ')'
@@ -198,6 +273,7 @@ BL          <-  Sp '[' !'[' !'='
 BR          <-  Sp ']'
 TL          <-  Sp '{'
 TR          <-  Sp '}'
+<<<<<<< HEAD
 COMMA       <-  Sp ','
 SEMICOLON   <-  Sp ';'
 BAR         <-  Sp '|'
@@ -217,12 +293,43 @@ DirtyTR     <-  TR {}  / {} -> MissTR
 DirtyPR     <-  PR {}  / {} -> DirtyPR
 DirtyLabel  <-  LABEL  / {} -> MissLabel
 NeedPR      <-  PR     / {} -> MissPR
+=======
+AL          <-  Sp '<'
+AR          <-  Sp '>'
+COMMA       <-  Sp ({} ',')
+            ->  COMMA
+SEMICOLON   <-  Sp ({} ';')
+            ->  SEMICOLON
+DOTS        <-  Sp ({} '...')
+            ->  DOTS
+DOT         <-  Sp ({} '.' !'.')
+            ->  DOT
+COLON       <-  Sp ({} ':' !':')
+            ->  COLON
+LABEL       <-  Sp '::'
+ARROW       <-  Sp '->'
+ASSIGN      <-  Sp '=' !'='
+COMPASSIGN  <-  Sp ({} {('+' / '-' / '*' / '/' / '^' / '..' / '%')} '=' !'=' {})
+            ->  CompOp
+AssignOrEQ  <-  Sp ({} '==' {})
+            ->  ErrAssign
+            /   ASSIGN
+
+DirtyBR     <-  BR     / {} -> MissBR
+DirtyTR     <-  TR     / {} -> MissTR
+DirtyPR     <-  PR     / {} -> MissPR
+DirtyAR     <-  AR     / {} -> MissAR
+>>>>>>> origin/master
 NeedEnd     <-  END    / {} -> MissEnd
 NeedDo      <-  DO     / {} -> MissDo
 NeedAssign  <-  ASSIGN / {} -> MissAssign
 NeedComma   <-  COMMA  / {} -> MissComma
 NeedIn      <-  IN     / {} -> MissIn
 NeedUntil   <-  UNTIL  / {} -> MissUntil
+<<<<<<< HEAD
+=======
+NeedThen    <-  THEN   / {} -> MissThen
+>>>>>>> origin/master
 ]]
 
 grammar 'Nil' [[
@@ -252,11 +359,16 @@ StringClose <-  ']' =eq ']'
 
 grammar 'Number' [[
 Number      <-  Sp ({} {NumberDef} {}) -> Number
+<<<<<<< HEAD
                 NumberSuffix?
                 ErrNumber?
 NumberDef   <-  Number16 / Number2 / Number10
 NumberSuffix<-  ({} {[uU]? [lL] [lL]})      -> FFINumber
             /   ({} {[iI]})                 -> ImaginaryNumber
+=======
+                ErrNumber?
+NumberDef   <-  Number16 / Number2 / Number10
+>>>>>>> origin/master
 ErrNumber   <-  ({} {([0-9a-zA-Z] / '.')+}) -> UnknownSymbol
 
 Number10    <-  Float10 Float10Exp?
@@ -283,24 +395,44 @@ BinWithSep  <-  [01_]+
 grammar 'Name' [[
 Name        <-  Sp ({} NameBody {})
             ->  Name
+<<<<<<< HEAD
 NameBody    <-  {[a-zA-Z_] [a-zA-Z0-9_]*}
 FreeName    <-  Sp ({} {NameBody=>NotReserved} {})
             ->  Name
+=======
+NameStr     <-  [a-zA-Z_] [a-zA-Z0-9_]*
+NameBody    <-  {NameStr}
+FreeName    <-  Sp ({} {NameBody=>NotReserved} {})
+            ->  Name
+KeyWord     <-  Sp NameBody=>Reserved
+>>>>>>> origin/master
 MustName    <-  Name / DirtyName
 DirtyName   <-  {} -> DirtyName
 ]]
 
 grammar 'Exp' [[
+<<<<<<< HEAD
 Exp         <-  (UnUnit (BinaryOp (UnUnit / {} -> DirtyExp))*)
             ->  Exp
 UnUnit      <-  Assert
             /   UnaryOp+ (Assert / {} -> DirtyExp)
 Assert      <-  (ExpUnit (LABEL Type)?)
+=======
+Exp         <-  (UnUnit BinUnit*)
+            ->  Binary
+BinUnit     <-  (BinaryOp UnUnit?)
+            ->  SubBinary
+UnUnit      <-  TypeAssert
+            /   (UnaryOp+ (TypeAssert / MissExp))
+            ->  Unary
+TypeAssert  <-  (ExpUnit (LABEL Type)?)
+>>>>>>> origin/master
             ->  TypeAssert
 ExpUnit     <-  Nil
             /   Boolean
             /   String
             /   Number
+<<<<<<< HEAD
             /   DOTS -> DotsAsExp
             /   Table
             /   Function
@@ -319,12 +451,47 @@ Suffix      <-  DOT   Name / DOT   {} -> MissField
             /   Index
             /   ({} PL CallArgList DirtyPR) -> Call
 Method      <-  COLON Name / COLON {} -> MissMethod
+=======
+            /   Dots
+            /   Table
+            /   ExpFunction
+            /   Simple
+
+Simple      <-  {| Prefix (Sp Suffix)* |}
+            ->  Simple
+Prefix      <-  Sp ({} PL DirtyExp DirtyPR {})
+            ->  Paren
+            /   Single
+Single      <-  !FUNCTION FreeName
+            ->  Single
+Suffix      <-  SuffixWithoutCall
+            /   ({} PL SuffixCall DirtyPR {})
+            ->  Call
+SuffixCall  <-  Sp ({} {| (COMMA / Exp->NoNil)+ |} {})
+            ->  PackExpList
+            /   %nil
+SuffixWithoutCall
+            <-  (DOT (Name / MissField))
+            ->  GetField
+            /   ({} BL DirtyExp DirtyBR {})
+            ->  GetIndex
+            /   (COLON (Name / MissMethod) NeedCall)
+            ->  GetMethod
+            /   ({} {| Table |} {})
+            ->  Call
+            /   ({} {| String |} {})
+            ->  Call
+NeedCall    <-  (!(Sp CallStart) {} -> MissPL)?
+MissField   <-  {} -> MissField
+MissMethod  <-  {} -> MissMethod
+>>>>>>> origin/master
 CallStart   <-  PL
             /   TL
             /   '"'
             /   "'"
             /   '[' '='* '['
 
+<<<<<<< HEAD
 DirtyExp    <-  Exp
             /   {} -> DirtyExp
 MaybeExp    <-  Exp / MissExp
@@ -379,11 +546,75 @@ Type        <-  Sp (UnTypeUnit (TypeOp (UnTypeUnit / {} -> DirtyExp))*)
             ->  Exp
 UnTypeUnit  <-  TypeUnit
             /   UnaryOp+ (TypeUnit / {} -> DirtyExp)
+=======
+DirtyExp    <-  !THEN !DO !END Exp
+            /   {} -> DirtyExp
+MaybeExp    <-  Exp / MissExp
+MissExp     <-  {} -> MissExp
+ExpList     <-  Sp {| MaybeExp (Sp ',' MaybeExp)* |}
+
+Dots        <-  DOTS
+            ->  VarArgs
+
+Table       <-  Sp ({} TL {| TableField* |} DirtyTR {})
+            ->  Table
+TableField  <-  COMMA
+            /   SEMICOLON
+            /   NewIndex
+            /   NewField
+            /   Exp->NoNil
+Index       <-  BL DirtyExp DirtyBR
+NewIndex    <-  Sp ({} Index NeedAssign DirtyExp {})
+            ->  NewIndex
+NewField    <-  Sp ({} MustName ASSIGN DirtyExp {})
+            ->  NewField
+
+ExpFunction <-  Function
+            ->  ExpFunction
+Function    <-  FunctionBody
+            ->  Function
+FunctionBody
+            <-  FUNCTION FuncName FuncArgs {} ReturnTypeAnn
+                    {| (!END Action)* |}
+                NeedEnd
+            /   FUNCTION FuncName FuncArgsMiss {} ReturnTypeAnn
+                    {| %nil |}
+                NeedEnd
+FuncName    <-  !END {| Single (Sp SuffixWithoutCall)* |}
+            ->  Simple
+            /   %nil
+
+FuncArgs    <-  Sp ({} PL {| FuncArg+ |} DirtyPR {})
+            ->  FuncArgs
+            /   PL DirtyPR %nil
+FuncArgsMiss<-  {} -> MissPL DirtyPR %nil
+FuncArg     <-  DOTS TypeAnn?
+            /   Name TypeAnn?
+            /   COMMA
+
+-- 纯占位，修改了 `relabel.lua` 使重复定义不抛错
+Action      <-  !END .
+
+-- Type Grammars
+TypeOp      <-  (Sp {} {'|'}
+            /   Sp {} {'&'})
+            ->  BinaryOp
+
+Optional    <-  Sp ({} {'?'})
+            ->  Optional
+
+Type        <-  (TypeUnit (SubType)*)
+            ->  Type
+SubType     <-  (TypeOp TypeUnit?)
+            ->  SubType
+
+>>>>>>> origin/master
 TypeUnit    <-  ModuleType
             /   Typeof
             /   NameType
             /   FuncType
             /   TableType
+<<<<<<< HEAD
             /   VariadicType
             /   TypeSimple
 
@@ -412,11 +643,45 @@ NameType    <-  Sp ({} NameBody {} Generics2? Optional)
 ModuleType  <-  Sp ({} NameBody DOT NameType {})
             ->  ModuleType
 FuncType    <-  Sp ({} FuncTypeList Sp '->' (TypeList / Type) {})
+=======
+            /   TypeSimple
+
+TypeSimple  <-  ({| TypePrefix |} Optional?)
+            ->  TypeSimple
+TypePrefix  <-  Sp ({} PL Type !COMMA DirtyPR {})
+            ->  Paren
+            /   Single
+
+DirtyType   <-  Type
+            /   {} -> DirtyType
+
+Typeof      <-  Sp ({} 'typeof' Sp {} PL Exp DirtyPR {} Optional?)
+            ->  Typeof
+
+Generics1   <-  Sp ({} AL Sp {| (Name / COMMA)+ |} Sp DirtyAR {})
+            ->  Generics
+            /   %nil
+Generics2   <-  Sp ({} AL Sp {| (Type / COMMA)+ |} Sp DirtyAR {})
+            ->  Generics
+            /   %nil
+TypeList    <-  Sp ({} PL {| (Type / VariadicType / COMMA)* |} DirtyPR {})
+            ->  TypeList
+NamedType   <-  Sp (Name COLON Type) 
+            ->  NamedType
+ArgTypeList <-  Sp ({} PL {| (NamedType / Type / VariadicType / COMMA)* |} DirtyPR {})
+            ->  TypeList
+ModuleType  <-  Sp ({} (Name -> Single) DOT (NameType / %nil) {})
+            ->  ModuleType
+NameType    <-  Sp ({} NameBody Generics2 {} Optional?)
+            ->  NameType
+FuncType    <-  Sp ({} ArgTypeList ARROW (Type / VariadicType / TypeList Optional?) {})
+>>>>>>> origin/master
             ->  FuncType
 VariadicType    
             <-  Sp ({} DOTS Type {})
             ->  VariadicType
 
+<<<<<<< HEAD
 FieldType   <-  Sp ({} Name COLON Type {}) ->  FieldType1
             /   Sp ({} BL Type DirtyBR COLON Type {}) ->  FieldType2
             /   Sp ({} Type {}) ->  FieldType3
@@ -431,11 +696,30 @@ ParamType   <-  (COLON Type)
             ->  ParamType
 ReturnType  <-  (COLON (TypeList / Type))
             ->  ReturnType
+=======
+FieldType   <-  Sp ({} Name COLON Type {}) 
+            ->  FieldType
+            /   Sp ({} BL Type DirtyBR COLON Type {}) 
+            ->  IndexType
+            /   Type
+FieldList   <-  {| (FieldType / COMMA / Sp SEMICOLON)* |}
+            ->  FieldTypeList
+TableType   <-  Sp ({} TL FieldList DirtyTR {} Optional?)
+            ->  TableType
+
+TypeAnn     <-  (COLON {} Type {})
+            ->  TypeAnn
+ReturnTypeAnn
+            <-  (COLON {} (Type / VariadicType / TypeList) {})
+            ->  TypeAnn
+            /   %nil
+>>>>>>> origin/master
 ]]
 
 grammar 'Action' [[
 Action      <-  Sp (CrtAction / UnkAction)
 CrtAction   <-  Semicolon
+<<<<<<< HEAD
             /   TypeDef
             /   Do
             /   Break
@@ -443,6 +727,11 @@ CrtAction   <-  Semicolon
             /   Return
             /   Label
             /   GoTo
+=======
+            /   Do
+            /   Break
+            /   Return
+>>>>>>> origin/master
             /   If
             /   For
             /   While
@@ -450,18 +739,28 @@ CrtAction   <-  Semicolon
             /   NamedFunction
             /   LocalFunction
             /   Local
+<<<<<<< HEAD
             /   Set
+=======
+            /   TypeAlias
+            /   Set
+            /   Continue
+>>>>>>> origin/master
             /   Call
             /   ExpInAction
 UnkAction   <-  ({} {Word+})
             ->  UnknownAction
+<<<<<<< HEAD
             /   ({} '//' {} (LongComment / ShortComment))
             ->  CCommentPrefix
+=======
+>>>>>>> origin/master
             /   ({} {. (!Sps !CrtAction .)*})
             ->  UnknownAction
 ExpInAction <-  Sp ({} Exp {})
             ->  ExpInAction
 
+<<<<<<< HEAD
 Semicolon   <-  SEMICOLON
             ->  Skip
 SimpleList  <-  (Simple (COMMA Simple)*)
@@ -575,10 +874,105 @@ LocalNameList
 LocalName   <-  (MustName LocalTag)
             ->  LocalName
 
+=======
+Semicolon   <-  Sp ';'
+SimpleList  <-  {| Simple (Sp ',' Simple)* |}
+
+TypeAliasName
+            <-  (Sp ({} ({NameStr '.' NameStr} / NameBody) {}))
+            ->  Name
+
+TypeAlias   <-  Sp ({} (EXPORT %true / %false) TYPE TypeAliasName Generics1 AssignOrEQ DirtyType {})
+            ->  TypeAlias
+
+Do          <-  Sp ({} 
+                'do' Cut
+                    {| (!END Action)* |}
+                NeedEnd)
+            ->  Do
+
+Break       <-  Sp ({} BREAK {})
+            ->  Break
+
+Continue    <-  Sp ({} CONTINUE {} (Sp ';'? !%p))
+            ->  Continue
+
+Return      <-  Sp ({} RETURN ReturnExpList {})
+            ->  Return
+ReturnExpList 
+            <-  Sp !END !ELSEIF !ELSE {| Exp (Sp ',' MaybeExp)* |}
+            /   Sp {| %nil |}
+
+If          <-  Sp ({} {| IfHead IfBody* |} NeedEnd)
+            ->  If
+
+IfHead      <-  Sp (IfPart     {}) -> IfBlock
+            /   Sp (ElseIfPart {}) -> ElseIfBlock
+            /   Sp (ElsePart   {}) -> ElseBlock
+IfBody      <-  Sp (ElseIfPart {}) -> ElseIfBlock
+            /   Sp (ElsePart   {}) -> ElseBlock
+IfPart      <-  IF DirtyExp NeedThen
+                    {| (!ELSEIF !ELSE !END Action)* |}
+ElseIfPart  <-  ELSEIF DirtyExp NeedThen
+                    {| (!ELSEIF !ELSE !END Action)* |}
+ElsePart    <-  ELSE
+                    {| (!ELSEIF !ELSE !END Action)* |}
+
+For         <-  Loop / In
+
+Loop        <-  LoopBody
+            ->  Loop
+LoopBody    <-  FOR LoopArgs NeedDo
+                    {} {| (!END Action)* |}
+                NeedEnd
+LoopArgs    <-  MustName AssignOrEQ
+                ({} {| (COMMA / !DO !END Exp->NoNil)* |} {})
+            ->  PackLoopArgs
+
+In          <-  InBody
+            ->  In
+InBody      <-  FOR InNameList NeedIn InExpList NeedDo
+                    {} {| (!END Action)* |}
+                NeedEnd
+InNameList  <-  ({} {| (COMMA / !IN !DO !END Name->NoNil TypeAnn?)* |} {})
+            ->  PackInNameList
+InExpList   <-  ({} {| (COMMA / !DO !DO !END Exp->NoNil)*  |} {})
+            ->  PackInExpList
+
+While       <-  WhileBody
+            ->  While
+WhileBody   <-  WHILE DirtyExp NeedDo
+                    {| (!END Action)* |}
+                NeedEnd
+
+Repeat      <-  (RepeatBody {})
+            ->  Repeat
+RepeatBody  <-  REPEAT
+                    {| (!UNTIL Action)* |}
+                NeedUntil DirtyExp
+
+Local       <-  Sp ({} LOCAL LocalNameList ((AssignOrEQ ExpList) / %nil) {})
+            ->  Local
+Set         <-  Sp ({} SimpleList AssignOrEQ {} ExpList {}) 
+            ->  Set
+            /   Sp ({} SimpleList COMPASSIGN {} ExpList {}) 
+            ->  CompSet
+
+LocalNameList
+            <-  {| LocalName (Sp ',' LocalName)* |}
+LocalName   <-  (MustName TypeAnn?)
+            ->  LocalName
+
+NamedFunction
+            <-  Function
+            ->  NamedFunction
+
+>>>>>>> origin/master
 Call        <-  Simple
             ->  SimpleCall
 
 LocalFunction
+<<<<<<< HEAD
             <-  Sp ({} LOCAL FunctionNamedBody {})
             ->  LocalFunction
 
@@ -694,12 +1088,20 @@ EmmyFunctionArg <-  MustEmmyName %s* ':' %s* EmmyType
 EmmySee         <-  {} MustEmmyName %s* '#' %s* MustEmmyName {}
 EmmyOverLoad    <-  EmmyFunctionType
 EmmyModule      <-  ({} {([a-zA-Z_] [a-zA-Z0-9_.]+ / '.' !'.')*} {})
+=======
+            <-  Sp ({} LOCAL Function)
+            ->  LocalFunction
+>>>>>>> origin/master
 ]]
 
 grammar 'Lua' [[
 Lua         <-  Head?
+<<<<<<< HEAD
                 (Emmy / Action)* -> Lua
                 BlockEnd
+=======
+                ({} {| Action* |} {}) -> Lua
+>>>>>>> origin/master
                 Sp
 Head        <-  '#' (!%nl .)*
 ]]
@@ -711,6 +1113,12 @@ return function (self, lua, mode)
         local err = errorpos(pos)
         return nil, err
     end
+<<<<<<< HEAD
+=======
+    if type(r) ~= 'table' then
+        return nil
+    end
+>>>>>>> origin/master
 
     return r
 end

@@ -29,9 +29,16 @@ cpath:    %s
 ))
 end
 
+<<<<<<< HEAD
 local fs = require 'bee.filesystem'
 local rootPath = fs.path(exePath):parent_path():parent_path():remove_filename():string()
 if dll == '.dll' then
+=======
+local currentPath = debug.getinfo(1, 'S').source:sub(2)
+local fs = require 'bee.filesystem'
+local rootPath = fs.path(currentPath):remove_filename():string()
+if dll == 'dll' then
+>>>>>>> origin/master
     rootPath = rootPath:gsub('/', '\\')
     package.path  = rootPath .. script .. '\\?.lua'
           .. ';' .. rootPath .. script .. '\\?\\init.lua'
@@ -40,3 +47,22 @@ else
     package.path  = rootPath .. script .. '/?.lua'
           .. ';' .. rootPath .. script .. '/?/init.lua'
 end
+<<<<<<< HEAD
+=======
+
+package.searchers[2] = function (name)
+    local filename, err = package.searchpath(name, package.path)
+    if not filename then
+        return err
+    end
+    local f = io.open(filename)
+    local buf = f:read '*a'
+    f:close()
+    local relative = filename:sub(#rootPath + 1)
+    local init, err = load(buf, '@' .. relative)
+    if not init then
+        return err
+    end
+    return init, filename
+end
+>>>>>>> origin/master

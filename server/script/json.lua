@@ -16,14 +16,27 @@ local string_format = string.format
 local math_type = math.type
 local setmetatable = setmetatable
 local getmetatable = getmetatable
+<<<<<<< HEAD
 local Inf = math.huge
+=======
+local huge = math.huge
+local tiny = -huge
+>>>>>>> origin/master
 
 local json = {}
 json.object = {}
 
+<<<<<<< HEAD
 -- json.encode --
 local statusMark
 local statusQue
+=======
+json.supportSparseArray = true
+
+-- json.encode --
+local statusVisited
+local statusBuilder
+>>>>>>> origin/master
 
 local encode_map = {}
 
@@ -54,17 +67,33 @@ end
 
 local function encode(v)
     local res = encode_map[type(v)](v)
+<<<<<<< HEAD
     statusQue[#statusQue+1] = res
+=======
+    statusBuilder[#statusBuilder+1] = res
+>>>>>>> origin/master
 end
 
 encode_map["nil"] = function ()
     return "null"
 end
 
+<<<<<<< HEAD
 function encode_map.string(v)
     return '"' .. string_gsub(v, '[\0-\31\\"]', encode_escape_map) .. '"'
 end
 local encode_string = encode_map.string
+=======
+local function encode_string(v)
+    return string_gsub(v, '[\0-\31\\"]', encode_escape_map)
+end
+
+function encode_map.string(v)
+    statusBuilder[#statusBuilder+1] = '"'
+    statusBuilder[#statusBuilder+1] = encode_string(v)
+    return '"'
+end
+>>>>>>> origin/master
 
 local function convertreal(v)
     local g = string_format('%.16g', v)
@@ -74,11 +103,26 @@ local function convertreal(v)
     return string_format('%.17g', v)
 end
 
+<<<<<<< HEAD
 function encode_map.number(v)
     if v ~= v or v <= -Inf or v >= Inf then
         error("unexpected number value '" .. tostring(v) .. "'")
     end
     return string_gsub(convertreal(v), ',', '.')
+=======
+if string_match(tostring(1/2), "%p") == "," then
+    local _convertreal = convertreal
+    function convertreal(v)
+        return string_gsub(_convertreal(v), ',', '.')
+    end
+end
+
+function encode_map.number(v)
+    if v ~= v or v <= tiny or v >= huge then
+        error("unexpected number value '" .. tostring(v) .. "'")
+    end
+    return convertreal(v)
+>>>>>>> origin/master
 end
 
 function encode_map.boolean(v)
@@ -98,16 +142,26 @@ function encode_map.table(t)
             return "[]"
         end
     end
+<<<<<<< HEAD
     if statusMark[t] then
         error("circular reference")
     end
     statusMark[t] = true
     if type(first_val) == 'string' then
         local key = {}
+=======
+    if statusVisited[t] then
+        error("circular reference")
+    end
+    statusVisited[t] = true
+    if type(first_val) == 'string' then
+        local keys = {}
+>>>>>>> origin/master
         for k in next, t do
             if type(k) ~= "string" then
                 error("invalid table: mixed or invalid key types")
             end
+<<<<<<< HEAD
             key[#key+1] = k
         end
         table_sort(key)
@@ -126,15 +180,41 @@ function encode_map.table(t)
         statusMark[t] = nil
         return "}"
     else
+=======
+            keys[#keys+1] = k
+        end
+        table_sort(keys)
+        local k = keys[1]
+        statusBuilder[#statusBuilder+1] = '{"'
+        statusBuilder[#statusBuilder+1] = encode_string(k)
+        statusBuilder[#statusBuilder+1] = '":'
+        encode(t[k])
+        for i = 2, #keys do
+            local k = keys[i]
+            statusBuilder[#statusBuilder+1] = ',"'
+            statusBuilder[#statusBuilder+1] = encode_string(k)
+            statusBuilder[#statusBuilder+1] = '":'
+            encode(t[k])
+        end
+        statusVisited[t] = nil
+        return "}"
+    else
+        local count = 0
+>>>>>>> origin/master
         local max = 0
         for k in next, t do
             if math_type(k) ~= "integer" or k <= 0 then
                 error("invalid table: mixed or invalid key types")
             end
+<<<<<<< HEAD
+=======
+            count = count + 1
+>>>>>>> origin/master
             if max < k then
                 max = k
             end
         end
+<<<<<<< HEAD
         statusQue[#statusQue+1] = "["
         encode(t[1])
         for i = 2, max do
@@ -142,6 +222,18 @@ function encode_map.table(t)
             encode(t[i])
         end
         statusMark[t] = nil
+=======
+        if not json.supportSparseArray and count ~= max then
+            error("sparse array are not supported")
+        end
+        statusBuilder[#statusBuilder+1] = "["
+        encode(t[1])
+        for i = 2, max do
+            statusBuilder[#statusBuilder+1] = ","
+            encode(t[i])
+        end
+        statusVisited[t] = nil
+>>>>>>> origin/master
         return "]"
     end
 end
@@ -158,6 +250,7 @@ encode_map[ "userdata" ] = encode_unexpected
 encode_map[ "thread"   ] = encode_unexpected
 
 function json.encode(v)
+<<<<<<< HEAD
     statusMark = {}
     statusQue = {}
     encode(v)
@@ -165,6 +258,16 @@ function json.encode(v)
 end
 
 json.encode_map = encode_map
+=======
+    statusVisited = {}
+    statusBuilder = {}
+    encode(v)
+    return table_concat(statusBuilder)
+end
+
+json._encode_map = encode_map
+json._encode_string = encode_string
+>>>>>>> origin/master
 
 -- json.decode --
 
@@ -200,12 +303,29 @@ local function get_word()
 end
 
 local function next_byte()
+<<<<<<< HEAD
     statusPos = string_find(statusBuf, "[^ \t\r\n]", statusPos)
     if statusPos then
         return string_byte(statusBuf, statusPos)
     end
     statusPos = #statusBuf + 1
     decode_error("unexpected character '<eol>'")
+=======
+    local pos = string_find(statusBuf, "[^ \t\r\n]", statusPos)
+    if pos then
+        statusPos = pos
+        return string_byte(statusBuf, pos)
+    end
+    return -1
+end
+
+local function consume_byte(c)
+    local _, pos = string_find(statusBuf, c, statusPos)
+    if pos then
+        statusPos = pos + 1
+        return true
+    end
+>>>>>>> origin/master
 end
 
 local function expect_byte(c)
@@ -272,6 +392,7 @@ local function decode_string()
 end
 
 local function decode_number()
+<<<<<<< HEAD
     local word = get_word()
     if not (
         string_match(word, '^.[0-9]*$')
@@ -315,6 +436,48 @@ local function decode_number_zero()
     end
     statusPos = statusPos + #word
     return tonumber(word)
+=======
+    local num, c = string_match(statusBuf, '^([0-9]+%.?[0-9]*)([eE]?)', statusPos)
+    if not num or string_byte(num, -1) == 0x2E --[[ "." ]] then
+        decode_error("invalid number '" .. get_word() .. "'")
+    end
+    if c ~= '' then
+        num = string_match(statusBuf, '^([^eE]*[eE][-+]?[0-9]+)[ \t\r\n%]},]', statusPos)
+        if not num then
+            decode_error("invalid number '" .. get_word() .. "'")
+        end
+    end
+    statusPos = statusPos + #num
+    return tonumber(num)
+end
+
+local function decode_number_zero()
+    local num, c = string_match(statusBuf, '^(.%.?[0-9]*)([eE]?)', statusPos)
+    if not num or string_byte(num, -1) == 0x2E --[[ "." ]] or string_match(statusBuf, '^.[0-9]+', statusPos) then
+        decode_error("invalid number '" .. get_word() .. "'")
+    end
+    if c ~= '' then
+        num = string_match(statusBuf, '^([^eE]*[eE][-+]?[0-9]+)[ \t\r\n%]},]', statusPos)
+        if not num then
+            decode_error("invalid number '" .. get_word() .. "'")
+        end
+    end
+    statusPos = statusPos + #num
+    return tonumber(num)
+end
+
+local function decode_number_negative()
+    statusPos = statusPos + 1
+    local c = string_byte(statusBuf, statusPos)
+    if c then
+        if c == 0x30 then
+            return -decode_number_zero()
+        elseif c > 0x30 and c < 0x3A then
+            return -decode_number()
+        end
+    end
+    decode_error("invalid number '" .. get_word() .. "'")
+>>>>>>> origin/master
 end
 
 local function decode_true()
@@ -344,8 +507,12 @@ end
 local function decode_array()
     statusPos = statusPos + 1
     local res = {}
+<<<<<<< HEAD
     if next_byte() == 93 --[[ "]" ]] then
         statusPos = statusPos + 1
+=======
+    if consume_byte "^[ \t\r\n]*%]" then
+>>>>>>> origin/master
         return res
     end
     statusTop = statusTop + 1
@@ -357,8 +524,12 @@ end
 local function decode_object()
     statusPos = statusPos + 1
     local res = {}
+<<<<<<< HEAD
     if next_byte() == 125 --[[ "}" ]] then
         statusPos = statusPos + 1
+=======
+    if consume_byte "^[ \t\r\n]*}" then
+>>>>>>> origin/master
         return setmetatable(res, json.object)
     end
     statusTop = statusTop + 1
@@ -389,11 +560,21 @@ local decode_uncompleted_map = {
 local function unexpected_character()
     decode_error("unexpected character '" .. string_sub(statusBuf, statusPos, statusPos) .. "'")
 end
+<<<<<<< HEAD
+=======
+local function unexpected_eol()
+    decode_error("unexpected character '<eol>'")
+end
+>>>>>>> origin/master
 
 local decode_map = {}
 for i = 0, 255 do
     decode_map[i] = decode_uncompleted_map[i] or unexpected_character
 end
+<<<<<<< HEAD
+=======
+decode_map[-1] = unexpected_eol
+>>>>>>> origin/master
 
 local function decode()
     return decode_map[next_byte()]()

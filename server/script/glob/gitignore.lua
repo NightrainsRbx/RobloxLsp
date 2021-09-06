@@ -44,6 +44,14 @@ local parser = m.P {
 }
 
 ---@class gitignore
+<<<<<<< HEAD
+=======
+---@field pattern string[]
+---@field options table
+---@field errors table[]
+---@field matcher table
+---@field interface function[]
+>>>>>>> origin/master
 local mt = {}
 mt.__index = mt
 mt.__name = 'gitignore'
@@ -111,6 +119,10 @@ function mt:checkDirectory(catch, path, matcher)
 end
 
 function mt:simpleMatch(path)
+<<<<<<< HEAD
+=======
+    path = self:getRelativePath(path)
+>>>>>>> origin/master
     for i = #self.matcher, 1, -1 do
         local matcher = self.matcher[i]
         local catch = matcher(path)
@@ -142,18 +154,64 @@ function mt:finishMatch(path)
     return false
 end
 
+<<<<<<< HEAD
 function mt:scan(callback)
+=======
+function mt:getRelativePath(path)
+    local root = self.options.root or ''
+    if self.options.ignoreCase then
+        path = path:lower()
+        root = root:lower()
+    end
+    path = path:gsub('^[/\\]+', ''):gsub('[/\\]+', '/')
+    root = root:gsub('^[/\\]+', ''):gsub('[/\\]+', '/')
+    if path:sub(1, #root) == root then
+        path = path:sub(#root + 1)
+        path = path:gsub('^[/\\]+', '')
+    end
+    return path
+end
+
+function mt:scan(path, callback)
+>>>>>>> origin/master
     local files = {}
     if type(callback) ~= 'function' then
         callback = nil
     end
     local list = {}
+<<<<<<< HEAD
     local result = self:callInterface('list', '')
     if type(result) ~= 'table' then
         return files
     end
     for _, path in ipairs(result) do
         list[#list+1] = path:match '([^/\\]+)[/\\]*$'
+=======
+
+    local function check(current)
+        local fileType = self:callInterface('type', current)
+        if fileType == 'file' then
+            if callback then
+                callback(current)
+            end
+            files[#files+1] = current
+        elseif fileType == 'directory' then
+            local result = self:callInterface('list', current)
+            if type(result) == 'table' then
+                for _, path in ipairs(result) do
+                    local filename = path:match '([^/\\]+)[/\\]*$'
+                    if  filename
+                    and filename ~= '.'
+                    and filename ~= '..' then
+                        list[#list+1] = path
+                    end
+                end
+            end
+        end
+    end
+    if not self:simpleMatch(path) then
+        check(path)
+>>>>>>> origin/master
     end
     while #list > 0 do
         local current = list[#list]
@@ -162,6 +220,7 @@ function mt:scan(callback)
         end
         list[#list] = nil
         if not self:simpleMatch(current) then
+<<<<<<< HEAD
             local fileType = self:callInterface('type', current)
             if fileType == 'file' then
                 if callback then
@@ -181,15 +240,22 @@ function mt:scan(callback)
                     end
                 end
             end
+=======
+            check(current)
+>>>>>>> origin/master
         end
     end
     return files
 end
 
 function mt:__call(path)
+<<<<<<< HEAD
     if self.options.ignoreCase then
         path = path:lower()
     end
+=======
+    path = self:getRelativePath(path)
+>>>>>>> origin/master
     return self:finishMatch(path)
 end
 
@@ -202,6 +268,15 @@ return function (pattern, options, interface)
         interface = {},
     }, mt)
 
+<<<<<<< HEAD
+=======
+    if type(options) == 'table' then
+        for op, val in pairs(options) do
+            self:setOption(op, val)
+        end
+    end
+
+>>>>>>> origin/master
     if type(pattern) == 'table' then
         for _, pat in ipairs(pattern) do
             self:addPattern(pat)
@@ -210,12 +285,15 @@ return function (pattern, options, interface)
         self:addPattern(pattern)
     end
 
+<<<<<<< HEAD
     if type(options) == 'table' then
         for op, val in pairs(options) do
             self:setOption(op, val)
         end
     end
 
+=======
+>>>>>>> origin/master
     if type(interface) == 'table' then
         for key, func in pairs(interface) do
             self:setInterface(key, func)

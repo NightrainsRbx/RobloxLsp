@@ -1,5 +1,6 @@
 local m = require 'lpeglabel'
 
+<<<<<<< HEAD
 local function utf8_len(buf, start, finish)
     local len, pos = utf8.len(buf, start, finish)
     if len then
@@ -11,6 +12,14 @@ end
 local function Line(start, line, finish)
     line.start  = start
     line.finish = finish - 1
+=======
+_ENV = nil
+
+local function Line(start, line, range, finish)
+    line.start  = start
+    line.finish = finish - 1
+    line.range  = range  - 1
+>>>>>>> origin/master
     return line
 end
 
@@ -34,12 +43,18 @@ end
 local parser = m.P{
 'Lines',
 Lines   = m.Ct(m.V'Line'^0 * m.V'LastLine'),
+<<<<<<< HEAD
 Line    = m.Cp() * m.V'Indent' * (1 - m.V'Nl')^0 * m.Cp() * m.V'Nl' / Line,
 LastLine= m.Cp() * m.V'Indent' * (1 - m.V'Nl')^0 * m.Cp() / Line,
+=======
+Line    = m.Cp() * m.V'Indent' * (1 - m.V'Nl')^0 * m.Cp() * m.V'Nl' * m.Cp() / Line,
+LastLine= m.Cp() * m.V'Indent' * (1 - m.V'Nl')^0 * m.Cp() * m.Cp() / Line,
+>>>>>>> origin/master
 Nl      = m.P'\r\n' + m.S'\r\n',
 Indent  = m.C(m.S' \t')^0 / Space,
 }
 
+<<<<<<< HEAD
 local mt = {}
 mt.__index = mt
 
@@ -184,4 +199,13 @@ return function (self, buf, code)
     lines.code = code
 
     return setmetatable(lines, mt)
+=======
+return function (self, text)
+    local lines, err = parser:match(text)
+    if not lines then
+        return nil, err
+    end
+
+    return lines
+>>>>>>> origin/master
 end

@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 local DiagnosticDefaultSeverity = require 'constant.DiagnosticDefaultSeverity'
 local rpc = require 'rpc'
+=======
+local util   = require 'utility'
+local define = require 'proto.define'
+
+local m = {}
+m.version = 0
+>>>>>>> origin/master
 
 local function Boolean(v)
     if type(v) == 'boolean' then
@@ -19,6 +27,16 @@ local function String(v)
     return true, tostring(v)
 end
 
+<<<<<<< HEAD
+=======
+local function Nil(v)
+    if type(v) == 'nil' then
+        return true, nil
+    end
+    return false
+end
+
+>>>>>>> origin/master
 local function Str2Hash(sep)
     return function (v)
         if type(v) == 'string' then
@@ -41,6 +59,28 @@ local function Str2Hash(sep)
     end
 end
 
+<<<<<<< HEAD
+=======
+local function Array2Hash(checker)
+    return function (tbl)
+        if type(tbl) ~= 'table' then
+            return false
+        end
+        local t = {}
+        if #tbl > 0 then
+            for _, k in ipairs(tbl) do
+                t[k] = true
+            end
+        else
+            for k, v in pairs(tbl) do
+                t[k] = v
+            end
+        end
+        return true, t
+    end
+end
+
+>>>>>>> origin/master
 local function Array(checker)
     return function (tbl)
         if type(tbl) ~= 'table' then
@@ -90,6 +130,7 @@ local function Or(...)
     end
 end
 
+<<<<<<< HEAD
 -- Just a copy and paste from the utility script.
 -- This is a fix for the early log.debug stuff at the start
 function table.deepCopy(a)
@@ -110,10 +151,16 @@ local ConfigTemplate = {
         version         = {'Luau', String},
         library         = {{},        Str2Hash ';'},
         path            = {{
+=======
+local ConfigTemplate = {
+    runtime = {
+        path              = {{
+>>>>>>> origin/master
                                 "?.lua",
                                 "?/init.lua",
                                 "?/?.lua"
                             },        Array(String)},
+<<<<<<< HEAD
     },
     diagnostics = {
         enable            = {true, Boolean},
@@ -126,6 +173,26 @@ local ConfigTemplate = {
             table.deepCopy(DiagnosticDefaultSeverity),
             Hash(String, String),
         },
+=======
+        meta              = {'${version} ${language}', String},
+        plugin            = {'.vscode/lua/plugin.lua', String},
+        fileEncoding      = {'utf8',    String},
+    },
+    diagnostics = {
+        enable          = {true, Boolean},
+        globals         = {{},   Str2Hash ';'},
+        disable         = {{},   Str2Hash ';'},
+        severity        = {
+            util.deepCopy(define.DiagnosticDefaultSeverity),
+            Hash(String, String),
+        },
+        neededFileStatus = {
+            util.deepCopy(define.DiagnosticDefaultNeededFileStatus),
+            Hash(String, String),
+        },
+        workspaceDelay  = {0,    Integer},
+        workspaceRate   = {100,  Integer},
+>>>>>>> origin/master
     },
     workspace = {
         ignoreDir       = {{},      Str2Hash ';'},
@@ -133,6 +200,7 @@ local ConfigTemplate = {
         rojoProjectFile = {"default",    String},
         loadMode        = {'All Files', String},
         useGitIgnore    = {true,    Boolean},
+<<<<<<< HEAD
         maxPreload      = {300,     Integer},
         preloadFileSize = {100,     Integer},
         library         = {{},      Hash(
@@ -151,16 +219,42 @@ local ConfigTemplate = {
     },
     signatureHelp = {
         enable          = {true,      Boolean},
+=======
+        maxPreload      = {1000,    Integer},
+        preloadFileSize = {100,     Integer},
+        library         = {{},      Array2Hash(String)},
+    },
+    completion = {
+        enable             = {true,      Boolean},
+        callParenthesess   = {false,     Boolean},
+        keywordSnippet     = {'Replace', String},
+        displayContext     = {0,         Integer},
+        endAutocompletion  = {false,     Boolean},
+        workspaceWord      = {true,      Boolean},
+        showParams         = {true,      Boolean},
+        deprecatedMembers  = {false,     Boolean},
+    },
+    signatureHelp = {
+        enable          = {true,      Boolean},
+        documentation   = {true,      Boolean},
+>>>>>>> origin/master
     },
     hover = {
         enable          = {true,      Boolean},
         viewString      = {true,      Boolean},
         viewStringMax   = {1000,      Integer},
         viewNumber      = {true,      Boolean},
+<<<<<<< HEAD
+=======
+        fieldInfer      = {3000,      Integer},
+        previewFields   = {100,       Integer},
+        enumsLimit      = {5,         Integer},
+>>>>>>> origin/master
     },
     color = {
         mode            = {'Semantic', String},
     },
+<<<<<<< HEAD
     misc = {
         color3Picker    = {true,      Boolean},
         goToScriptLink  = {true,      Boolean},
@@ -171,10 +265,41 @@ local ConfigTemplate = {
     },
     logging = {
         showDebugMessages = {false, Boolean}
+=======
+    hint = {
+        enable          = {false,     Boolean},
+        variableType    = {true,      Boolean},
+        paramType       = {true,      Boolean},
+        setType         = {false,     Boolean},
+        returnType      = {false,     Boolean},
+        paramName       = {false,     Boolean},
+    },
+    intelliSense = {
+        searchDepth     = {0,         Integer},
+    },
+    window              = {
+        statusBar       = {true,      Boolean},
+        progressBar     = {true,      Boolean},
+    },
+    misc = {
+        color3Picker      = {true,      Boolean},
+        goToScriptLink    = {true,      Boolean},
+        serviceAutoImport = {true,      Boolean},
+        serverPort        = {27843,       Integer},
+    },
+    typeChecking = {
+        mode            = {'Disabled', String},
+        options         = {
+            util.shallowCopy(define.TypeCheckingOptions),
+            Hash(String, Boolean),
+        },
+        showFullType    = {false,       Boolean},
+>>>>>>> origin/master
     }
 }
 
 local OtherTemplate = {
+<<<<<<< HEAD
     associations = {{}, Hash(String, String)},
     exclude =      {{}, Hash(String, Boolean)},
 }
@@ -201,6 +326,35 @@ local function init()
 end
 
 local function setConfig(self, config, other)
+=======
+    associations            = {{},   Hash(String, String)},
+    exclude                 = {{},   Hash(String, Boolean)},
+    semantic                = {'',   Or(Boolean, String)},
+    acceptSuggestionOnEnter = {'on', String},
+}
+
+local function init()
+    if m.config then
+        return
+    end
+
+    m.config = {}
+    for c, t in pairs(ConfigTemplate) do
+        m.config[c] = {}
+        for k, info in pairs(t) do
+            m.config[c][k] = info[1]
+        end
+    end
+
+    m.other = {}
+    for k, info in pairs(OtherTemplate) do
+        m.other[k] = info[1]
+    end
+end
+
+function m.setConfig(config, other)
+    m.version = m.version + 1
+>>>>>>> origin/master
     xpcall(function ()
         for c, t in pairs(config) do
             for k, v in pairs(t) do
@@ -210,9 +364,15 @@ local function setConfig(self, config, other)
                     if info then
                         local suc, v = info[2](v)
                         if suc then
+<<<<<<< HEAD
                             Config[c][k] = v
                         else
                             Config[c][k] = info[1]
+=======
+                            m.config[c][k] = v
+                        else
+                            m.config[c][k] = info[1]
+>>>>>>> origin/master
                         end
                     end
                 end
@@ -223,6 +383,7 @@ local function setConfig(self, config, other)
             if info then
                 local suc, v = info[2](v)
                 if suc then
+<<<<<<< HEAD
                     Other[k] = v
                 else
                     Other[k] = info[1]
@@ -236,10 +397,21 @@ local function setConfig(self, config, other)
             message = "Error Loading Config: " .. err,
         })
     end)
+=======
+                    m.other[k] = v
+                else
+                    m.other[k] = info[1]
+                end
+            end
+        end
+        log.debug('Config update: ', util.dump(m.config), util.dump(m.other))
+    end, log.error)
+>>>>>>> origin/master
 end
 
 init()
 
+<<<<<<< HEAD
 return {
     setConfig = setConfig,
     config = Config,
@@ -248,3 +420,6 @@ return {
     end,
     other = Other,
 }
+=======
+return m
+>>>>>>> origin/master

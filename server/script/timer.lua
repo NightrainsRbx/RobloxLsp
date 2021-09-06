@@ -1,8 +1,20 @@
+<<<<<<< HEAD
 local setmetatable = setmetatable
 local pairs = pairs
 local tableInsert = table.insert
 local mathMax = math.max
 local mathFloor = math.floor
+=======
+local time         = require 'bee.time'
+local setmetatable = setmetatable
+local mathMax      = math.max
+local mathFloor    = math.floor
+local monotonic    = time.monotonic
+local xpcall       = xpcall
+local logError     = log.error
+
+_ENV = nil
+>>>>>>> origin/master
 
 local curFrame = 0
 local maxFrame = 0
@@ -42,7 +54,11 @@ local function mWakeup(self)
     end
     self._running = false
     if self._onTimer then
+<<<<<<< HEAD
         xpcall(self._onTimer, log.error, self)
+=======
+        xpcall(self._onTimer, logError, self)
+>>>>>>> origin/master
     end
     if self._removed then
         return
@@ -91,6 +107,7 @@ local function onTick()
     freeQueue[#freeQueue + 1] = q
 end
 
+<<<<<<< HEAD
 function ac.clock()
     return curFrame / 1000.0
 end
@@ -126,6 +143,9 @@ local function update(delta)
     end
 end
 
+=======
+local m = {}
+>>>>>>> origin/master
 local mt = {}
 mt.__index = mt
 mt.type = 'timer'
@@ -197,7 +217,11 @@ function mt:onTimer()
     self:_onTimer()
 end
 
+<<<<<<< HEAD
 function ac.wait(timeout, onTimer)
+=======
+function m.wait(timeout, onTimer)
+>>>>>>> origin/master
     local t = setmetatable({
         ['_timeout'] = mathMax(mathFloor(timeout * 1000.0), 1),
         ['_onTimer'] = onTimer,
@@ -207,7 +231,11 @@ function ac.wait(timeout, onTimer)
     return t
 end
 
+<<<<<<< HEAD
 function ac.loop(timeout, onTimer)
+=======
+function m.loop(timeout, onTimer)
+>>>>>>> origin/master
     local t = setmetatable({
         ['_timeout'] = mathFloor(timeout * 1000.0),
         ['_onTimer'] = onTimer,
@@ -216,9 +244,15 @@ function ac.loop(timeout, onTimer)
     return t
 end
 
+<<<<<<< HEAD
 function ac.timer(timeout, count, onTimer)
     if count == 0 then
         return ac.loop(timeout, onTimer)
+=======
+function m.timer(timeout, count, onTimer)
+    if count == 0 then
+        return m.loop(timeout, onTimer)
+>>>>>>> origin/master
     end
     local t = setmetatable({
         ['_timeout'] = mathFloor(timeout * 1000.0),
@@ -229,6 +263,7 @@ function ac.timer(timeout, count, onTimer)
     return t
 end
 
+<<<<<<< HEAD
 local function utimer_initialize(u)
     if not u._timers then
         u._timers = {}
@@ -274,3 +309,25 @@ function ac.utimer(u, timeout, count, onTimer)
 end
 
 return update
+=======
+function m.clock()
+    return curFrame / 1000.0
+end
+
+local lastClock = monotonic()
+function m.update()
+    local currentClock = monotonic()
+    local delta = currentClock - lastClock
+    lastClock = currentClock
+    if curIndex ~= 0 then
+        curFrame = curFrame - 1
+    end
+    maxFrame = maxFrame + delta
+    while curFrame < maxFrame do
+        curFrame = curFrame + 1
+        onTick()
+    end
+end
+
+return m
+>>>>>>> origin/master

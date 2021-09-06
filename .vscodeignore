@@ -3,4 +3,10 @@
 **/*.map
 **/tsconfig.json
 server/log
+<<<<<<< HEAD
 .gitignore
+=======
+server/script/output.lua
+.gitignore
+TODO-LIST
+>>>>>>> origin/master

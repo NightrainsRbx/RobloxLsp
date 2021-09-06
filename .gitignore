@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 /server/log/*
 /server/script/output.lua
 /client/node_modules
 /.vscode/settings.json
 TODO.txt
+=======
+/server/log
+/server/script/output.lua
+/client/node_modules
+TODO-LIST
+>>>>>>> origin/master

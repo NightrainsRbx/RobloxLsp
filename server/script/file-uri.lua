@@ -1,5 +1,10 @@
 local platform = require 'bee.platform'
 
+<<<<<<< HEAD
+=======
+---@class uri: string
+
+>>>>>>> origin/master
 local escPatt = '[^%w%-%.%_%~%/]'
 
 local function esc(c)
@@ -20,7 +25,11 @@ local m = {}
 
 --- path -> uri
 ---@param path string
+<<<<<<< HEAD
 ---@return string uri
+=======
+---@return uri uri
+>>>>>>> origin/master
 function m.encode(path)
     local authority = ''
     if platform.OS == 'Windows' then
@@ -46,10 +55,17 @@ function m.encode(path)
     end
 
     -- lower-case windows drive letters in /C:/fff or C:/fff
+<<<<<<< HEAD
     local start, finish, drive = path:find '/(%u):'
     if drive then
         path = path:sub(1, start) .. drive:lower() .. path:sub(finish, -1)
     end
+=======
+    -- local start, finish, drive = path:find '/(%u):'
+    -- if drive then
+    --     path = path:sub(1, start) .. drive:lower() .. path:sub(finish, -1)
+    -- end
+>>>>>>> origin/master
 
     local uri = 'file://'
         .. authority:gsub(escPatt, esc)
@@ -62,7 +78,11 @@ end
 -- file://server/share/some/path  --> \\server\share\some\path
 
 --- uri -> path
+<<<<<<< HEAD
 ---@param uri string
+=======
+---@param uri uri
+>>>>>>> origin/master
 ---@return string path
 function m.decode(uri)
     local scheme, authority, path = uri:match('([^:]*):?/?/?([^/]*)(.*)')
@@ -76,7 +96,11 @@ function m.decode(uri)
     if scheme == 'file' and #authority > 0 and #path > 1 then
         value = '//' .. authority .. path
     elseif path:match '/%a:' then
+<<<<<<< HEAD
         value = path:sub(2, 2):lower() .. path:sub(3)
+=======
+        value = path:sub(2, 2) .. path:sub(3)
+>>>>>>> origin/master
     else
         value = path
     end
