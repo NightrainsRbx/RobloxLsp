@@ -4678,16 +4678,22 @@ function m.hasType(status, source, type)
     return false
 end
 
--- TODO: Add Cache
 function m.getType(status, source)
     if not source then
         return
     end
     source = m.getObjectValue(source) or source
+    if not status.share.getTypeCache then
+        status.share.getTypeCache = {}
+    end
+    if status.share.getTypeCache[source] then
+        return status.share.getTypeCache[source]
+    end
     if m.isLiteral(source) then
         return makeNameType(source.type)
     elseif m.typeAnnTypes[source.type] then
         local tp = m.getFullType(status, source)
+        status.share.getTypeCache[source] = tp
         return tp
     end
     local newStatus = m.status(status, source)
@@ -4705,10 +4711,11 @@ function m.getType(status, source)
         end
     end
     if #union == 0 then
-        return
+        union = nil
     elseif #union == 1 then
         union = union[1]
     end
+    status.share.getTypeCache[source] = union
     return union
 end
 
