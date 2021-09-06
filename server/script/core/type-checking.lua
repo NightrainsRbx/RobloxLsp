@@ -9,6 +9,10 @@ local util      = require 'utility'
 local vm        = require 'vm'
 local ws        = require 'workspace'
 
+local undefinedType    = require 'core.diagnostics.undefined-type'
+local redefinedType    = require 'core.diagnostics.redefined-type'
+local invalidClassName = require 'core.diagnostics.invalid-class-name'
+
 local m = {}
 
 local nilType = {
@@ -865,74 +869,6 @@ function m.getArgCount(args)
     return count
 end
 
-local function checkSelfRecursiveTypeAlias(typeAlias, value, mark)
-    mark = mark or {}
-    if mark[value] then
-        return true
-    end
-    mark[value] = true
-    if value.type == "type.union" or value.type == "type.inter" then
-        for _, v in ipairs(guide.getAllValuesInType(value)) do
-            if checkSelfRecursiveTypeAlias(typeAlias, v, mark) then
-                return true
-            end
-        end
-    end
-    if value.typeAlias then
-        if value.typeAlias == typeAlias then
-            return true
-        end
-        return checkSelfRecursiveTypeAlias(typeAlias, value.typeAlias.value, mark)
-    end
-    return false
-end
-
-local function checkTypeAlias(source, pushResult)
-    if checkSelfRecursiveTypeAlias(source, source.value) then
-        pushResult {
-            start = source.start,
-            finish = source.finish,
-            message = lang.script('TYPE_ALIAS_RECURSIVE')
-        }
-        return
-    end
-    local other = guide.getTypeAlias(source, source.name[1])
-    if other == source then
-        other = nil
-    end
-    if other or rbxlibs.object[source.name[1]] then
-        pushResult {
-            start = source.name.start,
-            finish = source.name.finish,
-            message = lang.script('TYPE_REDEFINED', source.name[1]),
-            related = other
-        }
-    end
-    if source.generics then
-        local names = {}
-        for _, generic in ipairs(source.generics) do
-            local other = guide.getTypeAlias(source, generic[1])
-            if other or rbxlibs.object[generic[1]] then
-                pushResult {
-                    start = generic.start,
-                    finish = generic.finish,
-                    message = lang.script('TYPE_REDEFINED', generic[1]),
-                    related = other
-                }
-            end
-            if names[generic[1]] then
-                pushResult {
-                    start = generic.start,
-                    finish = generic.finish,
-                    message = lang.script('TYPE_REDEFINED', generic[1]),
-                    related = names[generic[1]]
-                }
-            end
-            names[generic[1]] = generic
-        end
-    end
-end
-
 local function checkCallFunction(func, call, pushResult)
     local argCount = m.getArgCount(func.args)
     if not call.args  then
@@ -1243,53 +1179,6 @@ local function checkFunction(source, pushResult)
     end
 end
 
-local function checkTypeName(source, pushResult)
-    if source[1] == "" then
-        return
-    end
-    if rbxlibs.object[source[1]] then
-        if source.generics then
-            pushResult {
-                start = source.generics.start,
-                finish = source.generics.finish,
-                message = lang.script('TYPE_GENERIC_COUNT', 0, #source.generics)
-            }
-        end
-        return
-    end
-    local typeAlias = source.typeAlias or source.typeAliasGeneric
-    if not typeAlias and source.parent.type == "type.module" then
-        typeAlias = vm.getModuleTypeAlias(source.parent)
-    end
-    if typeAlias then
-        local genericCount = 0
-        if typeAlias.generics then
-            genericCount = #typeAlias.generics
-        end
-        if source.generics then
-            if #source.generics ~= genericCount then
-                pushResult {
-                    start = source.generics.start,
-                    finish = source.generics.finish,
-                    message = lang.script('TYPE_GENERIC_COUNT', genericCount, #source.generics)
-                }
-            end
-        elseif genericCount > 0 then
-            pushResult {
-                start = source.start,
-                finish = source.finish,
-                message = lang.script('TYPE_GENERIC_COUNT', genericCount, "none")
-            }
-        end
-    else
-        pushResult {
-            start = source.start,
-            finish = source.finish,
-            message = lang.script('TYPE_UNDEFINED', source[1])
-        }
-    end
-end
-
 local function checkBinary(source, pushResult)
     local op = source.op.type
     if op == "and" or op == "or" then
@@ -1425,28 +1314,17 @@ function m.check(uri)
     local function pushResult(result)
         result.code = "type-checking"
         result.level = define.DiagnosticSeverity.Warning
-        result.related = result.related and {
-            {
-                start = result.related.start,
-                finish = result.related.finish,
-                uri = guide.getUri(result.related)
-            }
-        } or nil
         results[#results+1] = result
     end
 
     local skipNodes = {}
 
-    guide.eachSourceType(ast, "type.alias", function (source)
-        if checkTypecheckModeAt(ast, source.start) then
-            checkTypeAlias(source, pushResult)
-        end
-    end)
-    guide.eachSourceType(ast, "type.name", function (source)
-        if checkTypecheckModeAt(ast, source.start) then
-            checkTypeName(source, pushResult)
-        end
-    end)
+    if not config.config.diagnostics.enable then
+        undefinedType(uri, pushResult)
+        redefinedType(uri, pushResult)
+        invalidClassName(uri, pushResult)
+    end
+
     guide.eachSourceType(ast, "setlocal", function (source)
         if checkTypecheckModeAt(ast, source.start) then
             checkSetLocal(source, pushResult)

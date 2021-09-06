@@ -78,13 +78,18 @@ local function buildDiagnostic(uri, diag)
             }
         end
     end
-
+    local code = diag.code
+    local source = lang.script.DIAG_DIAGNOSTICS
+    if code == "type-checking" then
+        source = lang.script.DIAG_TYPECHECKING
+        code = nil
+    end
     return {
         range    = files.range(uri, diag.start, diag.finish),
-        source   = lang.script.DIAG_DIAGNOSTICS,
+        source   = source,
         severity = diag.level,
         message  = diag.message,
-        code     = diag.code,
+        code     = code,
         tags     = diag.tags,
         data     = diag.data,
         relatedInformation = relatedInformation,

@@ -488,6 +488,28 @@
 							],
 							"scope": "resource",
 							"type": "string"
+						},
+						"undefined-type": {
+							"default": "Any",
+							"description": "%config.diagnostics.undefined-type%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"redefined-type": {
+							"default": "Any",
+							"description": "%config.diagnostics.redefined-type%",
+							"enum": [
+								"Any",
+								"Opened",
+								"None"
+							],
+							"scope": "resource",
+							"type": "string"
 						}
 					},
 					"scope": "resource",
@@ -884,6 +906,30 @@
 						"invalid-class-name": {
 							"default": "Warning",
 							"description": "%config.diagnostics.invalid-class-name%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"undefined-type": {
+							"default": "Warning",
+							"description": "%config.diagnostics.undefined-type%",
+							"enum": [
+								"Error",
+								"Warning",
+								"Information",
+								"Hint"
+							],
+							"scope": "resource",
+							"type": "string"
+						},
+						"redefined-type": {
+							"default": "Warning",
+							"description": "%config.diagnostics.redefined-type%",
 							"enum": [
 								"Error",
 								"Warning",
