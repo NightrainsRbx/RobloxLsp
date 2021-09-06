@@ -390,6 +390,7 @@ local function parseMembers(data, isObject)
                     other.value = {
                         type = "type.inter",
                         special = SPECIAL_FUNCTIONS[fullName],
+                        returns = other.value.returns,
                         [1] = other.value
                     }
                 end

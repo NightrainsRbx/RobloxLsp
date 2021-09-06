@@ -1811,7 +1811,7 @@ function m.searchFields(status, obj, key, mode)
         return
     end
     if m.typeAnnTypes[obj.type] then
-        obj = m.getTypeValue(status, obj) or obj
+        obj = m.getFullType(status, obj) or obj
         if obj.type == "type.table" then
             for _, field in ipairs(obj) do
                 status.results[#status.results+1] = field
@@ -1984,13 +1984,13 @@ function m.getFuncArgIndex(funcargs, obj)
 end
 
 local function pushCallbackArgs(source, argIndex, status, start, pushQueue)
-    source = m.getTypeValue(status, source)
+    source = m.getFullType(status, source)
     local overloads = {}
     if source.type == "type.function" then
         overloads[#overloads+1] = source
     elseif source.type == "type.union" or source.type == "type.inter" then
         for _, value in ipairs(m.getAllValuesInType(source)) do
-            value = m.getTypeValue(status, value)
+            value = m.getFullType(status, value)
             if value.type == "type.function" then
                 overloads[#overloads+1] = value
             end
@@ -2029,7 +2029,7 @@ function m.checkSameSimpleInCallbackParam(status, obj, start, pushQueue)
             local newStatus = m.status(status)
             m.searchRefs(newStatus, func.parent.parent.node, 'def')
             for _, src in ipairs(newStatus.results) do
-                src = m.getTypeValue(status, src)
+                src = m.getFullType(status, src)
                 if src.type == "type.function" then
                     local callback = src.args[callbackIndex]
                     if callback then
@@ -2967,7 +2967,7 @@ function m.getAllValuesInType(source, tp, results)
     return results
 end
 
-function m.getTypeValue(status, tp, mark)
+function m.getFullType(status, tp, mark)
     mark = mark or {}
     if mark[tp] then
         return tp
@@ -2989,7 +2989,7 @@ function m.getTypeValue(status, tp, mark)
         m.searchRefs(newStatus, tp.value, 'def')
         for _, def in ipairs(newStatus.results) do
             if m.typeAnnTypes[def.type] then
-                return m.getTypeValue(status, def, mark)
+                return m.getFullType(status, def, mark)
             end
         end
     end
@@ -3019,12 +3019,67 @@ function m.getTypeValue(status, tp, mark)
     if typeAlias then
         if generics and typeAlias.generics then
             local copy = m.copyTypeWithGenerics(typeAlias.value, m.getGenericsReplace(typeAlias, generics))
-            return m.getTypeValue(status, copy, mark)
+            return m.getFullType(status, copy, mark)
         else
-            return m.getTypeValue(status, typeAlias.value, mark)
+            return m.getFullType(status, typeAlias.value, mark)
         end
     end
     return tp
+end
+
+local anyType = {
+    type = "type.name",
+    [1] = "any"
+}
+
+local function typeCheckFunctionCall(status, func, callArgs)
+    local typeChecker = require("core.type-checking")
+    typeChecker.init()
+    typeChecker.options["union-bivariance"] = true
+    typeChecker.strict = true
+    local varargs = nil
+    local argsCount = #callArgs
+    for i = 1, m.getTypeCount(func.args) do
+        local arg = func.args[i]
+        if arg and arg.type == "type.variadic" then
+            varargs = arg.value
+        end
+        local argType = varargs or arg
+        if not argType then
+            break
+        end
+        local other = callArgs[i]
+        if not other then
+            break
+        end
+        local otherType = m.getType(status, other) or anyType
+        if otherType.parent and i == argsCount then
+            if otherType.parent.type == "type.list" then
+                for j = 2, #otherType.parent do
+                    if otherType.parent[j].type == "type.variadic" then
+                        for _ = i + j - 1, #func.args do
+                            callArgs[#callArgs+1] = otherType.parent[j].value
+                        end
+                    else
+                        if #callArgs == #func.args then
+                            break
+                        end
+                        callArgs[#callArgs+1] = otherType.parent[j]
+                    end
+                end
+            elseif otherType.parent.type == "type.variadic" then
+                for _ = i + 1, #func.args do
+                    callArgs[#callArgs+1] = otherType
+                end
+            end
+        end
+        if not typeChecker.compareTypes(otherType, argType) then
+            typeChecker.init()
+            return false
+        end
+    end
+    typeChecker.init()
+    return true
 end
 
 local function checkSameSimpleAndMergeTypeAnnReturns(status, results, source, index, args)
@@ -3035,15 +3090,23 @@ local function checkSameSimpleAndMergeTypeAnnReturns(status, results, source, in
     if source.returnTypeAnn then
         returns[1] = source.returnTypeAnn.value
     elseif m.typeAnnTypes[source.type] then
-        source = m.getTypeValue(status, source)
+        source = m.getFullType(status, source)
         if source.type == "type.function" then
             if source.parent == rbxlibs.global["require"] then
                 return true
             end
             returns[1] = source.returns
         elseif source.type == "type.inter" then
-            for _, src in ipairs(m.getAllValuesInType(source, "type.function")) do
-                returns[#returns+1] = src.returns
+            if source.returns then
+                returns[#returns+1] = source.returns
+            elseif args then
+                for _, func in ipairs(m.getAllValuesInType(source)) do
+                    func = m.getFullType(status, func) or func
+                    if func.type == "type.function" and typeCheckFunctionCall(status, func, args) then
+                        returns[#returns+1] = func.returns
+                        break
+                    end
+                end
             end
         end
     end
@@ -3488,7 +3551,7 @@ function m.checkSameSimpleAsKeyOrValueInForPairs(status, ref, start, pushQueue)
                 end
             end
         elseif m.typeAnnTypes[def.type] then
-            def = m.getTypeValue(status, def)
+            def = m.getFullType(status, def)
             if def.type == "type.table" then
                 for _, field in ipairs(def) do
                     if field.type == "type.index" then
@@ -3625,56 +3688,6 @@ function m.checkSameSimpleInLiteral(status, ref, start, pushQueue, mode)
     end
 end
 
-local function typeCheckFunctionCall(status, func, callArgs)
-    local typeChecker = require("core.type-checking")
-    typeChecker.init()
-    typeChecker.options["union-bivariance"] = true
-    typeChecker.strict = true
-    local varargs = nil
-    local argsCount = #callArgs
-    for i = 1, m.getTypeCount(func.args) do
-        local arg = func.args[i]
-        if arg and arg.type == "type.variadic" then
-            varargs = arg.value
-        end
-        local argType = varargs or arg
-        if not argType then
-            break
-        end
-        local other = callArgs[i]
-        if not other then
-            break
-        end
-        local otherType = m.getType(status, other)
-        if otherType.parent and i == argsCount then
-            if otherType.parent.type == "type.list" then
-                for j = 2, #otherType.parent do
-                    if otherType.parent[j].type == "type.variadic" then
-                        for _ = i + j - 1, #func.args do
-                            callArgs[#callArgs+1] = otherType.parent[j].value
-                        end
-                    else
-                        if #callArgs == #func.args then
-                            break
-                        end
-                        callArgs[#callArgs+1] = otherType.parent[j]
-                    end
-                end
-            elseif otherType.parent.type == "type.variadic" then
-                for _ = i + 1, #func.args do
-                    callArgs[#callArgs+1] = otherType
-                end
-            end
-        end
-        if not typeChecker.compareTypes(otherType, argType) then
-            typeChecker.init()
-            return false
-        end
-    end
-    typeChecker.init()
-    return true
-end
-
 function m.checkSameSimpleInBinaryOrUnary(status, source, start, pushQueue, mode)
     source = m.getObjectValue(source) or source
     if source.type == "binary" or source.type == "unary" then
@@ -3717,7 +3730,7 @@ function m.checkSameSimpleInBinaryOrUnary(status, source, start, pushQueue, mode
                                 m.getAllValuesInType(meta.value, nil, funcs)
                             end
                             for _, func in ipairs(funcs) do
-                                func = m.getTypeValue(newStatus, func)
+                                func = m.getFullType(newStatus, func)
                                 if func.type == "type.function" and typeCheckFunctionCall(newStatus, func, {tp1, tp2}) then
                                     local results = {}
                                     checkSameSimpleAndMergeTypeAnnReturns(newStatus, results, func, 1)
@@ -4673,7 +4686,7 @@ function m.getType(status, source)
     if m.isLiteral(source) then
         return makeNameType(source.type)
     elseif m.typeAnnTypes[source.type] then
-        local tp = m.getTypeValue(status, source)
+        local tp = m.getFullType(status, source)
         return tp
     end
     local newStatus = m.status(status, source)
@@ -4686,7 +4699,7 @@ function m.getType(status, source)
         if m.isLiteral(def) then
             union[#union+1] = makeNameType(def.type)
         elseif m.typeAnnTypes[def.type] then
-            local tp = m.getTypeValue(status, def)
+            local tp = m.getFullType(status, def)
             union[#union+1] = tp
         end
     end
@@ -4758,7 +4771,7 @@ function m.inferCheckTypeAnn(status, source)
         typeAnn = typeAnn.value
     end
     if status.options.fullType then
-        typeAnn = m.getTypeValue(status, typeAnn)
+        typeAnn = m.getFullType(status, typeAnn)
     end
     status.results = m.allocInfer {
         type = m.buildTypeAnn(typeAnn),
