@@ -2,7 +2,7 @@
 
 [Original Project](https://github.com/sumneko/lua-language-server) by [sumneko](https://github.com/sumneko)
 
-Make sure you don't have both [Lua](https://marketplace.visualstudio.com/items?itemName=sumneko.lua) by sumneko and Roblox LSP installed.
+Make sure you don't have both [Lua](https://marketplace.visualstudio.com/items?itemName=sumneko.lua) by sumneko and Roblox LSP enabled.
 
 ## More Info
 https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745
@@ -15,7 +15,7 @@ https://marketplace.visualstudio.com/items?itemName=Nightrains.robloxlsp
 - [x] Exact Luau Environment
 - [x] Full Luau Typechecking and Intellisense
 - [x] Support for [Rojo](https://github.com/Roblox/rojo)
-- [x] Support for Third-Party libraries like Roact, Rodux, TestEz, etc.
+- [x] Support for Third-Party libraries like Roact, Rodux, Promise, TestEz, etc.
 - [x] Color3 Preview and Picker
 - [x] Auto-completion of game descendants
 - [x] Auto-updatable API
