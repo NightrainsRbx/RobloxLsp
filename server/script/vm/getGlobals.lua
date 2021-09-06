@@ -100,7 +100,7 @@ local function insertLibrary(results, name, uri)
         if name == "*" or lib.name == name then
             if lib.name == "script" and uri then
                 local script = util.shallowCopy(lib)
-                local scriptValue = rojo:findScriptByPath(uri)
+                local scriptValue = rojo.Scripts[uri]
                 if scriptValue then
                     script.value = scriptValue
                 else

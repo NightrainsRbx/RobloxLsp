@@ -7,7 +7,6 @@ local rbxlibs   = require 'library.rbxlibs'
 local rojo      = require 'library.rojo'
 local util      = require 'utility'
 local vm        = require 'vm'
-local ws        = require 'workspace'
 
 local undefinedType    = require 'core.diagnostics.undefined-type'
 local redefinedType    = require 'core.diagnostics.redefined-type'
@@ -132,32 +131,21 @@ function m.checkRequire(func)
     if call and call.args then
         local reqScript = call.args[1]
         for _, def in ipairs(vm.getDefs(reqScript, 0)) do
-            if def.file then
-                local lib = rojo:matchLibrary(def.file)
+            if def.uri then
+                local lib = rojo:matchLibrary(def.uri)
                 if lib then
                     return lib
                 end
-            end
-            if def.path then
-                local path = rojo:findPathByScript(def)
-                if not path then
-                    goto CONTINUE
-                end
-                local myUri = guide.getUri(reqScript)
-                local uris = ws.findUrisByRequirePath(path)
-                for _, uri in ipairs(uris) do
-                    if not files.eq(myUri, uri) then
-                        local ast = files.getAst(uri)
-                        if ast and ast.ast.returns then
-                            if #ast.ast.returns == 1 then
-                                return ast.ast.returns[1][1]
-                            end
-                            break
+                if not files.eq(guide.getUri(reqScript), def.uri) then
+                    local ast = files.getAst(def.uri)
+                    if ast and ast.ast.returns then
+                        if #ast.ast.returns == 1 then
+                            return ast.ast.returns[1][1]
                         end
+                        break
                     end
                 end
             end
-            ::CONTINUE::
         end
     end
 end

@@ -10,20 +10,12 @@ local util       = require 'utility'
 local findSource = require 'core.find-source'
 local lang       = require 'language'
 local markdown   = require 'provider.markdown'
-local ws         = require 'workspace'
 local furi       = require 'file-uri'
-local rojo       = require 'library.rojo'
 
 local function getPath(source)
     for _, def in ipairs(vm.getDefs(source)) do
-        if def.type == "type.library" and def.value.path then
-            local path = rojo:findPathByScript(def.value)
-            if path then
-                local uri = ws.findUrisByRequirePath(path)[1]
-                if uri then
-                    return furi.decode(uri)
-                end
-            end
+        if def.type == "type.library" and def.value.uri then
+            return furi.decode(def.value.uri)
         end
     end
 end

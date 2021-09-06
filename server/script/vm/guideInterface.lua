@@ -31,30 +31,19 @@ function m.require(status, args, index)
     local newStatus = guide.status(status)
     guide.searchRefs(newStatus, reqScript, "def")
     for _, def in ipairs(newStatus.results) do
-        if def.file then
-            local lib = rojo:matchLibrary(def.file)
+        if def.uri then
+            local lib = rojo:matchLibrary(def.uri)
             if lib then
                 return {lib}
             end
-        end
-        if def.path then
-            local path = rojo:findPathByScript(def)
-            if not path then
-                goto CONTINUE
-            end
-            local myUri = guide.getUri(args[1])
-            local uris = ws.findUrisByRequirePath(path)
-            for _, uri in ipairs(uris) do
-                if not files.eq(myUri, uri) then
-                    local ast = files.getAst(uri)
-                    if ast then
-                        m.searchFileReturn(results, ast.ast, index)
-                        break
-                    end
+            if not files.eq(guide.getUri(args[1]), def.uri) then
+                local ast = files.getAst(def.uri)
+                if ast then
+                    m.searchFileReturn(results, ast.ast, index)
+                    break
                 end
             end
         end
-        ::CONTINUE::
     end
     return results
 end

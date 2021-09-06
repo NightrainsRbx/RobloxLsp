@@ -80,6 +80,7 @@ local function updateConfig()
     or not util.equal(oldOther.associations, newOther.associations)
     or not util.equal(oldOther.exclude, newOther.exclude)
     then
+        rbxlibs.init()
         workspace.reload()
         semantic.refresh()
     end

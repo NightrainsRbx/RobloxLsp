@@ -1,9 +1,7 @@
 local guide      = require 'core.guide'
-local workspace  = require 'workspace'
 local files      = require 'files'
 local vm         = require 'vm'
 local findSource = require 'core.find-source'
-local rojo       = require "library.rojo"
 
 local function sortResults(results)
     -- 先按照顺序排序
@@ -53,26 +51,6 @@ local accept = {
 
     ['type.name']   = true
 }
-
-local function checkScriptPath(results, value, source)
-    local path = rojo:findPathByScript(value)
-    if path then
-        local uris = workspace.findUrisByRequirePath(path)
-        if uris then
-            for i, uri in ipairs(uris) do
-                results[#results+1] = {
-                    uri    = files.getOriginUri(uri),
-                    source = source,
-                    target = {
-                        start  = 0,
-                        finish = 0,
-                        uri    = uri,
-                    }
-                }
-            end
-        end
-    end
-end
 
 local function convertIndex(source)
     if not source then
@@ -134,8 +112,16 @@ return function (uri, offset)
         if values[src] then
             goto CONTINUE
         end
-        if src.value and src.value.path then
-            checkScriptPath(results, src.value, source)
+        if src.value and src.value.uri then
+            results[#results+1] = {
+                uri    = files.getOriginUri(src.value.uri),
+                source = source,
+                target = {
+                    start  = 0,
+                    finish = 0,
+                    uri    = src.value.uri,
+                }
+            }
             goto CONTINUE
         end
         local root = guide.getRoot(src)

@@ -12,6 +12,7 @@ rojo.Watch = {}
 rojo.RojoProject = {}
 rojo.LibraryCache = {}
 rojo.DataModel = nil
+rojo.Scripts = {}
 
 local librariesTypes = {
     ["Roact"] = {
@@ -27,31 +28,13 @@ local librariesTypes = {
         textPattern = "^%s*%-%-%[%[%s*An implementation of Promises similar to Promise%/A%+%."
     }
 }
+
 local keys = {
     ["$className"] = true,
     ["$path"] = true,
     ["$properties"] = true,
     ["$ignoreUnknownInstances"] = true
 }
-
-local function split(str, pat)
-    local t = {}
-    local fpat = "(.-)" .. pat
-    local last_end = 1
-    local s, e, cap = str:find(fpat, 1)
-    while s do
-        if s ~= 1 or cap ~= "" then
-            table.insert(t, cap)
-        end
-        last_end = e+1
-        s, e, cap = str:find(fpat, last_end)
-    end
-    if last_end <= #str then
-        cap = str:sub(last_end)
-        table.insert(t, cap)
-    end
-    return t
-end
 
 function rojo:scriptClass(filename)
     if filename:match("^.+%.server%.lua$") then
@@ -91,7 +74,7 @@ local function inspectModel(model)
     return tree
 end
 
-local function searchFile(parent, parentPath, filePath)
+local function searchFile(parent, filePath)
     local path = fs.current_path() / filePath
     if not path then
         return
@@ -104,19 +87,21 @@ local function searchFile(parent, parentPath, filePath)
                 local name = removeLuaExtension(childName)
                 if name == "init" then
                     parent.value[1] = rojo:scriptClass(childName)
-                    parent.value.file = tostring(childPath)
+                    parent.value.uri = furi.encode(childPath:string())
+                    rojo.Scripts[parent.value.uri] = parent.value
                 else
-                    parent.value.child[name] = {
+                    local child = {
                         name = name,
                         type = "type.library",
                         kind = "child",
                         value = {
                             [1] = rojo:scriptClass(childName),
                             type = "type.name",
-                            path = parentPath .. "/" .. name,
-                            uri = tostring(childPath)
+                            uri = furi.encode(childPath:string())
                         }
                     }
+                    parent.value.child[name] = child
+                    rojo.Scripts[child.value.uri] = child.value
                 end
             elseif fs.is_directory(childPath) then
                 local child = {
@@ -126,11 +111,10 @@ local function searchFile(parent, parentPath, filePath)
                     value = {
                         [1] = "Folder",
                         type = "type.name",
-                        path = parentPath .. "/" .. childName,
                         child = {}
                     }
                 }
-                searchFile(child, child.value.path, filePath .. "/" .. childName)
+                searchFile(child, filePath .. "/" .. childName)
                 parent.value.child[childName] = child
             elseif childName == "init.meta.json" then
                 local success, meta = pcall(json.decode, util.loadFile(childPath))
@@ -148,7 +132,6 @@ local function searchFile(parent, parentPath, filePath)
                         value = {
                             [1] = model.ClassName,
                             type = "type.name",
-                            path = parentPath .. "/" .. name,
                             child = inspectModel(model)
                         }
                     }
@@ -162,7 +145,6 @@ local function searchFile(parent, parentPath, filePath)
                     value = {
                         [1] = "StringValue",
                         type = "type.name",
-                        path = parentPath .. "/" .. name,
                     }
                 }
             elseif childName:match("%.csv$") then
@@ -174,7 +156,6 @@ local function searchFile(parent, parentPath, filePath)
                     value = {
                         [1] = "LocalizationTable",
                         type = "type.name",
-                        path = parentPath .. "/" .. name,
                     }
                 }
             elseif childName:match("%.json$") and not childName:match("%.meta%.json$")  then
@@ -186,7 +167,6 @@ local function searchFile(parent, parentPath, filePath)
                     value = {
                         [1] = "ModuleScript",
                         type = "type.name",
-                        path = parentPath .. "/" .. name,
                     }
                 }
             end
@@ -195,7 +175,8 @@ local function searchFile(parent, parentPath, filePath)
         local name = tostring(path:filename())
         if rojo:scriptClass(name) then
             parent.value[1] = rojo:scriptClass(name)
-            parent.value.file = tostring(path)
+            parent.value.uri = furi.encode(path:string())
+            rojo.Scripts[parent.value.uri] = parent.value
         elseif name:match("%.model%.json$") then
             local success, model = pcall(json.decode, util.loadFile(path))
             if success then
@@ -231,14 +212,13 @@ local function getChildren(parent, name, tree, path)
         value = {
             [1] = "Instance",
             type = "type.name",
-            path = path,
             child = {}
         }
     }
     if tree["$path"] then
         local filePath = normalizePath(tree["$path"])
         rojo.Watch[#rojo.Watch+1] = filePath
-        searchFile(obj, path, filePath)
+        searchFile(obj, filePath)
     end
     if tree["$className"] then
         obj.value[1] = tree["$className"]
@@ -255,29 +235,29 @@ local function getChildren(parent, name, tree, path)
     end
 end
 
-function rojo:matchLibrary(filePath)
-    if filePath:match("%.spec%.lua$") then
+function rojo:matchLibrary(uri)
+    if uri:match("%.spec%.lua$") then
         return nil
     end
-    local cache = rojo.LibraryCache[filePath]
+    local cache = rojo.LibraryCache[uri]
     if cache ~= nil then
         if cache == false then
             return nil
         end
         return cache
     end
-    local text = util.loadFile(filePath)
+    local text = util.loadFile(furi.decode(uri))
     for tp, info in pairs(librariesTypes) do
         if text:match(info.textPattern) then
-            rojo.LibraryCache[filePath] = {
+            rojo.LibraryCache[uri] = {
                 [1] = tp,
                 type = "type.name",
                 typeAlias = defaultlibs.customType[tp]
             }
-            return rojo.LibraryCache[filePath]
+            return rojo.LibraryCache[uri]
         end
     end
-    rojo.LibraryCache[filePath] = false
+    rojo.LibraryCache[uri] = false
     return nil
 end
 
@@ -318,6 +298,7 @@ function rojo:loadRojoProject()
     self.LibraryCache = {}
     self.RojoProject = {}
     self.Watch = {}
+    self.Scripts = {}
     if config.config.workspace.rojoProjectFile ~= "" then
         local filename = config.config.workspace.rojoProjectFile .. ".project.json"
         if fs.exists(fs.current_path() / filename) then
@@ -351,111 +332,6 @@ function rojo:loadRojoProject()
         return #a > #b
     end)
     return mainTree
-end
-
-function rojo:searchRojoPaths(paths, tree, parent)
-    for name, items in pairs(tree) do
-        if not keys[name] then
-            if items["$path"] then
-                paths[#paths + 1] = {
-                    path = parent .. "/" .. name,
-                    uri = normalizePath(items["$path"])
-                }
-            end
-            self:searchRojoPaths(paths, items, parent .. "/" .. name)
-        end
-    end
-    return paths
-end
-
-function rojo:findScriptByPath(uri)
-    if #self.RojoProject == 0 then
-        return
-    end
-    local path = nil
-    local rojoPaths = {}
-    for _, project in pairs(self.RojoProject) do
-        self:searchRojoPaths(rojoPaths, project.tree, "")
-    end
-    table.sort(rojoPaths, function(a, b)
-        return #a.uri > #b.uri
-    end)
-    for _, info in pairs(rojoPaths) do
-        local _, finish = uri:find(info.uri, 1, true)
-        if finish then
-            path = info.path:sub(2) .. uri:sub(finish + 1)
-            break
-        end
-    end
-    if not path then
-        return
-    end
-    local fileName = nil
-    for str in path:gmatch(".+/(.+%.lua)$") do
-        fileName = str
-    end
-    if not fileName then
-        return
-    end
-    path = path:sub(1, (#path - #fileName) - 1)
-    fileName = removeLuaExtension(fileName)
-    if fileName == "init" then
-        for str in path:gmatch(".+/(.+)$") do
-            fileName = str
-        end
-        path = path:sub(1, (#path - #fileName) - 1)
-    end
-    local rbxlibs = require 'library.rbxlibs'
-    local current = rbxlibs.global["game"]
-    for _, name in pairs(split(path,'[\\/]+')) do
-        if current.value.child then
-            for _, child in pairs(current.value.child) do
-                if child.name == name and rbxlibs.ClassNames[current.value[1]] then
-                    current = child
-                end
-            end
-        else
-            break
-        end
-    end
-    if current and current.value.child then
-        local script = nil
-        for _, child in pairs(current.value.child) do
-            if child.name == fileName and rbxlibs.ClassNames[current.value[1]] then
-                script = child
-                break
-            end
-        end
-        if script then
-            return script.value
-        end
-    end
-end
-
-function rojo:findPathByScript(script)
-    if #self.RojoProject == 0 then
-        return
-    end
-    if not script.path then
-        return
-    end
-    local path = script.path
-    local rojoPaths = {}
-    for _, project in pairs(self.RojoProject) do
-        self:searchRojoPaths(rojoPaths, project.tree, "")
-    end
-    table.sort(rojoPaths, function(a, b)
-        return #a.path > #b.path
-    end)
-    for _, info in pairs(rojoPaths) do
-        local _, finish = path:find(info.path, 1, true)
-        if finish then
-            path = info.uri .. path:sub(finish + 1)
-            break
-        end
-    end
-    path = path:gsub("%/", ".")
-    return path
 end
 
 return rojo

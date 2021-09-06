@@ -816,9 +816,15 @@ local function buildDataModel()
     end
     local rojoProject = rojo:loadRojoProject()
     if rojoProject then
-        util.mergeTable(game, rojoProject)
-        for _, child in pairs(rojoProject.value.child) do
-            setChildParent(child, game.value)
+        if rojoProject.value[1] == "DataModel" then
+            util.mergeTable(game, rojoProject)
+            for _, child in pairs(rojoProject.value.child) do
+                setChildParent(child, game.value)
+            end
+        else
+            for _, child in pairs(rojoProject.value.child) do
+                setChildParent(child, rojoProject.value)
+            end
         end
     end
     for _, child in pairs(game.value.child) do
