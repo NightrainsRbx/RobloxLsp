@@ -1013,11 +1013,22 @@ local function checkCallbackFunction(ast, text, offset, results)
     end)
     if source and source.type == "getglobal" and matchKey(source[1], "function") then
         local call, argIndex = guide.getCallAndArgIndex(source)
-        for _, def in ipairs(vm.getDefs(call.node, 0)) do
-            if def.type == "type.function" then
+        for _, def in ipairs(vm.getDefs(call.node, 0, {fullType = true})) do
+            if def.type == "type.function" or (def.type == "function" and def.args) then
                 local callback = def.args[argIndex]
                 if callback then
+                    if callback.typeAnn then
+                        callback = callback.typeAnn
+                    end
                     callback = guide.getObjectValue(callback) or callback
+                    if callback.type ~= "type.function" then
+                        for _, infer in ipairs(vm.getInfers(callback, 0, {fullType = true})) do
+                            if infer.source and infer.source.type == "type.function" then
+                                callback = infer.source
+                                break
+                            end
+                        end
+                    end
                 end
                 if callback and callback.type == "type.function" then
                     local params = {}
