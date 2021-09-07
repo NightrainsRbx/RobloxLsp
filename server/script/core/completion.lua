@@ -874,12 +874,12 @@ local function checkLenPlusOne(ast, text, offset, results)
 end
 
 local function tryLabelInString(label, source)
-    if not source or source.type ~= 'string' then
-        return label
-    end
     local str = parser:grammar(label, 'String')
     if not str then
         return label
+    end
+    if not source or source.type ~= 'string' then
+        return nil
     end
     if not matchKey(source[1], str[1]) then
         return nil
