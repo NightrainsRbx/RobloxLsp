@@ -521,7 +521,9 @@ local function checkFieldOfRefs(refs, ast, word, start, offset, parent, oop, res
         or src.type == 'tableindex'
         or src.type == 'setindex'
         or src.type == 'setmethod'
-        or src.type == 'setglobal' then
+        or src.type == 'setglobal'
+        or src.type == 'type.library'
+        or src.type == 'type.field' then
             fields[name] = src
             goto CONTINUE
         end
