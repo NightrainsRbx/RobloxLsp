@@ -400,7 +400,7 @@ function m.init()
         field = util.shallowCopy(field)
         field.type = "type.library"
         field.value = util.deepCopy(field.value)
-        field.value.method = true
+        field.method = true
         field.name = field.key[1]
         util.setTypeParent(field)
         m.object.string.child[#m.object.string.child+1] = field

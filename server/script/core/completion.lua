@@ -409,8 +409,14 @@ local function checkFieldThen(name, src, word, start, offset, parent, oop, resul
     or value.type == 'doc.type.function'
     or value.type == 'type.function'
     or (value.type == "type.inter" and #guide.getAllValuesInType(value, "type.function") > 0) then
-        if value.method and not oop then
-            return
+        if not oop then
+            if src.method or src.type == "setmethod" then
+                return
+            elseif value.type == "type.function" then
+                if value.args[1] and value.args[1].paramName and value.args[1].paramName[1] == "self" then
+                    return
+                end
+            end
         end
         if oop then
             kind = define.CompletionItemKind.Method

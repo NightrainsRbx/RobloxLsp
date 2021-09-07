@@ -364,11 +364,11 @@ local function parseMembers(data, isObject)
                 type = "type.library",
                 description = description,
                 overloadDescription = overloadDescription,
+                method = isObject and member.MemberType ~= "Callback" or nil,
                 value = {
                     type = "type.function",
                     args = parseParameters(member.Parameters),
                     returns = returns,
-                    method = isObject and member.MemberType ~= "Callback" or nil,
                     special = SPECIAL_FUNCTIONS[fullName],
                     enums = enums
                 },
@@ -410,6 +410,7 @@ local function parseMembers(data, isObject)
                 child[1] = {
                     name = "Wait",
                     type = "type.library",
+                    method = true,
                     value = {
                         type = "type.function",
                         args = {
@@ -421,14 +422,14 @@ local function parseMembers(data, isObject)
                                 paramName = {"self"}
                             }
                         },
-                        returns = #params == 1 and params[1] or params,
-                        method = true
+                        returns = #params == 1 and params[1] or params
                     }
                 }
                 for _, key in ipairs({"Connect", "ConnectParallel"}) do
                     child[#child+1] = {
                         name = key,
                         type = "type.library",
+                        method = true,
                         value = {
                             type = "type.function",
                             args = {
@@ -451,8 +452,7 @@ local function parseMembers(data, isObject)
                             returns = {
                                 [1] = "RBXScriptConnection",
                                 type = "type.name"
-                            },
-                            method = true
+                            }
                         }
                     }
                 end
@@ -511,8 +511,7 @@ local function parseEnums()
                                 type = "type.name"
                             }
                         }
-                    },
-                    method = true
+                    }
                 }
             }
         }
