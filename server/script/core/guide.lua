@@ -2029,10 +2029,15 @@ function m.checkSameSimpleInCallbackParam(status, obj, start, pushQueue)
             local newStatus = m.status(status)
             m.searchRefs(newStatus, func.parent.parent.node, 'def')
             for _, src in ipairs(newStatus.results) do
-                src = m.getFullType(status, src)
-                if src.type == "type.function" then
+                if m.typeAnnTypes[src.type] then
+                    src = m.getFullType(status, src)
+                end
+                if src.type == "type.function" or src.type == "function" then
                     local callback = src.args[callbackIndex]
                     if callback then
+                        if callback.typeAnn then
+                            callback = callback.typeAnn.value
+                        end
                         pushCallbackArgs(callback, argIndex, status, start, pushQueue)
                     end
                 end
