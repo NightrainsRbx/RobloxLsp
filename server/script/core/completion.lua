@@ -396,14 +396,14 @@ local LIBS = {
     ["package"] = true
 }
 
-local function checkFieldThen(name, src, word, start, offset, parent, oop, results)
+local function checkFieldThen(name, src, word, start, offset, parent, oop, results, infer)
     if src.hidden and word ~= name then
         return
     end
     if src.deprecated and not config.config.completion.deprecatedMembers then
         return
     end
-    local value = guide.getObjectValue(src) or src
+    local value = guide.getObjectValue(infer or src) or (infer or src)
     local kind = define.CompletionItemKind.Field
     if value.type == 'function'
     or value.type == 'doc.type.function'
@@ -443,12 +443,13 @@ local function checkFieldThen(name, src, word, start, offset, parent, oop, resul
         else
             kind = define.CompletionItemKind.Variable
         end
-    -- elseif value.type == "type.name" then
-    --     if value[1] == "Enum" then
-    --         kind = define.CompletionItemKind.Enum
-    --     elseif value[1] == "EnumItem" and not value.text then
-    --         kind = define.CompletionItemKind.EnumMember
-    --     end
+    elseif not infer and config.config.intelliSense.searchDepth > 0 then
+        local infers = vm.getInfers(value, 0, {searchAll = true})
+        for _, infer in ipairs(infers) do
+            if infer.source then
+                return checkFieldThen(name, src, word, start, offset, parent, oop, results, infer.source)
+            end
+        end
     end
     if oop then
         return
