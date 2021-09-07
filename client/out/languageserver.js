@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const path = require("path");
@@ -7,6 +16,7 @@ const fs = require("fs");
 const vscode = require("vscode");
 const vscode_1 = require("vscode");
 const node_1 = require("vscode-languageclient/node");
+const express = require("express");
 let defaultClient;
 let clients = new Map();
 function registerCustomCommands(context) {
@@ -102,8 +112,61 @@ function start(context, documentSelector, folder) {
         onCommand(client);
         onDecorations(client);
         statusBar(client);
+        startPluginServer(client);
     });
     return client;
+}
+let server;
+function startPluginServer(client) {
+    try {
+        let lastUpdate = "";
+        let app = express();
+        app.use('/update', express.json({
+            limit: '10mb',
+        }));
+        app.post('/update', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            if (!req.body) {
+                res.status(400);
+                res.json({
+                    success: false,
+                    reason: 'Missing JSON',
+                });
+                return;
+            }
+            if (!req.body.DataModel) {
+                res.status(400);
+                res.json({
+                    success: false,
+                    reason: 'Missing body.DataModel',
+                });
+                return;
+            }
+            try {
+                client.sendNotification('$/updateDataModel', {
+                    "datamodel": req.body.DataModel,
+                    "version": req.body.Version
+                });
+                lastUpdate = req.body.DataModel;
+            }
+            catch (err) {
+                vscode.window.showErrorMessage(err);
+            }
+            res.status(200);
+            res.json({ success: true });
+        }));
+        app.get("/last", (req, res) => {
+            res.send(lastUpdate);
+        });
+        let port = vscode.workspace.getConfiguration().get("robloxLsp.misc.serverPort");
+        if (port > 0) {
+            server = app.listen(port, () => {
+                // vscode.window.showInformationMessage(`Started Roblox LSP Plugin Server on port ${port}`);
+            });
+        }
+    }
+    catch (err) {
+        vscode.window.showErrorMessage(`Failed to launch Roblox LSP plugin server: ${err}`);
+    }
 }
 let barCount = 0;
 function statusBar(client) {
@@ -276,6 +339,10 @@ function activate(context) {
 }
 exports.activate = activate;
 function deactivate() {
+    if (server != undefined) {
+        server.close();
+        server = undefined;
+    }
     let promises = [];
     if (defaultClient) {
         promises.push(defaultClient.stop());

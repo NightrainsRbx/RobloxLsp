@@ -15,59 +15,6 @@ const languageserver = require("./languageserver");
 const fetch = require("node-fetch");
 const path = require("path");
 const fs = require("fs");
-const express = require("express");
-let server;
-function startPluginServer() {
-    try {
-        let lastUpdate = "";
-        let app = express();
-        app.use('/update', express.json({
-            limit: '10mb',
-        }));
-        app.post('/update', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            if (!req.body) {
-                res.status(400);
-                res.json({
-                    success: false,
-                    reason: 'Missing JSON',
-                });
-                return;
-            }
-            if (!req.body.DataModel) {
-                res.status(400);
-                res.json({
-                    success: false,
-                    reason: 'Missing body.DataModel',
-                });
-                return;
-            }
-            try {
-                vscode.commands.executeCommand("robloxLsp.updateDatamodel", {
-                    "datamodel": req.body.DataModel,
-                    "version": req.body.Version
-                });
-                lastUpdate = req.body.DataModel;
-            }
-            catch (err) {
-                vscode.window.showErrorMessage(err);
-            }
-            res.status(200);
-            res.json({ success: true });
-        }));
-        app.get("/last", (req, res) => {
-            res.send(lastUpdate);
-        });
-        let port = vscode.workspace.getConfiguration().get("robloxLsp.misc.serverPort");
-        if (port > 0) {
-            server = app.listen(port, () => {
-                // vscode.window.showInformationMessage(`Started Roblox LSP Plugin Server on port ${port}`);
-            });
-        }
-    }
-    catch (err) {
-        vscode.window.showErrorMessage(`Failed to launch Roblox LSP plugin server: ${err}`);
-    }
-}
 const fetchData = (url, handler) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         fetch.default(url)
@@ -182,14 +129,9 @@ function activate(context) {
     openUpdatesWindow(context);
     updateRobloxAPI(context);
     languageserver.activate(context);
-    startPluginServer();
 }
 exports.activate = activate;
 function deactivate() {
-    if (server != undefined) {
-        server.close();
-        server = undefined;
-    }
     languageserver.deactivate();
 }
 exports.deactivate = deactivate;

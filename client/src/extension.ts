@@ -3,60 +3,6 @@ import * as languageserver from './languageserver';
 import * as fetch from 'node-fetch';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as express from 'express';
-import { Server } from 'http';
-
-let server: Server | undefined;
-
-function startPluginServer() {
-    try {
-        let lastUpdate = "";
-        let app = express();
-        app.use('/update', express.json({
-            limit: '10mb',
-        }));
-        app.post('/update', async (req, res) => {
-            if (!req.body) {
-                res.status(400);
-                res.json({
-                    success: false,
-                    reason: 'Missing JSON',
-                });
-                return;
-            }
-            if (!req.body.DataModel) {
-                res.status(400);
-                res.json({
-                    success: false,
-                    reason: 'Missing body.DataModel',
-                });
-                return;
-            }
-            try {
-                vscode.commands.executeCommand("robloxLsp.updateDatamodel", {
-                    "datamodel": req.body.DataModel,
-                    "version": req.body.Version
-                });
-                lastUpdate = req.body.DataModel;
-            } catch (err) {
-                vscode.window.showErrorMessage(err);
-            }
-            res.status(200);
-            res.json({success: true});
-        });
-        app.get("/last", (req, res) => {
-            res.send(lastUpdate);
-        });
-        let port = vscode.workspace.getConfiguration().get("robloxLsp.misc.serverPort");
-        if (port > 0) {
-            server = app.listen(port, () => {
-                // vscode.window.showInformationMessage(`Started Roblox LSP Plugin Server on port ${port}`);
-            });
-        }
-    } catch (err) {
-        vscode.window.showErrorMessage(`Failed to launch Roblox LSP plugin server: ${err}`);
-    }
-}
 
 const fetchData = async (url: string, handler: (data: string) => void) => {
     try {
@@ -178,14 +124,8 @@ export function activate(context: vscode.ExtensionContext) {
     updateRobloxAPI(context);
 
     languageserver.activate(context);
-
-    startPluginServer();
 }
 
 export function deactivate() {
-    if (server != undefined) {
-        server.close();
-        server = undefined;
-    }
     languageserver.deactivate();
 }

@@ -761,18 +761,6 @@ proto.on('workspace/executeCommand', function (params)
     elseif command == 'lua.jsonToLua' then
         local core = require 'core.command.jsonToLua'
         return core(params.arguments[1])
-    elseif command == 'robloxLsp.updateDatamodel' then
-        if params.arguments[1].version == 1 then
-            if rojo.DataModel == nil then
-                proto.notify('window/showMessage', {
-                    type    = define.MessageType.Info,
-                    message = 'Roblox LSP: Connected to Roblox Studio Plugin!'
-                })
-            end
-            rojo:updateDatamodel(params.arguments[1].datamodel)
-            rbxlibs.init()
-            workspace.reload()
-        end
     end
 end)
 
@@ -895,6 +883,20 @@ end)
 
 proto.on('$/didChangeVisibleRanges', function (params)
     files.setVisibles(params.uri, params.ranges)
+end)
+
+proto.on('$/updateDataModel', function (params)
+    if params.version == 1 then
+        if rojo.DataModel == nil then
+            proto.notify('window/showMessage', {
+                type    = define.MessageType.Info,
+                message = 'Roblox LSP: Connected to Roblox Studio Plugin!'
+            })
+        end
+        rojo:updateDatamodel(params.datamodel)
+        rbxlibs.init()
+        workspace.reload()
+    end
 end)
 
 proto.on('$/status/click', function ()

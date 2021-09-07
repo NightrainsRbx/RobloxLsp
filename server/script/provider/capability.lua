@@ -83,7 +83,6 @@ function m.getIniter()
                 'lua.removeSpace:' .. sp:get_id(),
                 'lua.solve:'       .. sp:get_id(),
                 'lua.jsonToLua:'   .. sp:get_id(),
-                "robloxLsp.updateDatamodel"
             },
         },
         foldingRangeProvider = true,

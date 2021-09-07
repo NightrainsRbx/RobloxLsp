@@ -21,6 +21,9 @@ import {
     DocumentSelector,
 } from 'vscode-languageclient/node';
 
+import * as express from 'express';
+import { Server } from 'http';
+
 let defaultClient: LanguageClient;
 let clients: Map<string, LanguageClient> = new Map();
 
@@ -155,9 +158,61 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
         onCommand(client);
         onDecorations(client);
         statusBar(client);
+        startPluginServer(client);
     });
 
     return client;
+}
+
+let server: Server | undefined;
+function startPluginServer(client: LanguageClient) {
+    try {
+        let lastUpdate = "";
+        let app = express();
+        app.use('/update', express.json({
+            limit: '10mb',
+        }));
+        app.post('/update', async (req, res) => {
+            if (!req.body) {
+                res.status(400);
+                res.json({
+                    success: false,
+                    reason: 'Missing JSON',
+                });
+                return;
+            }
+            if (!req.body.DataModel) {
+                res.status(400);
+                res.json({
+                    success: false,
+                    reason: 'Missing body.DataModel',
+                });
+                return;
+            }
+            try {
+                client.sendNotification('$/updateDataModel', {
+                    "datamodel": req.body.DataModel,
+                    "version": req.body.Version
+                });
+                lastUpdate = req.body.DataModel;
+            } catch (err) {
+                vscode.window.showErrorMessage(err);
+            }
+            res.status(200);
+            res.json({success: true});
+        });
+        app.get("/last", (req, res) => {
+            res.send(lastUpdate);
+        });
+        let port = vscode.workspace.getConfiguration().get("robloxLsp.misc.serverPort");
+        if (port > 0) {
+            server = app.listen(port, () => {
+                // vscode.window.showInformationMessage(`Started Roblox LSP Plugin Server on port ${port}`);
+            });
+        }
+    } catch (err) {
+        vscode.window.showErrorMessage(`Failed to launch Roblox LSP plugin server: ${err}`);
+    }
 }
 
 let barCount = 0;
@@ -348,6 +403,10 @@ export function activate(context: ExtensionContext) {
 }
 
 export function deactivate(): Thenable<void> | undefined {
+    if (server != undefined) {
+        server.close();
+        server = undefined;
+    }
     let promises: Thenable<void>[] = [];
     if (defaultClient) {
         promises.push(defaultClient.stop());
