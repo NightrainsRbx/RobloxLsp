@@ -828,7 +828,7 @@ local function buildDataModel()
         end
     end
     for _, child in pairs(game.value.child) do
-        if m.object[child.value[1]] then
+        if m.Services[child.value[1]] then
             m.object[child.value[1]].ref = child.value.child
         end
     end
