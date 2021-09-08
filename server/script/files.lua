@@ -390,7 +390,7 @@ function m.getRequires(uri)
             for _, def in ipairs(vm.getDefs(req, 0, {skipType = true})) do
                 local reqUri = guide.getUri(def)
                 if not m.eq(uri, reqUri) then
-                    map[reqUri] = true
+                    map[reqUri] = req
                 end
             end
         end
@@ -399,7 +399,7 @@ function m.getRequires(uri)
     return m.requireMap[uri] or {}
 end
 
-function m.getRecursiveRequires(reqUri, list, mark)
+function m.getRequiring(reqUri, recursive, list, mark)
     mark = mark or {}
     list = list or {}
     for _, uri in ipairs(m.getAllUris()) do
@@ -408,7 +408,10 @@ function m.getRecursiveRequires(reqUri, list, mark)
             if requires[reqUri] then
                 mark[uri] = true
                 list[#list+1] = uri
-                m.getRecursiveRequires(uri, list, mark)
+                list[uri] = requires[reqUri]
+                if recursive then
+                    m.getRequiring(uri, recursive, list, mark)
+                end
             end
         end
     end

@@ -352,7 +352,7 @@ local function ofTypeField(source, newname, callback)
     local key = guide.getKeyName(source)
     ofFieldThen(key, source, newname, callback)
     local myUri = guide.getUri(source)
-    local uris = files.getRecursiveRequires(myUri)
+    local uris = files.getRequiring(myUri, true)
     uris[#uris+1] = myUri
     for _, uri in ipairs(uris) do
         local ast = files.getAst(uri)
@@ -395,7 +395,7 @@ local function ofTypeAlias(source, newname, callback)
         end
     end
     if source.export then
-        for _, uri in ipairs(files.getRecursiveRequires(guide.getUri(source))) do
+        for _, uri in ipairs(files.getRequiring(guide.getUri(source), true)) do
             local ast = files.getAst(uri)
             if ast then
                 guide.eachSourceType(ast.ast, "type.module", function (mod)

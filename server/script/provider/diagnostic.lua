@@ -347,7 +347,7 @@ function m.diagnosticsRequires(reqUri)
             cancelled = true
             askForDisable()
         end)
-        local uris = files.getRecursiveRequires(reqUri)
+        local uris = files.getRequiring(reqUri, true)
         for i, uri in ipairs(uris) do
             bar:setMessage(('%d/%d'):format(i, #uris))
             bar:setPercentage(i / #uris * 100)

@@ -96,9 +96,14 @@ function vm.interface.types(source)
     return vm.getInfers(source, 0)
 end
 
-function vm.interface.link(uri)
+function vm.interface.link(reqUri)
     await.delay()
-    return vm.getLinksTo(uri)
+    local links = {}
+    local requires = files.getRequiring(reqUri)
+    for _, uri in ipairs(requires) do
+        links[#links+1] = requires[uri]
+    end
+    return links
 end
 
 function vm.interface.cache(options)
