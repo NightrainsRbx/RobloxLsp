@@ -392,7 +392,7 @@ function m.convertToType(infer, get)
         if source.type == "table" then
             local tp = {
                 type = "type.table",
-                infered = true
+                infered = source
             }
             m.cache.convert[source] = tp
             local fields
@@ -482,7 +482,7 @@ function m.convertToType(infer, get)
                     funcargs = true
                 },
                 returns = anyType,
-                infered = true
+                infered = source
             }
             m.cache.convert[source] = tp
             if source.args then
@@ -564,19 +564,23 @@ end
 function m.compareTypes(a, b, mark)
     a = m.normalizeType(a)
     b = m.normalizeType(b)
-    if a.original and b.original and a.original == b.original then
-        mark = mark or {}
-        if mark[a.original] then
-            return true
-        end
-        mark[a.original] = true
-    end
     if (a.type == "type.union" and #a == 0)
     or (b.type == "type.union" and #b == 0) then
         return false
     end
     if a == b or a[1] == "any" or b[1] == "any" then
         return true
+    end
+    mark = mark or {}
+    if mark[tostring(a) .. tostring(b)] then
+        return true
+    end
+    mark[tostring(a) .. tostring(b)] = true
+    if a.original and b.original and a.original == b.original then
+        if mark[a.original] then
+            return true
+        end
+        mark[a.original] = true
     end
     if a.type == "type.union" then
         local allMatch = true
