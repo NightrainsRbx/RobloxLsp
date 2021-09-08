@@ -325,11 +325,11 @@ SuffixCall  <-  Sp ({} {| (COMMA / Exp->NoNil)+ |} {})
             ->  PackExpList
             /   %nil
 SuffixWithoutCall
-            <-  (DOT (Name / MissField))
+            <-  (DOT (FreeName / MissField))
             ->  GetField
             /   ({} BL DirtyExp DirtyBR {})
             ->  GetIndex
-            /   (COLON (Name / MissMethod) NeedCall)
+            /   (COLON (FreeName / MissMethod) NeedCall)
             ->  GetMethod
             /   ({} {| Table |} {})
             ->  Call
