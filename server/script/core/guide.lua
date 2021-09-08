@@ -4206,7 +4206,7 @@ function m.getCallerInSameFile(status, func)
 end
 
 function m.getCallerCrossFiles(status, main)
-    if status.interface.link then
+    if (not status.options.sameFile) and status.interface.link then
         return status.interface.link(main.uri)
     end
     return {}

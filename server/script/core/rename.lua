@@ -304,11 +304,8 @@ local function ofField(source, newname, callback)
     for _, src in ipairs(vm.getFields(node, 5, {searchAll = true})) do
         ofFieldThen(key, src, newname, callback)
     end
-    if source.type == 'tablefield'
-    or source.type == 'tableindex' then
-        for _, src in ipairs(vm.getRefs(source, 5, {searchAll = true, skipType = true})) do
-            ofFieldThen(key, src, newname, callback)
-        end
+    for _, src in ipairs(vm.getRefs(source, 5, {skipType = true})) do
+        ofFieldThen(key, src, newname, callback)
     end
 end
 

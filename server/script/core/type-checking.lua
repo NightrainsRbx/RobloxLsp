@@ -36,7 +36,8 @@ local numberType = {
 
 local inferOptions = {
     skipDoc = true,
-    onlyDef = true
+    onlyDef = true,
+    sameFile = true
 }
 
 local function buildType(tp)
