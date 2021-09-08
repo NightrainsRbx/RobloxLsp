@@ -1469,8 +1469,10 @@ function m.getVisibleRefs(obj, main)
     if not main then
         return obj.ref
     end
+    local nodeCount = 0
     local mainNode = main
     while mainNode.node do
+        nodeCount = nodeCount + 1
         mainNode = mainNode.node
         if not mainNode then
             return obj.ref
@@ -1482,6 +1484,7 @@ function m.getVisibleRefs(obj, main)
     local hasTypeAnn = obj.typeAnn
     local mainFunc = m.getParentFunction(main)
     local refs = {}
+    local sets = {}
     local same = nil
     for _, ref in ipairs(obj.ref) do
         if ref == main then
@@ -1489,21 +1492,31 @@ function m.getVisibleRefs(obj, main)
             goto CONTINUE
         end
         local node = ref
-        while node.next do
-            node = node.next
-            if not node then
-                goto CONTINUE
+        for _ = 1, nodeCount do
+            if node.next then
+                node = node.next
             end
         end
+        local key = node ~= ref and m.getKeyName(node) or nil
         if m.isSet(node) then
+            if key then
+                sets[key] = node
+            end
             if hasTypeAnn then
                 goto CONTINUE
             end
-            if node.start > main.finish then
+            local refFunc = m.getParentFunction(node)
+            if refFunc == mainFunc then
+                if node.start > main.finish then
+                    goto CONTINUE
+                end
+            elseif not m.hasParent(mainFunc, refFunc) then
                 goto CONTINUE
             end
-            local refFunc = m.getParentFunction(node)
-            if refFunc ~= mainFunc and not m.hasParent(mainFunc, refFunc) then
+        else
+            if key and sets[key] and sets[key].start < node.start then
+                goto CONTINUE
+            elseif m.hasParent(m.getParentFunction(node), mainFunc) then
                 goto CONTINUE
             end
         end

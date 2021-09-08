@@ -9,7 +9,6 @@ local tableUnpack = table.unpack
 local type        = type
 
 local specials = {
-    ['_G']           = true,
     ['rawset']       = true,
     ['rawget']       = true,
     ['setmetatable'] = true,
@@ -20,7 +19,7 @@ local specials = {
     ['ipairs']       = true,
     ['next']         = true,
     ['type']         = true,
-    ['typeof']         = true
+    ['typeof']       = true
 }
 
 _ENV = nil
