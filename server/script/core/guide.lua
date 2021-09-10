@@ -2357,32 +2357,6 @@ function m.checkSameSimpleOfRefByDocReturn(status, obj, start, pushQueue, mode)
     end
 end
 
--- local function copyChildren(copy, mark)
---     mark = mark or {}
---     if mark[copy] then
---         return mark[copy]
---     end
---     mark[copy] = copy
---     local childMap = m.childMap[copy.type]
---     for index, value in pairs(copy) do
---         if mark[value] then
---             copy[index] = mark[value]
---             goto CONTINUE
---         end
---         local key = type(index) == "number" and "#" or index
---         if (childMap and util.tableHas(childMap, key)) then
---             local valueCopy = util.shallowCopy(value)
---             valueCopy.parent = copy
---             mark[value] = valueCopy
---             copy[index] = valueCopy
---             copyChildren(valueCopy, mark)
---             goto CONTINUE
---         end
---         copy[index] = value
---         ::CONTINUE::
---     end
--- end
-
 function m.copyTypeWithGenerics(obj, generics, mark)
     mark = mark or {}
     if mark[obj] then
