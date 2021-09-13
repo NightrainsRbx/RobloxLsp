@@ -1154,10 +1154,10 @@ end
 -- 根据语法，单步搜索定义
 local function stepRefOfLocal(status, loc, mode)
     local results = {}
-    if loc.start ~= 0 and not m.isOpaqued(loc, status.main) then
+    if loc.start ~= 0 and not m.isOpaqued(loc, status) then
         results[#results+1] = loc
     end
-    local refs = m.getVisibleRefs(loc, status.main)
+    local refs = m.getVisibleRefs(loc, status)
     if not refs then
         return results
     end
@@ -1466,97 +1466,59 @@ function m.getSimple(obj, max)
     return simpleList
 end
 
-function m.getVisibleRefs(obj, main)
+function m.getVisibleRefs(obj, status)
     if not obj.ref then
         return nil
     end
-    if not main then
+    if not status.main then
         return obj.ref
     end
-    local nodeCount = 0
-    local mainNode = main
-    while mainNode.node do
-        nodeCount = nodeCount + 1
-        mainNode = mainNode.node
-        if not mainNode then
+    local searchFrom = status.refMain[obj] or status.searchFrom or status.main
+    local root = m.getRoot(obj)
+    if root ~= m.getRoot(searchFrom) then
+        if root.returns then
+            searchFrom = root.returns[#root.returns]
+        else
             return obj.ref
         end
     end
-    if obj ~= mainNode then
-        return obj.ref
-    end
-    local hasTypeAnn = obj.typeAnn
-    local mainFunc = m.getParentFunction(main)
     local refs = {}
-    local sets = {}
-    local same = nil
+    local mainFunc = m.getParentFunction(searchFrom) or searchFrom
+    local range = select(2, m.getRange(searchFrom))
+    local hasTypeAnn = obj.typeAnn
     for _, ref in ipairs(obj.ref) do
-        if ref == main then
-            same = ref
-            goto CONTINUE
-        end
-        local node = ref
-        for _ = 1, nodeCount do
-            if node.next then
-                node = node.next
-            end
-        end
-        local key = node ~= ref and m.getKeyName(node) or nil
-        if m.isSet(node) then
-            if key then
-                sets[key] = node
-            end
+        if ref ~= status.main then
             if hasTypeAnn then
                 goto CONTINUE
             end
-            local refFunc = m.getParentFunction(node)
+            local refFunc = m.getParentFunction(ref)
+            local mainFunc, range = mainFunc, range
+            if status.refMain[refFunc] and refFunc ~= mainFunc then
+                mainFunc = refFunc
+                range = select(2, m.getRange(status.refMain[refFunc]))
+            end
             if refFunc == mainFunc then
-                if node.start > main.finish then
+                if ref.start > range and not blockTypes[searchFrom.type] then
                     goto CONTINUE
                 end
             elseif not m.hasParent(mainFunc, refFunc) then
-                goto CONTINUE
-            end
-        else
-            if key and sets[key] and sets[key].start < node.start then
-                goto CONTINUE
-            elseif m.hasParent(m.getParentFunction(node), mainFunc) then
                 goto CONTINUE
             end
         end
         refs[#refs+1] = ref
         ::CONTINUE::
     end
-    for i = 1, #refs do
-        local ref = refs[i]
-        if ref and m.isSet(ref) then
-            local block = m.getParentBlock(ref)
-            local isParent = m.hasParent(main, block)
-            for j = 1, #refs do
-                local other = refs[j]
-                if other and m.isSet(other) then
-                    if ref.start > other.start and (isParent or m.hasParent(other, block)) then
-                        refs[j] = refs[#refs]
-                        refs[#refs] = nil
-                    end
-                end
-            end
-        end
-    end
-    if same then
-        refs[#refs+1] = same
-    end
     return refs
 end
 
-function m.isOpaqued(loc, main)
+function m.isOpaqued(loc, status)
     if loc.typeAnn then
         return false
     end
-    if not main or not loc.ref then
+    if not status.main or not loc.ref then
         return false
     end
-    local mainNode = main
+    local mainNode = status.main
     while mainNode.node do
         mainNode = mainNode.node
         if not mainNode then
@@ -1566,15 +1528,76 @@ function m.isOpaqued(loc, main)
     if mainNode ~= loc then
         return false
     end
-    local mainFunc = m.getParentFunction(main)
+    local mainFunc = m.getParentFunction(status.searchFrom or status.main)
     for _, ref in ipairs(loc.ref) do
-        if ref ~= main
+        if ref ~= status.main
         and m.isSet(ref)
-        and ref.start < main.start
-        and m.hasParent(main, m.getParentBlock(ref)) then
+        and ref.start < (status.searchFrom or status.main).start
+        and m.hasParent(status.searchFrom or status.main, m.getParentBlock(ref)) then
             local refFunc = m.getParentFunction(ref)
             if refFunc == mainFunc or m.hasParent(mainFunc, refFunc) then
                 return true
+            end
+        end
+    end
+end
+
+function m.selectClosestsRefs(status, mode)
+    local results = status.results
+    if mode == "def" then
+        local visibleSets = util.shallowCopy(status.sets)
+        for set in pairs(status.sets) do
+            local block = m.getParentBlock(set)
+            local isParent = m.hasParent(status.searchFrom or status.main, block)
+            for other in pairs(visibleSets) do
+                if set.start > other.start and (isParent or m.hasParent(other, block)) then
+                    visibleSets[other] = nil
+                end
+            end
+        end
+        for i = #results, 1, -1 do
+            local ref = results[i]
+            if ref.type == "metatable" then
+                goto CONTINUE
+            end
+            local hasSet = false
+            for set, values in pairs(status.sets) do
+                for _, value in ipairs(values) do
+                    if value == ref then
+                        if visibleSets[set] then
+                            goto CONTINUE
+                        end
+                        hasSet = true
+                    end
+                end
+            end
+            if hasSet then
+                results[i] = results[#results]
+                results[#results] = nil
+            end
+            ::CONTINUE::
+        end
+    elseif mode == "field" then
+        for i = 1, #results do
+            local ref = results[i]
+            if ref and m.isSet(ref) then
+                local key = m.getKeyName(ref)
+                if key and m.getKeyType(ref) == "string" then
+                    local block = m.getParentBlock(ref)
+                    local isParent = m.hasParent(status.searchFrom or status.main, block)
+                    for j = #results, 1, -1 do
+                        local other = results[j]
+                        if  other
+                        and m.isSet(other)
+                        and m.getKeyName(other) == key
+                        and m.getKeyType(other) == "string" then
+                            if ref.start > other.start and (isParent or m.hasParent(other, block)) then
+                                results[j] = results[#results]
+                                results[#results] = nil
+                            end
+                        end
+                    end
+                end
             end
         end
     end
@@ -1588,18 +1611,21 @@ end
 function m.status(parentStatus, main, interface, deep, options)
     ---@class core.guide.status
     local status = {
-        share     = parentStatus and parentStatus.share       or {
+        share      = parentStatus and parentStatus.share       or {
             count = 0,
             cacheLock = {},
         },
-        main      = main or parentStatus and parentStatus.main,
-        depth     = parentStatus and (parentStatus.depth + 1) or 0,
-        searchDeep= parentStatus and parentStatus.searchDeep  or deep or -999,
-        interface = parentStatus and parentStatus.interface   or {},
-        deep      = parentStatus and parentStatus.deep,
-        clock     = parentStatus and parentStatus.clock       or osClock(),
-        options   = parentStatus and parentStatus.options     or options or {},
-        results   = {},
+        main       = main          or parentStatus            and parentStatus.main,
+        searchFrom = parentStatus and parentStatus.searchFrom  or options and options.searchFrom,
+        refMain    = parentStatus and parentStatus.refMain     or {},
+        depth      = parentStatus and (parentStatus.depth + 1) or 0,
+        searchDeep = parentStatus and parentStatus.searchDeep  or deep or -999,
+        interface  = parentStatus and parentStatus.interface   or {},
+        deep       = parentStatus and parentStatus.deep,
+        clock      = parentStatus and parentStatus.clock       or osClock(),
+        options    = parentStatus and parentStatus.options     or options or {},
+        results    = {},
+        sets       = {},
     }
     if status.options.searchAll then
         status.main = nil
@@ -1842,6 +1868,9 @@ function m.searchFields(status, obj, key, mode)
     simple[#simple+1] = key or m.ANY
     m.searchSameFields(status, simple, mode)
     m.cleanResults(status.results)
+    if status.main and not status.options.searchAll then
+        m.selectClosestsRefs(status, "field")
+    end
 end
 
 ---@param obj parser.guide.object
@@ -2564,8 +2593,10 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
         elseif obj.type == "type.variadic" then
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.typeof" then
-            if config.config.typeChecking.mode == "Strict" then
-                status.main = obj.value
+            if obj.parent and m.getParentType(obj, "type.alias") then
+                status.searchFrom = m.getParentBlock(obj)
+            else
+                status.searchFrom = obj.value
             end
             pushQueue(obj.value, start, true)
         elseif obj.type ~= "type.function" then
@@ -2982,6 +3013,11 @@ function m.getFullType(status, tp, mark)
     end
     if tp.type == "type.typeof" then
         local newStatus = m.status(status)
+        if tp.parent and m.getParentType(tp, "type.alias") then
+            newStatus.searchFrom = m.getParentBlock(tp)
+        else
+            newStatus.searchFrom = tp.value
+        end
         m.searchRefs(newStatus, tp.value, 'def')
         for _, def in ipairs(newStatus.results) do
             if m.isTypeAnn(def) then
@@ -3216,6 +3252,13 @@ function m.checkSameSimpleInCall(status, ref, start, pushQueue, mode)
         end
         status.share.callFuncMark[obj] = true
         local newStatus = m.status(status)
+        if status.main then
+            local parentFunc = m.getParentFunction(obj)
+            if parentFunc and parentFunc ~= m.getParentFunction(status.searchFrom or status.main) then
+                status.refMain[parentFunc] = obj
+                status.searchFrom = obj
+            end
+        end
         m.searchRefs(newStatus, obj, mode)
         pushQueue(obj, start, true)
         mark[obj] = true
@@ -3355,6 +3398,9 @@ function m.searchSameFieldsInValue(status, ref, start, pushQueue, mode)
     end
     if m.hasValueMark(status, value) then
         return
+    end
+    if m.isSet(ref) then
+        status.currentSet = ref
     end
     status.share.inSetValue = (status.share.inSetValue or 0) + 1
     if not status.share.tempValueMark then
@@ -3532,7 +3578,7 @@ function m.checkSameSimpleAsKeyOrValueInForPairs(status, ref, start, pushQueue)
         pushQueue(makeNameType("number"), start, true)
         return
     end
-    local newStatus = m.status(status, tableObj)
+    local newStatus = m.status(status)
     m.searchRefs(newStatus, tableObj, "def")
     for _, def in ipairs(newStatus.results) do
         if def.bindDocs and not status.options.skipDoc then
@@ -3753,6 +3799,7 @@ end
 
 function m.pushResult(status, mode, ref, simple)
     local results = status.results
+    local count = #results
     if mode == 'def' then
         if m.typeAnnTypes[ref.type] then
             results[#results+1] = ref
@@ -3873,11 +3920,8 @@ function m.pushResult(status, mode, ref, simple)
             and loc.type ~= "getlocal"
             and loc.type ~= "setlocal" then
                 loc = m.getParentType(loc, "local")
-                if not loc then
-                    return
-                end
             end
-            if m.getSimpleName(node) == m.getSimpleName(loc) then
+            if loc and m.getSimpleName(node) == m.getSimpleName(loc) then
                 results[#results+1] = ref
             end
         end
@@ -3926,6 +3970,14 @@ function m.pushResult(status, mode, ref, simple)
     elseif mode == 'meta' then
         if ref.type == "type.meta" then
             results[#results+1] = ref
+        end
+    end
+    if #results > count then
+        if status.currentSet then
+            if not status.sets[status.currentSet] then
+                status.sets[status.currentSet] = {}
+            end
+            table.insert(status.sets[status.currentSet], results[#results])
         end
     end
 end
@@ -4071,7 +4123,7 @@ function m.searchSameFields(status, simple, mode)
     local queueLen = 0
     local locks = {}
     local function appendQueue(obj, start, force)
-        if obj.type == "local" and m.isOpaqued(obj, status.main) then
+        if obj.type == "local" and m.isOpaqued(obj, status) then
             return true
         end
         local lock = locks[start]
@@ -4114,7 +4166,7 @@ function m.searchSameFields(status, simple, mode)
             return
         end
         if obj.type == 'local' and obj.ref then
-            for _, ref in ipairs(m.getVisibleRefs(obj, status.main)) do
+            for _, ref in ipairs(m.getVisibleRefs(obj, status)) do
                 appendQueue(ref, start, force)
             end
         end
@@ -4692,7 +4744,8 @@ function m.getType(status, source)
         status.share.getTypeCache[source] = tp
         return tp
     end
-    local newStatus = m.status(status, source)
+    local newStatus = m.status(status)
+    newStatus.searchFrom = source
     m.searchRefs(newStatus, source, "def")
     local union = {
         type = "type.union"
@@ -5130,7 +5183,7 @@ function m.inferCheckUpDoc(status, source)
     end
 end
 
-function m.inferByDef(status, obj)
+function m.inferByDef(status, obj, main)
     if not status.share.inferedDef then
         status.share.inferedDef = {}
     end
@@ -5142,16 +5195,20 @@ function m.inferByDef(status, obj)
     local newStatus = m.status(status)
     tracy.ZoneBeginN('inferByDef searchRefs')
     m.searchRefs(newStatus, obj, 'def')
+    if main and status.main == main and not status.options.searchAll then
+        newStatus.main, newStatus.searchFrom = status.main, status.searchFrom
+        m.selectClosestsRefs(newStatus, "def")
+    end
     tracy.ZoneEnd()
     for _, src in ipairs(newStatus.results) do
         local inferStatus = m.status(newStatus)
         m.searchInfer(inferStatus, src)
         if #inferStatus.results == 0 then
-            status.results[#status.results+1] = {
-                type   = 'any',
-                source = src,
-                level  = 0,
-            }
+            -- status.results[#status.results+1] = {
+            --     type   = 'any',
+            --     source = src,
+            --     level  = 0,
+            -- }
         else
             for _, infer in ipairs(inferStatus.results) do
                 if not mark[infer.source] then
@@ -5210,6 +5267,7 @@ function m.cleanInfers(infers, obj)
     end
     -- merge infers
     local mark = {}
+    local parenValue = {}
     for i = #infers, 1, -1 do
         local infer = infers[i]
         if infer.level < level then
@@ -5217,12 +5275,18 @@ function m.cleanInfers(infers, obj)
             infers[#infers] = nil
             goto CONTINUE
         end
-        local key = ('%p'):format(infer.type, infer.source)
+        local key = ('%p'):format(infer.meta or infer.type)
         if mark[key] then
             infers[i] = infers[#infers]
             infers[#infers] = nil
         else
             mark[key] = true
+            if infer.source.type == "paren" then
+                local value = m.getObjectValue(infer.source)
+                if m.typeAnnTypes[value.type] then
+                    parenValue[value] = true
+                end
+            end
         end
         ::CONTINUE::
     end
@@ -5230,7 +5294,7 @@ function m.cleanInfers(infers, obj)
     if #infers > 1 then
         for i = #infers, 1, -1 do
             local infer = infers[i]
-            if infer.source.typeGeneric then
+            if infer.source.typeGeneric or parenValue[infer.source] then
                 infers[i] = infers[#infers]
                 infers[#infers] = nil
             end
@@ -5238,19 +5302,20 @@ function m.cleanInfers(infers, obj)
     end
 end
 
-function m.searchInfer(status, obj)
-    while obj.type == 'paren' do
-        obj = obj.exp
-        if not obj then
-            return
-        end
-    end
+function m.searchInfer(status, obj, deep)
+    local main = obj
     while true do
         local value = m.getObjectValue(obj)
         if not value or value == obj then
             break
         end
         obj = value
+    end
+    while obj.type == 'paren' do
+        obj = obj.exp
+        if not obj then
+            return
+        end
     end
     if not obj then
         return
@@ -5287,9 +5352,9 @@ function m.searchInfer(status, obj)
     end
 
     -- m.inferByLocalRef(status, obj)
-    if status.deep then
+    if status.deep or deep then
         tracy.ZoneBeginN('inferByDef')
-        m.inferByDef(status, obj)
+        m.inferByDef(status, obj, main)
         tracy.ZoneEnd()
     end
 

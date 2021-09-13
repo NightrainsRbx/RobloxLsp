@@ -245,13 +245,6 @@ function m.normalizeType(tp)
         end
     end
     optional = tp.optional or optional
-    -- if tp.type == "type.list" then
-    --     if #tp == 0 then
-    --         return nilType
-    --     elseif #tp == 1 then
-    --         return m.normalizeType(tp[1])
-    --     end
-    -- end
     if tp.type == "type.table" then
         for i, field in ipairs(tp) do
             if field.type ~= "type.index" and field.type ~= "type.field" then
@@ -266,7 +259,13 @@ function m.normalizeType(tp)
         end
     end
     if tp.type == "type.typeof" then
+        if tp.parent and guide.getParentType(tp, "type.alias") then
+            inferOptions.searchFrom = guide.getParentBlock(tp)
+        else
+            inferOptions.searchFrom = tp.value
+        end
         local value = m.getType(tp.value)
+        inferOptions.searchFrom = nil
         return m.normalizeType(value)
     end
     if tp.type == "type.module" then
@@ -361,22 +360,27 @@ function m.getType(source)
     return tp
 end
 
-function m.hasTypeAnn(source, checkArgs)
-    if guide.typeAnnTypes[source.type] then
+function m.hasTypeAnn(source, checkFunc)
+    if guide.isTypeAnn(source) then
         return true
     end
     if not m.strict and not m.checkDefinition(source) then
         return false
     end
     for _, infer in ipairs(vm.getInfers(source, 0, inferOptions)) do
-        if guide.typeAnnTypes[infer.source.type] then
+        if guide.isTypeAnn(infer.source) then
             return true
         elseif infer.source.type == "string" then
             return true
-        elseif checkArgs and infer.source.type == "function" and infer.source.args then
-            for _, arg in ipairs(infer.source.args) do
-                if arg.typeAnn then
-                    return true
+        elseif checkFunc and infer.source.type == "function" then
+            if infer.source.returnTypeAnn then
+                return true
+            end
+            if infer.source.args then
+                for _, arg in ipairs(infer.source.args) do
+                    if arg.typeAnn then
+                        return true
+                    end
                 end
             end
         end
@@ -384,7 +388,7 @@ function m.hasTypeAnn(source, checkArgs)
     return false
 end
 
-function m.convertToType(infer, get)
+function m.convertToType(infer, get, searchFrom)
     local source = infer.source
     if source then
         if m.cache.convert[source] then
@@ -393,9 +397,10 @@ function m.convertToType(infer, get)
         if source.type == "table" then
             local tp = {
                 type = "type.table",
-                infered = source
+                inferred = source
             }
             m.cache.convert[source] = tp
+            inferOptions.searchFrom = inferOptions.searchFrom or searchFrom or get
             local fields
             if get == source then
                 fields = {}
@@ -405,39 +410,43 @@ function m.convertToType(infer, get)
                     end
                 end
             else
-                fields = m.strict and vm.getFields(get, 0, inferOptions) or getFieldsOfTable(source)
+                inferOptions.skipMeta = true
+                fields = vm.getFields(get, 0, inferOptions)
+                inferOptions.skipMeta = nil
             end
             for _, value in ipairs(source) do
                 if value.type ~= "tablefield" and value.type ~= "tableindex" then
                     fields[#fields+1] = {
-                        type = "tableindex",
                         index = numberType,
                         value = value,
-                        finish = value.finish
                     }
                 end
             end
             local checked = {}
             local indexType = nil
-            get = guide.getRoot(source) == guide.getRoot(get) and get or source
             for _, field in ipairs(fields) do
-                local valueType = m.getType(field.value)
+                local valueType = m.getType(field.type and field or field.value)
+                if valueType.type ~= "paren" then
+                    valueType = guide.getObjectValue(valueType) or valueType
+                end
                 if guide.getKeyType(field) == "string" then
                     local key = guide.getKeyName(field)
-                    if checked[key] then
-                        if not m.compareTypes(valueType, checked[key].value) then
-                            checked[key].value[#checked[key].value+1] = valueType
-                        end
-                    else
-                        tp[#tp+1] = {
-                            type = "type.field",
-                            key = {key},
-                            value = {
-                                type = "type.union",
-                                [1] = valueType
+                    if key then
+                        if checked[key] then
+                            if not m.compareTypes(valueType, checked[key].value) then
+                                checked[key].value[#checked[key].value+1] = valueType
+                            end
+                        else
+                            tp[#tp+1] = {
+                                type = "type.field",
+                                key = {key},
+                                value = {
+                                    type = "type.union",
+                                    [1] = valueType
+                                }
                             }
-                        }
-                        checked[key] = tp[#tp]
+                            checked[key] = tp[#tp]
+                        end
                     end
                 elseif field.index then
                     local keyType = m.getType(field.index)
@@ -464,6 +473,9 @@ function m.convertToType(infer, get)
                     end
                 end
             end
+            if inferOptions.searchFrom == (searchFrom or get) then
+                inferOptions.searchFrom = nil
+            end
             for _, field in ipairs(tp) do
                 if field.type == "type.index" then
                     if #field.key == 1 then
@@ -483,12 +495,12 @@ function m.convertToType(infer, get)
                     funcargs = true
                 },
                 returns = anyType,
-                infered = source
+                inferred = source
             }
             m.cache.convert[source] = tp
             if source.args then
                 for _, arg in ipairs(source.args) do
-                    local argType = arg.typeAnn and m.normalizeType(arg.typeAnn.value) or {
+                    local argType = arg.typeAnn and arg.typeAnn.value or {
                         [1] = "any",
                         type = "type.name"
                     }
@@ -504,7 +516,7 @@ function m.convertToType(infer, get)
                 end
             end
             if source.returnTypeAnn then
-                tp.returns = m.normalizeType(source.returnTypeAnn.value)
+                tp.returns = source.returnTypeAnn.value
             elseif m.strict then
                 if not source.returns then
                     tp.returns = nilType
@@ -817,15 +829,17 @@ function m.searchFieldType(tp, key, index)
             end
         end
     end
-    if indexType then
-        if m.compareTypes(index, indexType.key) then
-            return indexType.value
+    if index then
+        if indexType then
+            if m.compareTypes(index, indexType.key) then
+                return indexType.value
+            end
+        elseif not key and m.compareTypes(index, stringType) then
+            return anyType
         end
-    elseif not key and m.compareTypes(index, stringType) then
-        return anyType
-    end
-    if m.hasTypeName(index, "any") or m.hasTypeName(tp, "any") then
-        return anyType
+        if m.hasTypeName(index, "any") or m.hasTypeName(tp, "any") then
+            return anyType
+        end
     end
     return nil
 end
@@ -981,7 +995,7 @@ local function checkCall(source, pushResult, funcType)
                     results[1].message = results[1].message .. string.format(" Others %d overloads failed.", #results - 1)
                     pushResult(results[1])
                 end
-                return true
+                return
             end
         end
         if not m.hasTypeName(funcType, "any") and not m.hasTypeName(funcType, "function") then
@@ -1155,7 +1169,7 @@ local function checkFunction(source, pushResult)
                         returnType[#returnType+1] = v
                     end
                 else
-                    returnType[#returnType+1] = m.getType(value)
+                    returnType[#returnType+1] = valueType
                 end
             end
             if #returnType == 1 then
@@ -1256,6 +1270,7 @@ end
 
 local function checkTypecheckModeAt(ast, offset)
     if not ast.docs or #ast.docs == 0 then
+        m.cache.convert = {}
         return true
     end
     local closestDoc = nil
@@ -1281,6 +1296,7 @@ local function checkTypecheckModeAt(ast, offset)
         m.strict = config.config.typeChecking.mode == "Strict"
     end
     m.cache = getCache(tostring(m.strict))
+    m.cache.convert = {}
     return true
 end
 
