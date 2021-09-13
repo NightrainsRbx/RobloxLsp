@@ -225,7 +225,7 @@ local function getParams(func, oop)
             args[#args+1] = '...'
         elseif arg.type == 'doc.type.arg' then
             args[#args+1] = arg.name[1]
-        elseif guide.typeAnnTypes[arg.type] then
+        elseif guide.isTypeAnn(arg) then
             local paramName = arg.type == "type.variadic" and "..." or (arg.paramName and arg.paramName[1])
             if paramName then
                 args[#args+1] = paramName .. (arg.optional and "?" or "")
@@ -1030,7 +1030,7 @@ local function checkCallbackFunction(ast, text, offset, results)
                         callback = callback.typeAnn
                     end
                     callback = guide.getObjectValue(callback) or callback
-                    if guide.typeAnnTypes[callback.type] and callback.type ~= "type.function" then
+                    if guide.isTypeAnn(callback) and callback.type ~= "type.function" then
                         for _, infer in ipairs(vm.getInfers(callback, 0, {fullType = true})) do
                             if infer.source and infer.source.type == "type.function" then
                                 callback = infer.source
@@ -1081,7 +1081,7 @@ end
 
 local function isType(ast, offset)
     return guide.eachSourceContain(ast.ast, offset, function (source)
-        if guide.typeAnnTypes[source.type] then
+        if guide.isTypeAnn(source) then
             return true
         end
     end)

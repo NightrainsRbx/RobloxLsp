@@ -81,7 +81,7 @@ local function getArgNames(func)
         if arg.type == '...' or arg.type == "type.variadic" then
             break
         end
-        if guide.typeAnnTypes[arg.type] then
+        if guide.isTypeAnn(arg) then
             names[#names+1] = (arg.paramName and arg.paramName[1]) or ''
         else
             names[#names+1] = arg[1] or ''

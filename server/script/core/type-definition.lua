@@ -86,7 +86,7 @@ return function (uri, offset)
         defs[#defs+1] = findTypeAlias(source)
     else
         for _, def in ipairs(vm.getDefs(source, 0, {skipDoc = true})) do
-            if guide.typeAnnTypes[def.type] then
+            if guide.isTypeAnn(def) then
                 defs[#defs+1] = def
                 if def.type == "type.name" or def.type == "type.module" then
                     defs[#defs+1] = findTypeAlias(def.type == "type.module" and def[2] or def)

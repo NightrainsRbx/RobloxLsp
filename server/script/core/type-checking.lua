@@ -326,7 +326,7 @@ function m.getType(source)
             return anyType
         end
     end
-    if guide.typeAnnTypes[source.type] then
+    if guide.isTypeAnn(source) then
         return source
     end
     if m.cache.type[source] then
@@ -345,7 +345,7 @@ function m.getType(source)
         type = "type.union"
     }
     for _, infer in ipairs(infers) do
-        if guide.typeAnnTypes[infer.source.type] then
+        if guide.isTypeAnn(infer.source) then
             tp[#tp+1] = infer.source
         else
             tp[#tp+1] = m.convertToType(infer, source)

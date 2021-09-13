@@ -198,6 +198,10 @@ function m.isLiteral(obj)
         or tp == 'function'
 end
 
+function m.isTypeAnn(obj)
+    return m.typeAnnTypes[(m.getObjectValue(obj) or obj).type]
+end
+
 --- 获取字面量
 ---@param obj parser.guide.object
 ---@return any
@@ -1823,7 +1827,7 @@ function m.searchFields(status, obj, key, mode)
     if not m.checkStatusDepth(status) then
         return
     end
-    if m.typeAnnTypes[obj.type] then
+    if m.isTypeAnn(obj) then
         obj = m.getFullType(status, obj) or obj
         if obj.type == "type.table" then
             for _, field in ipairs(obj) do
@@ -2042,7 +2046,7 @@ function m.checkSameSimpleInCallbackParam(status, obj, start, pushQueue)
             local newStatus = m.status(status)
             m.searchRefs(newStatus, func.parent.parent.node, 'def')
             for _, src in ipairs(newStatus.results) do
-                if m.typeAnnTypes[src.type] then
+                if m.isTypeAnn(src) then
                     src = m.getFullType(status, src)
                 end
                 if src.type == "type.function" or src.type == "function" then
@@ -2980,7 +2984,7 @@ function m.getFullType(status, tp, mark)
         local newStatus = m.status(status)
         m.searchRefs(newStatus, tp.value, 'def')
         for _, def in ipairs(newStatus.results) do
-            if m.typeAnnTypes[def.type] then
+            if m.isTypeAnn(def) then
                 return m.getFullType(status, def, mark)
             end
         end
@@ -3081,7 +3085,7 @@ local function checkSameSimpleAndMergeTypeAnnReturns(status, results, source, in
     local returns = {}
     if source.returnTypeAnn then
         returns[1] = source.returnTypeAnn.value
-    elseif m.typeAnnTypes[source.type] then
+    elseif m.isTypeAnn(source) then
         source = m.getFullType(status, source)
         if source.type == "type.function" then
             if source.parent == rbxlibs.global["require"] then
@@ -3543,7 +3547,7 @@ function m.checkSameSimpleAsKeyOrValueInForPairs(status, ref, start, pushQueue)
                     end
                 end
             end
-        elseif m.typeAnnTypes[def.type] then
+        elseif m.isTypeAnn(def) then
             def = m.getFullType(status, def)
             if def.type == "type.table" then
                 for _, field in ipairs(def) do
@@ -4683,7 +4687,7 @@ function m.getType(status, source)
     end
     if m.isLiteral(source) then
         return makeNameType(source.type)
-    elseif m.typeAnnTypes[source.type] then
+    elseif m.isTypeAnn(source) then
         local tp = m.getFullType(status, source)
         status.share.getTypeCache[source] = tp
         return tp
@@ -4761,7 +4765,7 @@ function m.inferCheckTypeAnn(status, source)
         typeAnn = typeAnn.value
     elseif source.type == "type.assert" then
         typeAnn = source[2]
-    elseif m.typeAnnTypes[source.type] then
+    elseif m.isTypeAnn(source) then
         typeAnn = source
     else
         return false
