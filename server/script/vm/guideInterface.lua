@@ -91,11 +91,6 @@ function vm.interface.docType(name)
     return vm.getDocTypes(name)
 end
 
-function vm.interface.types(source)
-    await.delay()
-    return vm.getInfers(source, 0)
-end
-
 function vm.interface.link(reqUri)
     await.delay()
     local links = {}
