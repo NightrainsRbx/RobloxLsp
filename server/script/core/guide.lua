@@ -3761,7 +3761,6 @@ function m.checkSameSimpleInMeta(status, ref, start, pushQueue, mode)
         end
         cache = {}
         local newStatus = m.status(status)
-        newStatus.share.valueMark = {}
         m.searchFields(newStatus, ref.value, '__index', "deffield")
         for _, index in ipairs(newStatus.results) do
             if index.type == "tablefield" or index.type == "tableindex" then
