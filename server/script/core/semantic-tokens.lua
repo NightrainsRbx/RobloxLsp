@@ -167,13 +167,27 @@ Care['type.parameter'] = function (source, results)
 end
 Care['type.field.key'] = function (source, results)
     results[#results+1] = {
-        start  = source.start,
-        finish = source.finish,
-        type   = define.TokenTypes.property,
+        start     = source.start,
+        finish    = source.finish,
+        type      = define.TokenTypes.property,
         modifiers = define.TokenModifiers.declaration
     }
     if source.parent.readOnly then
         results[#results].modifiers = define.TokenModifiers.readonly
+    end
+end
+Care['call'] = function (source, results)
+    if not source.node then
+        return
+    end
+    if source.node.type == "getlocal"
+    or source.node.type == "getfield"
+    or source.node.type == "getmethod" then
+        results[#results+1] = {
+            start  = source.node.start,
+            finish = source.node.finish,
+            type   = define.TokenTypes["function"]
+        }
     end
 end
 
