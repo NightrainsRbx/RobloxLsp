@@ -286,11 +286,44 @@ m.customType = {
             [1] = "T"
         }
     },
+    WithMeta = {
+        type = "type.alias",
+        name = {
+            type = "type.alias.name",
+            [1] = "WithMeta"
+        },
+        generics = {
+            type = "type.generics",
+            {
+                type = "type.parameter",
+                [1] = "T",
+                replace = {}
+            },
+            {
+                type = "type.parameter",
+                [1] = "M",
+                replace = {}
+            }
+        },
+        value = {
+            type = "type.meta",
+            [1] = {
+                type = "type.name",
+                [1] = "T"
+            },
+            [2] = {
+                type = "type.name",
+                [1] = "M"
+            }
+        }
+    }
 }
 
 m.customType.Array.generics[1].replace = {m.customType.Array.value[1].value}
 m.customType.Dictionary.generics[1].replace = {m.customType.Dictionary.value[1].value}
 m.customType.Readonly.generics[1].replace = {m.customType.Readonly.value}
+m.customType.WithMeta.generics[1].replace = {m.customType.WithMeta.value[1]}
+m.customType.WithMeta.generics[2].replace = {m.customType.WithMeta.value[2]}
 
 for _, alias in pairs(m.customType) do
     util.setTypeParent(alias)

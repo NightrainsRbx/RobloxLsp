@@ -699,7 +699,7 @@ function m.setTypeParent(obj, parent, mark)
             m.setTypeParent(value, obj, mark)
         end
     end
-    if obj.type == "type.module" then
+    if obj.type == "type.module" or obj.type == "type.meta" then
         m.setTypeParent(obj[1], obj, mark)
         m.setTypeParent(obj[2], obj, mark)
     elseif obj.type == "type.index"

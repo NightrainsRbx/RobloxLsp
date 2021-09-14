@@ -343,9 +343,12 @@ function m.getType(source)
     local tp = {
         type = "type.union"
     }
+    local metatable = nil
     for _, infer in ipairs(infers) do
         if guide.isTypeAnn(infer.source) then
             tp[#tp+1] = infer.source
+        elseif infer.meta then
+            metatable = m.convertToType(infer, infer.meta.value, source)
         else
             tp[#tp+1] = m.convertToType(infer, source)
         end
@@ -355,6 +358,13 @@ function m.getType(source)
     elseif #tp == 0 then
         m.cache.type[source] = anyType
         return anyType
+    end
+    if metatable then
+        tp = {
+            type = "type.meta",
+            [1] = tp,
+            [2] = metatable
+        }
     end
     m.cache.type[source] = tp
     return tp
@@ -410,6 +420,9 @@ function m.convertToType(infer, get, searchFrom)
                     end
                 end
             else
+                if get.type == "tablefield" or get.type == "tableindex" then
+                    get = get.value
+                end
                 inferOptions.skipMeta = true
                 fields = vm.getFields(get, 0, inferOptions)
                 inferOptions.skipMeta = nil
@@ -585,10 +598,10 @@ function m.compareTypes(a, b, mark)
         return true
     end
     mark = mark or {}
-    if mark[tostring(a) .. tostring(b)] then
+    if mark[("%p%p"):format(a, b)] then
         return true
     end
-    mark[tostring(a) .. tostring(b)] = true
+    mark[("%p%p"):format(a, b)] = true
     if a.original and b.original and a.original == b.original then
         if mark[a.original] then
             return true
@@ -626,7 +639,7 @@ function m.compareTypes(a, b, mark)
             return a[1] == b[1]
         end
         if (b[1] == "function" and a.type == "type.function")
-        or (b[1] == "table" and a.type == "type.table") then
+        or (b[1] == "table" and (a.type == "type.table" or a.type == "type.meta")) then
             return true
         end
     elseif b.type == "type.union" then
@@ -766,6 +779,13 @@ function m.compareTypes(a, b, mark)
             end
             return true
         end
+    elseif b.type == "type.meta" then
+        if a.type == "type.name" and a[1] == "table" then
+            return true
+        end
+        if a.type == "type.meta" then
+            return m.compareTypes(a[1], b[1], mark) and m.compareTypes(a[2], b[2], mark)
+        end
     end
     return false
 end
@@ -801,6 +821,19 @@ function m.searchFieldType(tp, key, index)
             local field = m.searchFieldType(value, key, index)
             if field then
                 return field
+            end
+        end
+    end
+    if tp.type == "type.meta" then
+        local field = m.searchFieldType(tp[1], key, index)
+        if field then
+            return field
+        end
+        local __index = m.searchFieldType(tp[2], "__index")
+        if __index then
+            local metaField = m.searchFieldType(__index, key, index)
+            if metaField then
+                return metaField
             end
         end
     end
@@ -968,6 +1001,9 @@ local function checkCall(source, pushResult, funcType)
     end
     if funcType or m.hasTypeAnn(source.node, true) then
         funcType = m.normalizeType(funcType or m.getType(source.node))
+        if funcType.type == "type.meta" then
+            funcType = m.searchFieldType(funcType[2], "__call") or funcType
+        end
         if funcType.type == "type.function" then
             return checkCallFunction(funcType, source, pushResult)
         elseif funcType.type == "type.inter" or (m.options["union-bivariance"] and funcType.type == "type.union") then
@@ -1208,9 +1244,9 @@ local function checkBinary(source, pushResult)
     for i = 1, 2 do
         local metamethods = guide.requestMeta(source[i], vm.interface, 0, inferOptions)
         for _, meta in ipairs(metamethods) do
-            if guide.binaryMeta[op] == meta.method then
+            if guide.binaryMeta[op] == guide.getKeyName(meta) then
                 foundMeta = true
-                if checkCall(call, push, meta.value) and m.options["union-bivariance"] then
+                if checkCall(call, push, guide.getObjectValue(meta)) and m.options["union-bivariance"] then
                     return
                 end
             end
@@ -1243,7 +1279,7 @@ local function checkUnary(source, pushResult)
     end
     local metamethods = guide.requestMeta(source[1], vm.interface, 0, inferOptions)
     for _, meta in ipairs(metamethods) do
-        if guide.unaryMeta[op] == meta.method then
+        if guide.unaryMeta[op] == guide.getKeyName(meta) then
             return
         end
     end

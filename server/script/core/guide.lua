@@ -99,6 +99,7 @@ m.childMap = {
     ['type.variadic'] = {"value"},
     ['type.typeof']   = {"value"},
     ['type.library']  = {"value"},
+    ['type.meta']     = {"#"},
 
     ['doc']                = {'#'},
     ['doc.class']          = {'class', '#extends', 'comment'},
@@ -1034,13 +1035,17 @@ end
 local makeNameTypeCache = {}
 
 local function makeNameType(tp)
-    if not makeNameTypeCache[tp] then
-        makeNameTypeCache[tp] = {
-            [1] = tp,
-            type = "type.name"
-        }
-    end
-    return makeNameTypeCache[tp]
+    -- if not makeNameTypeCache[tp] then
+    --     makeNameTypeCache[tp] = {
+    --         [1] = tp,
+    --         type = "type.name"
+    --     }
+    -- end
+    -- return makeNameTypeCache[tp]
+    return {
+        [1] = tp,
+        type = "type.name"
+    }
 end
 
 function m.searchLibraryChildren(obj)
@@ -1823,10 +1828,10 @@ function m.searchMeta(status, obj)
             return nil
         end
     end
-    if m.isLiteral(obj.type) then
+    if m.isLiteral(obj) then
         if rbxlibs.object[obj.type].meta then
-            for _, meta in pairs(rbxlibs.object[obj.type].meta) do
-                status.results[#status.results+1] = meta
+            for _, method in ipairs(rbxlibs.object[obj.type].meta.value) do
+                status.results[#status.results+1] = method
             end
         end
         return
@@ -1842,8 +1847,14 @@ function m.searchMeta(status, obj)
     if not simple then
         return
     end
-    m.searchSameFields(status, simple, "meta")
-    m.cleanResults(status.results)
+    local newStatus = m.status(status)
+    m.searchSameFields(newStatus, simple, "meta")
+    m.cleanResults(newStatus.results)
+    for _, meta in ipairs(newStatus.results) do
+        if meta.type == "metatable" then
+            m.searchFields(status, meta.value, nil, "deffield")
+        end
+    end
     if makeCache then
         makeCache(status.results)
     end
@@ -1897,10 +1908,9 @@ function m.getObjectValue(obj)
     or obj.type == 'integer'
     or obj.type == 'string'
     or obj.type == 'doc.type.table'
-    or obj.type == 'doc.type.arrary' then
-        return obj
-    end
-    if m.typeAnnTypes[obj.type] then
+    or obj.type == 'doc.type.array'
+    or obj.type == "metatable"
+    or m.typeAnnTypes[obj.type] then
         return obj
     end
     if obj.value then
@@ -1927,33 +1937,30 @@ function m.getObjectValue(obj)
 end
 
 function m.checkSameSimpleInValueInMetaTable(status, mt, start, pushQueue)
-    local cache, makeCache = m.getRefCache(status, mt, '__index')
-    if cache then
-        for _, obj in ipairs(cache) do
-            pushQueue(obj, start, true)
-        end
+    if status.options.skipMeta then
         return
     end
-    cache = {}
-    local newStatus = m.status(status)
-    m.searchFields(newStatus, mt, '__index', "deffield")
-    local refsStatus = m.status(status)
-    for i = 1, #newStatus.results do
-        local indexValue = m.getObjectValue(newStatus.results[i])
-        if indexValue then
-            m.searchRefs(refsStatus, indexValue, 'ref')
-        end
+    if not status.share.metaCache then
+        status.share.metaCache = {}
     end
-    for i = 1, #refsStatus.results do
-        local obj = refsStatus.results[i]
-        if (m.getObjectValue(obj) or obj).type ~= "function" then
-            pushQueue(obj, start, true)
-            cache[i] = obj
-        end
+    if not status.share.metaCache[mt] then
+        status.share.metaCache[mt] = {
+            type = "metatable",
+            value = mt
+        }
     end
-    if makeCache then
-        makeCache(cache)
-    end
+    pushQueue(status.share.metaCache[mt], start, true)
+    -- local newStatus = m.status(status, mt)
+    -- m.searchRefs(newStatus, mt, "def")
+    -- for _, def in ipairs(newStatus.results) do
+    --     if not status.share.metaCache[def] then
+    --         status.share.metaCache[def] = {
+    --             type = "metatable",
+    --             value = def
+    --         }
+    --     end
+    --     pushQueue(status.share.metaCache[def], start, true)
+    -- end
 end
 function m.checkSameSimpleInValueOfSetMetaTable(status, func, start, pushQueue)
     if not func or func.special ~= 'setmetatable' then
@@ -1967,12 +1974,12 @@ function m.checkSameSimpleInValueOfSetMetaTable(status, func, start, pushQueue)
     local obj = args[1]
     local mt = args[2]
     if obj then
-        pushQueue(obj, start, true)
-        local newStatus = m.status(status)
-        m.searchRefs(newStatus, obj, 'def')
-        for _, def in ipairs(newStatus.results) do
-            pushQueue(def, start, true)
-        end
+        -- pushQueue(obj, start, true)
+        -- local newStatus = m.status(status)
+        -- m.searchRefs(newStatus, obj, 'def')
+        -- for _, def in ipairs(newStatus.results) do
+        --     pushQueue(def, start, true)
+        -- end
     end
     if mt then
         if not status.share.markMetaTable then
@@ -2561,9 +2568,7 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
                 if not (obj.parent and obj.parent.type == "type.module") then
                     local libObject = rbxlibs.object[obj[1]]
                     if libObject and libObject.meta then
-                        for _, meta in ipairs(libObject.meta) do
-                            m.pushResult(status, mode, meta)
-                        end
+                        m.pushResult(status, mode, libObject.meta)
                     end
                 end
             end
@@ -2576,9 +2581,7 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
                 pushQueue(field, start + 1)
             end
             if mode == "meta" then
-                for _, meta in ipairs(rbxlibs.object["table"].meta) do
-                    m.pushResult(status, mode, meta)
-                end
+                m.pushResult(status, mode, rbxlibs.object["table"].meta)
             end
         elseif obj.type == "type.field"
         or     obj.type == "type.index" then
@@ -2599,6 +2602,8 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
                 status.searchFrom = obj.value
             end
             pushQueue(obj.value, start, true)
+        elseif obj.type == "type.meta" then
+            m.checkSameSimpleInValueInMetaTable(status, obj[2], start, pushQueue)
         elseif obj.type ~= "type.function" then
             return false
         end
@@ -2731,14 +2736,16 @@ function m.checkSameSimpleInArg1OfSetMetaTable(status, obj, start, pushQueue)
     if args[1] ~= obj then
         return
     end
-    if obj == status.main then
-        return
-    end
+    -- if status.main then
+    --     if obj == status.main or obj.start > status.main.start then
+    --         return
+    --     end
+    -- end
     local mt = args[2]
     if mt then
-        if m.hasValueMark(status, mt) then
-            return
-        end
+        -- if m.hasValueMark(status, mt) then
+        --     return
+        -- end
         m.checkSameSimpleInValueInMetaTable(status, mt, start, pushQueue)
     end
 end
@@ -2904,10 +2911,7 @@ end
 
 local function checkSameSimpleAndMergeLibrarySpecialReturns(status, results, source, index, args)
     source = m.getObjectValue(source) or source
-    if source.type ~= "type.function" or not source.special then
-        return
-    end
-    if not args then
+    if not args or not source.special then
         return
     end
     if source.special == "Instance.new" then
@@ -2966,6 +2970,16 @@ local function checkSameSimpleAndMergeLibrarySpecialReturns(status, results, sou
             m.searchRefs(newStatus, args[1], "def")
             for _, def in ipairs(newStatus.results) do
                 results[#results+1] = m.getObjectValue(def) or def
+            end
+            return true
+        end
+    elseif source.special == "setmetatable" then
+        if index == 1 and args[1] then
+            local newStatus = m.status(status)
+            newStatus.searchFrom = source
+            m.searchRefs(newStatus, args[1], "def")
+            for _, def in ipairs(newStatus.results) do
+                results[#results+1] = def
             end
             return true
         end
@@ -3176,6 +3190,9 @@ function m.checkSameSimpleInCallInSameFile(status, func, args, index)
         return results
     end
     results = {}
+    if checkSameSimpleAndMergeLibrarySpecialReturns(status, results, func, index, args) then
+        return results
+    end
     local newStatus = m.status(status)
     m.searchRefs(newStatus, func, 'def')
     local skip = false
@@ -3226,7 +3243,7 @@ function m.checkSameSimpleInCall(status, ref, start, pushQueue, mode)
     end
     status.share.inSetValue = (status.share.inSetValue or 0) + 1
     -- 检查赋值是 semetatable() 的情况
-    m.checkSameSimpleInValueOfSetMetaTable(status, func, start, pushQueue)
+    -- m.checkSameSimpleInValueOfSetMetaTable(status, func, start, pushQueue)
     local objs = m.checkSameSimpleInCallInSameFile(status, func, args, index)
     if status.interface.call then
         local cobjs = status.interface.call(status, func, args, index)
@@ -3713,10 +3730,9 @@ end
 
 function m.checkSameSimpleInLiteral(status, ref, start, pushQueue, mode)
     if mode == "meta" and m.isLiteral(ref) then
-        if rbxlibs.object[ref.type].meta then
-            for _, meta in pairs(rbxlibs.object[ref.type].meta) do
-                status.results[#status.results+1] = meta
-            end
+        local meta = rbxlibs.object[ref.type].meta
+        if meta then
+            status.results[#status.results+1] = meta
         end
         return true
     else
@@ -3729,6 +3745,40 @@ function m.checkSameSimpleInLiteral(status, ref, start, pushQueue, mode)
         end
         return true
     end
+end
+
+function m.checkSameSimpleInMeta(status, ref, start, pushQueue, mode)
+    if ref.type ~= "metatable" then
+        return
+    end
+    if mode == "ref" then
+        local cache, makeCache = m.getRefCache(status, ref.value, '__index')
+        if cache then
+            for _, obj in ipairs(cache) do
+                pushQueue(obj, start + 1)
+            end
+            return
+        end
+        cache = {}
+        local newStatus = m.status(status)
+        newStatus.share.valueMark = {}
+        m.searchFields(newStatus, ref.value, '__index', "deffield")
+        for _, index in ipairs(newStatus.results) do
+            if index.type == "tablefield" or index.type == "tableindex" then
+                index = index.value
+            end
+            local refsStatus = m.status(status)
+            m.searchFields(refsStatus, index, nil, "deffield")
+            for _, field in ipairs(refsStatus.results) do
+                pushQueue(field, start + 1)
+                cache[#cache+1] = field
+            end
+        end
+        if makeCache then
+            makeCache(cache)
+        end
+    end
+    return true
 end
 
 function m.checkSameSimpleInBinaryOrUnary(status, source, start, pushQueue, mode)
@@ -3757,20 +3807,18 @@ function m.checkSameSimpleInBinaryOrUnary(status, source, start, pushQueue, mode
             local foundMeta = false
             if (tp1 and tp2) or (source.type == "unary" and tp1) then
                 local newStatus = m.status(status)
-                if op == "/" then
-                    newStatus.xd = true
-                end
                 for i = 1, 2 do
-                    newStatus.main = source[i]
+                    newStatus.searchFrom = source[i]
                     m.searchMeta(newStatus, source[i])
                     for _, meta in ipairs(newStatus.results) do
-                        if (source.type == "binary" and m.binaryMeta or m.unaryMeta)[op] == meta.method then
+                        if (source.type == "binary" and m.binaryMeta or m.unaryMeta)[op] == m.getKeyName(meta) then
                             foundMeta = true
                             local funcs = {}
-                            if meta.value.type == "type.function" then
-                                funcs[#funcs+1] = meta.value
-                            elseif meta.value.type == "type.inter" then
-                                m.getAllValuesInType(meta.value, nil, funcs)
+                            local value = m.getObjectValue(meta)
+                            if value.type == "type.function" then
+                                funcs[#funcs+1] = value
+                            elseif value.type == "type.inter" then
+                                m.getAllValuesInType(value, nil, funcs)
                             end
                             for _, func in ipairs(funcs) do
                                 func = m.getFullType(newStatus, func)
@@ -3849,6 +3897,9 @@ function m.pushResult(status, mode, ref, simple)
         and ref ~= simple.node then
             results[#results+1] = ref
         end
+        if ref.type == 'metatable' then
+            results[#results+1] = ref
+        end
     elseif mode == 'ref' then
         if m.typeAnnTypes[ref.type] then
             results[#results+1] = ref
@@ -3900,6 +3951,9 @@ function m.pushResult(status, mode, ref, simple)
         or ref.parent.type == 'binary'
         or ref.parent.type == 'unary')
         and ref ~= simple.node then
+            results[#results+1] = ref
+        end
+        if ref.type == 'metatable' then
             results[#results+1] = ref
         end
     elseif mode == 'field' then
@@ -3968,7 +4022,7 @@ function m.pushResult(status, mode, ref, simple)
             results[#results+1] = ref
         end
     elseif mode == 'meta' then
-        if ref.type == "type.meta" then
+        if ref.type == "metatable" then
             results[#results+1] = ref
         end
     end
@@ -4046,6 +4100,7 @@ function m.checkSameSimple(status, simple, ref, start, force, mode, pushQueue)
                     or    m.checkSameSimpleByDoc(status, ref, i, pushQueue, cmode)
                     or    m.checkSameSimpleByTypeAnn(status, ref, i, pushQueue, cmode)
                     or    m.checkSameSimpleInLiteral(status, ref, i, pushQueue, cmode)
+                    or    m.checkSameSimpleInMeta(status, ref, i, pushQueue, cmode)
         -- 检查自己是字符串的分支情况
         if not skipInfer and not skipSearch then
             -- 穿透 self:func 与 mt:func
@@ -4059,7 +4114,7 @@ function m.checkSameSimple(status, simple, ref, start, force, mode, pushQueue)
             -- 检查自己作为 setmetatable 第一个参数的情况
             m.checkSameSimpleInArg1OfSetMetaTable(status, ref, i, pushQueue)
             -- 检查自己作为 setmetatable 调用的情况
-            m.checkSameSimpleInValueOfCallMetaTable(status, ref, i, pushQueue)
+            -- m.checkSameSimpleInValueOfCallMetaTable(status, ref, i, pushQueue)
             -- self 的特殊处理
             m.checkSameSimpleInParamSelf(status, ref, i, pushQueue)
             -- 自己是 call 的情况
@@ -4550,9 +4605,10 @@ function m.buildTypeAnn(typeUnit, mark)
     mark = mark or {}
     if mark[typeUnit] then
         return "<CYCLE>"
-        -- return mark[typeUnit] == true and "<CYCLE>" or mark[typeUnit]
     end
-    mark[typeUnit] = true
+    if typeUnit.type ~= "type.name" then
+        mark[typeUnit] = true
+    end
     local text = ""
     if typeUnit.type == "type.name"
     or typeUnit.type == "type.parameter"
@@ -4605,6 +4661,8 @@ function m.buildTypeAnn(typeUnit, mark)
         text = "{" .. table.concat(fields, ", ") .. "}"
     elseif typeUnit.type == "type.field" then
         text = typeUnit.key[1] .. ": " .. m.buildTypeAnn(typeUnit.value, mark)
+    elseif typeUnit.type == "type.library" then
+        text = typeUnit.name .. ": " .. m.buildTypeAnn(typeUnit.value, mark)
     elseif typeUnit.type == "type.index" then
         text = "[" .. m.buildTypeAnn(typeUnit.key, mark) .. "]: " .. m.buildTypeAnn(typeUnit.value, mark)
     elseif typeUnit.type == "type.module" then
@@ -4618,13 +4676,14 @@ function m.buildTypeAnn(typeUnit, mark)
         else
             text = "any"
         end
+    elseif typeUnit.type == "type.meta" then
+        text = "{" .. m.buildTypeAnn(typeUnit[1], mark) .. ", @metatable " .. m.buildTypeAnn(typeUnit[2], mark) .. "}"
     elseif typeUnit.type == "paren" then
         text = "(" .. m.buildTypeAnn(typeUnit.exp, mark) .. ")"
     end
     if typeUnit.optional then
         text = text .. "?"
     end
-    mark[typeUnit] = text
     return text
 end
 
@@ -5202,7 +5261,11 @@ function m.inferByDef(status, obj, main)
     tracy.ZoneEnd()
     for _, src in ipairs(newStatus.results) do
         local inferStatus = m.status(newStatus)
-        m.searchInfer(inferStatus, src)
+        if src.type == "metatable" then
+            m.searchInfer(inferStatus, src.value, true)
+        else
+            m.searchInfer(inferStatus, src)
+        end
         if #inferStatus.results == 0 then
             -- status.results[#status.results+1] = {
             --     type   = 'any',
@@ -5214,6 +5277,9 @@ function m.inferByDef(status, obj, main)
                 if not mark[infer.source] then
                     mark[infer.source] = true
                     status.results[#status.results+1] = infer
+                    if src.type == "metatable" then
+                        infer.meta = src
+                    end
                 end
             end
         end

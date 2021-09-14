@@ -838,15 +838,10 @@ local function loadMeta()
     local parser = require("parser")
     local state = parser:compile(util.loadFile(ROOT / "def" / "meta.luau"), "lua")
     for _, object in ipairs(state.ast.types[1].value) do
-        local meta = {}
-        for _, field in ipairs(object.value) do
-            meta[#meta+1] = {
-                type = "type.meta",
-                method = field.key[1],
-                value = field.value
-            }
-        end
-        m.object[object.key[1]].meta = meta
+        m.object[object.key[1]].meta = {
+            type = "metatable",
+            value = object.value
+        }
     end
 end
 
