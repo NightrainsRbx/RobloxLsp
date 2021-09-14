@@ -183,9 +183,10 @@ Care['call'] = function (source, results)
     if source.node.type == "getlocal"
     or source.node.type == "getfield"
     or source.node.type == "getmethod" then
+        local node = source.node.field or source.node.method or source.node
         results[#results+1] = {
-            start  = source.node.start,
-            finish = source.node.finish,
+            start  = node.start,
+            finish = node.finish,
             type   = define.TokenTypes["function"]
         }
     end
