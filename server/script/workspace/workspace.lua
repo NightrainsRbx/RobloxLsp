@@ -297,19 +297,18 @@ function m.awaitPreload()
         end
     }
     log.info('Preload start.')
-    local nativeLoader    = loadFileFactory(m.path, progressData)
-    local native          = m.getNativeMatcher()
     local librarys        = m.getLibraryMatchers()
-    if native then
-        log.info('Scan files at:', m.path)
-        native:scan(m.path, nativeLoader)
-    end
     for _, library in ipairs(librarys) do
         local libraryLoader = loadFileFactory(library.path, progressData, true)
         log.info('Scan library at:', library.path)
         library.matcher:scan(library.path, libraryLoader)
     end
-
+    local nativeLoader    = loadFileFactory(m.path, progressData)
+    local native          = m.getNativeMatcher()
+    if native then
+        log.info('Scan files at:', m.path)
+        native:scan(m.path, nativeLoader)
+    end
     log.info(('Found %d files.'):format(progressData.max))
     while true do
         log.info(('Loaded %d/%d files'):format(progressData.read, progressData.max))

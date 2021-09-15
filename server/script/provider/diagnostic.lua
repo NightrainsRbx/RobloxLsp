@@ -273,7 +273,7 @@ function m.refresh(uri)
     await.call(function ()
         await.delay()
         if uri then
-            if m.doDiagnostic(uri) then
+            if m.doDiagnostic(uri) and not m.diagnosingAll then
                 m.diagnosticsRequires(uri)
             end
         end
@@ -377,6 +377,7 @@ function m.diagnosticsAll()
     await.close 'diagnosticsAll'
     await.call(function ()
         await.sleep(delay)
+        m.diagnosingAll = true
         m.diagnosticsAllClock = os.clock()
         local clock = os.clock()
         local bar <close> = progress.create(lang.script.WORKSPACE_DIAGNOSTIC, 1)
@@ -399,7 +400,9 @@ function m.diagnosticsAll()
         end
         bar:remove()
         log.debug('全文诊断耗时：', os.clock() - clock)
-    end, 'files.version', 'diagnosticsAll')
+        m.diagnosingAll = false
+    end, 'diagnosticsAll')
+    -- end, 'files.version', 'diagnosticsAll')
 end
 
 function m.start()
