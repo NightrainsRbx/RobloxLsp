@@ -414,6 +414,9 @@ function m.init()
                 value = g.value,
                 deprecated = deprecated[g.key[1]]
             }
+            if g.key[1] == "setmetatable" then
+                g.value.argCount = 2
+            end
             g.value.parent = tbl[g.key[1]]
             if g.value.type == "type.table" then
                 for _, field in ipairs(g.value) do

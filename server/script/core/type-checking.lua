@@ -910,7 +910,7 @@ function m.getArgCount(args)
 end
 
 local function checkCallFunction(func, call, pushResult)
-    local argCount = m.getArgCount(func.args)
+    local argCount = func.argCount or m.getArgCount(func.args)
     if not call.args  then
         if argCount > 0 then
             pushResult {

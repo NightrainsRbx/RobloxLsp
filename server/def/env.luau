@@ -136,7 +136,7 @@ type ENV = {
 		lrotate: (x: number, disp: number) -> number,
 	},
 	select: (index: string | number, ...any) -> any,
-	setmetatable: (table: table, metatable: table) -> table,
+	setmetatable: (table: table, metatable: table | nil) -> table,
 	rawset: (table: table, index: any, value: any) -> table,
 	rawget: (table: table, index: any) -> any,
 	rawequal: (v1: any, v2: any) -> boolean,
