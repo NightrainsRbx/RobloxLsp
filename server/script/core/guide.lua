@@ -1523,16 +1523,6 @@ function m.isOpaqued(loc, status)
     if not status.main or not loc.ref then
         return false
     end
-    local mainNode = status.main
-    while mainNode.node do
-        mainNode = mainNode.node
-        if not mainNode then
-            return false
-        end
-    end
-    if mainNode ~= loc then
-        return false
-    end
     local mainFunc = m.getParentFunction(status.searchFrom or status.main)
     for _, ref in ipairs(loc.ref) do
         if ref ~= status.main
@@ -2979,7 +2969,12 @@ local function checkSameSimpleAndMergeLibrarySpecialReturns(status, results, sou
     elseif source.special == "setmetatable" then
         if index == 1 and args[1] then
             local newStatus = m.status(status)
-            newStatus.searchFrom = source
+            local select = m.getParentType(source, "select")
+            if select then
+                newStatus.searchFrom = select.parent
+            else
+                newStatus.searchFrom = source
+            end
             m.searchRefs(newStatus, args[1], "def")
             for _, def in ipairs(newStatus.results) do
                 results[#results+1] = def
