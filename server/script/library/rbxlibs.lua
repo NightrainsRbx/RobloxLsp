@@ -630,10 +630,15 @@ local function addSuperMembers(class, superClass, mark)
     if not m.object[superClass] then
         return
     end
-    mark = mark or {}
+    if not mark then
+        mark = {}
+        for _, child in ipairs(m.object[class].child) do
+            mark[child.name] = true
+        end
+    end
     for _, child in ipairs(m.object[superClass].child) do
-        if not mark[child] then
-            mark[child] = true
+        if not mark[child.name] then
+            mark[child.name] = true
             table.insert(m.object[class].child, child)
         end
     end
