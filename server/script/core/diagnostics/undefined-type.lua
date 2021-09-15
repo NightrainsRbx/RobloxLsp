@@ -13,7 +13,7 @@ return function (uri, callback)
         if source[1] == "" then
             return
         end
-        if rbxlibs.object[source[1]] then
+        if source.parent.type ~= "type.module" and rbxlibs.object[source[1]] then
             if source.generics then
                 callback {
                     start = source.generics.start,

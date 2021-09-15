@@ -41,39 +41,36 @@ return function (uri, callback)
             return
         end
         local other = guide.getTypeAlias(source, source.name[1])
-        if other == source then
-            other = nil
-        end
-        if other or rbxlibs.object[source.name[1]] then
+        if other and other ~= source then
             callback {
                 start = source.name.start,
                 finish = source.name.finish,
                 message = lang.script('TYPE_REDEFINED', source.name[1]),
-                related = other and {
+                related = {
                     {
                         start = other.start,
                         finish = other.finish,
                         uri = guide.getUri(other)
                     }
-                } or nil
+                }
             }
         end
         if source.generics then
             local names = {}
             for _, generic in ipairs(source.generics) do
                 local other = guide.getTypeAlias(source, generic[1])
-                if other or rbxlibs.object[generic[1]] then
+                if other then
                     callback {
                         start = generic.start,
                         finish = generic.finish,
                         message = lang.script('TYPE_REDEFINED', generic[1]),
-                        related = other and {
+                        related = {
                             {
                                 start = other.start,
                                 finish = other.finish,
                                 uri = guide.getUri(other)
                             }
-                        } or nil
+                        }
                     }
                 end
                 if names[generic[1]] then
