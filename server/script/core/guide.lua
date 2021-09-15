@@ -1493,7 +1493,7 @@ function m.getVisibleRefs(obj, status)
     local hasTypeAnn = obj.typeAnn
     for _, ref in ipairs(obj.ref) do
         if ref ~= status.main then
-            if hasTypeAnn then
+            if hasTypeAnn and m.isSet(ref) then
                 goto CONTINUE
             end
             local refFunc = m.getParentFunction(ref)

@@ -142,25 +142,6 @@ function m.clear(uri)
     log.debug('clearDiagnostics', files.getOriginUri(uri))
 end
 
-function m.clearTypecheck(uri)
-    local luri = files.asKey(uri)
-    local cache = m.cache[luri]
-    if not cache then
-        return
-    end
-    for i, diag in ipairs(cache) do
-        if diag.code == "type-checking" then
-            cache[i] = cache[#cache]
-            cache[#cache] = nil
-        end
-    end
-    m.cache[luri] = cache
-    proto.notify('textDocument/publishDiagnostics', {
-        uri = files.getOriginUri(luri) or uri,
-        diagnostics = cache,
-    })
-end
-
 function m.clearAll()
     for luri in pairs(m.cache) do
         m.clear(luri)
@@ -454,16 +435,15 @@ files.watch(function (ev, uri)
         if ws.isReady() then
             m.refresh(uri)
         end
-    elseif ev == 'open' then
-        if ws.isReady() then
-            m.doDiagnostic(uri)
-        end
+    -- elseif ev == 'open' then
+    --     if ws.isReady() then
+    --         m.doDiagnostic(uri)
+    --     end
     elseif ev == 'close' then
         if files.isLibrary(uri)
         or ws.isIgnored(uri) then
             m.clear(uri)
         end
-        -- m.clearTypecheck(uri)
     end
 end)
 

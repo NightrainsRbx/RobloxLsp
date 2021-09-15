@@ -343,12 +343,18 @@ function m.getType(source)
     local tp = {
         type = "type.union"
     }
-    local metatable = nil
+    local meta = nil
+    local metaSource = nil
     for _, infer in ipairs(infers) do
         if guide.isTypeAnn(infer.source) then
             tp[#tp+1] = infer.source
         elseif infer.meta then
-            metatable = m.convertToType(infer, infer.meta.value, source)
+            if not metaSource or (infer.meta.value.start > metaSource.start) then
+                meta, metaSource = m.convertToType(infer, infer.meta.value, source), infer.meta.value
+                if m.compareTypes(meta, nilType) then
+                    meta = nil
+                end
+            end
         else
             tp[#tp+1] = m.convertToType(infer, source)
         end
@@ -359,11 +365,11 @@ function m.getType(source)
         m.cache.type[source] = anyType
         return anyType
     end
-    if metatable then
+    if meta then
         tp = {
             type = "type.meta",
             [1] = tp,
-            [2] = metatable
+            [2] = meta
         }
     end
     m.cache.type[source] = tp
@@ -538,6 +544,7 @@ function m.convertToType(infer, get, searchFrom)
                         type = "type.list"
                     }
                     local maxReturns = 1
+                    local prevSearchFrom = inferOptions.searchFrom
                     for i, ret in ipairs(source.returns) do
                         ret = {table.unpack(ret)}
                         local last = #ret
@@ -545,6 +552,7 @@ function m.convertToType(infer, get, searchFrom)
                             if j > maxReturns and not ret[j] then
                                 break
                             end
+                            inferOptions.searchFrom = ret[j]
                             local valueType = m.getType(ret[j] or nilType)
                             if j == last and valueType.parent and valueType.parent.type == "type.list" then
                                 for k = 2, #valueType.parent do
@@ -567,6 +575,7 @@ function m.convertToType(infer, get, searchFrom)
                         end
                         maxReturns = #ret > maxReturns and #ret or maxReturns
                     end
+                    inferOptions.searchFrom = prevSearchFrom
                     for i, ret in ipairs(returns) do
                         if #ret == 1 then
                             returns[i] = ret[1]
@@ -1291,22 +1300,26 @@ local function checkUnary(source, pushResult)
 end
 
 local function getCache(mode)
-    local cache = vm.getCache("cache")["typechecking-" .. mode]
-    if not cache then
-        cache = {
-            type = {},
-            convert = {},
-            normalize = {},
-            field = {}
-        }
-        vm.getCache("cache")["typechecking-" .. mode] = cache
-    end
-    return cache
+    return {
+        type = {},
+        convert = {},
+        normalize = {}
+    }
+    -- local cache = vm.getCache("cache")["typechecking-" .. mode]
+    -- if not cache then
+    --     cache = {
+    --         type = {},
+    --         convert = {},
+    --         normalize = {}
+    --     }
+    --     vm.getCache("cache")["typechecking-" .. mode] = cache
+    -- end
+    -- return cache
 end
 
 local function checkTypecheckModeAt(ast, offset)
+    m.cache = getCache()
     if not ast.docs or #ast.docs == 0 then
-        m.cache.convert = {}
         return true
     end
     local closestDoc = nil
@@ -1331,8 +1344,6 @@ local function checkTypecheckModeAt(ast, offset)
     else
         m.strict = config.config.typeChecking.mode == "Strict"
     end
-    m.cache = getCache(tostring(m.strict))
-    m.cache.convert = {}
     return true
 end
 
