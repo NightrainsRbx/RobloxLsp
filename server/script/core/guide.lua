@@ -2603,7 +2603,10 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
             end
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.meta" then
-            m.checkSameSimpleInValueInMetaTable(status, obj[2], start, pushQueue)
+            if mode ~= "def" then
+                pushQueue(obj[1], start, true)
+                m.checkSameSimpleInValueInMetaTable(status, obj[2], start, pushQueue)
+            end
         elseif obj.type ~= "type.function" then
             return false
         end
@@ -3761,12 +3764,21 @@ function m.checkSameSimpleInMeta(status, ref, start, pushQueue, mode)
         end
         cache = {}
         local newStatus = m.status(status)
-        m.searchFields(newStatus, ref.value, '__index', "deffield")
+        local meta = ref.value
+        if meta.type == "type.typeof" then
+            if meta.parent and m.getParentType(meta, "type.alias") then
+                newStatus.searchFrom = m.getParentBlock(meta)
+            else
+                newStatus.searchFrom = meta.value
+            end
+            meta = meta.value
+        end
+        m.searchFields(newStatus, meta, '__index', "deffield")
         for _, index in ipairs(newStatus.results) do
             if index.type == "tablefield" or index.type == "tableindex" then
                 index = index.value
             end
-            local refsStatus = m.status(status)
+            local refsStatus = m.status(newStatus)
             m.searchFields(refsStatus, index, nil, "deffield")
             for _, field in ipairs(refsStatus.results) do
                 pushQueue(field, start + 1)
