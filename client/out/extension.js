@@ -61,7 +61,7 @@ function updateRobloxAPI(context) {
 }
 function openUpdatesWindow(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (context.globalState.get("sawVersionLogNew5", false) == false) {
+        if (context.globalState.get("sawVersionLogNew6", false) == false) {
             const panel = vscode.window.createWebviewPanel('robloxlspUpdates', 'Roblox LSP Updates', vscode.ViewColumn.One, {});
             panel.webview.html = `<!DOCTYPE html>
         <html lang="en">
@@ -76,6 +76,13 @@ function openUpdatesWindow(context) {
                 <p style="font-size:1rem">More info: <a href="https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745">https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745</a></p>
                 <p style="font-size:1rem">Report any bug or question here: <a href="https://github.com/NightrainsRbx/RobloxLsp/issues">https://github.com/NightrainsRbx/RobloxLsp/issues</a></p>
                 <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
+                <h2 style="font-size:2rem; font-weight:100">1.3.0</h2>
+                <li style="font-size:1rem">More improvements to type inference.</li>
+                <li style="font-size:1rem">Improved how typeof (the type) works.</li>
+                <li style="font-size:1rem">Implemented proper type inference and type checking of metatables.</li>
+                <li style="font-size:1rem">Added utility type WithMeta&lt;T, M&gt; (may change).</li>
+                <li style="font-size:1rem">Improved preloading of workspace.</li>
+                <li style="font-size:1rem">Fixed many bugs.</li>
                 <h2 style="font-size:2rem; font-weight:100">1.2.2</h2>
                 <li style="font-size:1rem">Improved type inference by a lot.</li>
                 <li style="font-size:1rem">Fixed many bugs with auto-completion.</li>
@@ -118,7 +125,7 @@ function openUpdatesWindow(context) {
             </div>
         </body>
         </html>`;
-            yield context.globalState.update("sawVersionLogNew5", true);
+            yield context.globalState.update("sawVersionLogNew6", true);
         }
     });
 }
