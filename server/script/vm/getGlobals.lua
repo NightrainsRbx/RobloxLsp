@@ -10,7 +10,7 @@ local vm          = require 'vm.vm'
 
 function vm.getGlobals(key, uri, onlySet)
     local globals = {}
-    local scriptCache = vm.getCache 'globalDummy'
+    local scriptCache = vm.getCache 'scriptCache'
     for _, lib in pairs(rbxlibs.global) do
         if key == "*" or lib.name == key then
             if lib.name == "script" and uri then

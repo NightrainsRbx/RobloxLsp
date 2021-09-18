@@ -811,7 +811,7 @@ local function buildDataModel()
     for _, child in pairs(dataModelChild) do
         setChildParent(child, game.value)
     end
-    local datamodel = rojo.DataModel
+    local datamodel = rojo:parseDatamodel()
     if datamodel then
         util.mergeTable(game.value.child, datamodel)
         for _, child in pairs(datamodel) do

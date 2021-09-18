@@ -290,8 +290,10 @@ function rojo:findScriptInProject(uri)
     end
 end
 
-function rojo:updateDatamodel(datamodel)
-    self.DataModel = inspectModel(datamodel)
+function rojo:parseDatamodel()
+    if self.DataModel then
+        return inspectModel(self.DataModel)
+    end
 end
 
 function rojo:loadRojoProject()

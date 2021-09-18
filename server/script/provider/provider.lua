@@ -894,7 +894,7 @@ proto.on('$/updateDataModel', function (params)
                 message = 'Roblox LSP: Connected to Roblox Studio Plugin!'
             })
         end
-        rojo:updateDatamodel(params.datamodel)
+        rojo.DataModel = params.datamodel
         rbxlibs.init()
         workspace.reload()
     end
