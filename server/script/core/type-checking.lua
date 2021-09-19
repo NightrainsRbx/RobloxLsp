@@ -103,30 +103,6 @@ local function checkFieldOfTable(source, get)
     return result
 end
 
-local function getFieldsOfTable(source)
-    local fields = {}
-    for _, field in ipairs(source) do
-        if field.type == "tablefield"
-        or field.type == "tableindex" then
-            fields[#fields+1] = field
-        end
-    end
-    local simple = getSimpleString(source.parent)
-    if not simple then
-        return fields
-    end
-    guide.eachSourceBetween(guide.getParentBlock(source), source.finish, math.huge, function (field)
-        if field.type == "setfield"
-        or field.type == "setmethod"
-        or field.type == "setindex" then
-            if getSimpleString(field.node) == simple then
-                fields[#fields+1] = field
-            end
-        end
-    end)
-    return fields
-end
-
 function m.checkRequire(func)
     local call = func.next
     if call and call.args then
@@ -231,10 +207,6 @@ function m.checkDefinition(source, simple, other)
 end
 
 function m.normalizeType(tp)
-    local original = tp
-    if m.cache.normalize[original] then
-        return m.cache.normalize[original]
-    end
     local optional = tp.optional
     local readOnly = tp.readOnly
     while tp.type == "paren" do
@@ -245,6 +217,11 @@ function m.normalizeType(tp)
         end
     end
     optional = tp.optional or optional
+    local has, cache = m.cache("normalize", tp)
+    if has then
+        return cache
+    end
+    cache(anyType)
     if tp.type == "type.table" then
         for i, field in ipairs(tp) do
             if field.type ~= "type.index" and field.type ~= "type.field" then
@@ -266,7 +243,7 @@ function m.normalizeType(tp)
         end
         local value = m.getType(tp.value)
         inferOptions.searchFrom = nil
-        return m.normalizeType(value)
+        return cache(m.normalizeType(value))
     end
     if tp.type == "type.module" then
         local alias = vm.getModuleTypeAlias(tp)
@@ -278,7 +255,6 @@ function m.normalizeType(tp)
     if tp.type == "type.name" then
         local value = m.getTypeFromAlias(tp)
         if value ~= tp then
-            m.cache.normalize[tp] = anyType
             tp = m.normalizeType(value)
         end
     end
@@ -297,8 +273,7 @@ function m.normalizeType(tp)
             finish = tp.finish,
         }
     end
-    m.cache.normalize[original] = tp
-    return tp
+    return cache(tp)
 end
 
 function m.getTypeFromAlias(tp)
@@ -328,16 +303,16 @@ function m.getType(source)
     if guide.isTypeAnn(source) then
         return source
     end
-    if m.cache.type[source] then
-        return m.cache.type[source]
+    local has, cache = m.cache("type", source)
+    if has then
+        return cache
     end
+    cache(anyType)
     if not m.strict and not m.checkDefinition(source) then
-        m.cache.type[source] = anyType
         return anyType
     end
     local infers = vm.getInfers(source, 0, inferOptions)
     if #infers == 0 then
-        m.cache.type[source] = anyType
         return anyType
     end
     local tp = {
@@ -362,7 +337,6 @@ function m.getType(source)
     if #tp == 1 then
         tp = tp[1]
     elseif #tp == 0 then
-        m.cache.type[source] = anyType
         return anyType
     end
     if meta then
@@ -372,8 +346,7 @@ function m.getType(source)
             [2] = meta
         }
     end
-    m.cache.type[source] = tp
-    return tp
+    return cache(tp)
 end
 
 function m.hasTypeAnn(source, checkFunc)
@@ -406,16 +379,17 @@ end
 
 function m.convertToType(infer, get, searchFrom)
     local source = infer.source
+    local has, cache = m.cache("convert", source or infer)
+    if has then
+        return cache
+    end
     if source then
-        if m.cache.convert[source] then
-            return m.cache.convert[source]
-        end
         if source.type == "table" then
             local tp = {
                 type = "type.table",
                 inferred = source
             }
-            m.cache.convert[source] = tp
+            cache(tp)
             inferOptions.searchFrom = inferOptions.searchFrom or searchFrom or get
             local fields
             if get == source then
@@ -516,7 +490,7 @@ function m.convertToType(infer, get, searchFrom)
                 returns = anyType,
                 inferred = source
             }
-            m.cache.convert[source] = tp
+            cache(tp)
             if source.args then
                 for _, arg in ipairs(source.args) do
                     local argType = arg.typeAnn and arg.typeAnn.value or {
@@ -590,13 +564,13 @@ function m.convertToType(infer, get, searchFrom)
             return tp
         end
     end
-    return {
+    return cache({
         [1] = infer.type,
         type = "type.name"
-    }
+    })
 end
 
-function m.compareTypes(a, b, mark)
+function m.compareTypes(a, b)
     a = m.normalizeType(a)
     b = m.normalizeType(b)
     if (a.type == "type.union" and #a == 0)
@@ -606,26 +580,27 @@ function m.compareTypes(a, b, mark)
     if a == b or a[1] == "any" or b[1] == "any" then
         return true
     end
-    mark = mark or {}
-    if mark[("%p%p"):format(a, b)] then
-        return true
+    local has, cache = m.cache("compare", a, b)
+    if has then
+        return cache
     end
-    mark[("%p%p"):format(a, b)] = true
+    cache(true)
     if a.original and b.original and a.original == b.original then
-        if mark[a.original] then
-            return true
+        local has, cache = m.cache("compare", a.original)
+        if has then
+            return cache
         end
-        mark[a.original] = true
+        cache(true)
     end
     if a.type == "type.union" then
         local allMatch = true
         for _, v in ipairs(guide.getAllValuesInType(a)) do
             if m.options["union-bivariance"] then
                 allMatch = false
-                if m.compareTypes(v, b, mark) then
+                if m.compareTypes(v, b) then
                     return true
                 end
-            elseif not m.compareTypes(v, b, mark) then
+            elseif not m.compareTypes(v, b) then
                 allMatch = false
                 break
             end
@@ -656,19 +631,19 @@ function m.compareTypes(a, b, mark)
         if a.type == "type.union" then
             for _, avalue in ipairs(guide.getAllValuesInType(a)) do
                 for _, bvalue in ipairs(values) do
-                    if m.compareTypes(avalue, bvalue, mark) then
+                    if m.compareTypes(avalue, bvalue) then
                         goto CONTINUE
                     end
                 end
                 do
-                    return false
+                    return cache(false)
                 end
                 ::CONTINUE::
             end
             return true
         else
             for _, v in ipairs(values) do
-                if m.compareTypes(a, v, mark) then
+                if m.compareTypes(a, v) then
                     return true
                 end
             end
@@ -699,26 +674,26 @@ function m.compareTypes(a, b, mark)
             end
             other = varargsB or other
             if not other then
-                return false
+                return cache(false)
             end
             if b.funcargs then
                 other, arg = arg, other
             end
-            if not m.compareTypes(arg, other, mark) then
-                return false
+            if not m.compareTypes(arg, other) then
+                return cache(false)
             end
         end
         return true
     elseif b.type == "type.variadic" then
         if a.type == "type.list" then
             for _, value in ipairs(a) do
-                if not m.compareTypes(value, b, mark) then
-                    return false
+                if not m.compareTypes(value, b) then
+                    return cache(false)
                 end
             end
             return true
         else
-            return m.compareTypes(a.type == "type.variadic" and a.value or a, b.value, mark)
+            return m.compareTypes(a.type == "type.variadic" and a.value or a, b.value)
         end
     elseif b.type == "type.function" then
         if a.type == "type.name" and a[1] == "function" then
@@ -727,14 +702,14 @@ function m.compareTypes(a, b, mark)
         if a.type == "type.function" then
             if a.args then
                 if #a.args > guide.getTypeCount(b.args) then
-                    return false
+                    return cache(false)
                 end
-                if not m.compareTypes(a.args, b.args, mark) then
-                    return false
+                if not m.compareTypes(a.args, b.args) then
+                    return cache(false)
                 end
             end
-            if a.returns and not m.compareTypes(a.returns, b.returns, mark) then
-                return false
+            if a.returns and not m.compareTypes(a.returns, b.returns) then
+                return cache(false)
             end
             return true
         end
@@ -750,12 +725,12 @@ function m.compareTypes(a, b, mark)
                     local otherField = m.searchFieldType(a, field.key[1], stringType)
                     if not otherField then
                         if not m.hasTypeName(field.value, "nil") then
-                            return false
+                            return cache(false)
                         end
                         goto CONTINUE
                     end
-                    if not m.compareTypes(otherField, field.value, mark) then
-                        return false
+                    if not m.compareTypes(otherField, field.value) then
+                        return cache(false)
                     end
                     fieldsChecked[field.key[1]] = true
                 elseif field.type == "type.index" then
@@ -767,22 +742,22 @@ function m.compareTypes(a, b, mark)
                 if field.type == "type.field" then
                     if not fieldsChecked[field.key[1]] then
                         if indexType then
-                            if not m.compareTypes(stringType, indexType.key, mark)
-                            or not m.compareTypes(field.value, indexType.value, mark) then
-                                return false
+                            if not m.compareTypes(stringType, indexType.key)
+                            or not m.compareTypes(field.value, indexType.value) then
+                                return cache(false)
                             end
                         elseif not m.options["ignore-extra-fields"] then
-                            return false
+                            return cache(false)
                         end
                     end
                 elseif field.type == "type.index" then
                     if indexType then
-                        if not m.compareTypes(field.key, indexType.key, mark)
-                        or not m.compareTypes(field.value, indexType.value, mark) then
-                            return false
+                        if not m.compareTypes(field.key, indexType.key)
+                        or not m.compareTypes(field.value, indexType.value) then
+                            return cache(false)
                         end
                     elseif not m.options["ignore-extra-fields"] then
-                        return false
+                        return cache(false)
                     end
                 end
             end
@@ -793,14 +768,19 @@ function m.compareTypes(a, b, mark)
             return true
         end
         if a.type == "type.meta" then
-            return m.compareTypes(a[1], b[1], mark) and m.compareTypes(a[2], b[2], mark)
+            return cache(m.compareTypes(a[1], b[1]) and m.compareTypes(a[2], b[2]))
         end
     end
-    return false
+    return cache(false)
 end
 
 function m.searchFieldType(tp, key, index)
     tp = m.normalizeType(tp)
+    local has, cache = m.cache("searchField", tp, key, index)
+    if has then
+        return cache
+    end
+    cache(nil)
     if tp.type == "type.union" then
         local union = {
             type = "type.union"
@@ -823,49 +803,49 @@ function m.searchFieldType(tp, key, index)
             if #union == 1 then
                 union = union[1]
             end
-            return union
+            return cache(union)
         end
     elseif tp.type == "type.inter" then
         for _, value in ipairs(guide.getAllValuesInType(tp)) do
             local field = m.searchFieldType(value, key, index)
             if field then
-                return field
+                return cache(field)
             end
         end
     end
     if tp.type == "type.meta" then
         local field = m.searchFieldType(tp[1], key, index)
         if field then
-            return field
+            return cache(field)
         end
         local __index = m.searchFieldType(tp[2], "__index")
         if __index then
             local metaField = m.searchFieldType(__index, key, index)
             if metaField then
-                return metaField
+                return cache(metaField)
             end
         end
     end
     local indexType = nil
     if tp.type == "type.name" then
         if tp[1] == "table" then
-            return anyType
+            return cache(anyType)
         end
         local ret = guide.eachChildOfLibrary(tp, function (child)
             if child.type == "type.index" and key then
                 indexType = child
             elseif child.name == key then
-                return child
+                return cache(child)
             end
         end)
         if ret then
-            return ret.value
+            return cache(ret.value)
         end
     end
     if tp.type == "type.table" then
         for _, field in ipairs(tp) do
             if field.type == "type.field" and field.key[1] == key then
-                return field.value
+                return cache(field.value)
             elseif field.type == "type.index" then
                 indexType = field
             end
@@ -874,13 +854,13 @@ function m.searchFieldType(tp, key, index)
     if index then
         if indexType then
             if m.compareTypes(index, indexType.key) then
-                return indexType.value
+                return cache(indexType.value)
             end
         elseif not key and m.compareTypes(index, stringType) then
-            return anyType
+            return cache(anyType)
         end
         if m.hasTypeName(index, "any") or m.hasTypeName(tp, "any") then
-            return anyType
+            return cache(anyType)
         end
     end
     return nil
@@ -888,13 +868,18 @@ end
 
 function m.hasTypeName(tp, name)
     tp = m.normalizeType(tp)
+    local has, cache = m.cache("typeName", tp, name)
+    if has then
+        return cache
+    end
+    cache(false)
     if tp.type == "type.name" and tp[1] == name then
-        return true
+        return cache(true)
     end
     if tp.type == "type.union" then
         for _, value in ipairs(guide.getAllValuesInType(tp)) do
             if m.hasTypeName(m.normalizeType(value), name) then
-                return true
+                return cache(true)
             end
         end
     end
@@ -1299,26 +1284,7 @@ local function checkUnary(source, pushResult)
     }
 end
 
-local function getCache(mode)
-    return {
-        type = {},
-        convert = {},
-        normalize = {}
-    }
-    -- local cache = vm.getCache("cache")["typechecking-" .. mode]
-    -- if not cache then
-    --     cache = {
-    --         type = {},
-    --         convert = {},
-    --         normalize = {}
-    --     }
-    --     vm.getCache("cache")["typechecking-" .. mode] = cache
-    -- end
-    -- return cache
-end
-
-local function checkTypecheckModeAt(ast, offset)
-    m.cache = getCache()
+function m.checkTypecheckModeAt(ast, offset)
     if not ast.docs or #ast.docs == 0 then
         return true
     end
@@ -1347,9 +1313,43 @@ local function checkTypecheckModeAt(ast, offset)
     return true
 end
 
+function m.cache(name, ...)
+    if not m._cache[name] then
+        m._cache[name] = {}
+    end
+    local key = ""
+    local varargs = {...}
+    for i = 1, #varargs do
+        key = key .. ("%p/"):format(varargs[i])
+    end
+    if m._cache[key] then
+        if m._cache[key] == "NIL" then
+            return true, nil
+        end
+        return true, m._cache[key]
+    end
+    return false, function (value)
+        local set = value
+        if set == nil then
+            set = "NIL"
+        end
+        m._cache[key] = set
+        return value
+    end
+end
+
+function m.eachSourceType(type, callback)
+    guide.eachSourceType(m.ast, type, function (source)
+        if m.checkTypecheckModeAt(m.ast, source.start) then
+            m._cache = {}
+            callback(source)
+        end
+    end)
+end
+
 function m.init()
+    m._cache = {}
     m.strict = config.config.typeChecking.mode == "Strict"
-    m.cache = getCache(tostring(m.strict))
     m.options = util.mergeTable(
         util.shallowCopy(define.TypeCheckingOptions),
         config.config.typeChecking.options
@@ -1362,7 +1362,7 @@ function m.check(uri)
         return
     end
 
-    ast = ast.ast
+    m.ast = ast.ast
     m.init()
 
     local results = {}
@@ -1380,84 +1380,67 @@ function m.check(uri)
         redefinedType(uri, pushResult)
         invalidClassName(uri, pushResult)
     end
-
-    guide.eachSourceType(ast, "setlocal", function (source)
-        if checkTypecheckModeAt(ast, source.start) then
-            checkSetLocal(source, pushResult)
-        end
+    m.eachSourceType("setlocal", function (source)
+        checkSetLocal(source, pushResult)
     end)
-    guide.eachSourceType(ast, "local", function (source)
-        if checkTypecheckModeAt(ast, source.start) then
-            checkLocal(source, pushResult)
-        end
+    m.eachSourceType("local", function (source)
+        checkLocal(source, pushResult)
     end)
-    guide.eachSourceType(ast, "getfield", function (source)
+    m.eachSourceType("getfield", function (source)
         if skipNodes[source.node] then
             skipNodes[source] = true
             return
         end
-        if checkTypecheckModeAt(ast, source.start) then
-            if not checkGetField(source, pushResult, true) then
-                skipNodes[source] = true
-            end
+        if not checkGetField(source, pushResult, true) then
+            skipNodes[source] = true
         end
     end)
-    guide.eachSourceType(ast, "setfield", function (source)
+    m.eachSourceType("setfield", function (source)
         if skipNodes[source.node] then
             return
         end
-        if checkTypecheckModeAt(ast, source.start) then
-            local field = checkGetField(source, pushResult)
-            if field then
-                checkSetField(source, field, pushResult)
-            end
+        local field = checkGetField(source, pushResult)
+        if field then
+            checkSetField(source, field, pushResult)
         end
     end)
-    guide.eachSourceType(ast, "getmethod", function (source)
+    m.eachSourceType("getmethod", function (source)
         if skipNodes[source.node] then
             skipNodes[source] = true
             return
         end
-        if checkTypecheckModeAt(ast, source.start) then
-            if not checkGetField(source, pushResult, true) then
-                skipNodes[source] = true
-            end
+        if not checkGetField(source, pushResult, true) then
+            skipNodes[source] = true
         end
     end)
-    guide.eachSourceType(ast, "setmethod", function (source)
+    m.eachSourceType("setmethod", function (source)
         if skipNodes[source.node] then
             return
         end
-        if checkTypecheckModeAt(ast, source.start) then
-            local field = checkGetField(source, pushResult)
-            if field then
-                checkSetField(source, field, pushResult)
-            end
+        local field = checkGetField(source, pushResult)
+        if field then
+            checkSetField(source, field, pushResult)
         end
     end)
-    guide.eachSourceType(ast, "getindex", function (source)
+    m.eachSourceType("getindex", function (source)
         if skipNodes[source.node] then
             skipNodes[source] = true
             return
         end
-        if checkTypecheckModeAt(ast, source.start) then
-            if not checkGetIndex(source, pushResult) then
-                skipNodes[source] = true
-            end
+        if not checkGetIndex(source, pushResult) then
+            skipNodes[source] = true
         end
     end)
-    guide.eachSourceType(ast, "setindex", function (source)
+    m.eachSourceType("setindex", function (source)
         if skipNodes[source.node] then
             return
         end
-        if checkTypecheckModeAt(ast, source.start) then
-            local field = checkGetIndex(source, pushResult)
-            if field then
-                checkSetField(source, field, pushResult)
-            end
+        local field = checkGetIndex(source, pushResult)
+        if field then
+            checkSetField(source, field, pushResult)
         end
     end)
-    guide.eachSourceType(ast, "call", function (source)
+    m.eachSourceType("call", function (source)
         -- if skipNodes[source.node] then
         --     skipNodes[source] = true
         --     return
@@ -1465,24 +1448,16 @@ function m.check(uri)
         if source.nocheck then
             return
         end
-        if checkTypecheckModeAt(ast, source.start) then
-            checkCall(source, pushResult)
-        end
+        checkCall(source, pushResult)
     end)
-    guide.eachSourceType(ast, "function", function (source)
-        if checkTypecheckModeAt(ast, source.start) then
-            checkFunction(source, pushResult)
-        end
+    m.eachSourceType("function", function (source)
+        checkFunction(source, pushResult)
     end)
-    guide.eachSourceType(ast, "binary", function (source)
-        if checkTypecheckModeAt(ast, source.start) then
-            checkBinary(source, pushResult)
-        end
+    m.eachSourceType("binary", function (source)
+        checkBinary(source, pushResult)
     end)
-    guide.eachSourceType(ast, "unary", function (source)
-        if checkTypecheckModeAt(ast, source.start) then
-            checkUnary(source, pushResult)
-        end
+    m.eachSourceType("unary", function (source)
+        checkUnary(source, pushResult)
     end)
 
     return results
