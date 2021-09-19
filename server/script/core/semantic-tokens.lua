@@ -176,6 +176,13 @@ Care['type.field.key'] = function (source, results)
         results[#results].modifiers = define.TokenModifiers.readonly
     end
 end
+Care['type.typeof'] = function (source, results)
+    results[#results+1] = {
+        start  = source.name.start,
+        finish = source.name.finish,
+        type   = define.TokenTypes["function"]
+    }
+end
 Care['call'] = function (source, results)
     if not source.node then
         return
