@@ -1314,26 +1314,29 @@ function m.checkTypecheckModeAt(ast, offset)
 end
 
 function m.cache(name, ...)
-    if not m._cache[name] then
-        m._cache[name] = {}
-    end
     local key = ""
     local varargs = {...}
     for i = 1, #varargs do
         key = key .. ("%p/"):format(varargs[i])
     end
-    if m._cache[key] then
-        if m._cache[key] == "NIL" then
+    if not m._cache[name] then
+        m._cache[name] = {}
+    end
+    if m._cache[name][key] then
+        if m._cache[name][key] == "NIL" then
             return true, nil
         end
-        return true, m._cache[key]
+        return true, m._cache[name][key]
     end
     return false, function (value)
         local set = value
         if set == nil then
             set = "NIL"
         end
-        m._cache[key] = set
+        if not m._cache[name] then
+            m._cache[name] = {}
+        end
+        m._cache[name][key] = set
         return value
     end
 end
