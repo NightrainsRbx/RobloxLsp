@@ -4,11 +4,16 @@
 
 Make sure you don't have both [Lua](https://marketplace.visualstudio.com/items?itemName=sumneko.lua) by sumneko and Roblox LSP enabled.
 
-## More Info
-https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745
-
 ## Install In VSCode
 https://marketplace.visualstudio.com/items?itemName=Nightrains.robloxlsp
+
+## More Info 
+https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745
+
+## Get Help
+
+Roblox OS Community Discord Server: https://discord.gg/c4nPcZHwFU
+
 
 ## Features
 
