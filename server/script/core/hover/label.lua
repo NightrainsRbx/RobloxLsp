@@ -61,7 +61,7 @@ local function asDocTypeName(source)
 end
 
 local function asValue(source, title)
-    local name    = buildName(source)
+    local name    = buildName(source):gsub("%:", ".")
     local type    = vm.getTypeString(source, 0)
     local class   = nil--vm.getClass(source, 0)
     local literal = vm.getInferLiteral(source, 0)

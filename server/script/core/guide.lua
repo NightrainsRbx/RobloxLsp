@@ -4594,13 +4594,16 @@ end
 
 function m.buildTypeAnn(typeUnit, mark)
     mark = mark or {}
+    local text = "*unknown*"
+    if not typeUnit then
+        return text
+    end
     if mark[typeUnit] then
         return "<CYCLE>"
     end
     if typeUnit.type ~= "type.name" then
         mark[typeUnit] = true
     end
-    local text = ""
     if typeUnit.type == "type.name"
     or typeUnit.type == "type.parameter"
     or typeUnit.type == "name" then
@@ -4661,12 +4664,7 @@ function m.buildTypeAnn(typeUnit, mark)
     elseif typeUnit.type == "type.variadic" then
         text = "..." .. m.buildTypeAnn(typeUnit.value, mark)
     elseif typeUnit.type == "type.typeof" then
-        local infers = m.requestInfer(typeUnit.value, require("vm").interface, 0)
-        if infers and #infers > 0 then
-            text = m.viewInferType(infers)
-        else
-            text = "any"
-        end
+        text = "typeof(" .. m.buildExp(typeUnit.value) .. ")"
     elseif typeUnit.type == "type.meta" then
         text = "{" .. m.buildTypeAnn(typeUnit[1], mark) .. ", @metatable " .. m.buildTypeAnn(typeUnit[2], mark) .. "}"
     elseif typeUnit.type == "paren" then
@@ -4674,6 +4672,50 @@ function m.buildTypeAnn(typeUnit, mark)
     end
     if typeUnit.optional then
         text = text .. "?"
+    end
+    return text
+end
+
+function m.buildExp(expUnit, mark)
+    mark = mark or {}
+    local text = "*unknown*"
+    if not expUnit then
+        return text
+    end
+    if mark[expUnit] then
+        return "<CYCLE>"
+    end
+    mark[expUnit] = true
+    if expUnit.type == "paren" then
+        text = "(" .. m.buildExp(expUnit.exp, mark) .. ")"
+    elseif expUnit.type == "getlocal" or expUnit.type == "getglobal" then
+        text = expUnit[1]
+        return text
+    elseif expUnit.type == "getfield" then
+        text = "." .. expUnit.field[1]
+    elseif expUnit.type == "getmethod" then
+        text = ":" .. expUnit.method[1]
+    elseif expUnit.type == "getindex" then
+        text = "[" .. m.buildExp(expUnit.index) .. "]"
+    elseif expUnit.type == "call" then
+        text = "()"
+    elseif expUnit.type == "binary" then
+        text = m.buildExp(expUnit[1]) .. " " .. expUnit.op.type .. " " .. m.buildExp(expUnit[2])
+    elseif expUnit.type == "unary" then
+        text = expUnit.op.type .. m.buildExp(expUnit[1])
+    elseif expUnit.type == "string" then
+        text = "\"" .. expUnit[1] .. "\""
+    elseif expUnit.type == "number" then
+        text = tostring(expUnit[1])
+    elseif expUnit.type == "boolean" then
+        text = tostring(expUnit[1])
+    elseif expUnit.type == "table" then
+        text = "*table*"
+    elseif expUnit.type == "function" then
+        text = "*function*"
+    end
+    if expUnit.node then
+        text = m.buildExp(expUnit.node) .. text
     end
     return text
 end
