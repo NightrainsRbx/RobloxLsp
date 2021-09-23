@@ -2586,11 +2586,6 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
         elseif obj.type == "type.variadic" then
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.typeof" then
-            if obj.parent and m.getParentType(obj, "type.alias") then
-                status.searchFrom = m.getParentBlock(obj)
-            else
-                status.searchFrom = obj.value
-            end
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.meta" then
             if mode ~= "def" then
@@ -3025,11 +3020,6 @@ function m.getFullType(status, tp, mark)
     end
     if tp.type == "type.typeof" then
         local newStatus = m.status(status)
-        if tp.parent and m.getParentType(tp, "type.alias") then
-            newStatus.searchFrom = m.getParentBlock(tp)
-        else
-            newStatus.searchFrom = tp.value
-        end
         m.searchRefs(newStatus, tp.value, 'def')
         for _, def in ipairs(newStatus.results) do
             if m.isTypeAnn(def) then
@@ -3761,11 +3751,6 @@ function m.checkSameSimpleInMeta(status, ref, start, pushQueue, mode)
         local newStatus = m.status(status)
         local meta = ref.value
         if meta.type == "type.typeof" then
-            if meta.parent and m.getParentType(meta, "type.alias") then
-                newStatus.searchFrom = m.getParentBlock(meta)
-            else
-                newStatus.searchFrom = meta.value
-            end
             meta = meta.value
         end
         m.searchFields(newStatus, meta, '__index', "deffield")

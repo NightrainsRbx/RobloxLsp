@@ -236,13 +236,7 @@ function m.normalizeType(tp)
         end
     end
     if tp.type == "type.typeof" then
-        if tp.parent and guide.getParentType(tp, "type.alias") then
-            inferOptions.searchFrom = guide.getParentBlock(tp)
-        else
-            inferOptions.searchFrom = tp.value
-        end
         local value = m.getType(tp.value)
-        inferOptions.searchFrom = nil
         return cache(m.normalizeType(value))
     end
     if tp.type == "type.module" then
@@ -390,7 +384,11 @@ function m.convertToType(infer, get, searchFrom)
                 inferred = source
             }
             cache(tp)
-            inferOptions.searchFrom = inferOptions.searchFrom or searchFrom or get
+            local setSearchFrom = false
+            if not inferOptions.searchFrom then
+                inferOptions.searchFrom = searchFrom or get
+                setSearchFrom = true
+            end
             local fields
             if get == source then
                 fields = {}
@@ -466,7 +464,7 @@ function m.convertToType(infer, get, searchFrom)
                     end
                 end
             end
-            if inferOptions.searchFrom == (searchFrom or get) then
+            if setSearchFrom then
                 inferOptions.searchFrom = nil
             end
             for _, field in ipairs(tp) do
@@ -1344,6 +1342,8 @@ end
 function m.eachSourceType(type, callback)
     guide.eachSourceType(m.ast, type, function (source)
         if m.checkTypecheckModeAt(m.ast, source.start) then
+            inferOptions.searchFrom = nil
+            inferOptions.skipMeta = nil
             m._cache = {}
             callback(source)
         end
