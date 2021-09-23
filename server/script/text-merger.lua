@@ -56,6 +56,12 @@ local function mergeRows(rows, change)
     local left       = getLeft(rows[startLine], startChar)
     local right      = getRight(rows[endLine],  endChar)
     -- 先把双方的行数调整成一致
+    if endLine > #rows then
+        -- log.error('NMD, WSM `endLine > #rows` ?')
+        for i = #rows + 1, endLine do
+            rows[i] = ''
+        end
+    end
     local delta = #insertRows - (endLine - startLine + 1)
     if delta ~= 0 then
         table.move(rows, endLine, #rows, endLine + delta)
@@ -87,7 +93,7 @@ return function (uri, changes)
         if change.range then
             local rows = files.getCachedRows(uri)
             if not rows then
-                text = text or files.getOriginText(uri)
+                text = text or files.getOriginText(uri) or ''
                 rows = splitRows(text)
             end
             mergeRows(rows, change)
