@@ -183,7 +183,9 @@ function m.setText(uri, text, isTrust)
     file.cacheActiveTime = math.huge
     file.version = file.version + 1
     m.globalVersion = m.globalVersion + 1
-    await.close('files.version')
+    if not require("provider.diagnostic").diagnosingAll then
+        await.close('files.version')
+    end
     if create then
         m.onWatch('create', originUri)
     end

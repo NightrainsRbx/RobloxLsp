@@ -291,7 +291,7 @@ local function askForDisable()
         proto.notify('$/command', {
             command   = 'lua.config',
             data      = {
-                key    = 'Lua.diagnostics.workspaceDelay',
+                key    = 'robloxLsp.diagnostics.workspaceDelay',
                 action = 'set',
                 value  = delay * 1000,
             }
@@ -300,7 +300,7 @@ local function askForDisable()
         proto.notify('$/command', {
             command   = 'lua.config',
             data      = {
-                key    = 'Lua.diagnostics.workspaceDelay',
+                key    = 'robloxLsp.diagnostics.workspaceDelay',
                 action = 'set',
                 value  = -1,
             }
@@ -382,8 +382,7 @@ function m.diagnosticsAll()
         bar:remove()
         log.debug('全文诊断耗时：', os.clock() - clock)
         m.diagnosingAll = false
-    end, 'diagnosticsAll')
-    -- end, 'files.version', 'diagnosticsAll')
+    end, 'files.version', 'diagnosticsAll')
 end
 
 function m.start()
