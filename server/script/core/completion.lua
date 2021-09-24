@@ -449,7 +449,7 @@ local function checkFieldThen(name, src, word, start, offset, parent, oop, resul
         else
             kind = define.CompletionItemKind.Variable
         end
-    elseif not infer and config.config.intelliSense.searchDepth > 0 then
+    elseif not infer and (config.config.intelliSense.searchDepth > 0 or value.type == "typeof") then
         local infers = vm.getInfers(value, 0, {searchAll = true})
         for _, infer in ipairs(infers) do
             if infer.source then

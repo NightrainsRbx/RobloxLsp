@@ -190,10 +190,7 @@ end
 
 local function getHoverAsTypeName(source)
     local label
-    local typeAlias = source.typeAlias
-    if source.parent.type == "type.module" then
-        typeAlias = vm.getModuleTypeAlias(source.parent)
-    end
+    local typeAlias = vm.getTypeAlias(source)
     if typeAlias then
         label = getHoverAsTypeAlias(typeAlias.name).label
     else

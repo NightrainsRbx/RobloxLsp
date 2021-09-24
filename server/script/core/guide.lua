@@ -1339,6 +1339,9 @@ end
 local function buildSimpleList(obj, max)
     local list = {}
     local cur = obj
+    if obj.type == "type.typeof" then
+        cur = obj.value
+    end
     local limit = max and (max + 1) or 11
     for i = 1, max or limit do
         if i == limit then
@@ -1408,6 +1411,11 @@ local function buildSimpleList(obj, max)
         elseif cur.type == "type.assert" then
             list[i] = cur
             break
+        elseif cur.type == 'type.field'
+        or     cur.type == 'type.index'
+        or     cur.type == 'type.library' then
+            list[i] = cur
+            break
         else
             return nil
         end
@@ -1443,6 +1451,10 @@ function m.getSimple(obj, max)
     or obj.type == 'doc.type.name'
     or obj.type == 'doc.see.name'
     or obj.type == 'doc.see.field'
+    or obj.type == 'type.typeof'
+    or obj.type == 'type.field'
+    or obj.type == 'type.index'
+    or obj.type == 'type.library'
     or obj.type == 'type.assert' then
         simpleList = buildSimpleList(obj, max)
     elseif obj.type == 'field'
@@ -1459,7 +1471,7 @@ function m.getVisibleRefs(obj, status)
     if not status.main then
         return obj.ref
     end
-    local searchFrom = status.refMain[obj] or status.searchFrom or status.main
+    local searchFrom = status.searchFrom or status.main
     local root = m.getRoot(obj)
     if root ~= m.getRoot(searchFrom) then
         if root.returns then
@@ -1479,9 +1491,9 @@ function m.getVisibleRefs(obj, status)
             end
             local refFunc = m.getParentFunction(ref)
             local mainFunc, range = mainFunc, range
-            if status.refMain[refFunc] and refFunc ~= mainFunc then
+            if status.funcMain[refFunc] and refFunc ~= mainFunc then
                 mainFunc = refFunc
-                range = select(2, m.getRange(status.refMain[refFunc]))
+                range = select(2, m.getRange(status.funcMain[refFunc]))
             end
             if refFunc == mainFunc then
                 if ref.start > range and not blockTypes[searchFrom.type] then
@@ -1593,7 +1605,7 @@ function m.status(parentStatus, main, interface, deep, options)
         },
         main       = main          or parentStatus            and parentStatus.main,
         searchFrom = parentStatus and parentStatus.searchFrom  or options and options.searchFrom,
-        refMain    = parentStatus and parentStatus.refMain     or {},
+        funcMain   = parentStatus and parentStatus.funcMain    or {},
         depth      = parentStatus and (parentStatus.depth + 1) or 0,
         searchDeep = parentStatus and parentStatus.searchDeep  or deep or -999,
         interface  = parentStatus and parentStatus.interface   or {},
@@ -3036,6 +3048,15 @@ function m.getFullType(status, tp, mark)
         end
         tp = tp.exp
     end
+    -- if tp.type == "type.typeof" then
+    --     local newStatus = m.status(status)
+    --     m.searchRefs(newStatus, tp.value, 'def')
+    --     for _, def in ipairs(newStatus.results) do
+    --         if m.isTypeAnn(def) then
+    --             return m.getFullType(status, def, mark)
+    --         end
+    --     end
+    -- end
     local typeAlias = m.getTypeAlias(status, tp)
     if typeAlias then
         local generics = tp.generics
@@ -3134,6 +3155,11 @@ local function checkSameSimpleAndMergeTypeAnnReturns(status, results, source, in
                     end
                 end
             end
+        elseif source.type == "type.typeof" then
+            for _, result in ipairs(m.checkSameSimpleInCallInSameFile(status, source.value, args, index)) do
+                results[#results+1] = result
+            end
+            return true
         end
     end
     if #returns == 0 then
@@ -3198,8 +3224,8 @@ function m.checkSameSimpleInCallInSameFile(status, func, args, index)
                 end
             end
         end
-        cache[index] = results
     end
+    cache[index] = results
     return results
 end
 
@@ -3250,9 +3276,9 @@ function m.checkSameSimpleInCall(status, ref, start, pushQueue, mode)
         local newStatus = m.status(status)
         if status.main then
             local parentFunc = m.getParentFunction(obj)
-            if parentFunc and parentFunc ~= m.getParentFunction(status.searchFrom or status.main) then
-                status.refMain[parentFunc] = obj
-                status.searchFrom = obj
+            if parentFunc and not m.hasParent(status.searchFrom or status.main, parentFunc) then
+                status.funcMain[parentFunc] = obj
+                status .searchFrom = obj
             end
         end
         m.searchRefs(newStatus, obj, mode)
@@ -4916,6 +4942,9 @@ function m.inferCheckTypeAnn(status, source)
     if typeAnn.type == "type.field"
     or typeAnn.type == "type.index" then
         typeAnn = typeAnn.value
+    end
+    if typeAnn.type == "type.typeof" then
+        return false
     end
     if status.options.fullType then
         typeAnn = m.getFullType(status, typeAnn)

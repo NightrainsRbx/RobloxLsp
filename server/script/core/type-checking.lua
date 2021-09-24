@@ -1375,6 +1375,7 @@ function m.check(uri)
 
     m.ast = ast.ast
     m.init()
+    vm.flushCache()
 
     local results = {}
 
