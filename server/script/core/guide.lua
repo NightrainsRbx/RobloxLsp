@@ -2545,6 +2545,13 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
         elseif obj.type == "type.variadic" then
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.typeof" then
+            if status.main then
+                local searchFrom = status.searchFrom or status.main
+                local root = m.getRoot(obj)
+                if m.getRoot(searchFrom) ~= root and m.getParentFunction(obj) ~= root then
+                    status.funcMain[m.getParentFunction(obj)] = obj
+                end
+            end
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.meta" then
             if mode ~= "def" then
@@ -3735,6 +3742,13 @@ function m.checkSameSimpleInMeta(status, ref, start, pushQueue, mode)
         local newStatus = m.status(status)
         local meta = ref.value
         if meta.type == "type.typeof" then
+            if status.main then
+                local searchFrom = status.searchFrom or status.main
+                local root = m.getRoot(meta)
+                if m.getRoot(searchFrom) ~= root and m.getParentFunction(meta) ~= root then
+                    status.funcMain[m.getParentFunction(meta)] = meta
+                end
+            end
             meta = meta.value
         end
         m.searchFields(newStatus, meta, '__index', "deffield")

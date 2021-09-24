@@ -382,9 +382,16 @@ function m.convertToType(infer, get, searchFrom)
             }
             cache(tp)
             local setSearchFrom = false
+            local prevSearchFrom = nil
             if not inferOptions.searchFrom then
                 inferOptions.searchFrom = searchFrom or get
                 setSearchFrom = true
+            elseif guide.getParentType(get, "type.typeof") then
+                local root = guide.getRoot(get)
+                if guide.getRoot(inferOptions.searchFrom) ~= root and guide.getParentFunction(get) ~= root then
+                    prevSearchFrom = inferOptions.searchFrom
+                    inferOptions.searchFrom = get
+                end
             end
             local fields
             if get == source then
@@ -461,8 +468,8 @@ function m.convertToType(infer, get, searchFrom)
                     end
                 end
             end
-            if setSearchFrom then
-                inferOptions.searchFrom = nil
+            if setSearchFrom or prevSearchFrom then
+                inferOptions.searchFrom = prevSearchFrom
             end
             for _, field in ipairs(tp) do
                 if field.type == "type.index" then
@@ -1076,7 +1083,9 @@ local function checkGetField(source, pushResult, checkNoType)
     local key = guide.getKeyName(field)
     if m.hasTypeAnn(source.node) then
         local nodeType = m.getType(source.node)
+        inferOptions.searchFrom = source
         local fieldType = m.searchFieldType(nodeType, key, stringType)
+        inferOptions.searchFrom = nil
         if not fieldType then
             pushResult {
                 start = field.start,
@@ -1122,7 +1131,9 @@ local function checkGetIndex(source, pushResult)
             key = guide.getKeyName(source)
         end
         local indexType = m.getType(source.index)
+        inferOptions.searchFrom = source
         local fieldType = m.searchFieldType(nodeType, key, indexType)
+        inferOptions.searchFrom = nil
         if not fieldType then
             pushResult {
                 start = source.index.start,
