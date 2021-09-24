@@ -396,7 +396,7 @@ local function ofTypeAlias(source, newname, callback)
             local ast = files.getAst(uri)
             if ast then
                 guide.eachSourceType(ast.ast, "type.module", function (mod)
-                    if mod[2][1] == source.name[1] and vm.getModuleTypeAlias(mod) == source then
+                    if mod[2][1] == source.name[1] and vm.getTypeAlias(mod) == source then
                         renameTypeName(mod[2], newname, callback)
                     end
                 end)
@@ -434,12 +434,10 @@ local function rename(source, newname, callback)
     elseif source.type == 'doc.param.name' then
         return ofDocParamName(source, newname, callback)
     elseif source.type == 'type.name' then
-        if source.typeAlias then
-            return ofTypeAlias(source.typeAlias, newname, callback)
-        elseif source.typeAliasGeneric then
+        if source.typeAliasGeneric then
             return ofTypeParameter(source.typeAliasGeneric, newname, callback)
-        elseif source.parent and source.parent.type == "type.module" then
-            local alias = vm.getModuleTypeAlias(source.parent)
+        else
+            local alias = vm.getTypeAlias(source)
             if alias then
                 return ofTypeAlias(alias, newname, callback)
             end

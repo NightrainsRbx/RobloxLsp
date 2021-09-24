@@ -23,10 +23,7 @@ return function (uri, callback)
             end
             return
         end
-        local typeAlias = source.typeAlias or source.typeAliasGeneric
-        if not typeAlias and source.parent.type == "type.module" then
-            typeAlias = vm.getModuleTypeAlias(source.parent)
-        end
+        local typeAlias = source.typeAliasGeneric or vm.getTypeAlias(source)
         if typeAlias then
             local genericCount = 0
             if typeAlias.generics then

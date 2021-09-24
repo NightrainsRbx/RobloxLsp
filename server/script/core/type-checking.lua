@@ -240,11 +240,7 @@ function m.normalizeType(tp)
         return cache(m.normalizeType(value))
     end
     if tp.type == "type.module" then
-        local alias = vm.getModuleTypeAlias(tp)
-        if alias then
-            tp = util.shallowCopy(tp[2])
-            tp.typeAlias = alias
-        end
+        tp = tp[2]
     end
     if tp.type == "type.name" then
         local value = m.getTypeFromAlias(tp)
@@ -271,14 +267,15 @@ function m.normalizeType(tp)
 end
 
 function m.getTypeFromAlias(tp)
-    if tp.typeAlias then
-        if tp.generics and tp.typeAlias.generics then
+    local typeAlias = vm.getTypeAlias(tp)
+    if typeAlias then
+        if tp.generics and typeAlias.generics then
             return guide.copyTypeWithGenerics(
-                tp.typeAlias.value,
-                guide.getGenericsReplace(tp.typeAlias, tp.generics)
+                typeAlias.value,
+                guide.getGenericsReplace(typeAlias, tp.generics)
             )
         else
-            return tp.typeAlias.value
+            return typeAlias.value
         end
     end
     return tp

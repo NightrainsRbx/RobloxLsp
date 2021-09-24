@@ -46,12 +46,6 @@ local function addSpecial(name, obj)
     obj.special = name
 end
 
-local function executeOutState(func)
-    local state = {PushError, Compile, CompileBlock, Block, ENVMode, Compiled, LocalCount, Root, Uri, Text}
-    func()
-    PushError, Compile, CompileBlock, Block, ENVMode, Compiled, LocalCount, Root, Uri, Text = tableUnpack(state)
-end
-
 local vmMap = {
     ['getname'] = function (obj)
         local loc = guide.getLocal(obj, obj[1], obj.start)
@@ -321,12 +315,8 @@ local vmMap = {
                     end
                 end
             end
-            executeOutState(function ()
-                obj.typeAlias = guide.getTypeAlias(obj, obj[1], Uri)
-            end)
-            if not obj.typeAlias then
-                obj.typeAlias = defaultlibs.customType[obj[1]]
-            else
+            obj.typeAlias = guide.getTypeAliasInAst(obj, obj[1])
+            if obj.typeAlias then
                 obj.typeAlias.ref = obj.typeAlias.ref or {}
                 obj.typeAlias.ref[#obj.typeAlias.ref+1] = obj
             end

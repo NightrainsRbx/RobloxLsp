@@ -489,7 +489,7 @@ function m.getVisibleTypeAlias(source)
     return results
 end
 
-function m.getTypeAlias(source, name, uri)
+function m.getTypeAliasInAst(source, name)
     local block = m.getBlock(source)
     for _ = 1, 1000 do
         if not block then
@@ -502,25 +502,6 @@ function m.getTypeAlias(source, name, uri)
             end
         end
         block = m.getParentBlock(block)
-    end
-    local files = require("files")
-    uri = uri or m.getUri(source)
-    if uri and not files.isLibrary(uri) then
-        for libUri in pairs(files.libraryMap) do
-            local state = files.getAst(libUri)
-            if state and state.ast.types then
-                for _, alias in ipairs(state.ast.types) do
-                    if alias.export and alias.name[1] == name then
-                        return alias
-                    end
-                end
-            end
-        end
-    end
-    for _, alias in pairs(require('library.defaultlibs').customType) do
-        if alias.name[1] == name then
-            return alias
-        end
     end
     return nil
 end
@@ -2518,29 +2499,7 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.name" then
             if mode ~= "def" then
-                local typeAlias = obj.typeAlias
-                local isModule = obj.parent and obj.parent.type == "type.module" or false
-                if isModule then
-                    local module = obj.parent[1]
-                    local myUri = m.getUri(obj)
-                    local newStatus = m.status(status, nil, status.interface, true, {skipType = true})
-                    local files = require("files")
-                    m.searchRefs(newStatus, module, "def")
-                    for _, def in ipairs(newStatus.results) do
-                        local uri = m.getUri(def)
-                        if not files.eq(myUri, uri) then
-                            local ast = files.getAst(uri)
-                            if ast and ast.ast and ast.ast.types then
-                                for _, alias in ipairs(ast.ast.types) do
-                                    if alias.export and obj[1] == alias.name[1] then
-                                        typeAlias = alias
-                                    end
-                                end
-                                break
-                            end
-                        end
-                    end
-                end
+                local typeAlias = m.getTypeAlias(status, obj)
                 if typeAlias then
                     if obj.generics and typeAlias.generics then
                         local copy = m.copyTypeWithGenerics(typeAlias.value, m.getGenericsReplace(typeAlias, obj.generics))
@@ -2548,7 +2507,7 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
                     else
                         pushQueue(typeAlias.value, start, true)
                     end
-                elseif not isModule then
+                elseif not (obj.parent and obj.parent.type == "type.module") then
                     m.eachChildOfLibrary(obj, function (child)
                         pushQueue(child, start + 1)
                     end)
@@ -3001,6 +2960,58 @@ function m.getAllValuesInType(source, tp, results)
     return results
 end
 
+function m.getTypeAlias(status, source)
+    if source.typeAlias then
+        return source.typeAlias
+    end
+    if not source.parent then
+        return nil
+    end
+    if source.parent.type == "type.module" then
+        source = source.parent
+    end
+    local myUri = m.getUri(source)
+    if source.type == "type.module" then
+        local newStatus = m.status(status, nil, status.interface, true, {skipType = true})
+        local files = require("files")
+        m.searchRefs(newStatus, source[1], "def")
+        for _, def in ipairs(newStatus.results) do
+            local uri = m.getUri(def)
+            if not files.eq(myUri, uri) then
+                local ast = files.getAst(uri)
+                if ast and ast.ast and ast.ast.types then
+                    for _, alias in ipairs(ast.ast.types) do
+                        if alias.export and source[2][1] == alias.name[1] then
+                            return alias
+                        end
+                    end
+                    break
+                end
+            end
+        end
+    else
+        local files = require("files")
+        if myUri and not files.isLibrary(myUri) then
+            for libUri in pairs(files.libraryMap) do
+                local ast = files.getAst(libUri)
+                if ast and ast.ast.types then
+                    for _, alias in ipairs(ast.ast.types) do
+                        if alias.export and alias.name[1] == source[1] then
+                            return alias
+                        end
+                    end
+                end
+            end
+        end
+        for _, alias in pairs(require("library.defaultlibs").customType) do
+            if alias.name[1] == source[1] then
+                return alias
+            end
+        end
+    end
+    return nil
+end
+
 function m.getFullType(status, tp, mark)
     mark = mark or {}
     if mark[tp] then
@@ -3018,39 +3029,12 @@ function m.getFullType(status, tp, mark)
         end
         tp = tp.exp
     end
-    if tp.type == "type.typeof" then
-        local newStatus = m.status(status)
-        m.searchRefs(newStatus, tp.value, 'def')
-        for _, def in ipairs(newStatus.results) do
-            if m.isTypeAnn(def) then
-                return m.getFullType(status, def, mark)
-            end
-        end
-    end
-    local typeAlias = tp.typeAlias
-    local generics = tp.generics
-    if tp.type == "type.module" then
-        generics = tp[2].generics
-        local myUri = m.getUri(tp)
-        local newStatus = m.status(status, nil, status.interface, true, {skipType = true})
-        local files = require("files")
-        m.searchRefs(newStatus, tp[1], "def")
-        for _, def in ipairs(newStatus.results) do
-            local uri = m.getUri(def)
-            if not files.eq(myUri, uri) then
-                local ast = files.getAst(uri)
-                if ast and ast.ast and ast.ast.types then
-                    for _, alias in ipairs(ast.ast.types) do
-                        if alias.export and tp[2][1] == alias.name[1] then
-                            typeAlias = alias
-                        end
-                    end
-                    break
-                end
-            end
-        end
-    end
+    local typeAlias = m.getTypeAlias(status, tp)
     if typeAlias then
+        local generics = tp.generics
+        if tp.type == "type.module" then
+            generics = tp[2].generics
+        end
         if generics and typeAlias.generics then
             local copy = m.copyTypeWithGenerics(typeAlias.value, m.getGenericsReplace(typeAlias, generics))
             return m.getFullType(status, copy, mark)

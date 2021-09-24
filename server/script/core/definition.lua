@@ -72,14 +72,6 @@ local function convertIndex(source)
     return source
 end
 
-local function findTypeAlias(source)
-    if source.typeAlias then
-        return source.typeAlias
-    elseif source.parent and source.parent.type == "type.module" then
-        return vm.getModuleTypeAlias(source.parent)
-    end
-end
-
 return function (uri, offset)
     local ast = files.getAst(uri)
     if not ast then
@@ -95,9 +87,8 @@ return function (uri, offset)
 
     local defs = vm.getDefs(source, 0, {skipType = true})
     if source.type == "type.name" then
-        defs[#defs+1] = findTypeAlias(source)
+        defs[#defs+1] = vm.getTypeAlias(source)
     end
-
     local values = {}
     for _, src in ipairs(defs) do
         local value = guide.getObjectValue(src)

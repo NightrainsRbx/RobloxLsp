@@ -267,9 +267,8 @@ proto.on('textDocument/didOpen', function (params)
     local uri   = doc.uri
     local text  = doc.text
     log.debug('didOpen', uri)
-    workspace.awaitReady()
-    plugin.awaitReady()
     files.open(uri)
+    plugin.awaitReady()
     if not files.isOpen(uri) then
         return
     end

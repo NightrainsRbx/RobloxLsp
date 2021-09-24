@@ -40,7 +40,7 @@ return function (uri, callback)
             }
             return
         end
-        local other = guide.getTypeAlias(source, source.name[1])
+        local other = guide.getTypeAliasInAst(source, source.name[1])
         if other and other ~= source then
             callback {
                 start = source.name.start,
@@ -58,7 +58,7 @@ return function (uri, callback)
         if source.generics then
             local names = {}
             for _, generic in ipairs(source.generics) do
-                local other = guide.getTypeAlias(source, generic[1])
+                local other = guide.getTypeAliasInAst(source, generic[1])
                 if other then
                     callback {
                         start = generic.start,
