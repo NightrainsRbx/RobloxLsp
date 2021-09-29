@@ -59,7 +59,7 @@ type META = {
         __unm: (Vector2int16) -> Vector2int16
     },
     UDim2: {
-        __add: (UDim2, UDim2) -> UDim2,
+        __add: (UDim2?, UDim2?) -> UDim2,
         __sub: (UDim2, UDim2) -> UDim2,
         __unm: (UDim2) -> UDim2
     },
