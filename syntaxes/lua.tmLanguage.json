@@ -352,7 +352,7 @@
 				},
 				{
 					"match": "(?<=\\.)([a-zA-Z_]\\w*)\\b",
-					"name": "variable.property.lua"
+					"name": "variable.other.property.lua"
 				},
 				{
 					"match": "\\b(Axes|BrickColor|CFrame|Color3|ColorSequence|ColorSequenceKeypoint|DateTime|DockWidgetPluginGuiInfo|Faces|Instance|NumberRange|NumberSequence|NumberSequenceKeypoint|OverlapParams|PathWaypoint|PhysicalProperties|Random|Ray|RaycastParams|Rect|Region3|Region3int16|TweenInfo|UDim|UDim2|Vector2|Vector2int16|Vector3|Vector3int16)\\b\\.?(\\b[a-zA-Z_]\\w*(?=\\())?",

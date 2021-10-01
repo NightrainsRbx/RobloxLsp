@@ -86,7 +86,7 @@ local Care = {
     ['type.table'] = function (source, text, results)
         local folding = {
             start  = source.start,
-            finish = source.finish,
+            finish = source.finish - 1,
             kind   = 'region',
         }
         results[#results+1] = folding

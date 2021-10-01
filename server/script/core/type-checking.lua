@@ -622,7 +622,7 @@ function m.compareTypes(a, b)
             or (a[1] == "EnumItem" and b[1]:sub(1, 5) == "Enum.") then
                 return true
             end
-            return a[1] == b[1]
+            return cache(a[1] == b[1])
         end
         if (b[1] == "function" and a.type == "type.function")
         or (b[1] == "table" and (a.type == "type.table" or a.type == "type.meta")) then
@@ -695,7 +695,7 @@ function m.compareTypes(a, b)
             end
             return true
         else
-            return m.compareTypes(a.type == "type.variadic" and a.value or a, b.value)
+            return m.cache(m.compareTypes(a.type == "type.variadic" and a.value or a, b.value))
         end
     elseif b.type == "type.function" then
         if a.type == "type.name" and a[1] == "function" then
