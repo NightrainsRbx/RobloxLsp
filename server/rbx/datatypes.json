@@ -462,12 +462,14 @@
                     "Parameters": [
                         {
                             "Name": "Scale",
+                            "Default": "0",
                             "Type": {
                                 "Name": "number"
                             }
                         },
                         {
                             "Name": "Offset",
+                            "Default": "0",
                             "Type": {
                                 "Name": "number"
                             }
@@ -685,24 +687,28 @@
                     "Parameters": [
                         {
                             "Name": "xScale",
+                            "Default": "0",
                             "Type": {
                                 "Name": "number"
                             }
                         },
                         {
                             "Name": "xOffset",
+                            "Default": "0",
                             "Type": {
                                 "Name": "number"
                             }
                         },
                         {
                             "Name": "yScale",
+                            "Default": "0",
                             "Type": {
                                 "Name": "number"
                             }
                         },
                         {
                             "Name": "yOffset",
+                            "Default": "0",
                             "Type": {
                                 "Name": "number"
                             }
