@@ -26,7 +26,10 @@ local librariesTypes = {
     },
     ["Promise.Static"] = {
         textPattern = "^%s*%-%-%[%[%s*An implementation of Promises similar to Promise%/A%+%."
-    }
+    },
+    -- ["Fusion"] = {
+    --     textPattern = "^%s*%-%-%[%[%s*The entry point for the Fusion library%."
+    -- }
 }
 
 local keys = {

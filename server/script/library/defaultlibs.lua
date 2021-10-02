@@ -8,7 +8,8 @@ m.namespace = {
     Enum = true,
     Roact = true,
     Rodux = true,
-    Promise = true
+    Promise = true,
+    Fusion = true
 }
 
 m.primitiveTypes = {

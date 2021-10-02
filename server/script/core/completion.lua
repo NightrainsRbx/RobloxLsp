@@ -204,6 +204,24 @@ local function buildInsertGetService(ast, serviceName, importPos, quotes)
     }
 end
 
+local function buildInsertFusionField(ast, name, importPos)
+    local start = 1
+    if importPos then
+        local uri = guide.getUri(ast.ast)
+        local text  = files.getText(uri)
+        local lines = files.getLines(uri)
+        local row = calcline.rowcol(text, importPos)
+        start = lines[row + 1].start
+    end
+    return {
+        {
+            start   = start,
+            finish  = start - 1,
+            newText = ('local %s = Fusion.%s\n'):format(name, name)
+        }
+    }
+end
+
 local function isSameSource(ast, source, pos)
     if not files.eq(guide.getUri(source), guide.getUri(ast.ast)) then
         return false
@@ -332,6 +350,48 @@ local function checkRobloxService(ast, word, offset, results)
                     await.delay()
                     return {
                         additionalTextEdits = buildInsertGetService(ast, serviceName, importPos, quotes),
+                    }
+                end)
+            }
+        end
+    end
+end
+
+local function checkFusionField(ast, word, offset, results)
+    if not ast.ast.requires then
+        return
+    end
+    local fusion, loc
+    for _, req in ipairs(ast.ast.requires) do
+        if req.parent.parent.type == "local" then
+            for _, def in ipairs(vm.getDefs(req, nil, {skipType = true})) do
+                if def.type == "type.name" and def[1] == "Fusion" then
+                    fusion = def
+                    loc = req.parent.parent
+                    break
+                end
+            end
+        end
+    end
+    if not (fusion and loc) then
+        return
+    end
+    local locals = guide.getVisibleLocals(ast.ast, offset)
+    for _, field in ipairs(vm.getFields(fusion)) do
+        local name = guide.getKeyName(field)
+        if name and not locals[name] and matchKey(word, name) then
+            results[#results+1] = {
+                label = name,
+                kind = define.CompletionItemKind.Variable,
+                labelDetails = {
+                    description = "Import from Fusion"
+                },
+                id = stack(function ()
+                    await.delay()
+                    return {
+                        detail      = buildDetail(field),
+                        description = buildDesc(field),
+                        additionalTextEdits = buildInsertFusionField(ast, name, loc.range),
                     }
                 end)
             }
@@ -1157,8 +1217,11 @@ local function tryWord(ast, text, offset, triggerCharacter, results)
                         checkLocal(ast, word, start, results)
                         local env = guide.getENV(ast.ast, start)
                         checkGlobal(ast, word, start, offset, env, false, results)
-                        if config.config.misc.serviceAutoImport and not isAfterFunction(text, start) then
-                            checkRobloxService(ast, word, start, results)
+                        if not isAfterFunction(text, start) then
+                            if config.config.misc.serviceAutoImport  then
+                                checkRobloxService(ast, word, start, results)
+                            end
+                            -- checkFusionField(ast, word, start, results)
                         end
                     end
                 end
