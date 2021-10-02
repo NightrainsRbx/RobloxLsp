@@ -886,17 +886,22 @@ proto.on('$/didChangeVisibleRanges', function (params)
 end)
 
 proto.on('$/updateDataModel', function (params)
-    if params.version == 1 then
-        if rojo.DataModel == nil then
-            proto.notify('window/showMessage', {
-                type    = define.MessageType.Info,
-                message = 'Roblox LSP: Connected to Roblox Studio Plugin!'
-            })
-        end
-        rojo.DataModel = params.datamodel
-        rbxlibs.init()
-        workspace.reload()
+    if not params.version or params.version < 2 then
+        proto.notify('window/showMessage', {
+            type    = define.MessageType.Warning,
+            message = 'Roblox LSP: The Roblox Studio Plugin is outdated!'
+        })
+        return
     end
+    if rojo.DataModel == nil then
+        proto.notify('window/showMessage', {
+            type    = define.MessageType.Info,
+            message = 'Roblox LSP: Connected to Roblox Studio Plugin!'
+        })
+    end
+    rojo.DataModel = params.datamodel
+    rbxlibs.init()
+    workspace.reload()
 end)
 
 proto.on('$/status/click', function ()

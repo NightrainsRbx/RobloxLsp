@@ -79,7 +79,7 @@ function openUpdatesWindow(context) {
                 <h2 style="font-size:2rem; font-weight:100">1.3.0</h2>
                 <li style="font-size:1rem">More improvements to type inference.</li>
                 <li style="font-size:1rem">Improved how typeof (the type) works.</li>
-                <li style="font-size:1rem">Implemented proper type inference and type checking of metatables.</li>
+                <li style="font-size:1rem">Implemented type inference and type checking of metatables.</li>
                 <li style="font-size:1rem">Added utility type WithMeta&lt;T, M&gt; (may change).</li>
                 <li style="font-size:1rem">Improved preloading of workspace.</li>
                 <li style="font-size:1rem">Fixed many bugs.</li>
