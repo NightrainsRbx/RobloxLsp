@@ -3782,11 +3782,13 @@ function m.checkSameSimpleInMeta(status, ref, start, pushQueue, mode)
             if index.type == "tablefield" or index.type == "tableindex" then
                 index = index.value
             end
-            local refsStatus = m.status(newStatus)
-            m.searchFields(refsStatus, index, nil, "deffield")
-            for _, field in ipairs(refsStatus.results) do
-                pushQueue(field, start + 1)
-                cache[#cache+1] = field
+            if index then
+                local refsStatus = m.status(newStatus)
+                m.searchFields(refsStatus, index, nil, "deffield")
+                for _, field in ipairs(refsStatus.results) do
+                    pushQueue(field, start + 1)
+                    cache[#cache+1] = field
+                end
             end
         end
         if makeCache then
