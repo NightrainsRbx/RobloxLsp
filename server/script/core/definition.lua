@@ -87,7 +87,7 @@ return function (uri, offset)
 
     local defs = vm.getDefs(source, 0, {skipType = true})
     if source.type == "type.name" then
-        defs[#defs+1] = vm.getTypeAlias(source)
+        defs[#defs+1] = source.typeAliasGeneric or vm.getTypeAlias(source)
     end
     local values = {}
     for _, src in ipairs(defs) do

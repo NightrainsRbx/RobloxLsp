@@ -75,13 +75,13 @@ return function (uri, offset)
     local defs = {}
     local values = {}
     if source.type == "type.name" then
-        defs[#defs+1] = vm.getTypeAlias(source)
+        defs[#defs+1] = source.typeAliasGeneric or vm.getTypeAlias(source)
     else
         for _, def in ipairs(vm.getDefs(source, 0, {skipDoc = true})) do
             if guide.isTypeAnn(def) then
                 defs[#defs+1] = def
                 if def.type == "type.name" or def.type == "type.module" then
-                    defs[#defs+1] = vm.getTypeAlias(def)
+                    defs[#defs+1] = def.typeAliasGeneric or vm.getTypeAlias(def)
                 end
             end
         end
