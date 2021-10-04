@@ -5,6 +5,7 @@
         "server/locale",
         "locale",
     ],
+    "Lua.color.mode": "Grammar",
     "Lua.diagnostics.globals": [
         "ERR",
         "OUT",

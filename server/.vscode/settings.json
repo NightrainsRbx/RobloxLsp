@@ -23,6 +23,7 @@
     "Lua.diagnostics.disable": [
         "undefined-field"
     ],
+    "Lua.color.mode": "Grammar"
     // "Lua.develop.enable": true,
     // "Lua.misc.parameters": "--dbgport=11413"
 }
