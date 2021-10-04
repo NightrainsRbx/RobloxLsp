@@ -1507,14 +1507,21 @@ local function getChildrenOfInstance(source, argIndex, arg)
 end
 
 local function findCall(ast, text, offset)
-    local call
+    local call, func
     guide.eachSourceContain(ast.ast, offset, function (src)
         if src.type == 'call' then
             if not call or call.start < src.start then
                 call = src
             end
+        elseif src.type == 'function' then
+            if not func or func.start < src.start then
+                func = src
+            end
         end
     end)
+    if func and call and guide.hasParent(func, call) then
+        return nil
+    end
     return call
 end
 
