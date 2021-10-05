@@ -752,7 +752,7 @@ function m.loadApi()
         end
         m.Api = apiDump
         m.ClassDocs = {}
-        parseReflectionMetadata()
+        -- parseReflectionMetadata()
         parseAutocompleteMetadata()
     end
     return m.Api
