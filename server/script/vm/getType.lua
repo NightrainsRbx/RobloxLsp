@@ -20,6 +20,9 @@ function vm.getTypeString(source, deep)
 end
 
 function vm.getTypeAlias(source)
+    if source.typeAliasGeneric then
+        return nil
+    end
     if source.typeAlias then
         return source.typeAlias
     end

@@ -2506,7 +2506,6 @@ function m.checkSameSimpleByTypeAnn(status, obj, start, pushQueue, mode)
             else
                 pushQueue(obj[2], start, true)
             end
-            return true
         elseif obj.type == "type.library" then
             pushQueue(obj.value, start, true)
         elseif obj.type == "type.name" then
@@ -2980,6 +2979,9 @@ function m.getAllValuesInType(source, tp, results)
 end
 
 function m.getTypeAlias(status, source)
+    if source.typeAliasGeneric then
+        return nil
+    end
     if source.typeAlias then
         return source.typeAlias
     end

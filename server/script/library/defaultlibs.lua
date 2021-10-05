@@ -221,7 +221,6 @@ m.customType = {
             {
                 type = "type.parameter",
                 [1] = "T",
-                replace = {}
             }
         },
         value = {
@@ -278,7 +277,6 @@ m.customType = {
             {
                 type = "type.parameter",
                 [1] = "T",
-                replace = {}
             }
         },
         value = {
@@ -298,12 +296,10 @@ m.customType = {
             {
                 type = "type.parameter",
                 [1] = "T",
-                replace = {}
             },
             {
                 type = "type.parameter",
                 [1] = "M",
-                replace = {}
             }
         },
         value = {

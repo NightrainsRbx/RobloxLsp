@@ -1328,7 +1328,7 @@ function m.cache(name, ...)
     if not m._cache[name] then
         m._cache[name] = {}
     end
-    if m._cache[name][key] then
+    if m._cache[name][key] ~= nil then
         if m._cache[name][key] == "NIL" then
             return true, nil
         end
