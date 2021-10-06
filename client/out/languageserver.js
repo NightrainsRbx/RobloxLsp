@@ -282,7 +282,7 @@ function onDecorations(client) {
             }
         }
     });
-    let textType2 = vscode_1.window.createTextEditorDecorationType({ opacity: "0.5", });
+    let textType2 = vscode_1.window.createTextEditorDecorationType({ opacity: "0.6", });
     client.onNotification('$/luaComment', (params) => {
         let uri = params.uri;
         for (let index = 0; index < vscode_1.window.visibleTextEditors.length; index++) {

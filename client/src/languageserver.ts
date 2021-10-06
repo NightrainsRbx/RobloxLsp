@@ -341,7 +341,7 @@ function onDecorations(client: LanguageClient) {
         }
     })
     
-    let textType2 = window.createTextEditorDecorationType({opacity: "0.5",})
+    let textType2 = window.createTextEditorDecorationType({opacity: "0.6",})
     client.onNotification('$/luaComment', (params) => {
         let uri:        types.URI = params.uri;
         for (let index = 0; index < window.visibleTextEditors.length; index++) {
