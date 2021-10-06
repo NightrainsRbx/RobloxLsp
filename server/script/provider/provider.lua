@@ -995,7 +995,7 @@ do
             if comm.type == "comment.long" and text:sub(comm.start, comm.start + 4) == "--[=[" then
                 for _, visible in ipairs(visibles) do
                     if comm.start >= visible.start or comm.finish <= visible.finish then
-                        for start, finish in comm.text:gmatch("%`%`%`lua%s+().+()%`%`%`") do
+                        for start, finish in comm.text:gmatch("%`%`%`lua%s+().-()%`%`%`") do
                             edits[#edits+1] = {
                                 start = files.position(uri, comm.start + start + 5),
                                 ["end"] = files.position(uri, comm.start + finish + 5)
