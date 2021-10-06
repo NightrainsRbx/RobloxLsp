@@ -978,12 +978,47 @@ do
         })
     end
 
+
+    local function updateLuaComments(uri)
+        local visibles = files.getVisibles(uri)
+        if not visibles then
+            return
+        end
+        workspace.awaitReady()
+        local edits = {}
+        local ast = files.getAst(uri)
+        local text = files.getText(uri)
+        if not ast or not text then
+            return
+        end
+        for _, comm in ipairs(ast.comms) do
+            if comm.type == "comment.long" and text:sub(comm.start, comm.start + 4) == "--[=[" then
+                for _, visible in ipairs(visibles) do
+                    if comm.start >= visible.start or comm.finish <= visible.finish then
+                        for start, finish in comm.text:gmatch("%`%`%`lua%s+().+()%`%`%`") do
+                            edits[#edits+1] = {
+                                start = files.position(uri, comm.start + start + 5),
+                                ["end"] = files.position(uri, comm.start + finish + 5)
+                            }
+                        end
+                        break
+                    end
+                end
+            end
+        end
+        proto.notify('$/luaComment', {
+            uri   = uri,
+            ranges = edits,
+        })
+    end
+
     files.watch(function (ev, uri)
         if ev == 'update'
         or ev == 'updateVisible' then
             await.delay()
             await.call(function ()
                 updateHint(uri)
+                updateLuaComments(uri)
             end)
         end
     end)

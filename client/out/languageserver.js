@@ -282,6 +282,21 @@ function onDecorations(client) {
             }
         }
     });
+    let textType2 = vscode_1.window.createTextEditorDecorationType({ opacity: "0.5", });
+    client.onNotification('$/luaComment', (params) => {
+        let uri = params.uri;
+        for (let index = 0; index < vscode_1.window.visibleTextEditors.length; index++) {
+            const editor = vscode_1.window.visibleTextEditors[index];
+            if (editor.document.uri.toString() == uri && isDocumentInClient(editor.document, client)) {
+                let ranges = params.ranges;
+                let options = [];
+                for (let index = 0; index < ranges.length; index++) {
+                    options[index] = { range: ranges[index] };
+                }
+                editor.setDecorations(textType2, options);
+            }
+        }
+    });
 }
 function activate(context) {
     registerCustomCommands(context);

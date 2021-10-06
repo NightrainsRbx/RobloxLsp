@@ -380,7 +380,29 @@
 				{
 					"begin": "--\\[(=*)\\[",
 					"end": "\\]\\1\\]",
-					"name": "comment.block.lua"
+					"name": "comment.block.lua",
+					"patterns": [
+						{
+							"begin": "(```lua)\\s+",
+							"beginCaptures": {
+								"1": {
+									"name": "comment.lua"
+								}
+							},
+							"end": "(```)",
+							"endCaptures": {
+								"1": {
+									"name": "comment.lua"
+								}
+							},
+							"name": "keyword.operator.other.lua",
+							"patterns": [
+								{
+									"include": "source.lua"
+								}
+							]
+						}
+					]
 				},
 				{
 					"begin": "--",

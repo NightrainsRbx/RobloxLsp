@@ -340,6 +340,22 @@ function onDecorations(client: LanguageClient) {
             }
         }
     })
+    
+    let textType2 = window.createTextEditorDecorationType({opacity: "0.5",})
+    client.onNotification('$/luaComment', (params) => {
+        let uri:        types.URI = params.uri;
+        for (let index = 0; index < window.visibleTextEditors.length; index++) {
+            const editor = window.visibleTextEditors[index];
+            if (editor.document.uri.toString() == uri && isDocumentInClient(editor.document, client)) {
+                let ranges: vscode.Range[] = params.ranges
+                let options: vscode.DecorationOptions[] = [];
+                for (let index = 0; index < ranges.length; index++) {
+                    options[index] = {range: ranges[index]}
+                }
+                editor.setDecorations(textType2, options);
+            }
+        }
+    })
 }
 
 export function activate(context: ExtensionContext) {
