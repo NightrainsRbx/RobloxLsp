@@ -172,8 +172,8 @@ local function buildDetail(source, oop)
     end
 end
 
-local function buildFunction(results, source, oop, data)
-    if config.config.completion.callParenthesess then
+local function buildFunction(results, source, oop, text, data)
+    if config.config.completion.callParenthesess and (not text or not text:match("^[%w_]+%(")) then
         local snipData = util.deepCopy(data)
         snipData.insertText = data.label .. "($0)"
         snipData.insertTextFormat = 2
@@ -260,6 +260,7 @@ end
 
 local function checkLocal(ast, word, offset, results)
     local locals = guide.getVisibleLocals(ast.ast, offset, true)
+    local text = files.getText(ast.uri):sub(offset)
     for name, source in pairs(locals) do
         if isSameSource(ast, source, offset) then
             goto CONTINUE
@@ -272,7 +273,7 @@ local function checkLocal(ast, word, offset, results)
             if def.type == 'function'
             or def.type == 'doc.type.function'
             or def.type == 'type.function' then
-                buildFunction(results, source, false, {
+                buildFunction(results, source, false, text, {
                     label  = name,
                     labelDetails = config.config.completion.showParams and {
                         detail = getParams(def, false)
@@ -456,7 +457,7 @@ local LIBS = {
     ["package"] = true
 }
 
-local function checkFieldThen(name, src, word, start, offset, parent, oop, results, infer)
+local function checkFieldThen(name, src, word, start, offset, parent, oop, text, results, infer)
     if src.hidden and word ~= name then
         return
     end
@@ -483,7 +484,7 @@ local function checkFieldThen(name, src, word, start, offset, parent, oop, resul
         else
             kind = define.CompletionItemKind.Function
         end
-        buildFunction(results, src, oop, {
+        buildFunction(results, src, oop, text, {
             label      = name,
             kind       = kind,
             insertText = name:match '^[^(]+',
@@ -513,7 +514,7 @@ local function checkFieldThen(name, src, word, start, offset, parent, oop, resul
         local infers = vm.getInfers(value, 0, {searchAll = true})
         for _, infer in ipairs(infers) do
             if infer.source then
-                return checkFieldThen(name, src, word, start, offset, parent, oop, results, infer.source)
+                return checkFieldThen(name, src, word, start, offset, parent, oop, text, results, infer.source)
             end
         end
     end
@@ -589,9 +590,10 @@ local function checkFieldOfRefs(refs, ast, word, start, offset, parent, oop, res
         end
         ::CONTINUE::
     end
+    local text = files.getText(ast.uri):sub(offset)
     for name, src in util.sortPairs(fields) do
         if src then
-            checkFieldThen(name, src, word, start, offset, parent, oop, results)
+            checkFieldThen(name, src, word, start, offset, parent, oop, text, results)
         end
     end
 end
