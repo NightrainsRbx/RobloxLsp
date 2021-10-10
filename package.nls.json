@@ -41,6 +41,7 @@
     "config.workspace.loadMode": "What files should be preloaded.",
     "config.workspace.loadMode.allFiles": "Load all files in workspace.",
     "config.workspace.loadMode.rojoProject": "Load all files found in Rojo Project.",
+    "config.workspace.loadRequiredFiles": "Load files without diagnostics when they are required by other files even if they are ignored.",
     "config.misc.color3Picker": "Enable Color Picker and Preview for Color3 functions.",
     "config.misc.serviceAutoImport": "Suggests Roblox Services that can be auto imported.",
     "config.misc.goToScriptLink": "If enabled, shows a link to the source script when requiring a module.",

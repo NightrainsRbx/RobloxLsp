@@ -329,7 +329,7 @@ function m.awaitPreload()
 end
 
 function m.load(uri)
-    if files.isLua(uri) then
+    if config.config.workspace.loadRequiredFiles and files.isLua(uri) then
         await.delay()
         local text = util.loadFile(furi.decode(uri))
         if text then

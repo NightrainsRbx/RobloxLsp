@@ -1158,6 +1158,12 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
+				"robloxLsp.workspace.loadRequiredFiles": {
+					"default": true,
+					"markdownDescription": "%config.workspace.loadRequiredFiles%",
+					"scope": "resource",
+					"type": "boolean"
+				},
 				"robloxLsp.runtime.fileEncoding": {
 					"default": "utf8",
 					"enum": [
