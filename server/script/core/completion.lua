@@ -18,6 +18,8 @@ local lookBackward = require 'core.look-backward'
 local rbxlibs      = require 'library.rbxlibs'
 local defaultlibs  = require 'library.defaultlibs'
 local calcline     = require 'parser.calcline'
+local glob         = require 'glob'
+local furi         = require 'file-uri'
 
 local DiagnosticModes = {
     'disable-next-line',
@@ -2031,39 +2033,41 @@ local function tryLuaDocBySource(ast, offset, source, results)
             end
         end
     elseif source.type == "doc.module" then
-        local collect = {}
         local myUri = guide.getUri(ast.ast)
-        for uri in files.eachFile() do
-            uri = files.getOriginUri(uri)
-            if files.eq(myUri, uri) then
-                goto CONTINUE
-            end
-            local path = workspace.getRelativePath(uri)
-            local infos = rpath.getVisiblePath(path, config.config.runtime.path)
-            for _, info in ipairs(infos) do
-                if matchKey(source.path, info.expect) then
-                    if not collect[info.expect] then
-                        collect[info.expect] = {
-                            textEdit = {
-                                start   = source.start + #source.path,
-                                finish  = source.finish - #source.path,
-                                newText = info.expect,
-                            }
-                        }
-                    end
-                    if vm.isMetaFile(uri) then
-                        collect[info.expect][#collect[info.expect]+1] = ('* [[meta]](%s)'):format(uri)
-                    else
-                        collect[info.expect][#collect[info.expect]+1] = ([=[* [%s](%s) %s]=]):format(
-                            path,
-                            uri,
-                            lang.script('HOVER_USE_LUA_PATH', info.searcher)
-                        )
+        local matcher = glob.gitignore(true, workspace.matchOption, workspace.globInterface)
+        local collect = {}
+        matcher:setOption('root', workspace.path)
+        matcher:scan(workspace.path, function (path)
+            if files.isLua(path) then
+                local uri = furi.encode(path)
+                if not files.eq(myUri, uri) then
+                    path = workspace.getRelativePath(uri)
+                    local infos = rpath.getVisiblePath(path, config.config.runtime.path, not files.exists(uri))
+                    for _, info in ipairs(infos) do
+                        if matchKey(source.path, info.expect) then
+                            if not collect[info.expect] then
+                                collect[info.expect] = {
+                                    textEdit = {
+                                        start   = source.start + #source.path,
+                                        finish  = source.finish - #source.path,
+                                        newText = info.expect,
+                                    }
+                                }
+                            end
+                            if vm.isMetaFile(uri) then
+                                collect[info.expect][#collect[info.expect]+1] = ('* [[meta]](%s)'):format(uri)
+                            else
+                                collect[info.expect][#collect[info.expect]+1] = ([=[* [%s](%s) %s]=]):format(
+                                    path,
+                                    uri,
+                                    lang.script('HOVER_USE_LUA_PATH', info.searcher)
+                                )
+                            end
+                        end
                     end
                 end
             end
-            ::CONTINUE::
-        end
+        end)
         for label, infos in util.sortPairs(collect) do
             local mark = {}
             local des  = {}

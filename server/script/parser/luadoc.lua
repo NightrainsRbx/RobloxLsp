@@ -1013,29 +1013,16 @@ local function parseTypecheck()
     return result
 end
 
-local function parseModule()
-    local tp, text = nextToken()
-    if tp ~= "name" then
-        pushError {
-            type   = 'LUADOC_MISS_PATH',
-            start  = getFinish(),
-            finish = getFinish(),
-        }
-        return nil
-    end
-    local nextTP = nextToken()
-    if nextTP then
-        return nil
-    end
+local function parseModule(comment)
     return {
         type = "doc.module",
         start = getStart(),
-        finish = getFinish(),
-        path = text
+        finish = comment.finish,
+        path = comment.text:match('^%-%s*@module%s*(.-)%s*$')
     }
 end
 
-local function convertTokens()
+local function convertTokens(comment)
     local tp, text = nextToken()
     if not tp then
         return
@@ -1077,7 +1064,7 @@ local function convertTokens()
     elseif text == 'diagnostic' then
         return parseDiagnostic()
     elseif text == 'module' then
-        return parseModule()
+        return parseModule(comment)
     elseif text == 'typecheck' then
         return parseTypecheck()
     end
@@ -1119,7 +1106,7 @@ local function buildLuaDoc(comment)
     local doc = text:sub(startPos + 1)
 
     parseTokens(doc, comment.start + startPos - 1)
-    local result = convertTokens()
+    local result = convertTokens(comment)
     if result then
         result.range = comment.finish
         local cstart = text:find('%S', (result.firstFinish or result.finish) - comment.start + 2)

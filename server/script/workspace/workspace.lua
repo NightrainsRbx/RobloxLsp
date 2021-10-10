@@ -40,7 +40,7 @@ function m.init(uri)
     log.init(ROOT, logPath)
 end
 
-local globInteferFace = {
+m.globInterface = {
     type = function (path)
         local result
         pcall(function ()
@@ -84,12 +84,12 @@ function m.getNativeMatcher()
     end
     -- config.files.exclude
     if config.config.workspace.useFilesExclude then
-    for path, ignore in pairs(config.other.exclude) do
-        if ignore then
-            log.info('Ignore by exclude:', path)
-            pattern[#pattern+1] = path
+        for path, ignore in pairs(config.other.exclude) do
+            if ignore then
+                log.info('Ignore by exclude:', path)
+                pattern[#pattern+1] = path
+            end
         end
-    end
     end
     -- config.workspace.ignoreSubmodules
     if config.config.workspace.ignoreSubmodules then
@@ -131,7 +131,7 @@ function m.getNativeMatcher()
         pattern[#pattern+1] = path
     end
 
-    m.nativeMatcher = glob.gitignore(pattern, m.matchOption, globInteferFace)
+    m.nativeMatcher = glob.gitignore(pattern, m.matchOption, m.globInterface)
     m.nativeMatcher:setOption('root', m.path)
 
     m.nativeVersion = config.version
@@ -158,7 +158,7 @@ function m.getLibraryMatchers()
     for path in pairs(librarys) do
         if fs.exists(fs.path(path)) then
             local nPath = fs.absolute(fs.path(path)):string()
-            local matcher = glob.gitignore(true, m.matchOption, globInteferFace)
+            local matcher = glob.gitignore(true, m.matchOption, m.globInterface)
             matcher:setOption('root', path)
             log.debug('getLibraryMatchers', path, nPath)
             m.libraryMatchers[#m.libraryMatchers+1] = {

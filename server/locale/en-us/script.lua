@@ -42,7 +42,7 @@ DIAG_COSE_NON_OBJECT    = 'Cannot close a value of this type. (Unless set `__clo
 DIAG_COUNT_DOWN_LOOP    = 'Do you mean `{}` ?'
 DIAG_IMPLICIT_ANY       = 'Can not infer type.'
 DIAG_DEPRECATED         = '`{}` is deprecated.'
-DIAG_UNDEFINED_MODULE   = 'Module not found in workspace. Use Lua require() path format.'
+DIAG_UNDEFINED_MODULE   = 'Module not found in workspace. Use Lua require() path format relative to the root folder.'
 DIAG_INVALID_CLASSNAME  = 'Invalid {} name `{}`.'
 
 DIAG_CIRCLE_DOC_CLASS                 = 'Circularly inherited classes.'
