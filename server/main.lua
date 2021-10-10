@@ -38,6 +38,7 @@ end
 
 loadArgs()
 
+INV      = "‎"
 ROOT     = fs.path(expanduser(rootPath))
 LOGPATH  = LOGPATH  and expanduser(LOGPATH)  or (ROOT:string() .. '/log')
 METAPATH = METAPATH and expanduser(METAPATH) or (ROOT:string() .. '/meta')

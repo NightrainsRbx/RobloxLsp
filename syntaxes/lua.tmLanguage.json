@@ -531,8 +531,8 @@
 		"hover": {
 			"patterns": [
 				{
-					"begin": "\\f\\b(global|field|event|property|child|callback)\\b (\\w*)\\.?([\\w.]*)(:) ",
-					"end": "\\f",
+					"begin": "[‎]\\b(global|field|event|property|child|callback)\\b (\\w*)\\.?([\\w.]*)(:) ",
+					"end": "[‎]",
 					"beginCaptures": {
 						"1": {
 							"name": "storage"
@@ -554,8 +554,8 @@
 					]
 				},
 				{
-					"begin": "\\f\\s*-> ",
-					"end": "\\f",
+					"begin": "[‎]\\s*-> ",
+					"end": "[‎]",
 					"patterns": [
 						{
 							"match": "(\\w+): (\\w+(\\.)?\\w*)",
@@ -577,7 +577,7 @@
 					]
 				},
 				{
-					"begin": " \\f= ",
+					"begin": " [‎]= ",
 					"end": "[),]",
 					"patterns": [
 						{
@@ -586,7 +586,7 @@
 					]
 				},
 				{
-					"match": "\\f(type)\\s+(\\w+(\\.)?\\w*)",
+					"match": "[‎](type)\\s+(\\w+(\\.)?\\w*)",
 					"captures": {
 						"1": {
 							"name": "storage.type.lua"

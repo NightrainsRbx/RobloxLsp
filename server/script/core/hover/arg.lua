@@ -45,9 +45,9 @@ local function asFunction(source, oop)
                 )
                 if arg.default and arg.default ~= "nil" then
                     if argType == "string" or argType:sub(1, 5) == "Enum." then
-                        args[#args] = args[#args] .. " \f= \"" .. arg.default .. "\""
+                        args[#args] = ("%s %s= \"%s\""):format(args[#args], INV, arg.default)
                     else
-                        args[#args] = args[#args] .. " \f= " .. arg.default
+                        args[#args] = ("%s %s= %s"):format(args[#args], INV, arg.default)
                     end
                 end
             else
@@ -101,7 +101,7 @@ local function asTypeFunction(source, oop)
             end
         end
         if arg.default then
-            args[#args] = args[#args] .. " \f= " .. (arg.default == "" and '""' or arg.default)
+            args[#args+1] = ("%s %s= %s"):format(args[#args], INV, (arg.default == "" and '""' or arg.default))
         end
     end
     if oop then

@@ -406,7 +406,7 @@ local function parseMembers(data, isObject)
             local child = {}
             if params and #params > 0 then
                 local paramsStr = require("core.guide").buildTypeAnn(params)
-                paramsLabel = string.format("\n\f\f  -> %s\n", paramsStr)
+                paramsLabel = string.format("\n%s  -> %s\n", INV .. INV, paramsStr)
                 child[1] = {
                     name = "Wait",
                     type = "type.library",

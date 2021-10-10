@@ -52,7 +52,7 @@ local function getHoverAsValue(source)
         end
     end
     return {
-        label       = label and "\f" .. label,
+        label       = label and INV .. label,
         source      = source,
         description = desc,
         path        = getPath(source)
@@ -146,7 +146,7 @@ local function getHoverAsTypeFunction(source, values, oop)
             local rtn   = buildReturn(value)
             lines[#lines+1] = ('function %s(%s)'):format(name, arg)
             if rtn then
-                lines[#lines+1] = "\f" .. rtn .. "\f"
+                lines[#lines+1] = INV .. rtn .. INV
             end
         else
             other = other + 1

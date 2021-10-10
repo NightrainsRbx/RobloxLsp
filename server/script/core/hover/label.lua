@@ -17,7 +17,7 @@ local function asFunction(source, oop)
     local lines = {}
     lines[1] = ('function %s(%s)'):format(name, arg)
     if rtn then
-        lines[2] = "\f" .. rtn .. "\f"
+        lines[2] = INV .. rtn .. INV
     end
     return table.concat(lines, '\n')
 end
@@ -29,7 +29,7 @@ local function asDocFunction(source)
     local lines = {}
     lines[1] = ('function %s(%s)'):format(name, arg)
     if rtn then
-        lines[2] = "\f" .. rtn .. "\f"
+        lines[2] = INV .. rtn .. INV
     end
     return table.concat(lines, '\n')
 end
@@ -42,7 +42,7 @@ local function asFunctionType(source, oop)
     local lines = {}
     lines[1] = ('function %s(%s)'):format(name, arg)
     if rtn then
-        lines[2] = "\f" .. rtn .. "\f"
+        lines[2] = INV .. rtn .. INV
     end
     return table.concat(lines, '\n')
 end

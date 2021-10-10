@@ -52,7 +52,7 @@ end
 
 local function makeOneSignature(source, oop, index)
     local label = hoverLabel(source, oop)
-    label = label:gsub('%s*\f%s*->.+', ''):gsub("\f", "")
+    label = label:gsub("[%s ]*" .. INV .. "[%s ]*%-%>.+", ""):gsub(INV, "")
     local argStart, argLabel = label:match("()(%b())$")
     argLabel = argLabel:sub(2, #argLabel - 1)
     for _, pattern in ipairs({"()", "{}", "[]", "<>"}) do
