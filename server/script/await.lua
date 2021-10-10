@@ -85,8 +85,9 @@ function m.close(id)
         return
     end
     for co in pairs(map) do
-        map[co] = nil
-        coroutine.close(co)
+        if pcall(coroutine.close, co) then
+            map[co] = nil
+        end
     end
 end
 

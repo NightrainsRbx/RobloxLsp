@@ -330,6 +330,7 @@ end
 
 function m.load(uri)
     if files.isLua(uri) then
+        await.delay()
         local text = util.loadFile(furi.decode(uri))
         if text then
             files.setText(uri, text, false)
