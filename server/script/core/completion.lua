@@ -20,6 +20,7 @@ local defaultlibs  = require 'library.defaultlibs'
 local calcline     = require 'parser.calcline'
 local glob         = require 'glob'
 local furi         = require 'file-uri'
+local client       = require 'provider.client'
 
 local DiagnosticModes = {
     'disable-next-line',
@@ -1183,7 +1184,7 @@ local function tryWord(ast, text, offset, triggerCharacter, results)
     local finish = lookBackward.skipSpace(text, offset)
     local word, start = lookBackward.findWord(text, offset)
     if not word then
-        if triggerCharacter == nil then
+        if triggerCharacter == nil and client.isVSCode() then
             word = ''
             start = offset
         else
