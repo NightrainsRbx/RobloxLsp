@@ -151,6 +151,7 @@ local ConfigTemplate = {
         rojoProjectFile = {"default",    String},
         loadMode        = {'All Files', String},
         useGitIgnore    = {true,    Boolean},
+        useFilesExclude = {true,    Boolean},
         maxPreload      = {1000,    Integer},
         preloadFileSize = {100,     Integer},
         library         = {{},      Array2Hash(String)},

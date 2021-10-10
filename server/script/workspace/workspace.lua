@@ -82,11 +82,13 @@ function m.getNativeMatcher()
         pattern[#pattern+1] = path
     end
     -- config.files.exclude
+    if config.config.workspace.useFilesExclude then
     for path, ignore in pairs(config.other.exclude) do
         if ignore then
             log.info('Ignore by exclude:', path)
             pattern[#pattern+1] = path
         end
+    end
     end
     -- config.workspace.ignoreSubmodules
     if config.config.workspace.ignoreSubmodules then

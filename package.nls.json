@@ -59,6 +59,7 @@
     "config.workspace.maxPreload": "Max preloaded files.",
     "config.workspace.preloadFileSize": "Skip files larger than this value (KB) when preloading.",
     "config.workspace.useGitIgnore": "Ignore files list in `.gitignore` .",
+    "config.workspace.useFilesExclude": "Ignore files list in `files.ignore` .",
     "config.typeChecking.mode": "Type checking mode (BETA).",
     "config.typeChecking.mode.disabled": "Disable type checking.",
     "config.typeChecking.mode.nonStrict": "Only check types that can be known explicitly.",

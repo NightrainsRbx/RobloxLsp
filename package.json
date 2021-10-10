@@ -1152,6 +1152,12 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
+				"robloxLsp.workspace.useFilesExclude": {
+					"default": true,
+					"markdownDescription": "%config.workspace.useFilesExclude%",
+					"scope": "resource",
+					"type": "boolean"
+				},
 				"robloxLsp.runtime.fileEncoding": {
 					"default": "utf8",
 					"enum": [
