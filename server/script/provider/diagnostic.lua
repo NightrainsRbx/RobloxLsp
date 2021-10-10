@@ -309,6 +309,9 @@ local function askForDisable()
 end
 
 function m.diagnosticsRequires(reqUri)
+    if (ws.isIgnored(reqUri) and not files.isOpen(reqUri)) then
+        return
+    end
     if not m._start then
         return
     end

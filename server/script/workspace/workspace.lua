@@ -13,6 +13,7 @@ local timer      = require 'timer'
 local progress   = require 'progress'
 local define     = require "proto.define"
 local rojo       = require 'library.rojo'
+local util       = require 'utility'
 
 local m = {}
 m.type = 'workspace'
@@ -325,6 +326,17 @@ function m.awaitPreload()
     log.info('Preload finish.')
 
     diagnostic.start()
+end
+
+function m.load(uri)
+    if files.isLua(uri) then
+        local text = util.loadFile(furi.decode(uri))
+        if text then
+            files.setText(uri, text, false)
+        else
+            files.remove(uri)
+        end
+    end
 end
 
 --- 查找符合指定file path的所有uri

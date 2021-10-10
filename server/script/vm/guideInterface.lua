@@ -6,6 +6,8 @@ local guide   = require 'core.guide'
 local await   = require 'await'
 local config  = require 'config'
 local rojo    = require 'library.rojo'
+local fs      = require 'bee.filesystem'
+local furi    = require 'file-uri'
 
 local m = {}
 
@@ -37,6 +39,9 @@ function m.require(status, args, index)
                 return {lib}
             end
             if not files.eq(guide.getUri(args[1]), def.uri) then
+                if not files.exists(def.uri) then
+                    ws.load(def.uri)
+                end
                 local ast = files.getAst(def.uri)
                 if ast then
                     m.searchFileReturn(results, ast.ast, index)
@@ -66,6 +71,20 @@ function vm.interface.module(obj)
     local results = {}
     local myUri = guide.getUri(obj)
     local uris = ws.findUrisByRequirePath(obj.path)
+    if #uris == 0 then
+        local input = obj.path:gsub('%.', '/'):gsub('%%', '%%%%')
+        for _, luapath in ipairs(config.config.runtime.path) do
+            local path = fs.path(ws.normalize(luapath:gsub('%?', input)))
+            if fs.exists(path) then
+                local uri = furi.encode(fs.absolute(path):string())
+                if uri then
+                    ws.load(uri)
+                    uris[#uris+1] = uri
+                end
+                break
+            end
+        end
+    end
     for _, uri in ipairs(uris) do
         if not files.eq(myUri, uri) then
             local ast = files.getAst(uri)
