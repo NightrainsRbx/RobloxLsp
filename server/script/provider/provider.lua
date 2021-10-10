@@ -497,8 +497,7 @@ proto.on('textDocument/completion', function (params)
         return nil
     end
     local triggerCharacter = params.context and params.context.triggerCharacter
-    if config.config.completion.endAutocompletion 
-    and params.context.triggerCharacter == '\n' then
+    if config.config.completion.endAutocompletion and triggerCharacter == '\n' then
         require("core.end-completion")(uri, params.position)
     end
     if config.other.acceptSuggestionOnEnter ~= 'off' then
@@ -666,7 +665,7 @@ proto.on('textDocument/signatureHelp', function (params)
         }
     end
     local active = nil
-    if params.context.activeSignatureHelp and params.context.activeSignatureHelp.activeSignature then
+    if params.context and params.context.activeSignatureHelp and params.context.activeSignatureHelp.activeSignature then
         active = params.context.activeSignatureHelp.activeSignature
         if active > #infos - 1 then
             active = #infos - 1
