@@ -1295,7 +1295,7 @@ local function tryType(ast, text, offset, results)
                                         value.name[1] .. (value.generics and guide.buildTypeAnn(value.generics) or ""),
                                         guide.buildTypeAnn(value.value)
                                     )
-                                    or string.format("```lua\n\ftype %s\n```", name),
+                                    or string.format("```lua\n%stype %s\n```", INV, name),
                         kind        = define.CompletionItemKind.Class
                     }
                     ::CONTINUE::
@@ -1320,7 +1320,7 @@ local function tryType(ast, text, offset, results)
                     results[#results+1] = {
                         label       = alias[1],
                         detail      = alias[1],
-                        description = string.format("```lua\n\ftype %s\n```", alias[1]),
+                        description = string.format("```lua\n%stype %s\n```", INV, alias[1]),
                         kind        = define.CompletionItemKind.TypeParameter
                     }
                 end

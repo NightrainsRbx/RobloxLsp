@@ -194,7 +194,7 @@ local function getHoverAsTypeName(source)
     if typeAlias then
         label = getHoverAsTypeAlias(typeAlias.name).label
     else
-        label = "\ftype " .. guide.buildTypeAnn(source)
+        label = INV .. "type " .. guide.buildTypeAnn(source)
     end
     return {
         label       = label,
