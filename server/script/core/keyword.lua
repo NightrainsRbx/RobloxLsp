@@ -128,7 +128,7 @@ end"
     {'function', function (info, results)
         if info.hasSpace then
             results[#results+1] = {
-                label = 'function ()',
+                label = info.isExp and 'function()' or 'function ()',
                 kind  = define.CompletionItemKind.Snippet,
                 insertTextFormat = 2,
                 insertText = info.isExp and "\z
@@ -141,7 +141,7 @@ end"
             }
         else
             results[#results+1] = {
-                label = 'function ()',
+                label = info.isExp and 'function()' or 'function ()',
                 kind  = define.CompletionItemKind.Snippet,
                 insertTextFormat = 2,
                 insertText = info.isExp and "\z

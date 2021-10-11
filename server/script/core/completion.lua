@@ -1109,8 +1109,8 @@ local function checkCallbackFunction(ast, text, offset, results)
                     for _, param in ipairs(callback.args) do
                         if param.paramName then
                             params[#params+1] = param.paramName[1]
-                        elseif param.type == "type.variadic" then
-                            params[#params+1] = "..."
+                        -- elseif param.type == "type.variadic" then
+                        --     params[#params+1] = "..."
                         else
                             break
                         end
