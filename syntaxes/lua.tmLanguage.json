@@ -83,6 +83,9 @@
 					"name": "keyword.operator.type.lua"
 				},
 				{
+					"include": "#keywords"
+				},
+				{
 					"match": "(?<![:>.]\\s*)\\b_\\b",
 					"name": "variable.parameter.lua"
 				},
