@@ -3,7 +3,7 @@
 	"name": "Roblox Lua/Luau",
 	"patterns": [
 		{
-			"begin": "\\b(?:(local)\\s*)?(function)\\s*([a-zA-Z_]\\w*(?:[.:]([a-zA-Z_]\\w*))*)?\\s*(\\<.*\\>)?\\s*\\(",
+			"begin": "\\b(?:(local)\\s*)?(function)\\s*([a-zA-Z_]\\w*(?:[.:]([a-zA-Z_]\\w*))*)?\\s*(\\<[\\w\\s\\,]*\\>)?\\s*\\(",
 			"end": "\\)(?:\\s*(:)\\s*(.+?)(?=\\s*\\b(?:([^\\w.,<])|\\)>)\\s*\\w|\\s*)$)?",
 			"beginCaptures": {
 				"1": {
@@ -20,6 +20,14 @@
 						}
 					],
 					"name": "entity.name.function.lua"
+				},
+				"5": {
+					"patterns": [
+						{
+							"match": "\\b([a-zA-Z]\\w*)\\b",
+							"name": "entity.name.type.lua"
+						}
+					]
 				}
 			},
 			"endCaptures": {
@@ -506,7 +514,17 @@
 					]
 				},
 				{
-					"begin": "\\(",
+					"begin": "(\\<[\\w\\s\\,]*\\>)?\\(",
+					"beginCaptures": {
+						"1": {
+							"patterns": [
+								{
+									"match": "\\b([a-zA-Z]\\w*)\\b",
+									"name": "entity.name.type.lua"
+								}
+							]
+						}
+					},
 					"end": "\\)",
 					"patterns": [
 						{
