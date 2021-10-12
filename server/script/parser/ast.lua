@@ -868,7 +868,7 @@ local Defs = {
             [2]    = nameType
         }
     end,
-    FuncType = function (start, args, returns, optional, finish)
+    FuncType = function (start, generics, args, returns, optional, finish)
         args.funcargs = true
         return {
             type = "type.function",
@@ -876,6 +876,7 @@ local Defs = {
             finish = finish or optional,
             args = args,
             returns = returns,
+            generics = generics,
             optional = finish and optional
         }
     end,
@@ -1089,10 +1090,21 @@ local Defs = {
                         }
                     }
                 end
+                if v.type == "name" then
+                    v.type = "type.parameter"
+                    v.replace = {}
+                end
                 generics[#generics+1] = v
                 wantType = false
             end
             lastStart = v.finish + 1
+        end
+        if wantType and #generics > 0 then
+            PushError {
+                type = 'MISS_TYPE',
+                start = lastStart,
+                finish = finish - 1,
+            }
         end
         return {
             type = "type.generics",
@@ -1129,11 +1141,6 @@ local Defs = {
                 start = name.start,
                 finish = name.finish,
             }
-        end
-        if generics then
-            for i = 1, #generics do
-                generics[i].type = "type.parameter"
-            end
         end
         name.type = "type.alias.name"
         return {
@@ -1182,11 +1189,12 @@ local Defs = {
             finish = start,
         }
     end,
-    Function = function (functionStart, functionFinish, name, args, argsFinish, typeAnn, actions, endStart, endFinish)
+    Function = function (functionStart, functionFinish, name, generics, args, argsFinish, typeAnn, actions, endStart, endFinish)
         actions.type   = 'function'
         actions.start  = functionStart
         actions.finish = endFinish - 1
         actions.args   = args
+        actions.generics = generics
         actions.argsFinish = argsFinish - 1
         actions.keyword= {
             functionStart, functionFinish - 1,

@@ -371,10 +371,10 @@ ExpFunction <-  Function
 Function    <-  FunctionBody
             ->  Function
 FunctionBody
-            <-  FUNCTION FuncName FuncArgs {} ReturnTypeAnn
+            <-  FUNCTION FuncName Generics1 FuncArgs {} ReturnTypeAnn
                     {| (!END Action)* |}
                 NeedEnd
-            /   FUNCTION FuncName FuncArgsMiss {} ReturnTypeAnn
+            /   FUNCTION FuncName Generics1 FuncArgsMiss {} ReturnTypeAnn
                     {| %nil |}
                 NeedEnd
 FuncName    <-  !END {| Single (Sp SuffixWithoutCall)* |}
@@ -440,7 +440,7 @@ ModuleType  <-  Sp ({} (Name -> Single) DOT (NameType / %nil) {})
             ->  ModuleType
 NameType    <-  Sp ({} NameBody Generics2 {} Optional?)
             ->  NameType
-FuncType    <-  Sp ({} ArgTypeList ARROW (Type / VariadicType / TypeList Optional?) {})
+FuncType    <-  Sp ({} Generics1 ArgTypeList ARROW (Type / VariadicType / TypeList Optional?) {})
             ->  FuncType
 VariadicType    
             <-  Sp ({} DOTS Type {})

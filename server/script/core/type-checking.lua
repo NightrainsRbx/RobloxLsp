@@ -243,9 +243,16 @@ function m.normalizeType(tp)
         tp = tp[2]
     end
     if tp.type == "type.name" then
-        local value = m.getTypeFromAlias(tp)
-        if value ~= tp then
-            tp = m.normalizeType(value)
+        if tp.typeAliasGeneric then
+            tp = {
+                type = "type.name",
+                [1] = "any"
+            }
+        else
+            local value = m.getTypeFromAlias(tp)
+            if value ~= tp then
+                tp = m.normalizeType(value)
+            end
         end
     end
     if readOnly then

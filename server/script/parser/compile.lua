@@ -190,6 +190,7 @@ local vmMap = {
         Block = obj
         LocalCount = 0
         Compile(obj.args, obj)
+        Compile(obj.generics, obj)
         Compile(obj.returnTypeAnn, obj)
         for i = 1, #obj do
             Compile(obj[i], obj)
@@ -287,11 +288,6 @@ local vmMap = {
             end
             Root.types[#Root.types+1] = obj
         end
-        if obj.generics then
-            for _, generic in ipairs(obj.generics) do
-                generic.replace = {}
-            end
-        end
         Compile(obj.name, obj)
         Compile(obj.value, obj)
         Compile(obj.generics, obj)
@@ -305,13 +301,21 @@ local vmMap = {
     end,
     ['type.name'] = function (obj)
         if obj.parent.type ~= "type.module" then
-            local typeAlias = guide.getParentType(obj, "type.alias")
-            if typeAlias and typeAlias.generics then
-                for _, generic in ipairs(typeAlias.generics) do
-                    if generic[1] == obj[1] then
-                        generic.replace[#generic.replace+1] = obj
-                        obj.typeAliasGeneric = generic
-                        goto CONTINUE
+            local parent = obj
+            for _ = 1, 1000 do
+                parent = parent.parent
+                if not parent then
+                    break
+                end
+                if parent.type == "type.function" or parent.type == "function" or parent.type == "type.alias" then
+                    if parent.generics then
+                        for _, generic in ipairs(parent.generics) do
+                            if generic[1] == obj[1] then
+                                generic.replace[#generic.replace+1] = obj
+                                obj.typeAliasGeneric = generic
+                                goto CONTINUE
+                            end
+                        end
                     end
                 end
             end
@@ -373,6 +377,7 @@ local vmMap = {
     ['type.function'] = function (obj)
         Compile(obj.args, obj)
         Compile(obj.returns, obj)
+        Compile(obj.generics, obj)
     end,
     ['type.module'] = function (obj)
         Compile(obj[1], obj)

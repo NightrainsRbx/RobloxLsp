@@ -3,7 +3,7 @@
 	"name": "Roblox Lua/Luau",
 	"patterns": [
 		{
-			"begin": "\\b(?:(local)\\s*)?(function)\\s*([a-zA-Z_]\\w*(?:[.:]([a-zA-Z_]\\w*))*)?\\(",
+			"begin": "\\b(?:(local)\\s*)?(function)\\s*([a-zA-Z_]\\w*(?:[.:]([a-zA-Z_]\\w*))*)?\\s*(\\<.*\\>)?\\s*\\(",
 			"end": "\\)(?:\\s*(:)\\s*(.+?)(?=\\s*\\b(?:([^\\w.,<])|\\)>)\\s*\\w|\\s*)$)?",
 			"beginCaptures": {
 				"1": {
