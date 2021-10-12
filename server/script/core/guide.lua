@@ -454,10 +454,18 @@ end
 
 function m.getVisibleTypeAlias(source)
     local results = {}
-    local typeAlias = m.getParentType(source, "type.alias")
-    if typeAlias and typeAlias.generics then
-        for i = 1, #typeAlias.generics do
-            results[#results+1] = typeAlias.generics[i]
+    local parent = source
+    for _ = 1, 1000 do
+        parent = parent.parent
+        if not parent then
+            break
+        end
+        if parent.type == "type.function" or parent.type == "function" or parent.type == "type.alias" then
+            if parent.generics then
+                for _, generic in ipairs(parent.generics) do
+                    results[#results+1] = generic
+                end
+            end
         end
     end
     local block = m.getBlock(source)
