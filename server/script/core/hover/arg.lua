@@ -101,7 +101,7 @@ local function asTypeFunction(source, oop)
             end
         end
         if arg.default then
-            args[#args+1] = ("%s %s= %s"):format(args[#args], INV, (arg.default == "" and '""' or arg.default))
+            args[#args] = ("%s %s= %s"):format(args[#args], INV, (arg.default == "" and '""' or arg.default))
         end
     end
     if oop then
