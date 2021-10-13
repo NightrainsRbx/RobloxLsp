@@ -512,8 +512,8 @@ function m.utf8Len(str, start, finish)
             start = pos + 1
         end
     end
-        return len
-    end
+    return len
+end
 
 function m.revertTable(t)
     local len = #t

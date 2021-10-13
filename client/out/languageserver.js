@@ -122,7 +122,7 @@ function startPluginServer(client) {
         let lastUpdate = "";
         let app = express();
         app.use('/update', express.json({
-            limit: '2mb',
+            limit: '3mb',
         }));
         app.post('/update', (req, res) => __awaiter(this, void 0, void 0, function* () {
             if (!req.body) {

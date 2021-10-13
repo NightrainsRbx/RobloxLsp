@@ -170,7 +170,7 @@ function startPluginServer(client: LanguageClient) {
         let lastUpdate = "";
         let app = express();
         app.use('/update', express.json({
-            limit: '2mb',
+            limit: '3mb',
         }));
         app.post('/update', async (req, res) => {
             if (!req.body) {
