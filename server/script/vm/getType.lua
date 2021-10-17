@@ -11,7 +11,7 @@ function vm.getTypeString(source, deep)
         if infer.source and infer.source.type == "type.table" then
             local fields = {}
             for _, field in ipairs(infer.source) do
-                fields[#fields+1] = "    " .. guide.buildTypeAnn(field)
+                fields[#fields+1] = "    " .. guide.buildTypeAnn(field)
             end
             return ("{\n%s\n}"):format(table.concat(fields, ",\n"))
         end

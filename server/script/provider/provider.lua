@@ -102,7 +102,7 @@ local function updateConfig()
         proto.notify('$/status/show')
     else
         proto.notify('$/status/hide')
-end
+    end
 end
 
 proto.on('initialize', function (params)
@@ -125,35 +125,35 @@ proto.on('initialized', function (params)
 
     nonil.enable()
     if client.info.capabilities.workspace.didChangeWatchedFiles.dynamicRegistration then
-            -- 监视文件变化
-    registrations[#registrations+1] = {
-        id = 'workspace/didChangeWatchedFiles',
-                method = 'workspace/didChangeWatchedFiles',
-                registerOptions = {
-                    watchers = {
-                        {
-                            globPattern = '**/',
-                            kind = 1 | 2 | 4,
-                        }
-                    },
+        -- 监视文件变化
+        registrations[#registrations+1] = {
+            id = 'workspace/didChangeWatchedFiles',
+            method = 'workspace/didChangeWatchedFiles',
+            registerOptions = {
+                watchers = {
+                    {
+                        globPattern = '**/',
+                        kind = 1 | 2 | 4,
+                    }
                 },
-    }
+            },
+        }
     end
 
     if client.info.capabilities.workspace.didChangeConfiguration.dynamicRegistration then
-    -- 监视配置变化
-    registrations[#registrations+1] = {
-        id = 'workspace/didChangeConfiguration',
-                method = 'workspace/didChangeConfiguration',
-            }
+        -- 监视配置变化
+        registrations[#registrations+1] = {
+            id = 'workspace/didChangeConfiguration',
+            method = 'workspace/didChangeConfiguration',
+        }
     end
 
     nonil.disable()
 
     if #registrations ~= 0 then
-    proto.awaitRequest('client/registerCapability', {
-        registrations = registrations
-    })
+        proto.awaitRequest('client/registerCapability', {
+            registrations = registrations
+        })
     end
     workspace.reload()
     return true
@@ -483,6 +483,15 @@ proto.on('textDocument/prepareRename', function (params)
     }
 end)
 
+local function replaceSpaces(text)
+    if not text then
+        return
+    end
+    return text:gsub("  +", function (s)
+        return (" "):rep(#s)
+    end)
+end
+
 proto.on('textDocument/completion', function (params)
     await.close 'completion'
     await.setID 'completion'
@@ -558,7 +567,7 @@ proto.on('textDocument/completion', function (params)
                 return t
             end)(),
             documentation    = res.description and {
-                value = res.description,
+                value = replaceSpaces(res.description),
                 kind  = 'markdown',
             },
         }
@@ -568,7 +577,7 @@ proto.on('textDocument/completion', function (params)
                 if resolved then
                     item.detail = resolved.detail
                     item.documentation = resolved.description and {
-                        value = resolved.description,
+                        value = replaceSpaces(resolved.description),
                         kind  = 'markdown',
                     }
                 end
@@ -604,7 +613,7 @@ proto.on('completionItem/resolve', function (item)
     end
     item.detail = resolved.detail or item.detail
     item.documentation = resolved.description and {
-        value = resolved.description,
+        value = replaceSpaces(resolved.description),
         kind  = 'markdown',
     } or item.documentation
     item.labelDetails = resolved.labelDetails or item.labelDetails

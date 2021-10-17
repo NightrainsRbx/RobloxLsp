@@ -61,7 +61,7 @@ local function asTypeAnn(typeAnn)
     local line = {}
     for i = 1, #returns do
         if i == 1 then
-            line[#line+1] = '  -> ' .. returns[i]
+            line[#line+1] = '  -> ' .. returns[i]
         else
             line[#line+1] = ('% 3d. %s'):format(i, returns[i])
         end
@@ -83,7 +83,7 @@ local function asFunction(source)
         local line = {}
         local types = {}
         if i == 1 then
-            line[#line+1] = '  -> '
+            line[#line+1] = '  -> '
         else
             line[#line+1] = ('% 3d. '):format(i)
         end
@@ -133,7 +133,7 @@ local function asDocFunction(source)
             rtn.optional and '?' or ''
         )
         if i == 1 then
-            returns[#returns+1] = ('  -> %s'):format(rtnText)
+            returns[#returns+1] = ('  -> %s'):format(rtnText)
         else
             returns[#returns+1] = ('% 3d. %s'):format(i, rtnText)
         end

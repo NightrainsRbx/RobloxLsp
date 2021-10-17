@@ -119,13 +119,13 @@ local function buildAsHash(classes, literals, reachMax)
         local class   = classes[key]
         local literal = literals[key]
         if literal then
-            lines[#lines+1] = ('    %s: %s = %s,'):format(key, class, literal)
+            lines[#lines+1] = ('    %s: %s = %s,'):format(key, class, literal)
         else
-            lines[#lines+1] = ('    %s: %s,'):format(key, class)
+            lines[#lines+1] = ('    %s: %s,'):format(key, class)
         end
     end
     if reachMax then
-        lines[#lines+1] = '    ...'
+        lines[#lines+1] = '    ...'
     end
     lines[#lines+1] = '}'
     return table.concat(lines, '\n')
@@ -145,13 +145,13 @@ local function buildAsConst(classes, literals, reachMax)
         local class   = classes[key]
         local literal = literals[key]
         if literal then
-            lines[#lines+1] = ('    %s: %s = %s,'):format(key, class, literal)
+            lines[#lines+1] = ('    %s: %s = %s,'):format(key, class, literal)
         else
-            lines[#lines+1] = ('    %s: %s,'):format(key, class)
+            lines[#lines+1] = ('    %s: %s,'):format(key, class)
         end
     end
     if reachMax then
-        lines[#lines+1] = '    ...'
+        lines[#lines+1] = '    ...'
     end
     lines[#lines+1] = '}'
     return table.concat(lines, '\n')
