@@ -450,6 +450,22 @@
                     "ReturnType": {
                         "Name": "Color3"
                     }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "fromHex",
+                    "Deprecated": true,
+                    "Parameters": [
+                        {
+                            "Name": "hex",
+                            "Type": {
+                                "Name": "string"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "Color3"
+                    }
                 }
             ],
             "Name": "Color3"

@@ -35,6 +35,7 @@ local SPECIAL_FUNCTIONS = {
     ["Color3.new"] = "Color3.new",
     ["Color3.fromRGB"] = "Color3.fromRGB",
     ["Color3.fromHSV"] = "Color3.fromHSV",
+    ["Color3.fromHex"] = "Color3.fromHex",
     ["EnumItem.IsA"] = "EnumItem.IsA",
     ["BrickColor.new"] = "BrickColor.new"
 }

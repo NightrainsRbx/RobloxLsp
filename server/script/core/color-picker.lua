@@ -31,6 +31,11 @@ local function hsvToRgb(h, s, v, a)
     return r, g, b
 end
 
+local function hex2rgb(hex)
+	hex = hex:gsub("#","")
+	return tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
+end
+
 local function rgbToHsv(r, g, b, a)
     local max, min = math.max(r, g, b), math.min(r, g, b)
     local h, s, v
@@ -112,6 +117,21 @@ local function documentColor(uri)
                                 }
                             }
                         end
+                    end
+                    break
+                elseif def.special == "Color3.fromHex" then
+                    if source.args and #source.args == 1 and source.args[1].type == "string" then
+                        local hex = source.args[1][1]
+                        local r, g, b = hex2rgb(hex)
+                        results[#results+1] = {
+                            range = files.range(uri, source.start, source.finish),
+                            color = {
+                                red = r / 255,
+                                green = g / 255,
+                                blue = b / 255,
+                                alpha = 1
+                            }
+                        }
                     end
                     break
                 end
