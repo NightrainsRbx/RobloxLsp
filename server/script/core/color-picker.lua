@@ -123,15 +123,17 @@ local function documentColor(uri)
                     if source.args and #source.args == 1 and source.args[1].type == "string" then
                         local hex = source.args[1][1]
                         local r, g, b = hex2rgb(hex)
-                        results[#results+1] = {
-                            range = files.range(uri, source.start, source.finish),
-                            color = {
-                                red = r / 255,
-                                green = g / 255,
-                                blue = b / 255,
-                                alpha = 1
+                        if r and g and b then
+                            results[#results+1] = {
+                                range = files.range(uri, source.start, source.finish),
+                                color = {
+                                    red = r / 255,
+                                    green = g / 255,
+                                    blue = b / 255,
+                                    alpha = 1
+                                }
                             }
-                        }
+                        end
                     end
                     break
                 end
