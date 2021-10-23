@@ -4,13 +4,17 @@ import * as fetch from 'node-fetch';
 import * as path from 'path';
 import * as fs from 'fs';
 
-const fetchData = async (url: string, handler: (data: string) => void) => {
+const fetchData = async (url: string, handler: (data: string) => void, resolve?: () => void) => {
     try {
         fetch.default(url)
             .then(res => res.text())
-            .then(body => handler(body));
+            .then(body => handler(body))
+            .then(resolve);
     } catch (err) {
         vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
+        if (resolve != undefined) {
+            resolve();
+        }
     }
 };
 
@@ -27,20 +31,33 @@ function updateRobloxAPI(context: vscode.ExtensionContext) {
         try {
             const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), 'utf8')
             if (currentVersion != lastVersion) {
-                fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/AutocompleteMetadata.xml', (data) => {
-                    writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'AutocompleteMetadata.xml')), data);
+                vscode.window.withProgress({
+                    location: vscode.ProgressLocation.Notification,
+                    title: 'Updating Roblox API',
+                    cancellable: false
+                }, async () => {
+                    return Promise.all([
+                        // new Promise<void>(resolve => {
+                        //     fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/ReflectionMetadata.xml', (data) => {
+                        //         writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'ReflectionMetadata.xml')), data);
+                        //         resolve();
+                        //     });
+                        // }),
+                        new Promise<void>(resolve => {
+                            fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/AutocompleteMetadata.xml', (data) => {
+                                writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'AutocompleteMetadata.xml')), data);
+                            }, resolve);
+                        }),
+                        new Promise<void>(resolve => {
+                            fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/API-Dump.json', (data) => {
+                                writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'API-Dump.json')), data);
+                            }, resolve);
+                        })
+                    ]);
+                }).then(() => {
+                    vscode.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://clonetrooper1019.github.io/Roblox-API-History.html)`);
                 });
-                fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/ReflectionMetadata.xml', (data) => {
-                    writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'ReflectionMetadata.xml')), data);
-                });
-                fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/API-Dump.json', (data) => {
-                    writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'API-Dump.json')), data);
-                });
-                // fetchData('https://raw.githubusercontent.com/NightrainsRbx/RobloxLsp/master/server/rbx/datatypes.json', (data) => {
-                //     writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'datatypes.json')), data);
-                // });
                 writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), lastVersion);
-                vscode.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://clonetrooper1019.github.io/Roblox-API-History.html)`);
             }
         } catch (err) {
             vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
