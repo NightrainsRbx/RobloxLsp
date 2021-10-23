@@ -32,13 +32,6 @@ local librariesTypes = {
     -- }
 }
 
-local keys = {
-    ["$className"] = true,
-    ["$path"] = true,
-    ["$properties"] = true,
-    ["$ignoreUnknownInstances"] = true
-}
-
 function rojo:scriptClass(filename)
     if filename:match("^.+%.server%.lua$") then
         return "Script"
@@ -225,6 +218,8 @@ local function getChildren(parent, name, tree, path)
     end
     if tree["$className"] then
         obj.value[1] = tree["$className"]
+    else
+        obj.noClassName = true
     end
     for _name, child in pairs(tree) do
         if _name:sub(1, 1) ~= "$" then
@@ -332,6 +327,21 @@ function rojo:loadRojoProject()
         local tree = {value = {child = {}}}
         getChildren(tree, nil, project.tree, "")
         mainTree = util.mergeTable(mainTree, tree)
+    end
+    if mainTree.value[1] == "DataModel" then
+        for _, child in pairs(mainTree.value.child) do
+            if child.noClassName then
+                child.value[1] = child.name
+            end
+        end
+        local StarterPlayer = mainTree.value.child.StarterPlayer
+        if StarterPlayer then
+            for _, child in pairs(StarterPlayer.value.child) do
+                if child.noClassName then
+                    child.value[1] = child.name
+                end
+            end
+        end
     end
     table.sort(self.Watch, function(a, b)
         return #a > #b
