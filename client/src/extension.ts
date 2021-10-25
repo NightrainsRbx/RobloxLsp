@@ -66,7 +66,7 @@ function updateRobloxAPI(context: vscode.ExtensionContext) {
 }
 
 async function openUpdatesWindow(context: vscode.ExtensionContext) {
-    if (context.globalState.get("sawVersionLogNew6", false) == false) {
+    if (context.globalState.get("sawVersionLogNew8", false) == false) {
         const panel = vscode.window.createWebviewPanel(
             'robloxlspUpdates',
             'Roblox LSP Updates',
@@ -86,6 +86,18 @@ async function openUpdatesWindow(context: vscode.ExtensionContext) {
                 <p style="font-size:1rem">More info: <a href="https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745">https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745</a></p>
                 <p style="font-size:1rem">Report any bug or question here: <a href="https://github.com/NightrainsRbx/RobloxLsp/issues">https://github.com/NightrainsRbx/RobloxLsp/issues</a></p>
                 <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
+                <h2 style="font-size:2rem; font-weight:100">1.4.0</h2>
+                <li style="font-size:1rem">Support for Rojo project composition and Wally.</li>
+                <li style="font-size:1rem">Added robloxLsp.intelliSense.autoDetectLibraries.</li>
+                <li style="font-size:1rem">Improved markdown in descriptions.</li>
+                <h2 style="font-size:2rem; font-weight:100">As of 1.3.1</h2>
+                <li style="font-size:1rem">Added progress notification when updating API.</li>
+                <li style="font-size:1rem">Added Color3.fromHex (as deprecated) with Color preview.</li>
+                <li style="font-size:1rem">$className is no longer required in services for Rojo project files.</li>
+                <li style="font-size:1rem">Added syntax support for generic functions.</li>
+                <li style="font-size:1rem">Ignored files are now compiled for IntelliSense when requiring them.</li>
+                <li style="font-size:1rem">Added robloxLsp.workspace.loadRequiredFiles.</li>
+                <li style="font-size:1rem">A lot of fixes.</li>
                 <h2 style="font-size:2rem; font-weight:100">1.3.0</h2>
                 <li style="font-size:1rem">More improvements to type inference.</li>
                 <li style="font-size:1rem">Improved how typeof (the type) works.</li>
