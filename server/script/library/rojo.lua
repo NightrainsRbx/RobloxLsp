@@ -16,16 +16,16 @@ rojo.Scripts = {}
 
 local librariesTypes = {
     ["Roact"] = {
-        textPattern = "%s*%-%-%[%[%s*Packages up the internals of Roact and exposes a public API for it%."
+        textPattern = "%-%-%[%[%s+Packages up the internals of Roact and exposes a public API for it%."
     },
     ["Rodux"] = {
-        textPattern = ".-require%(script%.Store%).-require%(script%.createReducer%).-require%(script%.combineReducers%)"
+        textPattern = "require%(script%.Store%).-require%(script%.createReducer%).-require%(script%.combineReducers%)"
     },
     ["RoactRodux"] = {
         textPattern = "return %{%s+StoreProvider %= StoreProvider%,.-connect %= connect.-%}%s*$"
     },
     ["Promise.Static"] = {
-        textPattern = "%s*%-%-%[%[%s*An implementation of Promises similar to Promise%/A%+%."
+        textPattern = "%-%-%[%[%s+An implementation of Promises similar to Promise%/A%+%."
     },
     -- ["Fusion"] = {
     --     textPattern = "^%s*%-%-%[%[%s*The entry point for the Fusion library%."
