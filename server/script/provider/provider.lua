@@ -489,7 +489,7 @@ local function replaceSpaces(text)
     end
     return text:gsub("  +", function (s)
         return (" "):rep(#s)
-    end)
+    end):gsub("\t", "    ")
 end
 
 proto.on('textDocument/completion', function (params)
