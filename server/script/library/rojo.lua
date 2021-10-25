@@ -85,7 +85,7 @@ function rojo.searchFile(parent, filePath)
             local success, project = pcall(json.decode, util.loadFile(path / "default.project.json"))
             if success and project.tree then
                 local ws = require("workspace")
-                local relativePath = normalizePath(ws.getRelativePath(furi.encode(path:string())):gsub("\\", "/")) .. "/"
+                local relativePath = normalizePath(ws.getRelativePath(furi.encode(path:string()))) .. "/"
                 local tree = {value = {child = {}}}
                 rojo.getChildren(tree, nil, project.tree, relativePath)
                 parent.value = tree.value
