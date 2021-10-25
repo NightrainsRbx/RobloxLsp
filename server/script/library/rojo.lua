@@ -251,6 +251,9 @@ function rojo.getChildren(parent, name, tree, path)
 end
 
 function rojo:matchLibrary(uri)
+    if not config.config.intelliSense.autoDetectLibraries then
+        return
+    end
     if uri:match("%.spec%.lua$") then
         return nil
     end

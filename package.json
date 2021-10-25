@@ -1040,6 +1040,12 @@
 					"scope": "resource",
 					"type": "integer"
 				},
+				"robloxLsp.intelliSense.autoDetectLibraries": {
+					"default": true,
+					"markdownDescription": "%config.intelliSense.autoDetectLibraries%",
+					"scope": "resource",
+					"type": "boolean"
+				},
 				"robloxLsp.misc.parameters": {
 					"default": "",
 					"markdownDescription": "%config.misc.parameters%",

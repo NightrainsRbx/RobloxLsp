@@ -193,6 +193,7 @@ local ConfigTemplate = {
     },
     intelliSense = {
         searchDepth     = {0,         Integer},
+        autoDetectLibraries = {true,     Boolean},
     },
     window              = {
         statusBar       = {true,      Boolean},
