@@ -46,6 +46,10 @@ local function removeLuaExtension(name)
     return name:gsub("%.server%.lua$", ""):gsub("%.client%.lua$", ""):gsub("%.lua$", "")
 end
 
+local function normalizePath(path)
+    return path:gsub("[/\\]+", "/"):gsub("/$", ""):gsub("^%.%/", "")
+end
+
 local function inspectModel(model)
     if not model.Children then
         return
@@ -70,13 +74,24 @@ local function inspectModel(model)
     return tree
 end
 
-local function searchFile(parent, filePath)
+function rojo.searchFile(parent, filePath)
     local path = fs.current_path() / filePath
     if not path then
         return
     end
     if fs.is_directory(path) then
         parent.value[1] = "Folder"
+        if fs.exists(path / "default.project.json") then
+            local success, project = pcall(json.decode, util.loadFile(path / "default.project.json"))
+            if success and project.tree then
+                local ws = require("workspace")
+                local relativePath = normalizePath(ws.getRelativePath(furi.encode(path:string())):gsub("\\", "/")) .. "/"
+                local tree = {value = {child = {}}}
+                rojo.getChildren(tree, nil, project.tree, relativePath)
+                parent.value = tree.value
+            end
+            return
+        end
         for childPath in path:list_directory() do
             local childName = tostring(childPath:filename())
             if rojo:scriptClass(childName) then
@@ -110,7 +125,7 @@ local function searchFile(parent, filePath)
                         child = {}
                     }
                 }
-                searchFile(child, filePath .. "/" .. childName)
+                rojo.searchFile(child, filePath .. "/" .. childName)
                 parent.value.child[childName] = child
             elseif childName == "init.meta.json" then
                 local success, meta = pcall(json.decode, util.loadFile(childPath))
@@ -183,6 +198,15 @@ local function searchFile(parent, filePath)
                     util.mergeTable(parent.value.child, modelChildren)
                 end
             end
+        elseif name:match("%.project%.json$") then
+            local success, project = pcall(json.decode, util.loadFile(path))
+            if success and project.tree then
+                local ws = require("workspace")
+                local relativePath = normalizePath(ws.getRelativePath(furi.encode(path:string():sub(1, #path:string() - #name)))) .. "/"
+                local tree = {value = {child = {}}}
+                rojo.getChildren(tree, nil, project.tree, relativePath)
+                parent.value = tree.value
+            end
         elseif name:match("%.txt$") then
             parent.value[1] = "StringValue"
         elseif name:match("%.csv$") then
@@ -193,14 +217,7 @@ local function searchFile(parent, filePath)
     end
 end
 
-local function normalizePath(path)
-    return path:gsub("[/\\]+", "/"):gsub("/$", ""):gsub("^%.%/", "")
-end
-
-local function getChildren(parent, name, tree, path)
-    if name then
-        path = path .. "/" .. name
-    end
+function rojo.getChildren(parent, name, tree, path)
     local obj = {
         name = name,
         type = "type.library",
@@ -212,9 +229,9 @@ local function getChildren(parent, name, tree, path)
         }
     }
     if tree["$path"] then
-        local filePath = normalizePath(tree["$path"])
+        local filePath = path .. normalizePath(tree["$path"])
         rojo.Watch[#rojo.Watch+1] = filePath
-        searchFile(obj, filePath)
+        rojo.searchFile(obj, filePath)
     end
     if tree["$className"] then
         obj.value[1] = tree["$className"]
@@ -223,7 +240,7 @@ local function getChildren(parent, name, tree, path)
     end
     for _name, child in pairs(tree) do
         if _name:sub(1, 1) ~= "$" then
-            getChildren(obj, _name, child, path)
+            rojo.getChildren(obj, _name, child, path)
         end
     end
     if name then
@@ -325,7 +342,7 @@ function rojo:loadRojoProject()
     local mainTree = {}
     for _, project in pairs(self.RojoProject) do
         local tree = {value = {child = {}}}
-        getChildren(tree, nil, project.tree, "")
+        rojo.getChildren(tree, nil, project.tree, "")
         mainTree = util.mergeTable(mainTree, tree)
     end
     if mainTree.value[1] == "DataModel" then
