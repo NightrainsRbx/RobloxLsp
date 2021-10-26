@@ -1339,6 +1339,7 @@
 	],
 	"license": "MIT",
 	"main": "./client/out/extension",
+	"browser": "./client/out/extension",
 	"name": "robloxlsp",
 	"publisher": "Nightrains",
 	"repository": {
