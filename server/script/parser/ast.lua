@@ -761,6 +761,38 @@ local Defs = {
     Call = function (start, args, finish)
         return createCall(args, start, finish-1)
     end,
+    IfExp = function (ifStart, ifFinish, ifExp, thenStart, thenFinish, thenExp, elseIfs, elseStart, elseFinish, elseExp, finish)
+        local obj = {
+            type   = 'ifexp',
+            start  = ifStart,
+            finish = finish,
+            keyword = {
+                ifStart, ifFinish,
+                thenStart, thenFinish,
+                elseStart, elseFinish,
+            },
+            filter = ifExp,
+            [2]    = thenExp,
+        }
+        for i = 1, #elseIfs do
+            obj[#obj+1] = elseIfs[i]
+        end
+        obj[#obj+1] = elseExp
+        return obj
+    end,
+    ElseIfExp = function(ifStart, ifFinish, ifExp, thenStart, thenFinsih, thenExp, finish)
+        return {
+            type   = 'elseifexp',
+            start  = ifStart,
+            finish = finish,
+            keyword = {
+                ifStart, ifFinish,
+                thenStart, thenFinsih,
+            },
+            filter = ifExp,
+            [1]    = thenExp,
+        }
+    end,
     TypeSimple = function (units, optional)
         local last = units[1]
         for i = 2, #units do
@@ -1989,6 +2021,17 @@ local Defs = {
             finish = pos,
             info = {
                 symbol = 'then',
+            }
+        }
+        return pos, pos
+    end,
+    MissElse = function (pos)
+        PushError {
+            type = 'MISS_SYMBOL',
+            start = pos,
+            finish = pos,
+            info = {
+                symbol = 'else',
             }
         }
         return pos, pos

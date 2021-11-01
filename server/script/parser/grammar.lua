@@ -309,6 +309,7 @@ ExpUnit     <-  Nil
             /   Dots
             /   Table
             /   ExpFunction
+            /   IfExp
             /   Simple
 
 Simple      <-  {| Prefix (Sp Suffix)* |}
@@ -388,6 +389,12 @@ FuncArgsMiss<-  {} -> MissPL DirtyPR %nil
 FuncArg     <-  DOTS TypeAnn?
             /   Name TypeAnn?
             /   COMMA
+
+IfExp       <-  Sp (IF DirtyExp (THEN / {} -> MissThen) DirtyExp {| ElseIfExp* |} (ELSE / {} -> MissElse) DirtyExp {})
+            ->  IfExp
+
+ElseIfExp   <-  Sp (ELSEIF DirtyExp (THEN / {} -> MissThen) DirtyExp {})
+            ->  ElseIfExp
 
 -- 纯占位，修改了 `relabel.lua` 使重复定义不抛错
 Action      <-  !END .
