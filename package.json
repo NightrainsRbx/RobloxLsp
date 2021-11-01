@@ -1272,7 +1272,8 @@
 				"extensions": [
 					".lua",
 					".luau"
-				]
+				],
+				"configuration": "./language-configuration.json"
 			}
 		],
 		"grammars": [
