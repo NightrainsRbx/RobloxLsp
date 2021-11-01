@@ -96,6 +96,8 @@ type ENV = {
 		unpack: (t: table, i: number?, j: number?) -> ...any,
 		clear: (t: table) -> (),
 		create: (count: number, value: any?) -> table,
+		freeze: (t: table) -> table,
+		isfrozen: (t: table) -> boolean
 	},
 	setfenv: (target: function | number, env: { [string]: any }) -> function?,
 	os: {
