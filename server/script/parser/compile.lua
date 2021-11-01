@@ -275,6 +275,16 @@ local vmMap = {
     ['...'] = function (obj)
         Compile(obj.typeAnn, obj)
     end,
+    ["ifexp"] = function (obj)
+        Compile(obj.filter, obj)
+        for i = 1, #obj do
+            Compile(obj[i], obj)
+        end
+    end,
+    ["elseifexp"] = function (obj)
+        Compile(obj.filter, obj)
+        Compile(obj[1], obj)
+    end,
     ['type.alias'] = function (obj)
         if Block then
             if not Block.types then

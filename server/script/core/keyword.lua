@@ -1,6 +1,7 @@
 local define     = require 'proto.define'
 local guide      = require 'core.guide'
 local files      = require 'files'
+local findSource = require 'core.find-source'
 
 local keyWordMap = {
     {'do', function (info, results)
@@ -45,19 +46,25 @@ end",
         or info.text:find('^%s*do', info.offset + 1) then
             return false
         end
+        guide.eachSourceContain(info.ast.ast, info.offset, function (source)
+            if source.type == "ifexp" or source.type == "elseifexp" then
+                info.isExp = true
+                return true
+            end
+        end)
         if info.hasSpace then
             results[#results+1] = {
                 label = 'elseif .. then',
                 kind  = define.CompletionItemKind.Snippet,
                 insertTextFormat = 2,
-                insertText = [[$1 then]],
+                insertText = info.isExp and [[$1 then $0]] or [[$1 then]],
             }
         else
             results[#results+1] = {
                 label = 'elseif .. then',
                 kind  = define.CompletionItemKind.Snippet,
                 insertTextFormat = 2,
-                insertText = [[elseif $1 then]],
+                insertText = info.isExp and [[elseif $1 then $0]] or [[elseif $1 then]],
             }
         end
         return true
@@ -175,7 +182,7 @@ end"
                 label = 'if .. then',
                 kind  = define.CompletionItemKind.Snippet,
                 insertTextFormat = 2,
-                insertText = "\z
+                insertText = info.isExp and [[if $1 then $0]] or "\z
 if $1 then\
 \t$0\
 end"
@@ -261,6 +268,14 @@ until $1"
     end},
     {'return'},
     {'then', function (info, results)
+        local isExp = guide.eachSourceContain(info.ast.ast, info.offset, function (source)
+            if source.type == "ifexp" or source.type == "elseifexp" then
+                return true
+            end
+        end)
+        if isExp then
+            return false
+        end
         local lines = files.getLines(info.uri)
         local pos, first = info.text:match('%S+%s+()(%S+)', info.start)
         if first == 'end'

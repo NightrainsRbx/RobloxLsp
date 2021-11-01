@@ -85,6 +85,8 @@ m.childMap = {
     ['type.alias']  = {'name', 'value', 'generics'},
     ['type.assert'] = {1, 2},
     ['...']         = {'typeAnn'},
+    ['ifexp']       = {'filter', '#'},
+    ['elseifexp']   = {'filter', 1},
 
     ['type.list']     = {"#"},
     ['type.table']    = {"#"},
