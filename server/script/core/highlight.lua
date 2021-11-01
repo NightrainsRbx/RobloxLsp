@@ -113,7 +113,9 @@ local function findKeyWord(ast, text, offset, callback)
         or source.type == 'loop'
         or source.type == 'in'
         or source.type == 'while'
-        or source.type == 'repeat' then
+        or source.type == 'repeat'
+        or source.type == 'ifexp'
+        or source.type == 'elseifexp' then
             local ok
             for i = 1, #source.keyword, 2 do
                 local start  = source.keyword[i]
