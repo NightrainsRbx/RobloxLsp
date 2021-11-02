@@ -66,7 +66,11 @@ function updateRobloxAPI(context) {
                         })
                     ]);
                 })).then(() => {
-                    vscode.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://clonetrooper1019.github.io/Roblox-API-History.html)`);
+                    vscode.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://clonetrooper1019.github.io/Roblox-API-History.html)`, "Reload VSCode").then((item) => __awaiter(this, void 0, void 0, function* () {
+                        if (item == "Reload VSCode") {
+                            vscode.commands.executeCommand('workbench.action.reloadWindow');
+                        }
+                    }));
                 });
                 writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), lastVersion);
             }
