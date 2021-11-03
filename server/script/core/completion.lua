@@ -773,7 +773,8 @@ local function checkKeyWord(ast, text, start, offset, word, hasSpace, afterLocal
             if  key ~= 'nil'
             and key ~= 'true'
             and key ~= 'false'
-            and key ~= 'function' then
+            and key ~= 'function'
+            and key ~= 'if' then
                 goto CONTINUE
             end
         end

@@ -767,12 +767,12 @@ local Defs = {
             start  = ifStart,
             finish = finish,
             keyword = {
-                ifStart, ifFinish,
-                thenStart, thenFinish,
-                elseStart, elseFinish,
+                ifStart, ifFinish - 1,
+                thenStart, thenFinish - 1,
+                elseStart, elseFinish - 1,
             },
             filter = ifExp,
-            [2]    = thenExp,
+            [1]    = thenExp,
         }
         for i = 1, #elseIfs do
             obj[#obj+1] = elseIfs[i]
@@ -786,8 +786,8 @@ local Defs = {
             start  = ifStart,
             finish = finish,
             keyword = {
-                ifStart, ifFinish,
-                thenStart, thenFinsih,
+                ifStart, ifFinish - 1,
+                thenStart, thenFinsih - 1,
             },
             filter = ifExp,
             [1]    = thenExp,

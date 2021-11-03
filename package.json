@@ -1272,7 +1272,8 @@
 				"extensions": [
 					".lua",
 					".luau"
-				]
+				],
+				"configuration": "./language-configuration.json"
 			}
 		],
 		"grammars": [
@@ -1345,7 +1346,7 @@
 		"type": "git",
 		"url": "https://github.com/NightrainsRbx/RobloxLsp"
 	},
-	"version": "1.4.0",
+	"version": "1.5.0",
 	"__metadata": {
 		"id": "169d2b9c-69d2-482a-aee2-ea6c33ed4e89",
 		"publisherId": "e1e7384e-2406-4940-a937-5fad58f8815e",

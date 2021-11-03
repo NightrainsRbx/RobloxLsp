@@ -1013,6 +1013,9 @@ function m.getSimpleName(obj)
     elseif obj.type == 'binary'
     or     obj.type == 'unary' then
         return ('%p'):format(obj)
+    elseif obj.type == 'ifexp'
+    or     obj.type == 'elseifexp' then
+        return ('%p'):format(obj)
     elseif obj.type == 'doc.class.name'
     or     obj.type == 'doc.type.name'
     or     obj.type == 'doc.see.name' then
@@ -1418,6 +1421,10 @@ local function buildSimpleList(obj, max)
         or     cur.type == "unary" then
             list[i] = cur
             break
+        elseif cur.type == "ifexp"
+        or     cur.type == "elseifexp" then
+            list[i] = cur
+            break
         elseif cur.type == "type.assert" then
             list[i] = cur
             break
@@ -1454,8 +1461,10 @@ function m.getSimple(obj, max)
     or obj.type == 'string'
     or obj.type == 'number'
     or obj.type == '...'
-    or obj.type == "binary"
-    or obj.type == "unary"
+    or obj.type == 'binary'
+    or obj.type == 'unary'
+    or obj.type == 'ifexp'
+    or obj.type == 'elseifexp'
     or obj.type == 'doc.class.name'
     or obj.type == 'doc.class'
     or obj.type == 'doc.type.name'
@@ -3810,6 +3819,20 @@ function m.checkSameSimpleInMeta(status, ref, start, pushQueue, mode)
     return true
 end
 
+function m.checkSameSimpleInIfExp(status, source, start, pushQueue, mode)
+    source = m.getObjectValue(source) or source
+    if source.type == "ifexp" or source.type == "elseifexp" then
+        for i = 1, #source do
+            local newStatus = m.status(status)
+            m.searchRefs(newStatus, source[i], mode)
+            pushQueue(source[i], start, true)
+            for _, obj in ipairs(newStatus.results) do
+                pushQueue(obj, start, true)
+            end
+        end
+    end
+end
+
 function m.checkSameSimpleInBinaryOrUnary(status, source, start, pushQueue, mode)
     source = m.getObjectValue(source) or source
     if source.type == "binary" or source.type == "unary" then
@@ -3922,7 +3945,9 @@ function m.pushResult(status, mode, ref, simple)
         and ref.parent
         and (ref.parent.type == 'callargs'
         or ref.parent.type == 'binary'
-        or ref.parent.type == 'unary')
+        or ref.parent.type == 'unary'
+        or ref.parent.type == 'ifexp'
+        or ref.parent.type == 'elseifexp')
         and ref ~= simple.node then
             results[#results+1] = ref
         end
@@ -3978,7 +4003,9 @@ function m.pushResult(status, mode, ref, simple)
         and ref.parent
         and (ref.parent.type == 'callargs'
         or ref.parent.type == 'binary'
-        or ref.parent.type == 'unary')
+        or ref.parent.type == 'unary'
+        or ref.parent.type == 'ifexp'
+        or ref.parent.type == 'elseifexp')
         and ref ~= simple.node then
             results[#results+1] = ref
         end
@@ -4150,6 +4177,7 @@ function m.checkSameSimple(status, simple, ref, start, force, mode, pushQueue)
             m.checkSameSimpleInCall(status, ref, i, pushQueue, cmode)
             m.checkSameSimpleInCallbackParam(status, ref, i, pushQueue)
             m.checkSameSimpleInBinaryOrUnary(status, ref, i, pushQueue, cmode)
+            m.checkSameSimpleInIfExp(status, ref, i, pushQueue, cmode)
             -- 检查形如 for k,v in pairs()/ipairs() do end 的情况
             m.checkSameSimpleAsKeyOrValueInForPairs(status, ref, i, pushQueue)
             if cmode == 'ref' then
