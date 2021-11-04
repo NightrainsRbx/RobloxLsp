@@ -16,6 +16,8 @@ local DEVELOP      = _G.DEVELOP
 local log          = log
 local _G           = _G
 
+local SET_VALUE_LIMIT = 10
+
 ---@class parser.guide.object
 
 local function logWarn(...)
@@ -3239,7 +3241,7 @@ function m.checkSameSimpleInCall(status, ref, start, pushQueue, mode)
     if status.share.inBeSetValue and status.share.inBeSetValue > 0 then
         return
     end
-    if status.share.inSetValue and status.share.inSetValue > 10 then
+    if status.share.inSetValue and status.share.inSetValue > SET_VALUE_LIMIT then
         return
     end
     local func, args, index = m.getCallValue(ref)
@@ -3285,7 +3287,7 @@ function m.checkSameSimpleInCall(status, ref, start, pushQueue, mode)
             if parentFunc and not m.hasParent(status.searchFrom or status.main, parentFunc) then
                 -- status.funcMain[parentFunc] = obj
                 -- status.searchFrom = obj
-                local ret = parentFunc.returns[#parentFunc.returns] or obj
+                local ret = parentFunc.returns and parentFunc.returns[#parentFunc.returns] or obj
                 status.funcMain[parentFunc] = ret
                 status.searchFrom = ret
             end
@@ -3420,7 +3422,7 @@ function m.searchSameFieldsInValue(status, ref, start, pushQueue, mode)
     if status.share.inBeSetValue and status.share.inBeSetValue > 0 then
         return
     end
-    if status.share.inSetValue and status.share.inSetValue > 10 then
+    if status.share.inSetValue and status.share.inSetValue > SET_VALUE_LIMIT then
         return
     end
     local value = m.getObjectValue(ref)
@@ -3509,7 +3511,7 @@ function m.checkSameSimpleAsSetValue(status, ref, start, pushQueue)
     if status.share.inSetValue and status.share.inSetValue > 0 then
         return
     end
-    if status.share.inBeSetValue and status.share.inBeSetValue > 10 then
+    if status.share.inBeSetValue and status.share.inBeSetValue > SET_VALUE_LIMIT then
         return
     end
     if ref.type == 'select' then
@@ -3699,7 +3701,7 @@ function m.checkSameSimpleAsCallArg(status, ref, start, pushQueue)
     if (status.share.inSetValue or 0) > 0 then
         return
     end
-    if status.share.inBeSetValue and status.share.inBeSetValue > 10 then
+    if status.share.inBeSetValue and status.share.inBeSetValue > SET_VALUE_LIMIT then
         return
     end
     status.share.inBeSetValue = (status.share.inBeSetValue or 0) + 1
