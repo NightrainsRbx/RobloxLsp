@@ -1377,24 +1377,23 @@ local Defs = {
         local argCount = 0
         for i = 1, #args do
             local arg = args[i]
-            local argAst = arg
-            if argAst.type == ',' then
+            if arg.type == ',' then
                 if wantName then
                     PushError {
                         type = 'MISS_NAME',
                         start = lastStart,
-                        finish = argAst.start-1,
+                        finish = arg.start-1,
                     }
                 end
                 wantName = true
-            elseif argAst.type == "type.ann" then
+            elseif arg.type == "type.ann" then
                 goto CONTINUE
             else
                 if not wantName then
                     PushError {
                         type = 'MISS_SYMBOL',
                         start = lastStart-1,
-                        finish = argAst.start-1,
+                        finish = arg.start-1,
                         info = {
                             symbol = ',',
                         }
@@ -1403,12 +1402,12 @@ local Defs = {
                 wantName = false
                 argCount = argCount + 1
 
-                if argAst.type == '...' then
+                if arg.type == '...' then
                     args[argCount] = arg
                     if i < #args then
                         local a = args[i+1]
                         local b = args[#args]
-                        if type(b) ~= "number" and b.type == "type.ann" then
+                        if a == b and type(b) ~= "number" and b.type == "type.ann" then
                             arg.typeAnn = b
                             arg.range = b.finish
                             break
@@ -1428,7 +1427,7 @@ local Defs = {
                     args[argCount] = createLocal(arg, arg.start, nil, typeAnn)
                 end
             end
-            lastStart = argAst.finish + 1
+            lastStart = arg.finish + 1
             ::CONTINUE::
         end
         for i = argCount + 1, #args do
