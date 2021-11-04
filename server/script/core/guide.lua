@@ -3239,7 +3239,7 @@ function m.checkSameSimpleInCall(status, ref, start, pushQueue, mode)
     if status.share.inBeSetValue and status.share.inBeSetValue > 0 then
         return
     end
-    if status.share.inSetValue and status.share.inSetValue > --[[5]] 10 then
+    if status.share.inSetValue and status.share.inSetValue > 10 then
         return
     end
     local func, args, index = m.getCallValue(ref)
@@ -3283,8 +3283,11 @@ function m.checkSameSimpleInCall(status, ref, start, pushQueue, mode)
         if status.main then
             local parentFunc = m.getParentFunction(obj)
             if parentFunc and not m.hasParent(status.searchFrom or status.main, parentFunc) then
-                status.funcMain[parentFunc] = obj
-                status .searchFrom = obj
+                -- status.funcMain[parentFunc] = obj
+                -- status.searchFrom = obj
+                local ret = parentFunc.returns[#parentFunc.returns] or obj
+                status.funcMain[parentFunc] = ret
+                status.searchFrom = ret
             end
         end
         m.searchRefs(newStatus, obj, mode)
@@ -3417,7 +3420,7 @@ function m.searchSameFieldsInValue(status, ref, start, pushQueue, mode)
     if status.share.inBeSetValue and status.share.inBeSetValue > 0 then
         return
     end
-    if status.share.inSetValue and status.share.inSetValue > 5 then
+    if status.share.inSetValue and status.share.inSetValue > 10 then
         return
     end
     local value = m.getObjectValue(ref)
@@ -3506,7 +3509,7 @@ function m.checkSameSimpleAsSetValue(status, ref, start, pushQueue)
     if status.share.inSetValue and status.share.inSetValue > 0 then
         return
     end
-    if status.share.inBeSetValue and status.share.inBeSetValue > 5 then
+    if status.share.inBeSetValue and status.share.inBeSetValue > 10 then
         return
     end
     if ref.type == 'select' then
@@ -3696,7 +3699,7 @@ function m.checkSameSimpleAsCallArg(status, ref, start, pushQueue)
     if (status.share.inSetValue or 0) > 0 then
         return
     end
-    if status.share.inBeSetValue and status.share.inBeSetValue > 5 then
+    if status.share.inBeSetValue and status.share.inBeSetValue > 10 then
         return
     end
     status.share.inBeSetValue = (status.share.inBeSetValue or 0) + 1
