@@ -4560,9 +4560,10 @@ function m.searchRefs(status, obj, mode)
     if m.checkStatusDepth(status) then
         local simple = m.getSimple(obj)
         if simple then
-            if simple[#simple] ~= m.ANY then
+            -- if simple[#simple] ~= m.ANY then
+            --     m.searchSameFields(status, simple, mode)
+            -- end
                 m.searchSameFields(status, simple, mode)
-            end
         end
     end
     tracy.ZoneEnd()
