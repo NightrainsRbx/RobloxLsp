@@ -82,7 +82,7 @@ function updateRobloxAPI(context) {
 }
 function openUpdatesWindow(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (context.globalState.get("sawVersionLogNew9", false) == false) {
+        if (context.globalState.get("sawVersionLogNew10", false) == false) {
             const panel = vscode.window.createWebviewPanel('robloxlspUpdates', 'Roblox LSP Updates', vscode.ViewColumn.One, {});
             panel.webview.html = `<!DOCTYPE html>
         <html lang="en">
@@ -97,6 +97,9 @@ function openUpdatesWindow(context) {
                 <p style="font-size:1rem">More info: <a href="https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745">https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745</a></p>
                 <p style="font-size:1rem">Report any bug or question here: <a href="https://github.com/NightrainsRbx/RobloxLsp/issues">https://github.com/NightrainsRbx/RobloxLsp/issues</a></p>
                 <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
+                <h2 style="font-size:2rem; font-weight:100">1.5.1</h2>
+                <li style="font-size:1rem">Improved type inference.</li>
+                <li style="font-size:1rem">Fixed some bugs.</li>
                 <h2 style="font-size:2rem; font-weight:100">1.5.0</h2>
                 <li style="font-size:1rem">Support for if expressions.</li>
                 <li style="font-size:1rem">Added table.freeze and table.isfrozen.</li>
@@ -161,7 +164,7 @@ function openUpdatesWindow(context) {
             </div>
         </body>
         </html>`;
-            yield context.globalState.update("sawVersionLogNew9", true);
+            yield context.globalState.update("sawVersionLogNew10", true);
         }
     });
 }
