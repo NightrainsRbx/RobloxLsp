@@ -1010,12 +1010,6 @@ function m.getSimpleName(obj)
         return ('%p'):format(obj)
     elseif obj.type == 'string' then
         return ('%p'):format(obj)
-    elseif obj.type == 'binary'
-    or     obj.type == 'unary' then
-        return ('%p'):format(obj)
-    elseif obj.type == 'ifexp'
-    or     obj.type == 'elseifexp' then
-        return ('%p'):format(obj)
     elseif obj.type == 'doc.class.name'
     or     obj.type == 'doc.type.name'
     or     obj.type == 'doc.see.name' then
@@ -1026,16 +1020,7 @@ function m.getSimpleName(obj)
     return m.getKeyName(obj)
 end
 
-local makeNameTypeCache = {}
-
 local function makeNameType(tp)
-    -- if not makeNameTypeCache[tp] then
-    --     makeNameTypeCache[tp] = {
-    --         [1] = tp,
-    --         type = "type.name"
-    --     }
-    -- end
-    -- return makeNameTypeCache[tp]
     return {
         [1] = tp,
         type = "type.name"
@@ -3903,10 +3888,9 @@ function m.pushResult(status, mode, ref, simple)
     if mode == 'def' then
         if m.typeAnnTypes[ref.type] then
             results[#results+1] = ref
-        end
-        if ref.type == 'setglobal'
-        or ref.type == 'setlocal'
-        or ref.type == 'local' then
+        elseif ref.type == 'setglobal'
+        or     ref.type == 'setlocal'
+        or     ref.type == 'local' then
             results[#results+1] = ref
         elseif ref.type == 'setfield'
         or     ref.type == 'tablefield' then
@@ -3935,32 +3919,29 @@ function m.pushResult(status, mode, ref, simple)
             if #ref.enums > 0 or #ref.resumes > 0 then
                 results[#results+1] = ref
             end
+        elseif ref.type == 'metatable' then
+            results[#results+1] = ref
         end
         if ref.parent and ref.parent.type == 'return' then
             if m.getParentFunction(ref) ~= m.getParentFunction(simple.node) then
                 results[#results+1] = ref
             end
         end
-        if  m.isLiteral(ref)
-        and ref.parent
-        and (ref.parent.type == 'callargs'
-        or ref.parent.type == 'binary'
-        or ref.parent.type == 'unary'
-        or ref.parent.type == 'ifexp'
-        or ref.parent.type == 'elseifexp')
-        and ref ~= simple.node then
-            results[#results+1] = ref
-        end
-        if ref.type == 'metatable' then
-            results[#results+1] = ref
+        if ref.parent and m.isLiteral(ref) and ref ~= simple.node then
+            if ref.parent.type == "callargs"
+            or ref.parent.type == "binary"
+            or ref.parent.type == "unary"
+            or ref.parent.type == "ifexp"
+            or ref.parent.type == "elseifexp" then
+                results[#results+1] = ref
+            end
         end
     elseif mode == 'ref' then
         if m.typeAnnTypes[ref.type] then
             results[#results+1] = ref
-        end
-        if ref.type == 'setfield'
-        or ref.type == 'getfield'
-        or ref.type == 'tablefield' then
+        elseif ref.type == 'setfield'
+        or     ref.type == 'getfield'
+        or     ref.type == 'tablefield' then
             results[#results+1] = ref
         elseif ref.type == 'setmethod'
         or     ref.type == 'getmethod' then
@@ -3995,22 +3976,20 @@ function m.pushResult(status, mode, ref, simple)
             if #ref.enums > 0 or #ref.resumes > 0 then
                 results[#results+1] = ref
             end
+        elseif ref.type == 'metatable' then
+            results[#results+1] = ref
         end
         if ref.parent and ref.parent.type == 'return' then
             results[#results+1] = ref
         end
-        if  m.isLiteral(ref)
-        and ref.parent
-        and (ref.parent.type == 'callargs'
-        or ref.parent.type == 'binary'
-        or ref.parent.type == 'unary'
-        or ref.parent.type == 'ifexp'
-        or ref.parent.type == 'elseifexp')
-        and ref ~= simple.node then
-            results[#results+1] = ref
-        end
-        if ref.type == 'metatable' then
-            results[#results+1] = ref
+        if ref.parent and m.isLiteral(ref) and ref ~= simple.node then
+            if ref.parent.type == "callargs"
+            or ref.parent.type == "binary"
+            or ref.parent.type == "unary"
+            or ref.parent.type == "ifexp"
+            or ref.parent.type == "elseifexp" then
+                results[#results+1] = ref
+            end
         end
     elseif mode == 'field' then
         if ref.type == "type.field"
@@ -4458,30 +4437,6 @@ function m.cleanResults(results)
     end
 end
 
---function m.getRefCache(status, obj, mode)
---    local cache = status.interface.cache and status.interface.cache()
---    if not cache then
---        return
---    end
---    if m.isGlobal(obj) then
---        obj = m.getKeyName(obj)
---    end
---    if not cache[mode] then
---        cache[mode] = {}
---    end
---    local sourceCache = cache[mode][obj]
---    if sourceCache then
---        return sourceCache
---    end
---    sourceCache = {}
---    cache[mode][obj] = sourceCache
---    return nil, function (results)
---        for i = 1, #results do
---            sourceCache[i] = results[i]
---        end
---    end
---end
-
 function m.getRefCache(status, obj, mode)
     local isDeep = status.deep
     if mode == 'infer' then
@@ -4563,7 +4518,7 @@ function m.searchRefs(status, obj, mode)
             -- if simple[#simple] ~= m.ANY then
             --     m.searchSameFields(status, simple, mode)
             -- end
-                m.searchSameFields(status, simple, mode)
+            m.searchSameFields(status, simple, mode)
         end
     end
     tracy.ZoneEnd()
