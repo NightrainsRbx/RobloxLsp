@@ -1251,7 +1251,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "FromNormalId",
-                    "Deprecated": true,
+                    "Deprecated": false,
                     "Parameters": [
                         {
                             "Name": "normal",
@@ -1268,7 +1268,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "FromAxis",
-                    "Deprecated": true,
+                    "Deprecated": false,
                     "Parameters": [
                         {
                             "Name": "axis",
@@ -2786,7 +2786,7 @@
                     "Name": "Orthonormalize",
                     "Parameters": [],
                     "ReturnType": {
-                        "Name": "CFRame"
+                        "Name": "CFrame"
                     }
                 },
                 {
