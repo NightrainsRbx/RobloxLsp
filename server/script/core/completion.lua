@@ -332,9 +332,9 @@ local function checkRobloxService(ast, word, offset, results)
         end
     end)
     local side = 0
-    if ast.uri:match("%.server%.lua$") then
+    if ast.uri:match("%.server%.lua[u]?$") then
         side = 1
-    elseif ast.uri:match("%.client%.lua$") then
+    elseif ast.uri:match("%.client%.lua[u]?$") then
         side = 2
     end
     for serviceName, serviceSide in pairs(rbxlibs.RELEVANT_SERVICES) do

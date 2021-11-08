@@ -30,7 +30,7 @@ function vm.getGlobals(key, uri, onlySet)
             end
         end
     end
-    if uri:match("%.spec%.lua$") or uri:match("%.spec%/init%.lua$") then
+    if uri:match("%.spec%.lua[u]?$") or uri:match("%.spec%/init%.lua[u]?$") then
         for _, lib in pairs(defaultlibs.testez) do
             if key == "*" or lib.name == key then
                 globals[#globals+1] = lib

@@ -124,7 +124,10 @@ local ConfigTemplate = {
         path              = {{
                                 "?.lua",
                                 "?/init.lua",
-                                "?/?.lua"
+                                "?/?.lua",
+                                "?.luau",
+                                "?/init.luau",
+                                "?/?.luau"
                             },        Array(String)},
         meta              = {'${version} ${language}', String},
         plugin            = {'.vscode/lua/plugin.lua', String},

@@ -33,17 +33,17 @@ local librariesTypes = {
 }
 
 function rojo:scriptClass(filename)
-    if filename:match("^.+%.server%.lua$") then
+    if filename:match("^.+%.server%.lua[u]?$") then
         return "Script"
-    elseif filename:match("^.+%.client%.lua$") then
+    elseif filename:match("^.+%.client%.lua[u]?$") then
         return "LocalScript"
-    elseif filename:match("^.+%.lua$") then
+    elseif filename:match("^.+%.lua[u]?$") then
         return "ModuleScript"
     end
 end
 
 local function removeLuaExtension(name)
-    return name:gsub("%.server%.lua$", ""):gsub("%.client%.lua$", ""):gsub("%.lua$", "")
+    return name:gsub("%.server%.lua[u]?$", ""):gsub("%.client%.lua[u]?$", ""):gsub("%.lua[u]?$", "")
 end
 
 local function normalizePath(path)
@@ -254,7 +254,7 @@ function rojo:matchLibrary(uri)
     if not config.config.intelliSense.autoDetectLibraries then
         return
     end
-    if uri:match("%.spec%.lua$") then
+    if uri:match("%.spec%.lua[u]?$") then
         return nil
     end
     local cache = rojo.LibraryCache[uri]

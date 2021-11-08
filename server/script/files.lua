@@ -810,7 +810,7 @@ function m.isLua(uri)
     if not ext then
         return false
     end
-    if m.eq(ext, 'lua') then
+    if m.eq(ext, 'lua') or m.eq(ext, 'luau') then
         return true
     end
     local matcher = m.getAssoc()
