@@ -27,6 +27,13 @@ return function (uri, callback)
             if config.config.diagnostics.globals[key] then
                 return
             end
+        else
+            if not src.field and not src.method and not src.index then
+                return
+            end
+            if src.index and src.index.type ~= "string" then
+                return
+            end
         end
 
         await.delay()
