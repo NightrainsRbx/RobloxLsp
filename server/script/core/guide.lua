@@ -3118,7 +3118,7 @@ local function typeCheckFunctionCall(status, func, callArgs)
                         callArgs[#callArgs+1] = otherType.parent[j]
                     end
                 end
-            elseif otherType.parent.type == "type.variadic" then
+            elseif otherType.parent.type == "type.variadic" or other.type == "varargs" then
                 for _ = i + 1, #func.args do
                     callArgs[#callArgs+1] = otherType
                 end
@@ -3752,14 +3752,20 @@ function m.checkSameSimpleInLiteral(status, ref, start, pushQueue, mode)
         end
         return true
     else
-        if  ref.type ~= 'string'
-        and not hasTypeName(ref, 'string') then
-            return
+        if ref.type == 'select' then
+            ref = ref.vararg
         end
-        for _, child in pairs(rbxlibs.object["string"].child) do
-            pushQueue(child, start + 1)
+        if ref.type == 'varargs' then
+            if ref.typeAnn then
+                pushQueue(ref.typeAnn, start, true)
+            end
+            return true
+        elseif ref.type == "string" or hasTypeName(ref, 'string') then
+            for _, child in pairs(rbxlibs.object["string"].child) do
+                pushQueue(child, start + 1)
+            end
+            return true
         end
-        return true
     end
 end
 
@@ -4153,8 +4159,6 @@ function m.checkSameSimple(status, simple, ref, start, force, mode, pushQueue)
             m.checkSameSimpleInValueOfTable(status, ref, i, pushQueue)
             -- 检查自己作为 setmetatable 第一个参数的情况
             m.checkSameSimpleInArg1OfSetMetaTable(status, ref, i, pushQueue)
-            -- 检查自己作为 setmetatable 调用的情况
-            -- m.checkSameSimpleInValueOfCallMetaTable(status, ref, i, pushQueue)
             -- self 的特殊处理
             m.checkSameSimpleInParamSelf(status, ref, i, pushQueue)
             -- 自己是 call 的情况
@@ -5023,9 +5027,9 @@ function m.inferCheckLiteral(status, source)
         }
         return true
     elseif source.type == 'table' then
-        if m.inferCheckLiteralTableWithDocVararg(status, source) then
-            return true
-        end
+        -- if m.inferCheckLiteralTableWithDocVararg(status, source) then
+        --     return true
+        -- end
         status.results = m.allocInfer {
             type   = 'table',
             source = source,

@@ -960,7 +960,7 @@ local function checkCallFunction(func, call, pushResult)
                         callArgs[#callArgs+1] = otherType.parent[j]
                     end
                 end
-            elseif otherType.parent.type == "type.variadic" then
+            elseif otherType.parent.type == "type.variadic" or other.type == "varargs" then
                 tuple = other
                 for _ = i + 1, #func.args do
                     callArgs[#callArgs+1] = otherType
