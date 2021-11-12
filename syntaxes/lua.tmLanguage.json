@@ -111,7 +111,7 @@
 			]
 		},
 		{
-			"match": "\\b(for)\\s+([^=]+)\\b(in)\\b",
+			"match": "\\b(for)\\s+([^=]+)(\\bin\\b|(=))",
 			"captures": {
 				"1": {
 					"name": "keyword.control.lua"
@@ -141,6 +141,9 @@
 				},
 				"3": {
 					"name": "keyword.control.lua"
+				},
+				"4": {
+					"name": "keyword.operator.assignment.lua"
 				}
 			}
 		},

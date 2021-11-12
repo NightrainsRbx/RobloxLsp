@@ -89,7 +89,11 @@ Care['getlocal'] = function (source, results)
     and source.parent.node == source then
         return
     end
-    if loc.parent and loc.parent.type == 'funcargs' then
+    local parent = loc.parent
+    if not parent then
+        return
+    end
+    if parent.type == 'funcargs' or parent.type == 'in' or parent.type == 'loop' then
         results[#results+1] = {
             start      = source.start,
             finish     = source.finish,
