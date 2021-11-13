@@ -70,13 +70,13 @@ m.RELEVANT_SERVICES = {
     ["StarterGui"] = 0,
     ["StarterPack"] = 0,
     ["StarterPlayer"] = 0,
-    ["Stats"] = 0,
     ["Teams"] = 0,
     ["TeleportService"] = 0,
     ["TextService"] = 0,
     ["TweenService"] = 0,
     ["UserInputService"] = 2,
     ["VRService"] = 2,
+    ["MemoryStoreService"] = 1,
 }
 
 local REPLICATE_TO_PLAYER = {
