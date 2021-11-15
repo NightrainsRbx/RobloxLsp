@@ -2006,7 +2006,9 @@ function m.checkSameSimpleInParamSelf(status, obj, start, pushQueue)
         return
     end
     local func = node.parent.parent
-    if func.type ~= 'function' or func.parent.type ~= 'setfield' then
+    if func.type ~= 'function'
+    or func.parent.type ~= 'setfield'
+    or func.parent.type ~= 'setmethod' then
         return
     end
     local fieldNode = func.parent.node
@@ -2805,6 +2807,13 @@ function m.searchSameFieldsCrossMethod(status, ref, start, pushQueue, mode)
     end
     local method = m.searchSameMethodOutSelf(ref, mark)
     if method then
+        if method.type == "getfield" then
+            local newStatus = m.status(status)
+            m.searchRefs(newStatus, method, mode)
+            for _, res in ipairs(newStatus.results) do
+                pushQueue(res, start, true)
+            end
+        end
         pushQueue(method, start, true)
         return
     end

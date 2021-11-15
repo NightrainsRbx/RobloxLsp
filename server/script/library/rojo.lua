@@ -264,15 +264,17 @@ function rojo:matchLibrary(uri)
         end
         return cache
     end
-    local text = util.loadFile(furi.decode(uri))
-    for tp, info in pairs(librariesTypes) do
-        if text:match(info.textPattern) then
-            rojo.LibraryCache[uri] = {
-                [1] = tp,
-                type = "type.name",
-                typeAlias = defaultlibs.customType[tp]
-            }
-            return rojo.LibraryCache[uri]
+    local success, text = pcall(json.decode, util.loadFile(furi.decode(uri)))
+    if success then
+        for tp, info in pairs(librariesTypes) do
+            if text:match(info.textPattern) then
+                rojo.LibraryCache[uri] = {
+                    [1] = tp,
+                    type = "type.name",
+                    typeAlias = defaultlibs.customType[tp]
+                }
+                return rojo.LibraryCache[uri]
+            end
         end
     end
     rojo.LibraryCache[uri] = false
