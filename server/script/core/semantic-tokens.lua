@@ -93,21 +93,27 @@ Care['getlocal'] = function (source, results)
     if not parent then
         return
     end
-    if parent.type == 'funcargs' or parent.type == 'in' or parent.type == 'loop' then
-        results[#results+1] = {
-            start      = source.start,
-            finish     = source.finish,
-            type       = define.TokenTypes.parameter,
-            modifiers  = define.TokenModifiers.declaration,
-        }
+    if parent.type == "in" and parent.keys then
+        for i, key in ipairs(parent.keys) do
+            if key == loc then
+                break
+            elseif i == #parent.keys then
+                return
+            end
+        end
+    elseif parent.type == "loop" then
+        if parent.loc ~= loc then
+            return
+        end
+    elseif parent.type ~= "funcargs" then
         return
     end
-    -- 7. 其他
-    -- results[#results+1] = {
-    --     start      = source.start,
-    --     finish     = source.finish,
-    --     type       = define.TokenTypes.variable,
-    -- }
+    results[#results+1] = {
+        start      = source.start,
+        finish     = source.finish,
+        type       = define.TokenTypes.parameter,
+        modifiers  = define.TokenModifiers.declaration,
+    }
 end
 Care['setlocal'] = Care['getlocal']
 Care['doc.return.name'] = function (source, results)
