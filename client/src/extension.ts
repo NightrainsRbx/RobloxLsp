@@ -29,7 +29,7 @@ function writeToFile(path: string, content: string) {
 function updateRobloxAPI(context: vscode.ExtensionContext) {
     fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/version.txt', (lastVersion) => {
         try {
-            const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), 'utf8')
+            const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'api', 'version.txt')), 'utf8')
             if (currentVersion != lastVersion) {
                 vscode.window.withProgress({
                     location: vscode.ProgressLocation.Notification,
@@ -37,20 +37,15 @@ function updateRobloxAPI(context: vscode.ExtensionContext) {
                     cancellable: false
                 }, async () => {
                     return Promise.all([
-                        // new Promise<void>(resolve => {
-                        //     fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/ReflectionMetadata.xml', (data) => {
-                        //         writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'ReflectionMetadata.xml')), data);
-                        //         resolve();
-                        //     });
-                        // }),
                         new Promise<void>(resolve => {
-                            fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/AutocompleteMetadata.xml', (data) => {
-                                writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'AutocompleteMetadata.xml')), data);
-                            }, resolve);
+                            fetchData('https://github.com/MaximumADHD/Roblox-Client-Tracker/blob/roblox/api-docs/en-us.json', (data) => {
+                                writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Docs.json')), data);
+                                resolve();
+                            });
                         }),
                         new Promise<void>(resolve => {
                             fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/API-Dump.json', (data) => {
-                                writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'API-Dump.json')), data);
+                                writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Dump.json')), data);
                             }, resolve);
                         })
                     ]);
@@ -61,7 +56,7 @@ function updateRobloxAPI(context: vscode.ExtensionContext) {
                         }
                     });
                 });
-                writeToFile(context.asAbsolutePath(path.join('server', 'rbx', 'version.txt')), lastVersion);
+                writeToFile(context.asAbsolutePath(path.join('server', 'api', 'version.txt')), lastVersion);
             }
         } catch (err) {
             vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);

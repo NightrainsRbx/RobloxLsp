@@ -2,7 +2,6 @@ local json = require 'json'
 local lang = require 'language'
 local rojo = require 'library.rojo'
 local util = require 'utility'
-local xml = require 'xml'
 
 local defaultlibs
 
@@ -153,8 +152,7 @@ local function generateEnums(argName, enumType)
         enums[#enums+1] = {
             argName = argName,
             label = '"' .. item .. '"',
-            detail = type(detail) == "string" and detail or nil,
-            description = m.ClassDocs[item] and m.ClassDocs[item].__Summary
+            detail = type(detail) == "string" and detail or nil
         }
     end
     return enums
@@ -275,21 +273,6 @@ local function parseMembers(data, isObject)
         local readOnly = nil
         local description = ""
         local overloadDescription = nil
-        if m.ClassDocs[data.Name] then
-            if type(m.ClassDocs[data.Name][member.Name]) == "string" then
-                description = m.ClassDocs[data.Name][member.Name]
-            else
-                overloadDescription = m.ClassDocs[data.Name][member.Name]
-            end
-        else
-            for class, _docs in pairs(m.ClassDocs) do
-                if m.isA(class, data.Name) then
-                    if _docs[member.Name] then
-                        description = _docs[member.Name]
-                    end
-                end
-            end
-        end
         if member.Deprecated then
             deprecated = true
         end
@@ -308,15 +291,15 @@ local function parseMembers(data, isObject)
                 tags[#tags+1] = tag
             end
             if #tags > 0 then
-                description = string.format("%s\n\n*tags: %s.*", description, table.concat(tags, ", "))
+                description = ("%s\n\n*tags: %s.*"):format(description, table.concat(tags, ", "))
             end
         end
         if deprecated and (member.Name:sub(1, 1) == member.Name:sub(1, 1):lower() or data.Name == "Vector3") then
             hidden = true
         end
-        local docs = getDocumentationLink(member, data.Name)
-        if docs then
-            description = ("%s\n\n[%s](%s)"):format(description, lang.script.HOVER_VIEW_DOCUMENTS, docs)
+        local docLink = getDocumentationLink(member, data.Name)
+        if docLink then
+            description = ("%s\n\n[%s](%s)"):format(description, lang.script.HOVER_VIEW_DOCUMENTS, docLink)
         end
         if member.MemberType == "Property" then
             local enums = nil
@@ -552,81 +535,6 @@ local function parseEnums()
     end
 end
 
-local function parseReflectionMetadata()
-    local htmlToMarkdown = json.decode(util.loadFile(ROOT / "rbx" / "html_md.json"))
-    local data = xml.parser.parse(util.loadFile(ROOT / "rbx" / "ReflectionMetadata.xml"))
-    local classes = xml.getAttr(data.children[1], "class", "ReflectionMetadataClasses")
-    xml.forAttr(classes, "class", "ReflectionMetadataClass", function(class)
-        local properties = xml.getTag(class, "Properties")
-        local className = xml.getChild(xml.getAttr(properties, "name", "Name"), "text")
-        local summary = xml.getChild(xml.getAttr(properties, "name", "summary"), "text")
-        local docs = m.ClassDocs[className] or {}
-        if summary and summary:match("%&%w+") then
-            summary = htmlToMarkdown[className]
-        end
-        docs.__Summary = summary
-        xml.forTag(class, "Item", function(item)
-            xml.forAttr(item, "class", "ReflectionMetadataMember", function(member)
-                local properties = xml.getTag(member, "Properties")
-                if properties then
-                    local memberName = xml.getChild(xml.getAttr(properties, "name", "Name"), "text")
-                    local summary = xml.getChild(xml.getAttr(properties, "name", "summary"), "text")
-                    if summary and summary:match("%&%w+") then
-                        summary = htmlToMarkdown[memberName]
-                    end
-                    docs[memberName] = summary
-                end
-            end)
-        end)
-        m.ClassDocs[className] = docs
-    end)
-end
-
-local function parseAutocompleteMetadata()
-    local data = xml.parser.parse(util.loadFile(ROOT / "rbx" / "AutocompleteMetadata.xml"))
-    local items = xml.getTag(data, "StudioAutocomplete")
-    xml.forTag(items, "ItemStruct", function(struct)
-        local className = struct.attrs.name
-        if className == "EventInstance" then
-            className = "RBXScriptSignal"
-        elseif className == "RobloxScriptConnection" then
-            className = "RBXScriptConnection"
-        end
-        local docs = m.ClassDocs[className] or {}
-        local overload = {}
-        xml.forTag(struct, "Function", function(func)
-            local memberName = func.attrs.name
-            local description = xml.getChild(xml.getTag(func, "description"), "text")
-            if description then
-                if className ~= "Color3" and overload[memberName] then
-                    if type(docs[memberName]) == "string" then
-                        docs[memberName] = {
-                            docs[memberName]
-                        }
-                    end
-                    table.insert(docs[memberName], description)
-                else
-                    docs[memberName] = description
-                end
-            end
-            overload[memberName] = true
-        end)
-        xml.forTag(struct, "Properties", function(properties)
-            for _, prop in pairs(properties.children) do
-                if not prop.attrs then
-                    return
-                end
-                local memberName = prop.attrs.name
-                local description = xml.getChild(prop, "text")
-                if description then
-                    docs[memberName] = description
-                end
-            end
-        end)
-        m.ClassDocs[className] = docs
-    end)
-end
-
 local function addSuperMembers(class, superClass, mark)
     if not m.object[superClass] then
         return
@@ -700,7 +608,7 @@ function m.isA(class, super)
 end
 
 local function applyCorrections(api)
-    local corrections = json.decode(util.loadFile(ROOT / "rbx" / "Corrections.json"))
+    local corrections = json.decode(util.loadFile(ROOT / "api" / "Corrections.json"))
     for _, class in ipairs(corrections.Classes) do
         for _, otherClass in ipairs(api.Classes) do
             if otherClass.Name == class.Name then
@@ -744,17 +652,13 @@ end
 
 function m.loadApi()
     if not m.Api then
-        local apiDump = json.decode(util.loadFile(ROOT / "rbx" / "API-Dump.json"))
-        local dataTypes = json.decode(util.loadFile(ROOT / "rbx" / "datatypes.json")
-                                   or util.loadFile(ROOT / "rbx" / "DataTypes.json"))
+        local apiDump = json.decode(util.loadFile(ROOT / "api" / "API-Dump.json"))
+        local dataTypes = json.decode(util.loadFile(ROOT / "api" / "DataTypes.json"))
         applyCorrections(apiDump)
         for key, value in pairs(dataTypes) do
             apiDump[key] = value
         end
         m.Api = apiDump
-        m.ClassDocs = {}
-        -- parseReflectionMetadata()
-        parseAutocompleteMetadata()
     end
     return m.Api
 end
