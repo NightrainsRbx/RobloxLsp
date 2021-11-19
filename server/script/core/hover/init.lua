@@ -133,7 +133,7 @@ local function getHoverAsFunction(source, oop)
 end
 
 local function getHoverAsTypeFunction(source, values, oop)
-    local desc = {getDesc(source)}
+    local desc = {}
     local name
     local lines = {}
     name, oop   = buildName(source, oop)
@@ -164,7 +164,7 @@ local function getHoverAsTypeFunction(source, values, oop)
     return {
         label       = table.concat(lines, '\n'),
         source      = source,
-        description = #desc > 0 and table.concat(desc, '\n'),
+        description = #desc > 0 and table.concat(desc, '\n') or getDesc(source),
     }
 end
 
