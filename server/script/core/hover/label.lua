@@ -70,6 +70,12 @@ local function asValue(source, title)
     and #vm.getFields(source, 0, {searchAll = true}) > 0 then
         cont = buildTable(source)
     end
+    for _, def in ipairs(vm.getDefs(source, 0)) do
+        if def.kind then
+            title = def.kind
+            break
+        end
+    end
     local pack = {}
     pack[#pack+1] = title
     pack[#pack+1] = name .. ':'

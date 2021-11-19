@@ -852,6 +852,16 @@ local function parseDocumentaion()
             end
             ::CONTINUE::
         end
+        m.object.string = {child = {}}
+        for _, field in ipairs(m.global.string.value) do
+            field = util.shallowCopy(field)
+            field.type = "type.library"
+            field.value = util.deepCopy(field.value)
+            field.method = true
+            field.name = field.key[1]
+            util.setTypeParent(field)
+            m.object.string.child[#m.object.string.child+1] = field
+        end
     end)
     if not success then
         log.error(err)

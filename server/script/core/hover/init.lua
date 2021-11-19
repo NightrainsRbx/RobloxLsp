@@ -133,7 +133,7 @@ local function getHoverAsFunction(source, oop)
 end
 
 local function getHoverAsTypeFunction(source, values, oop)
-    local desc = getDesc(source)
+    local desc = {getDesc(source)}
     local name
     local lines = {}
     name, oop   = buildName(source, oop)
@@ -145,6 +145,9 @@ local function getHoverAsTypeFunction(source, values, oop)
             local arg   = buildArg(value, oop)
             local rtn   = buildReturn(value)
             lines[#lines+1] = ('function %s(%s)'):format(name, arg)
+            if value.parent.description then
+                desc[#desc+1] = value.parent.description
+            end
             if rtn then
                 lines[#lines+1] = INV .. rtn .. INV
             end
@@ -161,7 +164,7 @@ local function getHoverAsTypeFunction(source, values, oop)
     return {
         label       = table.concat(lines, '\n'),
         source      = source,
-        description = desc,
+        description = #desc > 0 and table.concat(desc, '\n'),
     }
 end
 
