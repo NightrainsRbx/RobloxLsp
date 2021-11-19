@@ -750,12 +750,7 @@ end
 
 local function parseDocumentaion()
     if not m.Docs then
-        local fs = require("bee.filesystem")
-        if fs.exists(ROOT / "api" / "API-Docs.json") then
-            m.Docs = json.decode(util.loadFile(ROOT / "api" / "API-Docs.json"))
-        else
-            return
-        end
+        m.Docs = json.decode(util.loadFile(ROOT / "api" / "API-Docs.json"))
     end
     local success, err = pcall(function ()
         for id, doc in pairs(m.Docs) do
@@ -777,6 +772,9 @@ local function parseDocumentaion()
                     end
                 elseif i == 3 then
                     local names = util.split(id[i], "%.")
+                    if names[2] == "FromNormalId" or names[2] == "FromAxis" then
+                        names[2] = "f" .. names[2]:sub(2)
+                    end
                     object = object[names[1]]
                     if object then
                         for j = 2, #names do
@@ -855,9 +853,9 @@ local function parseDocumentaion()
             ::CONTINUE::
         end
     end)
-    -- if not success then
-    --     error(err)
-    -- end
+    if not success then
+        log.error(err)
+    end
 end
 
 local function setChildParent(obj, parent)
