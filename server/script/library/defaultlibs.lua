@@ -376,11 +376,11 @@ local typeEnums = {
 
 local function loadLibLocale(langID, result)
 	result = result or {}
-    local path = (ROOT / 'locale' / langID / 'library.lua'):string()
-    local localeContent = util.loadFile(path)
-    if localeContent then
-        xpcall(lloader, log.error, localeContent, path, result)
-    end
+    -- local path = (ROOT / 'locale' / langID / 'library.lua'):string()
+    -- local localeContent = util.loadFile(path)
+    -- if localeContent then
+    --     xpcall(lloader, log.error, localeContent, path, result)
+    -- end
     return result
 end
 

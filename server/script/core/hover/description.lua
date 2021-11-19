@@ -335,7 +335,10 @@ return function (source)
             if source.parent.parent.overloadDescription then
                 for index, value in ipairs(source.parent) do
                     if value == source then
-                        return source.parent.parent.overloadDescription[index]
+                        local overload = source.parent.parent.overloadDescription[index]
+                        if overload then
+                            return overload.description
+                        end
                     end
                 end
             end

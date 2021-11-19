@@ -375,6 +375,23 @@ function m.tableHas(t, v)
     return false
 end
 
+function m.split(str, sep)
+    local t = {}
+    local current = 1
+    while current <= #str do
+        local s, e = str:find(sep, current)
+        if not s then
+            t[#t+1] = str:sub(current)
+            break
+        end
+        if s > 1 then
+            t[#t+1] = str:sub(current, s - 1)
+        end
+        current = e + 1
+    end
+    return t
+end
+
 --- 序列化
 function m.unpack(t)
     local result = {}

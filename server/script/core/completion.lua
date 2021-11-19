@@ -1380,6 +1380,32 @@ function (%s)\
 end"):format(table.concat(args, ', '))
 end
 
+local function getEnumDescription(enum)
+    if enum.description then
+        return enum.description
+    end
+    if not enum.descLocation then
+        return
+    end
+    if enum.descLocation.class then
+        local object = rbxlibs.object[enum.descLocation.class]
+        if object then
+            return rbxlibs.object[enum.descLocation.class].description
+        end
+    elseif enum.descLocation.enum then
+        for _, enumParent in ipairs(rbxlibs.object["Enums"].child) do
+            if enumParent.name == enum.descLocation.parent then
+                for _, child in ipairs(enumParent.value.child) do
+                    if child.name == enum.descLocation.enum then
+                        return child.description
+                    end
+                end
+                break
+            end
+        end
+    end
+end
+
 local function getCallEnums(source, index, callArg)
     if source.type ~= "function"
     and source.type ~= "type.function"
@@ -1409,7 +1435,7 @@ local function getCallEnums(source, index, callArg)
                         label       = enum.label,
                         detail      = enum.text,
                         insertText  = enum.text,
-                        description = enum.description,
+                        description = getEnumDescription(enum),
                         kind        = define.CompletionItemKind.EnumMember,
                     }
                 end
@@ -1461,7 +1487,7 @@ local function getCallEnums(source, index, callArg)
                     label       = enum.label,
                     detail      = enum.detail,
                     insertText  = enum.text,
-                    description = enum.description,
+                    description = getEnumDescription(enum),
                     kind        = define.CompletionItemKind.Color,
                 }
             end
@@ -1475,7 +1501,7 @@ local function getCallEnums(source, index, callArg)
                     label       = enum.label,
                     detail      = enum.text,
                     insertText  = enum.text,
-                    description = enum.description,
+                    description = getEnumDescription(enum),
                     kind        = define.CompletionItemKind.EnumMember,
                 }
             end
@@ -1835,7 +1861,7 @@ local function tryFieldEnum(ast, text, offset, results)
                     label       = enum.label,
                     detail      = enum.text,
                     insertText  = str and enum.text:match("%w+") or enum.text,
-                    description = enum.description,
+                    description = getEnumDescription(enum),
                     kind        = define.CompletionItemKind.EnumMember,
                 }
             end

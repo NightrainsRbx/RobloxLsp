@@ -33,24 +33,24 @@ function updateRobloxAPI(context: vscode.ExtensionContext) {
             if (currentVersion != lastVersion) {
                 vscode.window.withProgress({
                     location: vscode.ProgressLocation.Notification,
-                    title: 'Updating Roblox API',
+                    title: 'Roblox LSP: Updating API',
                     cancellable: false
                 }, async () => {
                     return Promise.all([
                         new Promise<void>(resolve => {
-                            fetchData('https://github.com/MaximumADHD/Roblox-Client-Tracker/blob/roblox/api-docs/en-us.json', (data) => {
-                                writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Docs.json')), data);
-                                resolve();
-                            });
-                        }),
-                        new Promise<void>(resolve => {
                             fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/API-Dump.json', (data) => {
                                 writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Dump.json')), data);
                             }, resolve);
+                        }),
+                        new Promise<void>(resolve => {
+                            fetchData('https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/api-docs/en-us.json', (data) => {
+                                writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Docs.json')), data);
+                                resolve();
+                            });
                         })
                     ]);
                 }).then(() => {
-                    vscode.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://clonetrooper1019.github.io/Roblox-API-History.html)`, "Reload VSCode").then(async (item) => {
+                    vscode.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://maximumadhd.github.io/Roblox-API-History)`, "Reload VSCode").then(async (item) => {
                         if (item == "Reload VSCode") {
                             vscode.commands.executeCommand('workbench.action.reloadWindow');
                         }

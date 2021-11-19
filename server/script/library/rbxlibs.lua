@@ -141,7 +141,11 @@ local function generateEnums(argName, enumType)
                     enums[#enums+1] =  {
                         argName = argName,
                         label = item.Name,
-                        text = "Enum." .. enumType .. "." .. item.Name
+                        text = "Enum." .. enumType .. "." .. item.Name,
+                        descLocation = {
+                            parent = enumType,
+                            enum = item.Name
+                        },
                     }
                 end
             end
@@ -152,7 +156,10 @@ local function generateEnums(argName, enumType)
         enums[#enums+1] = {
             argName = argName,
             label = '"' .. item .. '"',
-            detail = type(detail) == "string" and detail or nil
+            detail = type(detail) == "string" and detail or nil,
+            descLocation = enumType < 4 and {
+                class = item
+            },
         }
     end
     return enums
@@ -258,21 +265,11 @@ local function parseMembers(data, isObject)
     local members = {}
     local overload = {}
     for _, member in ipairs(data.Members) do
-        if member.Security then
-            if type(member.Security) == "string" and not MEMBER_SECURITY[member.Security] then
-                goto CONTINUE
-            elseif type(member.Security) == "table" then
-                if not MEMBER_SECURITY[member.Security.Read] then
-                    goto CONTINUE
-                end
-            end
-        end
         local fullName = data.Name .. "." .. member.Name
         local hidden = nil
         local deprecated = nil
         local readOnly = nil
         local description = ""
-        local overloadDescription = nil
         if member.Deprecated then
             deprecated = true
         end
@@ -292,6 +289,15 @@ local function parseMembers(data, isObject)
             end
             if #tags > 0 then
                 description = ("%s\n\n*tags: %s.*"):format(description, table.concat(tags, ", "))
+            end
+        end
+        if member.Security then
+            local security = type(member.Security) == "string" and member.Security or member.Security.Read
+            if not MEMBER_SECURITY[security] then
+                goto CONTINUE
+            end
+            if security ~= "None" then
+                description = ("%s\n\n*security: %s.*"):format(description, security)
             end
         end
         if deprecated and (member.Name:sub(1, 1) == member.Name:sub(1, 1):lower() or data.Name == "Vector3") then
@@ -347,7 +353,6 @@ local function parseMembers(data, isObject)
                 name = member.Name,
                 type = "type.library",
                 description = description,
-                overloadDescription = overloadDescription,
                 method = isObject and member.MemberType ~= "Callback" or nil,
                 value = {
                     type = "type.function",
@@ -464,7 +469,6 @@ local function parseMembers(data, isObject)
     end
     return members
 end
-
 
 local function parseEnums()
     local enums = m.object["Enums"]
@@ -663,6 +667,199 @@ function m.loadApi()
     return m.Api
 end
 
+local function htmlReplace(tag, attrs, content)
+    content = content or ""
+    if tag == "code" then
+        if attrs and attrs:match("class=\"language%-lua\"") then
+            content = content:gsub("&quot;", "\""):gsub("\n\n", "\n")
+            return "```lua\n" .. content .. "\n```"
+        end
+        local title = content:match("|(.-)$")
+        if title then
+            content = content:match("^(.-)|")
+        end
+        if content:lower():match("^articles[%./]") then
+            content = content:match("[%./](.-)$")
+            return ("[%s](https://developer.roblox.com/en-us/articles/%s)"):format(title or content, content:gsub("%s", "-"))
+        elseif content:lower():match("^datatype[%./]") then
+            content = content:match("[%./](.-)$")
+            return ("[%s](https://developer.roblox.com/en-us/api-reference/datatype/%s)"):format(title or content, content)
+        elseif content:lower():match("^enum[%./]") then
+            content = content:match("[%./](.-)$")
+            return ("[%s](https://developer.roblox.com/en-us/api-reference/enum/%s)"):format(title or content, content)
+        elseif content:match("^(.+)[%./:](.+)$") then
+            local class, member = content:match("^(.+)[%./:](.+)$")
+            local object = m.object[class]
+            if object then
+                for _, child in ipairs(object.child) do
+                    if child.name == member then
+                        if child.value.type == "type.function" then
+                            return ("[%s](https://developer.roblox.com/en-us/api-reference/function/%s/%s)"):format(title or content, class, member)
+                        elseif child.kind == "property" then
+                            return ("[%s](https://developer.roblox.com/en-us/api-reference/property/%s/%s)"):format(title or content, class, member)
+                        elseif child.kind == "event" then
+                            return ("[%s](https://developer.roblox.com/en-us/api-reference/event/%s/%s)"):format(title or content, class, member)
+                        end
+                        break
+                    end
+                end
+            end
+        elseif m.object[content] then
+            return ("[%s](https://developer.roblox.com/en-us/api-reference/class/%s)"):format(title or content, content)
+        end
+        return "`" .. (title or content) .. "`"
+    elseif tag == "em" or tag == "i" then
+        return "*" .. content .. "*"
+    elseif tag == "strong" or tag == "b" then
+        return "**" .. content .. "**"
+    elseif tag == "h2" then
+        return "## " .. content
+    elseif tag == "li" then
+        return "* " .. content
+    elseif tag == "a" and attrs then
+        local href = attrs:match("href=\"(.-)\"")
+        if href then
+            if href:sub(1, 4) ~= "http" then
+                href = "https://developer.roblox.com/" .. href
+            end
+            local title = attrs:match("title=\"(.-)\"") or content
+            return ("[%s](%s)"):format(title, href)
+        end
+    elseif tag == "img" and attrs then
+        local src = attrs:match("src=\"(.-)\"")
+        if src then
+            if src:sub(1, 4) ~= "http" then
+                src = "https://developer.roblox.com/" .. src
+            end
+            local alt = attrs:match("alt=\"(.-)\"")
+            return ("![%s](%s \"%s\")"):format(alt or content, src, content)
+        end
+    end
+    return content
+end
+
+local function parseHtmlToMarkdown(str)
+    str = str:gsub("\n", "\n\n"):gsub("></", "> </")
+    repeat
+        local c = 0
+        str, c = str:gsub("<(%w+)([^>]*)>(.-)</%1>", htmlReplace)
+    until c == 0
+    str = str:gsub("<(%w+)([^>]*)>", htmlReplace)
+    return str
+end
+
+local function parseDocumentaion()
+    if not m.Docs then
+        local fs = require("bee.filesystem")
+        if fs.exists(ROOT / "api" / "API-Docs.json") then
+            m.Docs = json.decode(util.loadFile(ROOT / "api" / "API-Docs.json"))
+        else
+            return
+        end
+    end
+    local success, err = pcall(function ()
+        for id, doc in pairs(m.Docs) do
+            doc = type(doc) == "table" and doc.documentation or doc
+            if type(doc) ~= "string" or #doc == 0 or doc == "<p>TBD</p>" then
+                goto CONTINUE
+            end
+            id = util.split(id, "/")
+            local object = nil
+            for i = 2, #id do
+                if i == 2 then
+                    if id[i] == "global" then
+                        object = m.global
+                    elseif id[i] == "globaltype" then
+                        object = m.object
+                    elseif id[i] == "enum" then
+                        object = m.object
+                        id[3] = "Enums." .. id[3]
+                    end
+                elseif i == 3 then
+                    local names = util.split(id[i], "%.")
+                    object = object[names[1]]
+                    if object then
+                        for j = 2, #names do
+                            local fields = object.child or object.value
+                            object = nil
+                            if fields then
+                                fields = fields.child or fields
+                                for key, field in pairs(fields) do
+                                    if (key == names[j])
+                                    or (field.type == "type.field" and field.key[1] == names[j])
+                                    or (field.type == "type.library" and field.name == names[j]) then
+                                        object = field
+                                        break
+                                    end
+                                end
+                            end
+                            if not object then
+                                break
+                            end
+                        end
+                    end
+                elseif id[i] == "overload" then
+                    if object.value.type == "type.inter" then
+                        local guide = require("core.guide")
+                        local tp = id[i + 1]
+                            :gsub("[%?%s]", "")
+                            :gsub("Tuple", "...any")
+                        for index, value in ipairs(object.value) do
+                            value = guide.getObjectValue(value) or value
+                            local tp2 = guide.buildTypeAnn(value)
+                                :gsub("%w+: ", "")
+                                :gsub("[%?%s]", "")
+                                :gsub("Array<.->", "table")
+                            if tp == tp2 then
+                                if i + 1 == #id then
+                                    if not object.overloadDescription then
+                                        object.overloadDescription = {}
+                                    end
+                                    object.overloadDescription[index] = {}
+                                    object = object.overloadDescription[index]
+                                else
+                                    object = value
+                                end
+                                goto NEXT
+                            end
+                        end
+                        object = nil
+                        ::NEXT::
+                    end
+                elseif id[i] == "param" then
+                    local args = object.args or (object.value and object.value.args)
+                    if args then
+                        object = args[tonumber(id[i + 1]) + 1]
+                    else
+                        object = nil
+                    end
+                elseif id[i] == "return" then
+                    local returns = object.returns or (object.value and object.value.returns)
+                    if returns then
+                        if returns.type == "type.list" then
+                            object = returns[tonumber(id[i + 1]) + 1]
+                        else
+                            object = returns
+                        end
+                    else
+                        object = nil
+                    end
+                end
+                if object == nil then
+                    break
+                end
+            end
+            if type(object) == "table" then
+                object.description = parseHtmlToMarkdown(doc) .. (object.description or "")
+            end
+            ::CONTINUE::
+        end
+    end)
+    -- if not success then
+    --     error(err)
+    -- end
+end
+
 local function setChildParent(obj, parent)
     if obj.kind ~= "child" then
         return
@@ -823,6 +1020,7 @@ function m.init()
         }
         util.setTypeParent(m.global[constructor.Name])
     end
+    parseDocumentaion()
     require("vm").flushCache()
 end
 
