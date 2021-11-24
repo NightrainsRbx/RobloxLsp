@@ -852,7 +852,7 @@ local function parseDocumentaion()
             end
             ::CONTINUE::
         end
-        m.object.string = {child = {}}
+        m.object.string.child = {}
         for _, field in ipairs(m.global.string.value) do
             field = util.shallowCopy(field)
             field.type = "type.library"
