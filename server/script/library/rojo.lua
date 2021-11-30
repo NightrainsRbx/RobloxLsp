@@ -50,6 +50,15 @@ local function normalizePath(path)
     return path:gsub("[/\\]+", "/"):gsub("/$", ""):gsub("^%.%/", "")
 end
 
+local function isValidPath(path)
+    if type(path) ~= "string" then
+        return false
+    end
+    if normalizePath(path):match("^%/?%w") then
+        return true
+    end
+end
+
 local function inspectModel(model)
     if not model.Children then
         return
@@ -228,7 +237,7 @@ function rojo.getChildren(parent, name, tree, path)
             child = {}
         }
     }
-    if tree["$path"] then
+    if tree["$path"] and isValidPath(tree["$path"]) then
         local filePath = path .. normalizePath(tree["$path"])
         rojo.Watch[#rojo.Watch+1] = filePath
         rojo.searchFile(obj, filePath)
