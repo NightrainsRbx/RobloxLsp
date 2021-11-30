@@ -2326,6 +2326,17 @@
                 }
             ],
             "Name": "Teams"
+        },
+        {
+            "Members": [
+                {
+                    "Name": "GetDataStore",
+                    "ReturnType": {
+                        "Name": "DataStore"
+                    }
+                }
+            ],
+            "Name": "DataStoreService"
         }
     ]
 }
