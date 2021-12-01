@@ -1285,6 +1285,9 @@ local function checkUnary(source, pushResult)
         return
     end
     local metamethods = guide.requestMeta(source[1], vm.interface, 0, inferOptions)
+    if #metamethods == 0 then
+        return
+    end
     for _, meta in ipairs(metamethods) do
         if guide.unaryMeta[op] == guide.getKeyName(meta) then
             return

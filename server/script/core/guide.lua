@@ -1138,9 +1138,9 @@ function m.getPath(a, b, sameFunction)
 end
 
 -- 根据语法，单步搜索定义
-local function stepRefOfLocal(status, loc, mode)
+local function stepRefOfLocal(status, ref, loc, mode)
     local results = {}
-    if loc.start ~= 0 and not m.isOpaqued(loc, status) then
+    if loc.start ~= 0 and not m.isOpaqued(loc, ref, status) then
         results[#results+1] = loc
     end
     local refs = m.getVisibleRefs(loc, status)
@@ -1220,10 +1220,10 @@ end
 function m.getStepRef(status, obj, mode)
     if obj.type == 'getlocal'
     or obj.type == 'setlocal' then
-        return stepRefOfLocal(status, obj.node, mode)
+        return stepRefOfLocal(status, obj, obj.node, mode)
     end
     if obj.type == 'local' then
-        return stepRefOfLocal(status, obj, mode)
+        return stepRefOfLocal(status, nil, obj, mode)
     end
     if obj.type == 'doc.class.name'
     or obj.type == 'doc.type.name'
@@ -1313,7 +1313,7 @@ local function convertSimpleList(list)
             end
             simple.mode = 'local'
             if not simple.node then
-                simple.node = c.node
+                simple.node = c--.node
             end
         elseif c.type == 'local' then
             simple.mode = 'local'
@@ -1502,7 +1502,7 @@ function m.getVisibleRefs(obj, status)
                 range = select(2, m.getRange(status.funcMain[refFunc]))
             end
             if refFunc == mainFunc then
-                if ref.start > range and not blockTypes[searchFrom.type] then
+                if (ref.range or ref.start) > range and not (blockTypes[searchFrom.type] and not m.hasParent(searchFrom, ref)) then
                     goto CONTINUE
                 end
             elseif not m.hasParent(mainFunc, refFunc) then
@@ -1515,19 +1515,21 @@ function m.getVisibleRefs(obj, status)
     return refs
 end
 
-function m.isOpaqued(loc, status)
+function m.isOpaqued(loc, nodeRef, status)
     if loc.typeAnn then
         return false
     end
     if not status.main or not loc.ref then
         return false
     end
-    local mainFunc = m.getParentFunction(status.searchFrom or status.main)
+    local searchFrom = status.searchFrom or status.main
+    local mainFunc = m.getParentFunction(searchFrom)
     for _, ref in ipairs(loc.ref) do
         if ref ~= status.main
         and m.isSet(ref)
-        and ref.start < (status.searchFrom or status.main).start
-        and m.hasParent(status.searchFrom or status.main, m.getParentBlock(ref)) then
+        and (ref.range or ref.start) < searchFrom.start
+        and (not nodeRef or not m.hasParent(nodeRef, ref))
+        and m.hasParent(searchFrom, m.getParentBlock(ref)) then
             local refFunc = m.getParentFunction(ref)
             if refFunc == mainFunc or m.hasParent(mainFunc, refFunc) then
                 return true
@@ -4231,8 +4233,8 @@ function m.searchSameFields(status, simple, mode)
     local queues, starts, forces = allocQueue()
     local queueLen = 0
     local locks = {}
-    local function appendQueue(obj, start, force)
-        if obj.type == "local" and m.isOpaqued(obj, status) then
+    local function appendQueue(obj, start, force, ref)
+        if obj.type == "local" and m.isOpaqued(obj, ref, status) then
             return true
         end
         local lock = locks[start]
@@ -4266,11 +4268,13 @@ function m.searchSameFields(status, simple, mode)
         return true
     end
     local function pushQueue(obj, start, force)
+        local nodeRef
         if obj.type == 'getlocal'
         or obj.type == 'setlocal' then
+            nodeRef = obj
             obj = obj.node
         end
-        if appendQueue(obj, start, force) == false then
+        if appendQueue(obj, start, force, nodeRef) == false then
             -- no need to process the rest if obj is already locked
             return
         end
