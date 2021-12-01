@@ -138,7 +138,7 @@ m.DiagnosticDefaultNeededFileStatus = {
 }
 
 m.TypeCheckingOptions = {
-    ["union-bivariance"]            = false,
+    ["union-bivariance"]            = true,
     ["ignore-extra-fields"]         = false,
     ["infer-instance-from-unknown"] = false,
     ["recursive-get-type"]          = false,

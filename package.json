@@ -1229,7 +1229,7 @@
 					"markdownDescription": "%config.typeChecking.options%",
 					"properties": {
 						"union-bivariance": {
-							"default": false,
+							"default": true,
 							"description": "%config.typeChecking.options.union-bivariance%",
 							"scope": "resource",
 							"type": "boolean"
