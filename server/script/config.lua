@@ -135,6 +135,8 @@ local ConfigTemplate = {
     },
     diagnostics = {
         enable          = {true, Boolean},
+        importScriptChildren = {false, Boolean},
+        importIgnore    = {{},   Array(String)},
         globals         = {{},   Str2Hash ';'},
         disable         = {{},   Str2Hash ';'},
         severity        = {

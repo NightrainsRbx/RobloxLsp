@@ -126,6 +126,20 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
+				"robloxLsp.diagnostics.importScriptChildren": {
+					"default": false,
+					"markdownDescription": "%config.diagnostics.importScriptChildren%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.diagnostics.importIgnore": {
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.diagnostics.importIgnore%",
+					"scope": "resource",
+					"type": "array"
+				},
 				"robloxLsp.diagnostics.globals": {
 					"items": {
 						"type": "string"

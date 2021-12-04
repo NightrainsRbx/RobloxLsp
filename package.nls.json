@@ -18,6 +18,8 @@
     "config.develop.enable": "Developer mode. Do not enable, performance will be affected.",
     "config.diagnostics.disable": "Disabled diagnostic (Use code in hover brackets).\n",
     "config.diagnostics.enable": "Enable diagnostics and syntax errors. Disabling this will not disable type checking.",
+    "config.diagnostics.importScriptChildren": "Suggest require paths that index scripts",
+    "config.diagnostics.importIgnore": "Globs to never suggest when suggesting require paths. For example: `**/_Index/**` to ignore wally's index folder. Case sensitive. Acts on the absolute path of files.",
     "config.diagnostics.globals": "Defined global variables.\n",
     "config.diagnostics.neededFileStatus": "If you want to check only opened files, choice Opened; else choice Any.\n",
     "config.diagnostics.severity": "Modified diagnostic severity.\n",
