@@ -8,7 +8,6 @@ local vm      = require 'vm'
 local rbxlibs = require 'library.rbxlibs'
 local config  = require 'config'
 local glob    = require 'glob'
-local platform = require 'bee.platform'
 local furi     = require 'file-uri'
 
 local function checkDisableByLuaDocExits(uri, row, mode, code)
