@@ -2370,18 +2370,22 @@ function m.checkSameSimpleOfRefByDocReturn(status, obj, start, pushQueue, mode)
     end
     status.share.searchingBindedDoc = nil
     for _, res in ipairs(newStatus.results) do
-        local call = res.parent
-        if call.type == 'call' then
-            if index == 1 then
-                local sel = call.parent
-                if sel.type == 'select' and sel.index == index then
-                    pushQueue(sel.parent, start, true)
-                end
-            else
-                if call.extParent then
-                    for _, sel in ipairs(call.extParent) do
-                        if sel.type == 'select' and sel.index == index then
-                            pushQueue(sel.parent, start, true)
+        if res.type == 'metatable' then
+            pushQueue(res, start, true)
+        else
+            local call = res.parent
+            if call.type == 'call' then
+                if index == 1 then
+                    local sel = call.parent
+                    if sel.type == 'select' and sel.index == index then
+                        pushQueue(sel.parent, start, true)
+                    end
+                else
+                    if call.extParent then
+                        for _, sel in ipairs(call.extParent) do
+                            if sel.type == 'select' and sel.index == index then
+                                pushQueue(sel.parent, start, true)
+                            end
                         end
                     end
                 end
