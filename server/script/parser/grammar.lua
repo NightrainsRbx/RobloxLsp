@@ -342,6 +342,7 @@ MissMethod  <-  {} -> MissMethod
 CallStart   <-  PL
             /   TL
             /   '"'
+            /   AL
             /   "'"
             /   '[' '='* '['
 
