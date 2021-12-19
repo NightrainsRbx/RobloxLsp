@@ -1307,6 +1307,21 @@ end
 return function (_, state)
     local ast = state.ast
     local comments = state.comms
+    -- for _, comm in ipairs(comments) do
+    --     if comm.type == "comment.long" and comm.text:match("@%w+") then
+    --         for start, text, finish in comm.text:gmatch("%s+()(@[%w%p ]+)()") do
+    --             comments[#comments+1] = {
+    --                 type = "comment.short",
+    --                 text = "- " .. text,
+    --                 start = start + comm.start + 4,
+    --                 finish = finish + comm.start + 4
+    --             }
+    --             comm.text = comm.text:gsub("%s*" .. text:gsub("(%p)", function (s)
+    --                 return "%" .. s
+    --             end), "")
+    --         end
+    --     end
+    -- end
     table.sort(comments, function (a, b)
         return a.start < b.start
     end)

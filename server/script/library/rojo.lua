@@ -101,7 +101,7 @@ function rojo.searchFile(parent, filePath)
             end
             return
         end
-        for childPath in path:list_directory() do
+        for childPath in fs.pairs(path) do
             local childName = tostring(childPath:filename())
             if rojo:scriptClass(childName) then
                 local name = removeLuaExtension(childName)
@@ -341,7 +341,7 @@ function rojo:loadRojoProject()
             end
         end
     else
-        for path in fs.current_path():list_directory() do
+        for path in fs.pairs(fs.current_path()) do
             if path:string():match("%.project%.json") then
                 local success, project = pcall(json.decode, util.loadFile(path:string()))
                 if success and project.tree then

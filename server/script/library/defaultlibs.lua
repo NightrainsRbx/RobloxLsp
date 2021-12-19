@@ -1,6 +1,6 @@
 local lang    = require 'language'
-local lloader = require 'locale-loader'
 local util    = require 'utility'
+local fs      = require 'bee.filesystem'
 
 local m = {}
 
@@ -438,7 +438,7 @@ function m.init()
         util.setTypeParent(field)
         m.object.string.child[#m.object.string.child+1] = field
     end
-    for libPath in (ROOT / "def" / "3rd"):list_directory() do
+    for libPath in fs.pairs(ROOT / "def" / "3rd") do
         local state = parser:compile(util.loadFile(libPath), "lua")
         state.ast.uri = tostring(libPath)
         if state.ast.types then

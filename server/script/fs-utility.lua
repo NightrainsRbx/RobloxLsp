@@ -386,7 +386,7 @@ local function fileRemove(path, option)
         return
     end
     if fsIsDirectory(path, option) then
-        for child in path:list_directory() do
+        for child in fs.pairs(path) do
             fileRemove(child, option)
         end
     end
@@ -401,7 +401,7 @@ local function fileCopy(source, target, option)
     local isExists = fsExists(target, option)
     if isDir1 then
         if isDir2 or fsCreateDirectories(target, option) then
-            for filePath in source:list_directory() do
+            for filePath in fs.pairs(source) do
                 local name = filePath:filename():string()
                 fileCopy(filePath, target / name, option)
             end
@@ -432,10 +432,10 @@ local function fileSync(source, target, option)
     if isDir1 then
         if isDir2 then
             local fileList = m.fileList()
-            for filePath in target:list_directory() do
+            for filePath in fs.pairs(target) do
                 fileList[filePath] = true
             end
-            for filePath in source:list_directory() do
+            for filePath in fs.pairs(source) do
                 local name = filePath:filename():string()
                 local targetPath = target / name
                 fileSync(filePath, targetPath, option)
@@ -449,7 +449,7 @@ local function fileSync(source, target, option)
                 fileRemove(target, option)
             end
             if fsCreateDirectories(target) then
-                for filePath in source:list_directory() do
+                for filePath in fs.pairs(source) do
                     local name = filePath:filename():string()
                     fileCopy(filePath, target / name, option)
                 end
@@ -562,7 +562,7 @@ function m.fileSync(source, target, option)
 end
 
 function m.scanDirectory(dir, callback)
-    for fullpath in dir:list_directory() do
+    for fullpath in fs.pairs(dir) do
         if fs.is_directory(fullpath) then
             m.scanDirectory(fullpath, callback)
         else
