@@ -76,6 +76,7 @@ m.RELEVANT_SERVICES = {
     ["UserInputService"] = 2,
     ["VRService"] = 2,
     ["MemoryStoreService"] = 1,
+    ["Workspace"] = 0,
 }
 
 local REPLICATE_TO_PLAYER = {
