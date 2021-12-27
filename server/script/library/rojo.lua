@@ -98,6 +98,9 @@ function rojo.searchFile(parent, filePath)
                 local tree = {value = {child = {}}}
                 rojo.getChildren(tree, nil, project.tree, relativePath)
                 parent.value = tree.value
+                if project.name then
+                    parent.name = project.name
+                end
             end
             return
         end
@@ -215,6 +218,9 @@ function rojo.searchFile(parent, filePath)
                 local tree = {value = {child = {}}}
                 rojo.getChildren(tree, nil, project.tree, relativePath)
                 parent.value = tree.value
+                if project.name then
+                    parent.name = project.name
+                end
             end
         elseif name:match("%.txt$") then
             parent.value[1] = "StringValue"
