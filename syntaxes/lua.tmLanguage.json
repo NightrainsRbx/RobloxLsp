@@ -111,7 +111,7 @@
 			]
 		},
 		{
-			"match": "\\b(for)\\s+([^=]+)(\\bin\\b|(=))",
+			"match": "\\b(for)\\s+(.+?)(\\bin\\b|(=))",
 			"captures": {
 				"1": {
 					"name": "keyword.control.lua"
