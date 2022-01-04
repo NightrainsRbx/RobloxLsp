@@ -4,7 +4,7 @@ local guide   = require 'core.guide'
 local util    = require 'utility'
 local sp      = require 'bee.subprocess'
 local vm      = require 'vm'
-local rojoimports = require 'library.rojoimports'
+local rbximports = require 'library.rbximports'
 local config  = require 'config'
 local calcline = require 'parser.calcline'
 
@@ -193,7 +193,7 @@ local function solveSuggestedImport(uri, diag, results)
         return guide.getKeyName(source)
     end)
 
-    local matches = rojoimports.findPotentialImportsSorted(uri, name)
+    local matches = rbximports.findPotentialImportsSorted(uri, name)
 
     local requireLocation = findBestRequireLocation(ast, offset)
 

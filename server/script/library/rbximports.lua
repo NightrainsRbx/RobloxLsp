@@ -4,7 +4,7 @@ local glob = require("glob")
 local furi = require("file-uri")
 local util = require("utility")
 
-local rojoimports = {}
+local rbximports = {}
 
 ---@alias PathItem table @ An object from the environment used in a path
 
@@ -22,7 +22,7 @@ local rojoimports = {}
 ---@param path PathItem[] | nil @ Used when called recursively. You can ignore this for external use.
 ---@param ignoreGlob table | nil @ An array of glob strings to ignore. Defaults to the `importIgnore` settings.
 ---@return Match[]
-function rojoimports.findMatchingScripts(name, object, matching, path, ignoreGlob)
+function rbximports.findMatchingScripts(name, object, matching, path, ignoreGlob)
 	object = object or rbxlibs.global.game
 	matching = matching or {}
 	path = path or { object }
@@ -52,7 +52,7 @@ function rojoimports.findMatchingScripts(name, object, matching, path, ignoreGlo
 			end
 			if child.type == "type.library" and child.value.child then
 				table.insert(path, child)
-				rojoimports.findMatchingScripts(name, child, matching, path, ignoreGlob)
+				rbximports.findMatchingScripts(name, child, matching, path, ignoreGlob)
 				table.remove(path)
 			end
 		end
@@ -65,7 +65,7 @@ end
 ---@param object table @ The object we're searching under. If nil, this defaults to `game`.
 ---@param path PathItem[] | nil @ Used when called recursively. You can ignore this for external use.
 ---@return PathItem[] @ The path of objects that lead to this object from the root object we're searching in (typically `game`)
-function rojoimports.findPath(uri, object, path)
+function rbximports.findPath(uri, object, path)
 	object = object or rbxlibs.global.game
 	path = path or { object }
 
@@ -78,7 +78,7 @@ function rojoimports.findPath(uri, object, path)
 
 			if child.type == "type.library" and child.value.child then
 				table.insert(path, child)
-				local result = rojoimports.findPath(uri, child, path)
+				local result = rbximports.findPath(uri, child, path)
 				if result then
 					return result
 				end
@@ -109,7 +109,7 @@ end
 ---@param sourcePath PathItem[] @ The path to the source script we're adding the require statement for
 ---@param targetPath PathItem[] @ The path to the target script we're adding the require statement for
 ---@return string | nil @ The text used for the first arg to `require`, for example, `"script.Parent.Example"`. Nil is not possible.
-function rojoimports.findRelativeRequireArg(sourcePath, targetPath)
+function rbximports.findRelativeRequireArg(sourcePath, targetPath)
 	local sourcePathMap = {}
 	for index, node in ipairs(sourcePath) do
 		-- We only want to use relative paths if they don't go through game or a
@@ -157,7 +157,7 @@ end
 
 ---@param path PathItem[] @ The path to the target script we're adding the require statement for
 ---@return string @ The text used for the first arg to `require`, for example, `"game.ReplicatedStorage.Example"`
-function rojoimports.getAbsoluteRequireArg(path)
+function rbximports.getAbsoluteRequireArg(path)
 	local builder = { path[1].name }
 
 	for index, node in ipairs(path) do
@@ -184,20 +184,20 @@ end
 ---@param sourceUri string @ The source file we're trying to add imports to
 ---@param targetName string @ The target file name we're trying to add imports for
 ---@return boolean @ Whether the target has any potential imports usable in the source file
-function rojoimports.hasPotentialImports(sourceUri, targetName)
-	local rawMatches = rojoimports.findMatchingScripts(targetName)
+function rbximports.hasPotentialImports(sourceUri, targetName)
+	local rawMatches = rbximports.findMatchingScripts(targetName)
 	if #rawMatches == 0 then
 		return false
 	end
 
-	local sourcePath = rojoimports.findPath(sourceUri)
+	local sourcePath = rbximports.findPath(sourceUri)
 
 	for _, match in ipairs(rawMatches) do
 		-- Never do `require(script)` or equivalent.
 		if match.object.uri ~= sourceUri then
 			local targetPath = match.path
-			local relativeLuaPath = isRelativePathSupported() and sourcePath and rojoimports.findRelativeRequireArg(sourcePath, targetPath)
-			local absoluteLuaPath = isAbsolutePathSupported() and rojoimports.getAbsoluteRequireArg(targetPath)
+			local relativeLuaPath = isRelativePathSupported() and sourcePath and rbximports.findRelativeRequireArg(sourcePath, targetPath)
+			local absoluteLuaPath = isAbsolutePathSupported() and rbximports.getAbsoluteRequireArg(targetPath)
 			-- If the path tries to index into a script and that's disallowed,
 			-- it won't have any paths available
 			if relativeLuaPath or absoluteLuaPath then
@@ -212,21 +212,21 @@ end
 ---@param sourceUri string @ The source file we're trying to add imports to
 ---@param targetName string @ The target file name we're trying to add imports for
 ---@return ImportMatch[] @ The potential imports
-function rojoimports.findPotentialImportsSorted(sourceUri, targetName)
-	local rawMatches = rojoimports.findMatchingScripts(targetName)
+function rbximports.findPotentialImportsSorted(sourceUri, targetName)
+	local rawMatches = rbximports.findMatchingScripts(targetName)
 	if #rawMatches == 0 then
 		return {}
 	end
 
-	local sourcePath = rojoimports.findPath(sourceUri)
+	local sourcePath = rbximports.findPath(sourceUri)
 
 	local matches = {}
 	for _, match in ipairs(rawMatches) do
 		-- Never do `require(script)` or equivalent.
 		if match.object.uri ~= sourceUri then
 			local targetPath = match.path
-			match.relativeLuaPath = isRelativePathSupported() and sourcePath and rojoimports.findRelativeRequireArg(sourcePath, targetPath)
-			match.absoluteLuaPath = isAbsolutePathSupported() and rojoimports.getAbsoluteRequireArg(targetPath)
+			match.relativeLuaPath = isRelativePathSupported() and sourcePath and rbximports.findRelativeRequireArg(sourcePath, targetPath)
+			match.absoluteLuaPath = isAbsolutePathSupported() and rbximports.getAbsoluteRequireArg(targetPath)
 			-- If the path tries to index into a script and that's disallowed,
 			-- it won't have any paths available
 			if match.relativeLuaPath or match.absoluteLuaPath then
@@ -250,4 +250,4 @@ function rojoimports.findPotentialImportsSorted(sourceUri, targetName)
 	return matches
 end
 
-return rojoimports
+return rbximports

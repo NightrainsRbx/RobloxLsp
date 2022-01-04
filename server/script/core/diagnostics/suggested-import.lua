@@ -3,7 +3,7 @@ local vm      = require 'vm'
 local lang    = require 'language'
 local config  = require 'config'
 local guide   = require 'core.guide'
-local rojoimports = require 'library.rojoimports'
+local rbximports = require 'library.rbximports'
 
 local function check(src, uri, callback)
     local key = guide.getKeyName(src)
@@ -20,7 +20,7 @@ local function check(src, uri, callback)
             globals[#globals] = nil
         end
     end
-    if #globals == 0 and rojoimports.hasPotentialImports(uri, key) then
+    if #globals == 0 and rbximports.hasPotentialImports(uri, key) then
         callback {
             start   = src.start,
             finish  = src.finish,
