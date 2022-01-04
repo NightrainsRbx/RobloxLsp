@@ -203,7 +203,7 @@ local function solveSuggestedImport(uri, diag, results)
             break
         end
 
-        if config.config.misc.importPathType == "Relative and Absolute Paths" then
+        if config.config.misc.importPathType == "Both" then
             if match.relativeLuaPath then
                 suggestImport(uri, name, match.relativeLuaPath, requireLocation, results)
             end

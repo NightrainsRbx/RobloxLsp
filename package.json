@@ -1220,12 +1220,12 @@
 					"markdownDescription": "%config.misc.importPathType%",
 					"scope": "resource",
 					"type": "string",
-					"default": "Prefer Relative Paths",
+					"default": "Relative First",
 					"enum": [
-						"Only Relative Paths",
-						"Prefer Relative Paths",
-						"Relative and Absolute Paths",
-						"Only Absolute Paths"
+						"Relative First",
+						"Relative Only",
+						"Absolute Only",
+						"Both"
 					]
 				},
 				"robloxLsp.misc.serverPort": {

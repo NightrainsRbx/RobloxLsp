@@ -174,11 +174,11 @@ function rbximports.getAbsoluteRequireArg(path)
 end
 
 local function isRelativePathSupported()
-	return config.config.misc.importPathType ~= "Only Absolute Paths"
+	return config.config.misc.importPathType ~= "Absolute Only"
 end
 
 local function isAbsolutePathSupported()
-	return config.config.misc.importPathType ~= "Only Relative Paths"
+	return config.config.misc.importPathType ~= "Relative Only"
 end
 
 ---@param sourceUri string @ The source file we're trying to add imports to
