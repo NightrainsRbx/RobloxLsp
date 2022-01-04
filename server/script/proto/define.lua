@@ -52,6 +52,7 @@ m.DiagnosticDefaultSeverity = {
     ['unused-local']            = 'Hint',
     ['unused-function']         = 'Hint',
     ['undefined-global']        = 'Warning',
+    ['suggested-import']        = 'Warning',
     ['global-in-nil-env']       = 'Warning',
     ['unused-vararg']           = 'Hint',
     ['trailing-space']          = 'Hint',

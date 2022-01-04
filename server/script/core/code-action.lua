@@ -6,6 +6,7 @@ local util    = require 'utility'
 local sp      = require 'bee.subprocess'
 local vm      = require 'vm'
 local rbxlibs = require 'library.rbxlibs'
+local rojoimports = require 'library.rojoimports'
 local config  = require 'config'
 local glob    = require 'glob'
 local furi     = require 'file-uri'
@@ -141,149 +142,7 @@ local function changeVersion(uri, version, results)
     }
 end
 
-local function findMatchingScripts(name, object, matching, path, ignoreGlob)
-    object = object or rbxlibs.global.game
-    matching = matching or {}
-    path = path or { object }
-
-    if not ignoreGlob then
-        if config.config.diagnostics.importIgnore[1] then
-            ignoreGlob = glob.glob(config.config.diagnostics.importIgnore, { ignoreCase = false })
-        else
-            ignoreGlob = function(_)
-                return false
-            end
-        end
-    end
-
-    for _, child in pairs(object.value.child) do
-        if child.name ~= 'Parent' then
-            if child.name == name and child.type == 'type.library' and child.value[1] == 'ModuleScript' then
-                if not ignoreGlob(furi.decode(child.value.uri)) then
-                    local pathCopy = util.shallowCopy(path)
-                    table.insert(pathCopy, child)
-
-                    table.insert(matching, {
-                        object = child.value,
-                        path = pathCopy,
-                    })
-                end
-            end
-            if child.type == 'type.library' and child.value.child then
-                table.insert(path, child)
-                findMatchingScripts(name, child, matching, path, ignoreGlob)
-                table.remove(path)
-            end
-        end
-    end
-
-    return matching
-end
-
-local function findPath(uri, object, path)
-    object = object or rbxlibs.global.game
-    path = path or { object }
-
-    for _, child in pairs(object.value.child) do
-        if child.name ~= 'Parent' then
-            if child.type == 'type.library' and child.value.uri == uri then
-                table.insert(path, child)
-                return path
-            end
-
-            if child.type == 'type.library' and child.value.child then
-                table.insert(path, child)
-                local result = findPath(uri, child, path)
-                if result then
-                    return result
-                end
-                table.remove(path)
-            end
-        end
-    end
-end
-
-local function getSafeIndexer(name)
-    if name:match('^%D[%w_]*$') then
-        return '.' .. name
-    else
-        return string.format('[%q]', name)
-    end
-end
-
-local function canIndexObject(object)
-    if not config.config.diagnostics.importScriptChildren then
-        if object.value[1]:match("Script$") then
-            return false
-        end
-    end
-
-    return true
-end
-
-local function findRelativeLuaPath(sourcePath, targetPath)
-    local sourcePathMap = {}
-    for index, node in ipairs(sourcePath) do
-        -- We only want to use relative paths if they don't go through game or a
-        -- service
-        local isGame = node == rbxlibs.global.game
-        local isChildOfGame = node.value.child and node.value.child.Parent == rbxlibs.global.game
-        if not isGame and not isChildOfGame then
-            sourcePathMap[node] = index
-        end
-    end
-
-    local commonAncestor
-    local commonAncestorTargetIndex
-    for index = #targetPath, 1, -1 do
-        local node = targetPath[index]
-        if sourcePathMap[node] then
-            commonAncestor = node
-            commonAncestorTargetIndex = index
-            break
-        end
-    end
-
-    if not commonAncestor then
-        return
-    end
-
-    local builder = {'script'}
-
-    for _ = #sourcePath - 1, sourcePathMap[commonAncestor], -1 do
-        table.insert(builder, '.Parent')
-    end
-
-    for index = commonAncestorTargetIndex + 1, #targetPath do
-        local node = targetPath[index]
-        
-        if index ~= #targetPath and not canIndexObject(node) then
-            return
-        end
-
-        table.insert(builder, getSafeIndexer(node.name))
-    end
-
-    return table.concat(builder)
-end
-
-local function getAbsoluteLuaPath(path)
-    local builder = { path[1].name }
-
-    for index, node in ipairs(path) do
-        if index ~= 1 then
-            if not canIndexObject(node) then
-                return
-            end
-
-            table.insert(builder, getSafeIndexer(node.name))
-        end
-    end
-
-    return table.concat(builder)
-end
-
-local function solveUndefinedGlobalImport(uri, diag, results)
+local function solveSuggestedImport(uri, diag, results)
     local ast    = files.getAst(uri)
     local offset = files.offsetOfWord(uri, diag.range.start)
     local name = guide.eachSourceContain(ast.ast, offset, function (source)
@@ -294,39 +153,7 @@ local function solveUndefinedGlobalImport(uri, diag, results)
         return guide.getKeyName(source)
     end)
 
-    local rawMatches = findMatchingScripts(name)
-    if rawMatches[1] == nil then
-        return
-    end
-
-    local sourcePath = findPath(uri)
-    
-    local matches = {}
-    for _, match in ipairs(rawMatches) do
-        -- Never do `require(script)` or equivalent.
-        if match.object.uri ~= uri then
-            local targetPath = match.path
-            match.relativeLuaPath = sourcePath and findRelativeLuaPath(sourcePath, targetPath)
-            match.absoluteLuaPath = getAbsoluteLuaPath(targetPath)
-            -- If the path tries to index into a script and that's disallowed,
-            -- it won't have any paths available
-            if match.relativeLuaPath or match.absoluteLuaPath then
-                table.insert(matches, match)
-            end
-        end
-    end
-    
-    -- Relative-available matches first, sorted by smallest lua path string,
-    -- followed by absolute paths, sorted by smallest lua path string
-    table.sort(matches, function(a, b)
-        if a.relativeLuaPath and b.relativeLuaPath then
-            return a.relativeLuaPath < b.relativeLuaPath
-        elseif a.relativeLuaPath or b.relativeLuaPath then
-            return a.relativeLuaPath ~= nil
-        else
-            return a.absoluteLuaPath < b.absoluteLuaPath
-        end
-    end)
+    local matches = rojoimports.findPotentialImportsSorted(uri, name)
 
     for index, match in ipairs(matches) do
         -- Don't display too many results if we found many matches
@@ -355,8 +182,6 @@ local function solveUndefinedGlobalImport(uri, diag, results)
 end
 
 local function solveUndefinedGlobal(uri, diag, results)
-    solveUndefinedGlobalImport(uri, diag, results)
-
     local ast    = files.getAst(uri)
     local offset = files.offsetOfWord(uri, diag.range.start)
     guide.eachSourceContain(ast.ast, offset, function (source)
@@ -529,6 +354,8 @@ local function solveDiagnostic(uri, diag, start, results)
     end
     if     diag.code == 'undefined-global' then
         solveUndefinedGlobal(uri, diag, results)
+    elseif diag.code == 'suggested-import' then
+        solveSuggestedImport(uri, diag, results)
     elseif diag.code == 'lowercase-global' then
         solveLowercaseGlobal(uri, diag, results)
     elseif diag.code == 'newline-call' then
