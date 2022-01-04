@@ -1,15 +1,12 @@
 local files   = require 'files'
 local lang    = require 'language'
-local define  = require 'proto.define'
 local guide   = require 'core.guide'
 local util    = require 'utility'
 local sp      = require 'bee.subprocess'
 local vm      = require 'vm'
-local rbxlibs = require 'library.rbxlibs'
 local rojoimports = require 'library.rojoimports'
 local config  = require 'config'
-local glob    = require 'glob'
-local furi     = require 'file-uri'
+local calcline     = require 'parser.calcline'
 
 local function checkDisableByLuaDocExits(uri, row, mode, code)
     local lines = files.getLines(uri)
@@ -142,6 +139,49 @@ local function changeVersion(uri, version, results)
     }
 end
 
+local function findBestRequireLocation(ast, offset)
+    local importPos = nil
+    guide.eachSourceType(ast.ast, 'callargs', function (source)
+        if guide.getSimpleName(source.parent.node) == "require" then
+            local parentBlock = guide.getParentBlock(source)
+            if offset <= parentBlock.finish and offset >= source.finish and guide.getParentType(source, "local") then
+                if parentBlock == ast.ast then
+                    importPos = importPos or source.start
+                end
+            end
+        end
+    end)
+
+    local start = 1
+    if importPos then
+        local uri = guide.getUri(ast.ast)
+        local text  = files.getText(uri)
+        local lines = files.getLines(uri)
+        local row = calcline.rowcol(text, importPos)
+        start = lines[row + 1].start
+    end
+
+    return start
+end
+
+local function suggestImport(uri, name, path, start, results)
+    results[#results + 1] = {
+        title = lang.script('ACTION_IMPORT_SUGGESTED', path),
+        kind = 'quickfix',
+        edit = {
+            changes = {
+                [uri] = {
+                    {
+                        start   = start,
+                        finish  = start - 1,
+                        newText = ('local %s = require(%s)\n'):format(name, path),
+                    },
+                }
+            }
+        }
+    }
+end
+
 local function solveSuggestedImport(uri, diag, results)
     local ast    = files.getAst(uri)
     local offset = files.offsetOfWord(uri, diag.range.start)
@@ -155,37 +195,23 @@ local function solveSuggestedImport(uri, diag, results)
 
     local matches = rojoimports.findPotentialImportsSorted(uri, name)
 
+    local requireLocation = findBestRequireLocation(ast, offset)
+
     for index, match in ipairs(matches) do
         -- Don't display too many results if we found many matches
         if index > 10 then
             break
         end
 
-        local luaPaths = {}
         if config.config.misc.importPathType == "Relative and Absolute Paths" then
-            table.insert(luaPaths, match.relativeLuaPath)
-            table.insert(luaPaths, match.absoluteLuaPath)
+            if match.relativeLuaPath then
+                suggestImport(uri, name, match.relativeLuaPath, requireLocation, results)
+            end
+            if match.absoluteLuaPath then
+                suggestImport(uri, name, match.absoluteLuaPath, requireLocation, results)
+            end
         else
-            table.insert(luaPaths, match.relativeLuaPath or match.absoluteLuaPath)
-        end
-
-        for pathsIndex = 1, #luaPaths do
-            local path = luaPaths[pathsIndex]
-            results[#results + 1] = {
-                title = lang.script('ACTION_IMPORT_SUGGESTED', path),
-                kind = 'quickfix',
-                edit = {
-                    changes = {
-                        [uri] = {
-                            {
-                                start   = 1,
-                                finish  = 0,
-                                newText = ('local %s = require(%s)\n'):format(name, path),
-                            },
-                        }
-                    }
-                }
-            }
+            suggestImport(uri, name, match.relativeLuaPath or match.absoluteLuaPath, requireLocation, results)
         end
     end
 end
