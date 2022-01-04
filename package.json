@@ -1208,6 +1208,7 @@
 					"type": "boolean"
 				},
 				"robloxLsp.misc.importIgnore": {
+					"default": ["**/_Index/**"],
 					"items": {
 						"type": "string"
 					},
