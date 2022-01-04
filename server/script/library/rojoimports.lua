@@ -12,6 +12,10 @@ local rojoimports = {}
 ---@field public object table @ The matching object from the environment tree
 ---@field public path PathItem[] @ The path of objects that lead to this object from the root object we're searching in (typically `game`)
 
+---@class ImportMatch:Match
+---@field public relativeLuaPath string | nil @ The argument for require, like `"script.Parent.Example"`
+---@field public absoluteLuaPath string | nil @ The argument for require, like `"game.ReplicatedStorage.Example"`
+
 ---@param name string @ The script name we're searching for
 ---@param object table | nil @ The object we're searching under. If nil, this defaults to `game`.
 ---@param matching table | nil @ Used when called recursively. You can ignore this for external use.
@@ -177,6 +181,9 @@ local function isAbsolutePathSupported()
 	return config.config.misc.importPathType ~= "Only Relative Paths"
 end
 
+---@param sourceUri string @ The source file we're trying to add imports to
+---@param targetName string @ The target file name we're trying to add imports for
+---@return boolean @ Whether the target has any potential imports usable in the source file
 function rojoimports.hasPotentialImports(sourceUri, targetName)
 	local rawMatches = rojoimports.findMatchingScripts(targetName)
 	if #rawMatches == 0 then
@@ -202,6 +209,9 @@ function rojoimports.hasPotentialImports(sourceUri, targetName)
 	return false
 end
 
+---@param sourceUri string @ The source file we're trying to add imports to
+---@param targetName string @ The target file name we're trying to add imports for
+---@return ImportMatch[] @ The potential imports
 function rojoimports.findPotentialImportsSorted(sourceUri, targetName)
 	local rawMatches = rojoimports.findMatchingScripts(targetName)
 	if #rawMatches == 0 then

@@ -6,7 +6,7 @@ local sp      = require 'bee.subprocess'
 local vm      = require 'vm'
 local rojoimports = require 'library.rojoimports'
 local config  = require 'config'
-local calcline     = require 'parser.calcline'
+local calcline = require 'parser.calcline'
 
 local function checkDisableByLuaDocExits(uri, row, mode, code)
     local lines = files.getLines(uri)
