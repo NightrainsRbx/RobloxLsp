@@ -126,20 +126,6 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"robloxLsp.diagnostics.importScriptChildren": {
-					"default": false,
-					"markdownDescription": "%config.diagnostics.importScriptChildren%",
-					"scope": "resource",
-					"type": "boolean"
-				},
-				"robloxLsp.diagnostics.importIgnore": {
-					"items": {
-						"type": "string"
-					},
-					"markdownDescription": "%config.diagnostics.importIgnore%",
-					"scope": "resource",
-					"type": "array"
-				},
 				"robloxLsp.diagnostics.globals": {
 					"items": {
 						"type": "string"
@@ -1214,6 +1200,32 @@
 					"markdownDescription": "%config.misc.goToScriptLink%",
 					"scope": "resource",
 					"type": "boolean"
+				},
+				"robloxLsp.misc.importScriptChildren": {
+					"default": false,
+					"markdownDescription": "%config.misc.importScriptChildren%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.misc.importIgnore": {
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.misc.importIgnore%",
+					"scope": "resource",
+					"type": "array"
+				},
+				"robloxLsp.misc.importPathType": {
+					"markdownDescription": "%config.misc.importPathType%",
+					"scope": "resource",
+					"type": "string",
+					"default": "Prefer Relative Paths",
+					"enum": [
+						"Only Relative Paths",
+						"Prefer Relative Paths",
+						"Relative and Absolute Paths",
+						"Only Absolute Paths"
+					]
 				},
 				"robloxLsp.misc.serverPort": {
 					"default": 27843,

@@ -24,8 +24,8 @@ function rojoimports.findMatchingScripts(name, object, matching, path, ignoreGlo
 	path = path or { object }
 
 	if not ignoreGlob then
-		if config.config.diagnostics.importIgnore[1] then
-			ignoreGlob = glob.glob(config.config.diagnostics.importIgnore, { ignoreCase = false })
+		if config.config.misc.importIgnore[1] then
+			ignoreGlob = glob.glob(config.config.misc.importIgnore, { ignoreCase = false })
 		else
 			ignoreGlob = function(_)
 				return false
@@ -93,7 +93,7 @@ local function getSafeIndexer(name)
 end
 
 local function canIndexObject(object)
-	if not config.config.diagnostics.importScriptChildren then
+	if not config.config.misc.importScriptChildren then
 		if object.value[1]:match("Script$") then
 			return false
 		end
@@ -169,6 +169,14 @@ function rojoimports.getAbsoluteRequireArg(path)
 	return table.concat(builder)
 end
 
+local function isRelativePathSupported()
+	return config.config.misc.importPathType ~= "Only Absolute Paths"
+end
+
+local function isAbsolutePathSupported()
+	return config.config.misc.importPathType ~= "Only Relative Paths"
+end
+
 function rojoimports.hasPotentialImports(sourceUri, targetName)
 	local rawMatches = rojoimports.findMatchingScripts(targetName)
 	if #rawMatches == 0 then
@@ -181,8 +189,8 @@ function rojoimports.hasPotentialImports(sourceUri, targetName)
 		-- Never do `require(script)` or equivalent.
 		if match.object.uri ~= sourceUri then
 			local targetPath = match.path
-			local relativeLuaPath = sourcePath and rojoimports.findRelativeRequireArg(sourcePath, targetPath)
-			local absoluteLuaPath = rojoimports.getAbsoluteRequireArg(targetPath)
+			local relativeLuaPath = isRelativePathSupported() and sourcePath and rojoimports.findRelativeRequireArg(sourcePath, targetPath)
+			local absoluteLuaPath = isAbsolutePathSupported() and rojoimports.getAbsoluteRequireArg(targetPath)
 			-- If the path tries to index into a script and that's disallowed,
 			-- it won't have any paths available
 			if relativeLuaPath or absoluteLuaPath then
@@ -197,7 +205,7 @@ end
 function rojoimports.findPotentialImportsSorted(sourceUri, targetName)
 	local rawMatches = rojoimports.findMatchingScripts(targetName)
 	if #rawMatches == 0 then
-		return
+		return {}
 	end
 
 	local sourcePath = rojoimports.findPath(sourceUri)
@@ -207,8 +215,8 @@ function rojoimports.findPotentialImportsSorted(sourceUri, targetName)
 		-- Never do `require(script)` or equivalent.
 		if match.object.uri ~= sourceUri then
 			local targetPath = match.path
-			match.relativeLuaPath = sourcePath and rojoimports.findRelativeRequireArg(sourcePath, targetPath)
-			match.absoluteLuaPath = rojoimports.getAbsoluteRequireArg(targetPath)
+			match.relativeLuaPath = isRelativePathSupported() and sourcePath and rojoimports.findRelativeRequireArg(sourcePath, targetPath)
+			match.absoluteLuaPath = isAbsolutePathSupported() and rojoimports.getAbsoluteRequireArg(targetPath)
 			-- If the path tries to index into a script and that's disallowed,
 			-- it won't have any paths available
 			if match.relativeLuaPath or match.absoluteLuaPath then

@@ -161,23 +161,32 @@ local function solveSuggestedImport(uri, diag, results)
             break
         end
 
-        local luaPath = match.relativeLuaPath or match.absoluteLuaPath
+        local luaPaths = {}
+        if config.config.misc.importPathType == "Relative and Absolute Paths" then
+            table.insert(luaPaths, match.relativeLuaPath)
+            table.insert(luaPaths, match.absoluteLuaPath)
+        else
+            table.insert(luaPaths, match.relativeLuaPath or match.absoluteLuaPath)
+        end
 
-        results[#results+1] = {
-            title = lang.script('ACTION_IMPORT_SUGGESTED', luaPath),
-            kind = 'quickfix',
-            edit = {
-                changes = {
-                    [uri] = {
-                        {
-                            start   = 1,
-                            finish  = 0,
-                            newText = ('local %s = require(%s)\n'):format(name, luaPath),
-                        },
+        for pathsIndex = 1, #luaPaths do
+            local path = luaPaths[pathsIndex]
+            results[#results + 1] = {
+                title = lang.script('ACTION_IMPORT_SUGGESTED', path),
+                kind = 'quickfix',
+                edit = {
+                    changes = {
+                        [uri] = {
+                            {
+                                start   = 1,
+                                finish  = 0,
+                                newText = ('local %s = require(%s)\n'):format(name, path),
+                            },
+                        }
                     }
                 }
             }
-        }
+        end
     end
 end
 
