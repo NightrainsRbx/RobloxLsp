@@ -204,8 +204,9 @@ local ConfigTemplate = {
     },
     misc = {
         color3Picker      = {true,      Boolean},
-        importScriptChildren = {false, Boolean},
-        importIgnore      = {{},   Array(String)},
+        importScriptChildren = {false,  Boolean},
+        importIgnore      = {{},        Array(String)},
+        importAlwaysAbsolute = {{},     Array(String)},
         importPathType    = {"Relative First", String},
         goToScriptLink    = {true,      Boolean},
         serviceAutoImport = {true,      Boolean},

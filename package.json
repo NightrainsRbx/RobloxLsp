@@ -1216,6 +1216,15 @@
 					"scope": "resource",
 					"type": "array"
 				},
+				"robloxLsp.misc.importAlwaysAbsolute": {
+					"default": [],
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.misc.importAlwaysAbsolute%",
+					"scope": "resource",
+					"type": "array"
+				},
 				"robloxLsp.misc.importPathType": {
 					"markdownDescription": "%config.misc.importPathType%",
 					"scope": "resource",
