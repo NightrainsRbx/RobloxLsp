@@ -149,7 +149,7 @@ local ConfigTemplate = {
         workspaceRate   = {100,  Integer},
     },
     workspace = {
-        ignoreDir         = {{},      Str2Hash ';'},
+        ignoreDir         = {{"**/_Index/**"},      Str2Hash ';'},
         ignoreSubmodules  = {true,    Boolean},
         rojoProjectFile   = {"default",    String},
         loadMode          = {'All Files', String},
@@ -204,6 +204,9 @@ local ConfigTemplate = {
     },
     misc = {
         color3Picker      = {true,      Boolean},
+        importScriptChildren = {false, Boolean},
+        importIgnore      = {{},   Array(String)},
+        importPathType    = {"Relative First", String},
         goToScriptLink    = {true,      Boolean},
         serviceAutoImport = {true,      Boolean},
         serverPort        = {27843,       Integer},
