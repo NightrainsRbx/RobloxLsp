@@ -239,11 +239,19 @@ function rbximports.findPotentialImportsSorted(sourceUri, targetName)
 	-- followed by absolute paths, sorted by smallest lua path string
 	table.sort(matches, function(a, b)
 		if a.relativeLuaPath and b.relativeLuaPath then
-			return a.relativeLuaPath < b.relativeLuaPath
+			if #a.relativeLuaPath == #b.relativeLuaPath then
+				return a.relativeLuaPath < b.relativeLuaPath
+			else
+				return #a.relativeLuaPath < #b.relativeLuaPath
+			end
 		elseif a.relativeLuaPath or b.relativeLuaPath then
 			return a.relativeLuaPath ~= nil
 		else
-			return a.absoluteLuaPath < b.absoluteLuaPath
+			if #a.absoluteLuaPath == #b.absoluteLuaPath then
+				return a.absoluteLuaPath < b.absoluteLuaPath
+			else
+				return #a.absoluteLuaPath < #b.absoluteLuaPath
+			end
 		end
 	end)
 

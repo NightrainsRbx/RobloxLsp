@@ -1223,6 +1223,7 @@
 					"default": "Relative First",
 					"enum": [
 						"Relative First",
+						"Shortest First",
 						"Relative Only",
 						"Absolute Only",
 						"Both"

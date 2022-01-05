@@ -50,6 +50,7 @@
     "config.misc.importIgnore": "Globs to never suggest when suggesting require paths. For example: `**/_Index/**` to ignore wally's index folder. Case sensitive. Acts on the absolute path of files.",
     "config.misc.importPathType": "Whether to show relative or absolute require paths.",
     "config.misc.importPathType.Relative First": "Suggest only the relative path or the absolute path for each import, preferring the relative path unless it's unavailable.",
+    "config.misc.importPathType.Shortest First": "Suggest only the shortest path out of the relative and absolute paths for each import.",
     "config.misc.importPathType.Relative Only": "Only suggest import paths relative to the current script.",
     "config.misc.importPathType.Absolute Only": "Only suggest absolute import paths.",
     "config.misc.importPathType.Both": "Suggest both relative and absolute paths for each import.",
