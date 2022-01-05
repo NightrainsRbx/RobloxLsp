@@ -1229,7 +1229,7 @@
 					"markdownDescription": "%config.misc.importPathType%",
 					"scope": "resource",
 					"type": "string",
-					"default": "Relative First",
+					"default": "Both",
 					"enum": [
 						"Relative First",
 						"Shortest First",
