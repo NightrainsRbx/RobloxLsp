@@ -197,6 +197,7 @@ local function solveSuggestedImport(uri, diag, results)
 
     local requireLocation = findBestRequireLocation(ast, offset)
 
+    local paths = {}
     for index, match in ipairs(matches) do
         -- Don't display too many results if we found many matches
         if index > 10 then
@@ -205,14 +206,38 @@ local function solveSuggestedImport(uri, diag, results)
 
         if config.config.misc.importPathType == "Both" then
             if match.relativeLuaPath then
-                suggestImport(uri, name, match.relativeLuaPath, requireLocation, results)
+                paths[#paths+1] = match.relativeLuaPath
             end
             if match.absoluteLuaPath then
-                suggestImport(uri, name, match.absoluteLuaPath, requireLocation, results)
+                paths[#paths+1] = match.absoluteLuaPath
+            end
+        elseif config.config.misc.importPathType == "Shortest First" then
+            if match.relativeLuaPath and match.absoluteLuaPath then
+                if #match.relativeLuaPath < #match.absoluteLuaPath then
+                    paths[#paths+1] = match.relativeLuaPath
+                else
+                    paths[#paths+1] = match.absoluteLuaPath
+                end
+            else
+                paths[#paths+1] = match.relativeLuaPath or match.absoluteLuaPath
             end
         else
-            suggestImport(uri, name, match.relativeLuaPath or match.absoluteLuaPath, requireLocation, results)
+            paths[#paths+1] = match.relativeLuaPath or match.absoluteLuaPath
         end
+    end
+
+    if config.config.misc.importPathType == "Shortest First" then
+        table.sort(paths)
+
+        -- In the case of "Both", we don't want to separate the relative- and
+        -- absolute- paths for each item.
+
+        -- In all other cases, the paths are already sorted by shortest path
+        -- before we received them.
+    end
+
+    for _, path in ipairs(paths) do
+        suggestImport(uri, name, path, requireLocation, results)
     end
 end
 

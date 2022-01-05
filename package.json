@@ -1100,7 +1100,8 @@
 				},
 				"robloxLsp.workspace.ignoreDir": {
 					"default": [
-						".vscode"
+						".vscode",
+						"**/_Index/**"
 					],
 					"items": {
 						"type": "string"
@@ -1216,13 +1217,23 @@
 					"scope": "resource",
 					"type": "array"
 				},
+				"robloxLsp.misc.importAlwaysAbsolute": {
+					"default": [],
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.misc.importAlwaysAbsolute%",
+					"scope": "resource",
+					"type": "array"
+				},
 				"robloxLsp.misc.importPathType": {
 					"markdownDescription": "%config.misc.importPathType%",
 					"scope": "resource",
 					"type": "string",
-					"default": "Relative First",
+					"default": "Both",
 					"enum": [
 						"Relative First",
+						"Shortest First",
 						"Relative Only",
 						"Absolute Only",
 						"Both"

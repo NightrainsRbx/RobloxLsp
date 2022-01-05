@@ -173,12 +173,30 @@ function rbximports.getAbsoluteRequireArg(path)
 	return table.concat(builder)
 end
 
-local function isRelativePathSupported()
-	return config.config.misc.importPathType ~= "Absolute Only"
+local function isRelativePathSupported(uri, alwaysAbsoluteGlob)
+	if config.config.misc.importPathType == "Absolute Only" then
+		return false
+	end
+
+	if alwaysAbsoluteGlob(furi.decode(uri)) then
+		return false
+	end
+
+	return true
 end
 
 local function isAbsolutePathSupported()
 	return config.config.misc.importPathType ~= "Relative Only"
+end
+
+local function getAlwaysAbsoluteGlob()
+	if config.config.misc.importAlwaysAbsolute[1] then
+		return glob.glob(config.config.misc.importAlwaysAbsolute, { ignoreCase = false })
+	else
+		return function(_)
+			return false
+		end
+	end
 end
 
 ---@param sourceUri string @ The source file we're trying to add imports to
@@ -191,12 +209,13 @@ function rbximports.hasPotentialImports(sourceUri, targetName)
 	end
 
 	local sourcePath = rbximports.findPath(sourceUri)
+	local alwaysAbsoluteGlob = getAlwaysAbsoluteGlob()
 
 	for _, match in ipairs(rawMatches) do
 		-- Never do `require(script)` or equivalent.
 		if match.object.uri ~= sourceUri then
 			local targetPath = match.path
-			local relativeLuaPath = isRelativePathSupported() and sourcePath and rbximports.findRelativeRequireArg(sourcePath, targetPath)
+			local relativeLuaPath = isRelativePathSupported(match.object.uri, alwaysAbsoluteGlob) and sourcePath and rbximports.findRelativeRequireArg(sourcePath, targetPath)
 			local absoluteLuaPath = isAbsolutePathSupported() and rbximports.getAbsoluteRequireArg(targetPath)
 			-- If the path tries to index into a script and that's disallowed,
 			-- it won't have any paths available
@@ -219,14 +238,15 @@ function rbximports.findPotentialImportsSorted(sourceUri, targetName)
 	end
 
 	local sourcePath = rbximports.findPath(sourceUri)
+	local alwaysAbsoluteGlob = getAlwaysAbsoluteGlob()
 
 	local matches = {}
 	for _, match in ipairs(rawMatches) do
 		-- Never do `require(script)` or equivalent.
 		if match.object.uri ~= sourceUri then
 			local targetPath = match.path
-			match.relativeLuaPath = isRelativePathSupported() and sourcePath and rbximports.findRelativeRequireArg(sourcePath, targetPath)
-			match.absoluteLuaPath = isAbsolutePathSupported() and rbximports.getAbsoluteRequireArg(targetPath)
+			match.relativeLuaPath = isRelativePathSupported(match.object.uri, alwaysAbsoluteGlob) and sourcePath and rbximports.findRelativeRequireArg(sourcePath, targetPath) or nil
+			match.absoluteLuaPath = isAbsolutePathSupported() and rbximports.getAbsoluteRequireArg(targetPath) or nil
 			-- If the path tries to index into a script and that's disallowed,
 			-- it won't have any paths available
 			if match.relativeLuaPath or match.absoluteLuaPath then
@@ -239,11 +259,19 @@ function rbximports.findPotentialImportsSorted(sourceUri, targetName)
 	-- followed by absolute paths, sorted by smallest lua path string
 	table.sort(matches, function(a, b)
 		if a.relativeLuaPath and b.relativeLuaPath then
-			return a.relativeLuaPath < b.relativeLuaPath
+			if #a.relativeLuaPath == #b.relativeLuaPath then
+				return a.relativeLuaPath < b.relativeLuaPath
+			else
+				return #a.relativeLuaPath < #b.relativeLuaPath
+			end
 		elseif a.relativeLuaPath or b.relativeLuaPath then
 			return a.relativeLuaPath ~= nil
 		else
-			return a.absoluteLuaPath < b.absoluteLuaPath
+			if #a.absoluteLuaPath == #b.absoluteLuaPath then
+				return a.absoluteLuaPath < b.absoluteLuaPath
+			else
+				return #a.absoluteLuaPath < #b.absoluteLuaPath
+			end
 		end
 	end)
 
