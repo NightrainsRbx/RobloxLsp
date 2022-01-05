@@ -1100,7 +1100,8 @@
 				},
 				"robloxLsp.workspace.ignoreDir": {
 					"default": [
-						".vscode"
+						".vscode",
+						"**/_Index/**"
 					],
 					"items": {
 						"type": "string"

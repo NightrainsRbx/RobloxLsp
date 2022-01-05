@@ -149,7 +149,7 @@ local ConfigTemplate = {
         workspaceRate   = {100,  Integer},
     },
     workspace = {
-        ignoreDir         = {{"**/_Index/**"},      Str2Hash ';'},
+        ignoreDir         = {{".vscode", "**/_Index/**"},      Str2Hash ';'},
         ignoreSubmodules  = {true,    Boolean},
         rojoProjectFile   = {"default",    String},
         loadMode          = {'All Files', String},
