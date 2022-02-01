@@ -1100,7 +1100,8 @@
 				},
 				"robloxLsp.workspace.ignoreDir": {
 					"default": [
-						".vscode"
+						".vscode",
+						"**/_Index/**"
 					],
 					"items": {
 						"type": "string"
@@ -1200,6 +1201,43 @@
 					"markdownDescription": "%config.misc.goToScriptLink%",
 					"scope": "resource",
 					"type": "boolean"
+				},
+				"robloxLsp.misc.importScriptChildren": {
+					"default": false,
+					"markdownDescription": "%config.misc.importScriptChildren%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.misc.importIgnore": {
+					"default": ["**/_Index/**"],
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.misc.importIgnore%",
+					"scope": "resource",
+					"type": "array"
+				},
+				"robloxLsp.misc.importAlwaysAbsolute": {
+					"default": [],
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "%config.misc.importAlwaysAbsolute%",
+					"scope": "resource",
+					"type": "array"
+				},
+				"robloxLsp.misc.importPathType": {
+					"markdownDescription": "%config.misc.importPathType%",
+					"scope": "resource",
+					"type": "string",
+					"default": "Both",
+					"enum": [
+						"Relative First",
+						"Shortest First",
+						"Relative Only",
+						"Absolute Only",
+						"Both"
+					]
 				},
 				"robloxLsp.misc.serverPort": {
 					"default": 27843,
