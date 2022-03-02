@@ -16,7 +16,7 @@ local MEMBER_SECURITY = {
 
 local UNSCRIPTABLE_TAGS = {
     NotScriptable = true,
-    Deprecated = true,
+    -- Deprecated = true,
     Hidden = true,
 }
 
