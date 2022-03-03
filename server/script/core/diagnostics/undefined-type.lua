@@ -13,16 +13,6 @@ return function (uri, callback)
         if source[1] == "" then
             return
         end
-        if source.parent.type ~= "type.module" and rbxlibs.object[source[1]] then
-            if source.generics then
-                callback {
-                    start = source.generics.start,
-                    finish = source.generics.finish,
-                    message = lang.script('TYPE_GENERIC_COUNT', 0, #source.generics)
-                }
-            end
-            return
-        end
         local typeAlias = source.typeAliasGeneric or vm.getTypeAlias(source)
         if typeAlias then
             if typeAlias.type == "type.genericpack" then
@@ -56,6 +46,16 @@ return function (uri, callback)
                 }
             end
         else
+            if source.parent.type ~= "type.module" and rbxlibs.object[source[1]] then
+                if source.generics then
+                    callback {
+                        start = source.generics.start,
+                        finish = source.generics.finish,
+                        message = lang.script('TYPE_GENERIC_COUNT', 0, #source.generics)
+                    }
+                end
+                return
+            end
             callback {
                 start = source.start,
                 finish = source.finish,
