@@ -164,6 +164,7 @@ m.typeAnnTypes = {
     ["type.module"] = true,
     ["type.variadic"] = true,
     ["type.typeof"] = true,
+    ["type.genericpack"] = true,
     ["type.library"] = true
 }
 

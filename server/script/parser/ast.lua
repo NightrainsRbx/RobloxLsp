@@ -962,6 +962,11 @@ local Defs = {
             value = type
         }
     end,
+    GenericPackType = function (name, dots)
+        name.type = "type.genericpack"
+        name.dots = dots
+        return name
+    end,
     NamedType = function (key, colon, value)
         value.paramName = key
         return value
@@ -1100,6 +1105,7 @@ local Defs = {
         local wantType = true
         local lastStart = start + 1
         local generics = {}
+        local hasGenericPack = false
         for i = 1, #list do
             local v = list[i]
             if v.type == "," then
@@ -1125,6 +1131,19 @@ local Defs = {
                 if v.type == "name" then
                     v.type = "type.parameter"
                     v.replace = {}
+                elseif v.type == "type.genericpack" then
+                    v.replace = {}
+                end
+                if v.type == "type.genericpack"
+                or v.type == "type.variadic"
+                or v.type == "type.list" then
+                    hasGenericPack = true
+                elseif hasGenericPack then
+                    PushError {
+                        type = 'TYPE_AFTER_PACK',
+                        start = v.start,
+                        finish = v.finish,
+                    }
                 end
                 generics[#generics+1] = v
                 wantType = false

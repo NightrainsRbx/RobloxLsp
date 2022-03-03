@@ -25,9 +25,20 @@ return function (uri, callback)
         end
         local typeAlias = source.typeAliasGeneric or vm.getTypeAlias(source)
         if typeAlias then
+            if typeAlias.type == "type.genericpack" then
+                callback {
+                    start = source.start,
+                    finish = source.finish,
+                    message = lang.script('TYPE_VARIADIC_AS_REGULAR', typeAlias[1])
+                }
+                return
+            end
             local genericCount = 0
             if typeAlias.generics then
                 genericCount = #typeAlias.generics
+                if typeAlias.generics[#typeAlias.generics].type == "type.genericpack" then
+                    return
+                end
             end
             if source.generics then
                 if #source.generics ~= genericCount then

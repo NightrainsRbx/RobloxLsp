@@ -69,6 +69,7 @@ TYPE_UNDEFINED           = 'Undefined type `{}`.'
 TYPE_REDEFINED           = 'Redefined type `{}`.'
 TYPE_BINARY              = 'Cannot use type `{}` with `{}` in `{}` operation.'
 TYPE_UNARY               = 'Cannot use type `{}` in `{}` operation.'
+TYPE_VARIADIC_AS_REGULAR = 'Variadic type `{}...` is used as a regular generic type.'
 
 MWS_NOT_SUPPORT         = '{} dose not support multi workspace for now, I may need to restart to support the new workspace ...'
 MWS_RESTART             = 'Restart'

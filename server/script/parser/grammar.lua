@@ -387,7 +387,7 @@ FuncArgs    <-  Sp ({} PL {| FuncArg+ |} DirtyPR {})
             ->  FuncArgs
             /   PL DirtyPR %nil
 FuncArgsMiss<-  {} -> MissPL DirtyPR %nil
-FuncArg     <-  DOTS TypeAnn?
+FuncArg     <-  DOTS DotsTypeAnn?
             /   Name TypeAnn?
             /   COMMA
 
@@ -432,27 +432,31 @@ DirtyType   <-  Type
 Typeof      <-  Sp ({} 'typeof' Sp {} PL Exp DirtyPR {} Optional?)
             ->  Typeof
 
-Generics1   <-  Sp ({} AL Sp {| (Name / COMMA)+ |} Sp DirtyAR {})
+Generics1   <-  Sp ({} AL Sp {| (GenericPackType / Name / COMMA)+ |} Sp DirtyAR {})
             ->  Generics
             /   %nil
-Generics2   <-  Sp ({} AL Sp {| (Type / COMMA)+ |} Sp DirtyAR {})
+Generics2   <-  Sp ({} AL Sp {| (TypeList / VariadicType / Type / COMMA)* |} Sp DirtyAR {})
             ->  Generics
             /   %nil
-TypeList    <-  Sp ({} PL {| (Type / VariadicType / COMMA)* |} DirtyPR {})
+TypeList    <-  Sp ({} PL {| (VariadicType / Type / COMMA)* |} DirtyPR {})
             ->  TypeList
 NamedType   <-  Sp (Name COLON Type) 
             ->  NamedType
-ArgTypeList <-  Sp ({} PL {| (NamedType / Type / VariadicType / COMMA)* |} DirtyPR {})
+ArgTypeList <-  Sp ({} PL {| (NamedType / VariadicType / Type / COMMA)* |} DirtyPR {})
             ->  TypeList
 ModuleType  <-  Sp ({} (Name -> Single) DOT (NameType / %nil) {})
             ->  ModuleType
 NameType    <-  Sp ({} NameBody Generics2 {} Optional?)
             ->  NameType
-FuncType    <-  Sp ({} Generics1 ArgTypeList ARROW (Type / VariadicType / TypeList Optional?) {})
+FuncType    <-  Sp ({} Generics1 ArgTypeList ARROW (VariadicType / Type / TypeList Optional?) {})
             ->  FuncType
 VariadicType    
             <-  Sp ({} DOTS Type {})
-            ->  VariadicType
+            ->  VariadicType 
+            /   GenericPackType
+GenericPackType
+            <-  Sp (Name DOTS)
+            ->  GenericPackType
 
 FieldType   <-  Sp ({} Name COLON Type {}) 
             ->  FieldType
@@ -466,6 +470,8 @@ TableType   <-  Sp ({} TL FieldList DirtyTR {} Optional?)
 
 TypeAnn     <-  (COLON {} Type {})
             ->  TypeAnn
+DotsTypeAnn <-  (COLON {} (GenericPackType / Type) {})
+            ->  TypeAnn            
 ReturnTypeAnn
             <-  (COLON {} (Type / VariadicType / TypeList) {})
             ->  TypeAnn
