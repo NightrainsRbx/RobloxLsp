@@ -165,6 +165,7 @@ m.typeAnnTypes = {
     ["type.variadic"] = true,
     ["type.typeof"] = true,
     ["type.genericpack"] = true,
+    ["type.singleton"] = true,
     ["type.library"] = true
 }
 
@@ -4714,6 +4715,8 @@ function m.buildTypeAnn(typeUnit, mark)
         text = "..." .. m.buildTypeAnn(typeUnit.value, mark)
     elseif typeUnit.type == "type.typeof" then
         text = "typeof(" .. m.buildExp(typeUnit.value) .. ")"
+    elseif typeUnit.type == "type.singleton" then
+        text = typeUnit[2] .. typeUnit[1] .. typeUnit[2]:gsub("%[", "]")
     elseif typeUnit.type == "type.meta" then
         text = "{" .. m.buildTypeAnn(typeUnit[1], mark) .. ", @metatable " .. m.buildTypeAnn(typeUnit[2], mark) .. "}"
     elseif typeUnit.type == "paren" then

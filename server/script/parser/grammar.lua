@@ -418,6 +418,7 @@ TypeUnit    <-  ModuleType
             /   NameType
             /   FuncType
             /   TableType
+            /   SingletonType
             /   TypeSimple
 
 TypeSimple  <-  ({| TypePrefix |} Optional?)
@@ -435,7 +436,7 @@ Typeof      <-  Sp ({} 'typeof' Sp {} PL Exp DirtyPR {} Optional?)
 Generics1   <-  Sp ({} AL Sp {| (GenericPackType / Name / COMMA)+ |} Sp DirtyAR {})
             ->  Generics
             /   %nil
-Generics2   <-  Sp ({} AL Sp {| (TypeList / VariadicType / Type / COMMA)* |} Sp DirtyAR {})
+Generics2   <-  Sp ({} AL Sp {| (VariadicType / Type / TypeList / COMMA)* |} Sp DirtyAR {})
             ->  Generics
             /   %nil
 TypeList    <-  Sp ({} PL {| (VariadicType / Type / COMMA)* |} DirtyPR {})
@@ -457,6 +458,9 @@ VariadicType
 GenericPackType
             <-  Sp (Name DOTS)
             ->  GenericPackType
+SingletonType
+            <-  String
+            ->  SingletonType
 
 FieldType   <-  Sp ({} Name COLON Type {}) 
             ->  FieldType

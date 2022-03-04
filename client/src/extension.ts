@@ -86,13 +86,15 @@ async function openUpdatesWindow(context: vscode.ExtensionContext) {
                 <p style="font-size:1rem">Report any bug or question here: <a href="https://github.com/NightrainsRbx/RobloxLsp/issues">https://github.com/NightrainsRbx/RobloxLsp/issues</a></p>
                 <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
                 <h2 style="font-size:2rem; font-weight:100">v1.5.6</h2>
-                <li style="font-size:1rem">Improved syntax support for Luau and added basic support for type packs.</li>
+                <li style="font-size:1rem">Improved syntax support for Luau.</li>
+                <li style="font-size:1rem">Added basic syntax support for generic type packs and singleton types.</li>
                 <li style="font-size:1rem">Implemented suggeted imports for modules (thanks to <a href="https://github.com/Corecii">@Corecii</a>, <a href="https://github.com/NightrainsRbx/RobloxLsp/pull/123">#123</a>)</li>
                 <li style="font-size:1rem">Added Vector3 constants (thanks to <a href="https://github.com/aku-e">@aku-e</a>, <a href="https://github.com/NightrainsRbx/RobloxLsp/pull/145">#145</a>)</li>
                 <li style="font-size:1rem">Color3.fromHex is no longer deprecated.</li>
                 <li style="font-size:1rem">Fixed deprecated classes not having typings. (<a href="https://github.com/NightrainsRbx/RobloxLsp/issues/147">#147</a>)</li>
                 <li style="font-size:1rem">Fixed embedded rojo projects not using their correct root name. (<a href="https://github.com/NightrainsRbx/RobloxLsp/issues/128">#128</a>)</li>
                 <li style="font-size:1rem">Inlay hints are not displayed if the type is "none" or "any".</li>
+                <li style="font-size:1rem">Fixed diagnostics for type aliases with the same names as built-in types.</li>
                 <li style="font-size:1rem">Updated binaries.</li>
             </div>
         </body>
