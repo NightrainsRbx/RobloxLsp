@@ -309,6 +309,34 @@
                     "ReturnType": {
                         "Name": "Vector2"
                     }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "zero",
+                    "ValueType": {
+                        "Name": "Vector2"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "one",
+                    "ValueType": {
+                        "Name": "Vector2"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "xAxis",
+                    "ValueType": {
+                        "Name": "Vector2"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "yAxis",
+                    "ValueType": {
+                        "Name": "Vector2"
+                    }
                 }
             ],
             "Name": "Vector2"
@@ -1128,6 +1156,13 @@
                         }
                     ],
                     "ReturnType": {
+                        "Name": "CFrame"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "identity",
+                    "ValueType": {
                         "Name": "CFrame"
                     }
                 }
