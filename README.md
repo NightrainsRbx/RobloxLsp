@@ -48,6 +48,12 @@ Roblox OS Community Discord Server: https://discord.gg/c4nPcZHwFU
 ![avatar](https://i.imgur.com/vHbKIJ0.gif)
 ![avatar](https://cdn.discordapp.com/attachments/434146484758249482/778145929345368064/test.gif)
 
+## Build
+
+You can download the extension with precompiled binaries here: https://github.com/NightrainsRbx/RobloxLsp/releases
+
+If you need to build your own binaries, follow the instructions at https://github.com/sumneko/lua-language-server
+
 ## Credit
 
 * [lua-language-server](https://github.com/sumneko/lua-language-server)
