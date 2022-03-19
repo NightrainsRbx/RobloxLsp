@@ -3,11 +3,11 @@ type ENV = {
 	getmetatable: (t: table) -> table?,
 	error: (message: any, level: number?) -> (),
 	debug: {
-		info: 
+		info:
 			((thread: thread, level: number, options: string) -> ...any)
 			& ((functionOrLevel: function | number, options: string) -> ...any),
-		traceback: 
-			((level: number?) -> string) 
+		traceback:
+			((level: number?) -> string)
 			& ((message: string, level: number?) -> string)
 			& ((thread: thread, message: string, level: number?) -> string),
 		profilebegin: (label: string) -> (),
@@ -22,6 +22,7 @@ type ENV = {
 		synchronize: () -> (),
 		delay: (sec: number?, f: function | thread, ...any) -> any,
 		wait: (sec: number?) -> number,
+		cancel: (thread: thread) -> ()
 	},
 	tonumber: (value: any, radix: number?) -> number,
 	pcall: (f: function, ...any) -> (boolean, ...any),
@@ -86,7 +87,7 @@ type ENV = {
 		foreachi: (t: table, f: (number, any) -> ()) -> (),
 		getn: (t: table) -> number,
 		concat: (t: table, sep: string?, i: number?, j: number?) -> string,
-		insert: 
+		insert:
 			((t: table, value: any) -> ())
 			& ((t: table, pos: number, value: any) -> ()),
 		move: (a1: table, f: number, e: number, t: number, a2: table?) -> (),
@@ -116,6 +117,7 @@ type ENV = {
 		status: (co: thread) -> string,
 		wrap: (f: function) -> function,
 		yield: (...any) -> ...any,
+		close: (thread: thread) -> (boolean, ...any),
 	},
 	shared: any,
 	typeof: (value: any) -> string,
