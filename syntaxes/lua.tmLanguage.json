@@ -460,6 +460,14 @@
 					"name": "storage.modifier.readonly.lua"
 				},
 				{
+					"match": "\\btrue\\b",
+					"name": "constant.language.boolean.true.lua"
+				},
+				{
+					"match": "\\bfalse\\b",
+					"name": "constant.language.boolean.false.lua"
+				},
+				{
 					"begin": "\\b([a-zA-Z]\\w*)\\b(<)",
 					"end": "(>)",
 					"beginCaptures": {

@@ -415,10 +415,10 @@ SubType     <-  (TypeOp TypeUnit?)
 
 TypeUnit    <-  ModuleType
             /   Typeof
+            /   SingletonType
             /   NameType
             /   FuncType
             /   TableType
-            /   SingletonType
             /   TypeSimple
 
 TypeSimple  <-  ({| TypePrefix |} Optional?)
@@ -459,7 +459,7 @@ GenericPackType
             <-  Sp (Name DOTS)
             ->  GenericPackType
 SingletonType
-            <-  String
+            <-  (String / Boolean)
             ->  SingletonType
 
 FieldType   <-  Sp ({} Name COLON Type {}) 

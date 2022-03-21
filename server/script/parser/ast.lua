@@ -967,9 +967,9 @@ local Defs = {
         name.dots = dots
         return name
     end,
-    SingletonType = function (str)
-        str.type = "type.singleton"
-        return str
+    SingletonType = function (obj)
+        obj.type = "type.singleton." .. obj.type
+        return obj
     end,
     NamedType = function (key, colon, value)
         value.paramName = key
