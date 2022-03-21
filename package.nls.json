@@ -38,7 +38,7 @@
     "config.hover.viewStringMax": "The maximum length of a hover to view the contents of a string.",
     "config.intelliSense.searchDepth": "Set the search depth for IntelliSense. Increasing this value increases accuracy, but decreases performance. Different workspace have different tolerance for this setting. Please adjust it to the appropriate value.",
     "config.intelliSense.autoDetectLibraries": "Auto-detect third party libraries like Roact and infer custom types.",
-    "config.workspace.rojoProjectFile": "The name of the .project.json file without the extension.",
+    "config.workspace.rojoProjectFile": "The name of the .project.json file without the extension. Set it empty to use all files found.",
     "config.workspace.loadMode": "What files should be preloaded.",
     "config.workspace.loadMode.allFiles": "Load all files in workspace.",
     "config.workspace.loadMode.rojoProject": "Load all files found in Rojo Project.",

@@ -1117,7 +1117,7 @@
 					"type": "boolean"
 				},
 				"robloxLsp.workspace.rojoProjectFile": {
-					"default": "default",
+					"default": "",
 					"markdownDescription": "%config.workspace.rojoProjectFile%",
 					"scope": "resource",
 					"type": "string"
