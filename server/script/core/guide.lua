@@ -4720,6 +4720,8 @@ function m.buildTypeAnn(typeUnit, mark)
         text = typeUnit[2] .. typeUnit[1] .. typeUnit[2]:gsub("%[", "]")
     elseif typeUnit.type == "type.singleton.boolean" then
         text = tostring(typeUnit[1])
+    elseif typeUnit.type == "type.genericpack" then
+        text = typeUnit[1] .. "..."
     elseif typeUnit.type == "type.meta" then
         text = "{" .. m.buildTypeAnn(typeUnit[1], mark) .. ", @metatable " .. m.buildTypeAnn(typeUnit[2], mark) .. "}"
     elseif typeUnit.type == "paren" then

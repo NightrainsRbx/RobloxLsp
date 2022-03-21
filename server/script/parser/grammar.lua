@@ -421,9 +421,9 @@ TypeUnit    <-  ModuleType
             /   TableType
             /   TypeSimple
 
-TypeSimple  <-  ({| TypePrefix |} Optional?)
+TypeSimple  <-  ({| TypeOrParen |} Optional?)
             ->  TypeSimple
-TypePrefix  <-  Sp ({} PL Type !COMMA DirtyPR {})
+TypeOrParen <-  Sp ({} PL Type !COMMA DirtyPR {})
             ->  Paren
             /   Single
 
@@ -449,11 +449,11 @@ ModuleType  <-  Sp ({} (Name -> Single) DOT (NameType / %nil) {})
             ->  ModuleType
 NameType    <-  Sp ({} NameBody Generics2 {} Optional?)
             ->  NameType
-FuncType    <-  Sp ({} Generics1 ArgTypeList ARROW (VariadicType / Type / TypeList Optional?) {})
+FuncType    <-  Sp ({} Generics1 ArgTypeList ARROW (VariadicType / Type !DOTS / TypeList) Optional? {})
             ->  FuncType
 VariadicType    
             <-  Sp ({} DOTS Type {})
-            ->  VariadicType 
+            ->  VariadicType
             /   GenericPackType
 GenericPackType
             <-  Sp (Name DOTS)
@@ -477,7 +477,7 @@ TypeAnn     <-  (COLON {} Type {})
 DotsTypeAnn <-  (COLON {} (GenericPackType / Type) {})
             ->  TypeAnn            
 ReturnTypeAnn
-            <-  (COLON {} (Type / VariadicType / TypeList) {})
+            <-  (COLON {} (VariadicType / Type !DOTS / TypeList) {})
             ->  TypeAnn
             /   %nil
 ]]

@@ -1001,14 +1001,16 @@ local Defs = {
         local hasIndexer = false
         for _, field in pairs(list) do
             if field.type == "type.index" then
-                if hasIndexer then
-                    PushError {
-                        type = 'MULTIPLE_TABLE_INDEXER',
-                        start = field.start,
-                        finish = field.finish,
-                    }
-                else
-                    hasIndexer = true
+                if field.key.type ~= "type.singleton.string" then
+                    if hasIndexer then
+                        PushError {
+                            type = 'MULTIPLE_TABLE_INDEXER',
+                            start = field.start,
+                            finish = field.finish,
+                        }
+                    else
+                        hasIndexer = true
+                    end
                 end
             elseif field.type ~= "," and field.type ~= ";" and field.type ~= "type.field" and #list > 1 then
                 PushError {
