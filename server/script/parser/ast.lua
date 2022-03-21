@@ -1107,6 +1107,76 @@ local Defs = {
         end
         return exp
     end,
+    DefaultType = function (start, type, finish)
+        return {
+            type = "type.default",
+            start = start,
+            finish = finish,
+            [1] = type
+        }
+    end,
+    GenericsDef = function(start, list, finish)
+        local wantType = true
+        local lastStart = start + 1
+        local generics = {}
+        local hasGenericPack = false
+        for i = 1, #list do
+            local v = list[i]
+            if v.type == "," then
+                if wantType then
+                    PushError {
+                        type = 'MISS_TYPE',
+                        start = lastStart,
+                        finish = v.start-1,
+                    }
+                end
+                wantType = true
+            elseif v.type == "name" or v.type == "type.genericpack" then
+                if not wantType then
+                    PushError {
+                        type = 'MISS_SYMBOL',
+                        start = lastStart-1,
+                        finish = v.start-1,
+                        info = {
+                            symbol = ',',
+                        }
+                    }
+                end
+                if v.type == "name" then
+                    v.type = "type.parameter"
+                    if hasGenericPack then
+                        PushError {
+                            type = 'TYPE_AFTER_PACK',
+                            start = v.start,
+                            finish = v.finish,
+                        }
+                    end
+                else
+                    hasGenericPack = true
+                end
+                v.replace = {}
+                generics[#generics+1] = v
+                wantType = false
+            elseif v.type == "type.default" then
+                generics[#generics].default = v[1]
+                generics[#generics].finish = v.finish
+            end
+            lastStart = v.finish + 1
+        end
+        if wantType and #generics > 0 then
+            PushError {
+                type = 'MISS_TYPE',
+                start = lastStart,
+                finish = finish - 1,
+            }
+        end
+        return {
+            type = "type.generics",
+            start = start,
+            finish = finish,
+            tableUnpack(generics)
+        }
+    end,
     Generics = function(start, list, finish)
         local wantType = true
         local lastStart = start + 1
@@ -1133,12 +1203,6 @@ local Defs = {
                             symbol = ',',
                         }
                     }
-                end
-                if v.type == "name" then
-                    v.type = "type.parameter"
-                    v.replace = {}
-                elseif v.type == "type.genericpack" then
-                    v.replace = {}
                 end
                 if v.type == "type.genericpack"
                 or v.type == "type.variadic"

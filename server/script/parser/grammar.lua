@@ -373,10 +373,10 @@ ExpFunction <-  Function
 Function    <-  FunctionBody
             ->  Function
 FunctionBody
-            <-  FUNCTION FuncName Generics1 FuncArgs {} ReturnTypeAnn
+            <-  FUNCTION FuncName GenericsDef FuncArgs {} ReturnTypeAnn
                     {| (!END Action)* |}
                 NeedEnd
-            /   FUNCTION FuncName Generics1 FuncArgsMiss {} ReturnTypeAnn
+            /   FUNCTION FuncName GenericsDef FuncArgsMiss {} ReturnTypeAnn
                     {| %nil |}
                 NeedEnd
 FuncName    <-  !END {| Single (Sp SuffixWithoutCall)* |}
@@ -433,10 +433,15 @@ DirtyType   <-  Type
 Typeof      <-  Sp ({} 'typeof' Sp {} PL Exp DirtyPR {} Optional?)
             ->  Typeof
 
-Generics1   <-  Sp ({} AL Sp {| (GenericPackType / Name / COMMA)+ |} Sp DirtyAR {})
-            ->  Generics
+DefaultType <-  Sp ({} AssignOrEQ Type {})
+            ->  DefaultType
+DefaultTypePack 
+            <-  Sp ({} AssignOrEQ (VariadicType / TypeList) {})
+            ->  DefaultType
+GenericsDef <-  Sp ({} AL Sp {| (GenericPackType DefaultTypePack? / Name DefaultType? / COMMA)+ |} Sp DirtyAR {})
+            ->  GenericsDef
             /   %nil
-Generics2   <-  Sp ({} AL Sp {| (VariadicType / Type / TypeList / COMMA)* |} Sp DirtyAR {})
+Generics    <-  Sp ({} AL Sp {| (VariadicType / Type / TypeList / COMMA)* |} Sp DirtyAR {})
             ->  Generics
             /   %nil
 TypeList    <-  Sp ({} PL {| (VariadicType / Type / COMMA)* |} DirtyPR {})
@@ -447,9 +452,9 @@ ArgTypeList <-  Sp ({} PL {| (NamedType / VariadicType / Type / COMMA)* |} Dirty
             ->  TypeList
 ModuleType  <-  Sp ({} (Name -> Single) DOT (NameType / %nil) {})
             ->  ModuleType
-NameType    <-  Sp ({} NameBody Generics2 {} Optional?)
+NameType    <-  Sp ({} NameBody Generics {} Optional?)
             ->  NameType
-FuncType    <-  Sp ({} Generics1 ArgTypeList ARROW (VariadicType / Type !DOTS / TypeList) Optional? {})
+FuncType    <-  Sp ({} GenericsDef ArgTypeList ARROW (VariadicType / Type !DOTS / TypeList) Optional? {})
             ->  FuncType
 VariadicType    
             <-  Sp ({} DOTS Type {})
@@ -514,7 +519,7 @@ TypeAliasName
             <-  (Sp ({} ({NameStr '.' NameStr} / NameBody) {}))
             ->  Name
 
-TypeAlias   <-  Sp ({} (EXPORT %true / %false) TYPE TypeAliasName Generics1 AssignOrEQ DirtyType {})
+TypeAlias   <-  Sp ({} (EXPORT %true / %false) TYPE TypeAliasName GenericsDef AssignOrEQ DirtyType {})
             ->  TypeAlias
 
 Do          <-  Sp ({} 

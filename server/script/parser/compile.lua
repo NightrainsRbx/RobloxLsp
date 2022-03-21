@@ -363,6 +363,26 @@ local vmMap = {
             Compile(obj[i], obj)
         end
     end,
+    ['type.parameter'] = function (obj)
+        Compile(obj.default, obj)
+        if obj.default and (guide.getParentType(obj, "type.function") or guide.getParentType(obj, "function")) then
+            PushError {
+                type   = 'UNEXPECT_TYPE',
+                start  = obj.default.start,
+                finish = obj.default.finish,
+            }
+        end
+    end,
+    ['type.genericpack'] = function (obj)
+        Compile(obj.default, obj)
+        if obj.default and (guide.getParentType(obj, "type.function") or guide.getParentType(obj, "function")) then
+            PushError {
+                type   = 'UNEXPECT_TYPE',
+                start  = obj.default.start,
+                finish = obj.default.finish,
+            }
+        end
+    end,
     ['type.field'] = function (obj)
         if obj.value and obj.value[1] == "readonly" and obj.value.generics then
             local optional = obj.value.optional
