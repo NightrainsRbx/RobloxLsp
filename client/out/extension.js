@@ -77,7 +77,7 @@ function updateRobloxAPI(context) {
 }
 function openUpdatesWindow(context) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (context.globalState.get("sawVersionLogNew12", false) == false) {
+        if (context.globalState.get("sawVersionLogNew14", false) == false) {
             const panel = vscode.window.createWebviewPanel('robloxlspUpdates', 'Roblox LSP Updates', vscode.ViewColumn.One, {});
             panel.webview.html = `<!DOCTYPE html>
         <html lang="en">
@@ -88,10 +88,16 @@ function openUpdatesWindow(context) {
         <body>
             <div style="position:relative; padding-left:100px; padding-right:100px">
                 <center><img src="https://i.imgur.com/PH5u9QD.png", witdh="300" height="300"></center>
-                <h1 style="font-size:3rem; font-weight:100">Roblox LSP Updates!</h1>
+                <h1 style="font-size:3rem; font-weight:100">Roblox LSP Release Notes!</h1>
                 <p style="font-size:1rem">More info: <a href="https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745">https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/717745</a></p>
                 <p style="font-size:1rem">Report any bug or question here: <a href="https://github.com/NightrainsRbx/RobloxLsp/issues">https://github.com/NightrainsRbx/RobloxLsp/issues</a></p>
                 <hr style="height:2px;border:none;color:#333;background-color:#333;"/>
+                <h2 style="font-size:2rem; font-weight:100">v1.5.7</h2>
+                <li style="font-size:1rem">Syntax support for boolean singleton types.</li>
+                <li style="font-size:1rem">Syntax support for default type parameters.</li>
+                <li style="font-size:1rem">Added Vector2 and CFrame constants (thanks to <a href="https://github.com/ykh09242">@ykh09242</a>, <a href="https://github.com/NightrainsRbx/RobloxLsp/pull/145">#150</a>)</li>
+                <li style="font-size:1rem">Added task.cancel and coroutine.close (thanks to <a href="https://github.com/Baileyeatspizza">@Baileyeatspizza</a>, <a href="https://github.com/NightrainsRbx/RobloxLsp/pull/145">#151</a>)</li>
+                <li style="font-size:1rem">By default, all rojo project files found will be loaded and merged into one, change robloxLsp.workspace.rojoProjectFile if you prefer to use a specific one.</li>
                 <h2 style="font-size:2rem; font-weight:100">v1.5.6</h2>
                 <li style="font-size:1rem">Improved syntax support for Luau.</li>
                 <li style="font-size:1rem">Added basic syntax support for generic type packs and singleton types.</li>
@@ -106,7 +112,7 @@ function openUpdatesWindow(context) {
             </div>
         </body>
         </html>`;
-            yield context.globalState.update("sawVersionLogNew12", true);
+            yield context.globalState.update("sawVersionLogNew14", true);
         }
     });
 }
