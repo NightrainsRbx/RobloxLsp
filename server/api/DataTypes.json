@@ -337,6 +337,13 @@
                     "ValueType": {
                         "Name": "Vector2"
                     }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "zAxis",
+                    "ValueType": {
+                        "Name": "Vector2"
+                    }
                 }
             ],
             "Name": "Vector2"
@@ -1162,6 +1169,13 @@
                 {
                     "MemberType": "Property",
                     "Name": "identity",
+                    "ValueType": {
+                        "Name": "CFrame"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Rotation",
                     "ValueType": {
                         "Name": "CFrame"
                     }
