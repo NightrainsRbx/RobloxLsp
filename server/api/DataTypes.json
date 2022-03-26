@@ -337,13 +337,6 @@
                     "ValueType": {
                         "Name": "Vector2"
                     }
-                },
-                {
-                    "MemberType": "Property",
-                    "Name": "zAxis",
-                    "ValueType": {
-                        "Name": "Vector2"
-                    }
                 }
             ],
             "Name": "Vector2"
