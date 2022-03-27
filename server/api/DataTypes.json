@@ -1165,6 +1165,13 @@
                     "ValueType": {
                         "Name": "CFrame"
                     }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Rotation",
+                    "ValueType": {
+                        "Name": "CFrame"
+                    }
                 }
             ],
             "Name": "CFrame"
