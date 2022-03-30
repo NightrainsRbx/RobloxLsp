@@ -96,6 +96,7 @@ type ENV = {
 		sort: (t: table, comp: ((any, any) -> boolean)?) -> (),
 		unpack: (t: table, i: number?, j: number?) -> ...any,
 		clear: (t: table) -> (),
+                clone: (t: table) -> table,
 		create: (count: number, value: any?) -> table,
 		freeze: (t: table) -> table,
 		isfrozen: (t: table) -> boolean
