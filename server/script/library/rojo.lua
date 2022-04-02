@@ -24,9 +24,9 @@ local librariesTypes = {
     ["RoactRodux"] = {
         textPattern = "return %{%s+StoreProvider %= StoreProvider%,.-connect %= connect.-%}%s*$"
     },
-    ["Promise.Static"] = {
-        textPattern = "%-%-%[%[%s+An implementation of Promises similar to Promise%/A%+%."
-    },
+    -- ["Promise.Static"] = {
+    --     textPattern = "%-%-%[%[%s+An implementation of Promises similar to Promise%/A%+%."
+    -- },
     -- ["Fusion"] = {
     --     textPattern = "^%s*%-%-%[%[%s*The entry point for the Fusion library%."
     -- }
@@ -279,7 +279,7 @@ function rojo:matchLibrary(uri)
         end
         return cache
     end
-    local success, text = pcall(json.decode, util.loadFile(furi.decode(uri)))
+    local success, text = pcall(util.loadFile, furi.decode(uri))
     if success then
         for tp, info in pairs(librariesTypes) do
             if text:match(info.textPattern) then
