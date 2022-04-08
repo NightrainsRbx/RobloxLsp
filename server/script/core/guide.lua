@@ -4719,7 +4719,7 @@ function m.buildTypeAnn(typeUnit, mark)
     elseif typeUnit.type == "type.typeof" then
         text = "typeof(" .. m.buildExp(typeUnit.value) .. ")"
     elseif typeUnit.type == "type.singleton.string" then
-        text = typeUnit[2] .. typeUnit[1] .. typeUnit[2]:gsub("%[", "]")
+        text = "\"" .. typeUnit[1] .. "\""
     elseif typeUnit.type == "type.singleton.boolean" then
         text = tostring(typeUnit[1])
     elseif typeUnit.type == "type.genericpack" then

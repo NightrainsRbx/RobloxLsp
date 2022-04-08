@@ -575,7 +575,8 @@ function m.convertToType(infer, get, searchFrom)
     end
     return cache({
         [1] = infer.type,
-        type = "type.name"
+        type = "type.name",
+        inferValue = infer.value
     })
 end
 
@@ -632,7 +633,9 @@ function m.compareTypes(a, b)
             return cache(a[1] == b[1])
         end
         if (b[1] == "function" and a.type == "type.function")
-        or (b[1] == "table" and (a.type == "type.table" or a.type == "type.meta")) then
+        or (b[1] == "table" and (a.type == "type.table" or a.type == "type.meta"))
+        or (b[1] == "string" and a.type == "type.singleton.string")
+        or (b[1] == "boolean" and a.type == "type.singleton.boolean") then
             return true
         end
     elseif b.type == "type.union" then
@@ -771,6 +774,20 @@ function m.compareTypes(a, b)
                 end
             end
             return true
+        end
+    elseif b.type == "type.singleton.string" then
+        if a.type == "type.singleton.string" then
+            return b[1] == a[1]
+        end
+        if type(a.inferValue) == "string" then
+            return b[1] == a.inferValue
+        end
+    elseif b.type == "type.singleton.boolean" then
+        if a.type == "type.singleton.boolean" then
+            return b[1] == a[1]
+        end
+        if type(a.inferValue) == "boolean" then
+            return b[1] == a.inferValue
         end
     elseif b.type == "type.meta" then
         if a.type == "type.name" and a[1] == "table" then
