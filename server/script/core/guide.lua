@@ -4889,7 +4889,11 @@ function m.getType(status, source)
         return status.share.getTypeCache[source]
     end
     if m.isLiteral(source) then
-        return makeNameType(source.type)
+        local tp = makeNameType(source.type)
+        if source.type == "string" or source.type == "boolean" then
+            tp.inferValue = source[1]
+        end
+        return tp
     elseif m.isTypeAnn(source) then
         local tp = m.getFullType(status, source)
         status.share.getTypeCache[source] = tp
@@ -4904,7 +4908,11 @@ function m.getType(status, source)
     for _, def in ipairs(newStatus.results) do
         def = m.getObjectValue(def) or def
         if m.isLiteral(def) then
-            union[#union+1] = makeNameType(def.type)
+            local tp = makeNameType(def.type)
+            if def.type == "string" or def.type == "boolean" then
+                tp.inferValue = def[1]
+            end
+            union[#union+1] = tp
         elseif m.typeAnnTypes[def.type] then
             local tp = m.getFullType(status, def)
             union[#union+1] = tp
