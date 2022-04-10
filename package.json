@@ -159,17 +159,6 @@
 							"scope": "resource",
 							"type": "string"
 						},
-						"count-down-loop": {
-							"default": "Any",
-							"description": "%config.diagnostics.count-down-loop%",
-							"enum": [
-								"Any",
-								"Opened",
-								"None"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
 						"deprecated": {
 							"default": "Opened",
 							"description": "%config.diagnostics.deprecated%",
@@ -534,18 +523,6 @@
 						"circle-doc-class": {
 							"default": "Warning",
 							"description": "%config.diagnostics.circle-doc-class%",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
-						"count-down-loop": {
-							"default": "Warning",
-							"description": "%config.diagnostics.count-down-loop%",
 							"enum": [
 								"Error",
 								"Warning",
