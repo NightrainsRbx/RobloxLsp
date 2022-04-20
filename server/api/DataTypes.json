@@ -1955,6 +1955,42 @@
                 }
             ],
             "Name": "CatalogSearchParams"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "family",
+                            "Type": {
+                                "Name": "string"
+                            }
+                        },
+                        {
+                            "Name": "weight",
+                            "Default": "Regular",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "FontWeight"
+                            }
+                        },
+                        {
+                            "Name": "style",
+                            "Default": "Normal",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "FontStyle"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "Font"
+                    }
+                }
+            ],
+            "Name": "Font"
         }
     ],
     "DataTypes": [
@@ -4102,6 +4138,41 @@
                 }
             ],
             "Name": "CatalogSearchParams"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Property",
+                    "Name": "Family",
+                    "ValueType": {
+                        "Name": "string"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Bold",
+                    "ValueType": {
+                        "Name": "boolean"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Weight",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "FontWeight"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Style",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "FontStyle"
+                    }
+                }
+            ],
+            "Name": "Font"
         }
     ]
 }

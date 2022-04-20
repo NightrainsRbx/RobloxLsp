@@ -64,7 +64,7 @@ type ENV = {
 		gsub: (
 			s: string,
 			pattern: string,
-			repl: string | { [string]: string } | ((string) -> string),
+			repl: string | { [string]: string } | ((...string) -> string),
 			n: number?
 		) -> (string, number),
 		len: (s: string) -> number,
@@ -96,7 +96,7 @@ type ENV = {
 		sort: (t: table, comp: ((any, any) -> boolean)?) -> (),
 		unpack: (t: table, i: number?, j: number?) -> ...any,
 		clear: (t: table) -> (),
-                clone: (t: table) -> table,
+		clone: (t: table) -> table,
 		create: (count: number, value: any?) -> table,
 		freeze: (t: table) -> table,
 		isfrozen: (t: table) -> boolean
