@@ -108,6 +108,29 @@
                 {
                     "Category": "Data",
                     "MemberType": "Property",
+                    "Name": "PropertyStatusStudio",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": false,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "ReadOnly",
+                        "NotReplicated",
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "PropertyStatus"
+                    }
+                },
+                {
+                    "Category": "Data",
+                    "MemberType": "Property",
                     "Name": "RobloxLocked",
                     "Security": {
                         "Read": "PluginSecurity",
@@ -2786,21 +2809,6 @@
                 },
                 {
                     "MemberType": "Event",
-                    "Name": "SettingsChanged",
-                    "Parameters": [
-                        {
-                            "Name": "property",
-                            "Type": {
-                                "Category": "Primitive",
-                                "Name": "string"
-                            }
-                        }
-                    ],
-                    "Security": "None",
-                    "ThreadSafety": "Unsafe"
-                },
-                {
-                    "MemberType": "Event",
                     "Name": "UploadFinished",
                     "Parameters": [
                         {
@@ -3103,6 +3111,32 @@
                             "Type": {
                                 "Category": "Primitive",
                                 "Name": "int64"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "Primitive",
+                        "Name": "void"
+                    },
+                    "Security": "RobloxScriptSecurity",
+                    "ThreadSafety": "Unsafe"
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "InsertVideo",
+                    "Parameters": [
+                        {
+                            "Name": "assetId",
+                            "Type": {
+                                "Category": "Primitive",
+                                "Name": "int64"
+                            }
+                        },
+                        {
+                            "Name": "assetName",
+                            "Type": {
+                                "Category": "Primitive",
+                                "Name": "string"
                             }
                         }
                     ],
@@ -16213,13 +16247,20 @@
             "Members": [
                 {
                     "MemberType": "Function",
-                    "Name": "IsWatchingScript",
+                    "Name": "IsWatchingScriptLine",
                     "Parameters": [
                         {
                             "Name": "scriptRef",
                             "Type": {
                                 "Category": "Primitive",
                                 "Name": "string"
+                            }
+                        },
+                        {
+                            "Name": "lineNumber",
+                            "Type": {
+                                "Category": "Primitive",
+                                "Name": "int"
                             }
                         }
                     ],
@@ -16232,7 +16273,7 @@
                 },
                 {
                     "MemberType": "Function",
-                    "Name": "StartWatchingScript",
+                    "Name": "StartWatchingScriptLine",
                     "Parameters": [
                         {
                             "Name": "scriptRef",
@@ -16247,12 +16288,48 @@
                                 "Category": "Primitive",
                                 "Name": "int"
                             }
+                        },
+                        {
+                            "Name": "lineNumber",
+                            "Type": {
+                                "Category": "Primitive",
+                                "Name": "int"
+                            }
                         }
                     ],
                     "ReturnType": {
                         "Category": "Primitive",
                         "Name": "void"
                     },
+                    "Security": "RobloxScriptSecurity",
+                    "ThreadSafety": "Unsafe"
+                },
+                {
+                    "MemberType": "Event",
+                    "Name": "GuidLineContentsChanged",
+                    "Parameters": [
+                        {
+                            "Name": "guid",
+                            "Type": {
+                                "Category": "Primitive",
+                                "Name": "string"
+                            }
+                        },
+                        {
+                            "Name": "lineNumber",
+                            "Type": {
+                                "Category": "Primitive",
+                                "Name": "int"
+                            }
+                        },
+                        {
+                            "Name": "contents",
+                            "Type": {
+                                "Category": "Primitive",
+                                "Name": "string"
+                            }
+                        }
+                    ],
                     "Security": "RobloxScriptSecurity",
                     "ThreadSafety": "Unsafe"
                 },
@@ -17697,6 +17774,18 @@
                 "NotCreatable",
                 "Settings",
                 "NotBrowsable"
+            ]
+        },
+        {
+            "Members": [
+            ],
+            "MemoryCategory": "Instances",
+            "Name": "DebuggablePluginWatcher",
+            "Superclass": "Instance",
+            "Tags": [
+                "NotCreatable",
+                "Service",
+                "NotReplicated"
             ]
         },
         {
@@ -23855,6 +23944,111 @@
                     }
                 },
                 {
+                    "Category": "Selection",
+                    "MemberType": "Property",
+                    "Name": "SelectionBehaviorDown",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotBrowsable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "SelectionBehavior"
+                    }
+                },
+                {
+                    "Category": "Selection",
+                    "MemberType": "Property",
+                    "Name": "SelectionBehaviorLeft",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotBrowsable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "SelectionBehavior"
+                    }
+                },
+                {
+                    "Category": "Selection",
+                    "MemberType": "Property",
+                    "Name": "SelectionBehaviorRight",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotBrowsable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "SelectionBehavior"
+                    }
+                },
+                {
+                    "Category": "Selection",
+                    "MemberType": "Property",
+                    "Name": "SelectionBehaviorUp",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotBrowsable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "SelectionBehavior"
+                    }
+                },
+                {
+                    "Category": "Selection",
+                    "MemberType": "Property",
+                    "Name": "SelectionGroup",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotBrowsable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "bool"
+                    }
+                },
+                {
                     "Category": "Debugging",
                     "MemberType": "Property",
                     "Name": "TotalGroupScale",
@@ -25559,6 +25753,24 @@
                 {
                     "Category": "Text",
                     "MemberType": "Property",
+                    "Name": "FontFace",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "DataType",
+                        "Name": "Font"
+                    }
+                },
+                {
+                    "Category": "Text",
+                    "MemberType": "Property",
                     "Name": "FontSize",
                     "Security": {
                         "Read": "None",
@@ -26266,6 +26478,24 @@
                     "ThreadSafety": "ReadSafe",
                     "ValueType": {
                         "Category": "Enum",
+                        "Name": "Font"
+                    }
+                },
+                {
+                    "Category": "Text",
+                    "MemberType": "Property",
+                    "Name": "FontFace",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "DataType",
                         "Name": "Font"
                     }
                 },
@@ -27224,6 +27454,24 @@
                     "ThreadSafety": "ReadSafe",
                     "ValueType": {
                         "Category": "Enum",
+                        "Name": "Font"
+                    }
+                },
+                {
+                    "Category": "Text",
+                    "MemberType": "Property",
+                    "Name": "FontFace",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "DataType",
                         "Name": "Font"
                     }
                 },
@@ -31391,6 +31639,25 @@
                         "Name": "void"
                     },
                     "Security": "RobloxScriptSecurity",
+                    "ThreadSafety": "Unsafe"
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "Select",
+                    "Parameters": [
+                        {
+                            "Name": "selectionParent",
+                            "Type": {
+                                "Category": "Class",
+                                "Name": "Instance"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "Primitive",
+                        "Name": "void"
+                    },
+                    "Security": "None",
                     "ThreadSafety": "Unsafe"
                 },
                 {
@@ -36094,6 +36361,28 @@
                 {
                     "Category": "Data",
                     "MemberType": "Property",
+                    "Name": "IsPbr",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": false,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "ReadOnly",
+                        "NotReplicated"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "bool"
+                    }
+                },
+                {
+                    "Category": "Data",
+                    "MemberType": "Property",
                     "Name": "MetalnessFilePath",
                     "Security": {
                         "Read": "None",
@@ -37120,18 +37409,6 @@
         },
         {
             "Members": [
-            ],
-            "MemoryCategory": "Instances",
-            "Name": "InternalContainer",
-            "Superclass": "Instance",
-            "Tags": [
-                "NotCreatable",
-                "Service",
-                "NotReplicated"
-            ]
-        },
-        {
-            "Members": [
                 {
                     "Category": "Behavior",
                     "MemberType": "Property",
@@ -37698,10 +37975,7 @@
             ],
             "MemoryCategory": "PhysicsParts",
             "Name": "Weld",
-            "Superclass": "JointInstance",
-            "Tags": [
-                "Deprecated"
-            ]
+            "Superclass": "JointInstance"
         },
         {
             "Members": [
@@ -38109,6 +38383,32 @@
         },
         {
             "Members": [
+                {
+                    "MemberType": "Function",
+                    "Name": "RegisterLSPCallback",
+                    "Parameters": [
+                        {
+                            "Name": "methodToOverride",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "LSPMethodType"
+                            }
+                        },
+                        {
+                            "Name": "callbackFunction",
+                            "Type": {
+                                "Category": "DataType",
+                                "Name": "Function"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "Primitive",
+                        "Name": "void"
+                    },
+                    "Security": "RobloxScriptSecurity",
+                    "ThreadSafety": "Unsafe"
+                }
             ],
             "MemoryCategory": "Instances",
             "Name": "LSPService",
@@ -41976,6 +42276,48 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "AsphaltName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "BasaltName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "Brick",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -41992,6 +42334,27 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "BrickName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42018,6 +42381,27 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "CobblestoneName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "Concrete",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -42034,6 +42418,27 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "ConcreteName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42060,6 +42465,48 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "CorrodedMetalName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "CrackedLavaName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "DiamondPlate",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -42076,6 +42523,27 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "DiamondPlateName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42102,6 +42570,27 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "FabricName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "Foil",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -42118,6 +42607,48 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "FoilName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "GlacierName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42144,6 +42675,27 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "GraniteName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "Grass",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -42160,6 +42712,48 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "GrassName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "GroundName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42186,6 +42780,69 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "IceName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "LeafyGrassName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "LimestoneName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "Marble",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -42202,6 +42859,27 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "MarbleName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42228,6 +42906,69 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "MetalName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "MudName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "PavementName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "Pebble",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -42244,6 +42985,27 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "PebbleName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42270,6 +43032,69 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "PlasticName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "RockName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "SaltName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "Sand",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -42286,6 +43111,48 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "SandName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "SandstoneName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42312,6 +43179,27 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "SlateName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "SmoothPlastic",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -42328,6 +43216,48 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "SmoothPlasticName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "SnowName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42813,6 +43743,27 @@
                 {
                     "Category": "Material Overrides",
                     "MemberType": "Property",
+                    "Name": "WoodName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
                     "Name": "WoodPlanks",
                     "Security": {
                         "Read": "RobloxSecurity",
@@ -42829,6 +43780,27 @@
                     "ValueType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    }
+                },
+                {
+                    "Category": "Material Overrides",
+                    "MemberType": "Property",
+                    "Name": "WoodPlanksName",
+                    "Security": {
+                        "Read": "RobloxSecurity",
+                        "Write": "RobloxSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "NotScriptable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -42894,6 +43866,70 @@
                 },
                 {
                     "MemberType": "Function",
+                    "Name": "GetBaseMaterialOverride",
+                    "Parameters": [
+                        {
+                            "Name": "material",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "Material"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    },
+                    "Security": "None",
+                    "ThreadSafety": "Unsafe"
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "GetMaterialOverrideChanged",
+                    "Parameters": [
+                        {
+                            "Name": "material",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "Material"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "DataType",
+                        "Name": "RBXScriptSignal"
+                    },
+                    "Security": "RobloxScriptSecurity",
+                    "ThreadSafety": "Unsafe"
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "GetMaterialVariant",
+                    "Parameters": [
+                        {
+                            "Name": "material",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "Material"
+                            }
+                        },
+                        {
+                            "Name": "name",
+                            "Type": {
+                                "Category": "Primitive",
+                                "Name": "string"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "Class",
+                        "Name": "MaterialVariant"
+                    },
+                    "Security": "None",
+                    "ThreadSafety": "Unsafe"
+                },
+                {
+                    "MemberType": "Function",
                     "Name": "GetOverridePartMaterial",
                     "Parameters": [
                         {
@@ -42926,6 +43962,32 @@
                     "ReturnType": {
                         "Category": "Class",
                         "Name": "MaterialVariant"
+                    },
+                    "Security": "None",
+                    "ThreadSafety": "Unsafe"
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "SetBaseMaterialOverride",
+                    "Parameters": [
+                        {
+                            "Name": "material",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "Material"
+                            }
+                        },
+                        {
+                            "Name": "name",
+                            "Type": {
+                                "Category": "Primitive",
+                                "Name": "string"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "Primitive",
+                        "Name": "void"
                     },
                     "Security": "None",
                     "ThreadSafety": "Unsafe"
@@ -43017,7 +44079,7 @@
                     }
                 },
                 {
-                    "Category": "Appearance For Terrain",
+                    "Category": "Appearance",
                     "MemberType": "Property",
                     "Name": "MaterialPattern",
                     "Security": {
@@ -44228,12 +45290,11 @@
                         "Write": "RobloxScriptSecurity"
                     },
                     "Serialization": {
-                        "CanLoad": false,
-                        "CanSave": false
+                        "CanLoad": true,
+                        "CanSave": true
                     },
                     "Tags": [
                         "Hidden",
-                        "ReadOnly",
                         "NotReplicated"
                     ],
                     "ThreadSafety": "ReadSafe",
@@ -44251,12 +45312,11 @@
                         "Write": "RobloxScriptSecurity"
                     },
                     "Serialization": {
-                        "CanLoad": false,
+                        "CanLoad": true,
                         "CanSave": true
                     },
                     "Tags": [
                         "Hidden",
-                        "ReadOnly",
                         "NotReplicated"
                     ],
                     "ThreadSafety": "ReadSafe",
@@ -44320,12 +45380,11 @@
                         "Write": "RobloxScriptSecurity"
                     },
                     "Serialization": {
-                        "CanLoad": false,
+                        "CanLoad": true,
                         "CanSave": true
                     },
                     "Tags": [
                         "Hidden",
-                        "ReadOnly",
                         "NotReplicated"
                     ],
                     "ThreadSafety": "ReadSafe",
@@ -44365,12 +45424,11 @@
                         "Write": "RobloxScriptSecurity"
                     },
                     "Serialization": {
-                        "CanLoad": false,
+                        "CanLoad": true,
                         "CanSave": true
                     },
                     "Tags": [
                         "Hidden",
-                        "ReadOnly",
                         "NotReplicated"
                     ],
                     "ThreadSafety": "ReadSafe",
@@ -46040,7 +47098,7 @@
         {
             "Members": [
                 {
-                    "Category": "Behavior",
+                    "Category": "Part",
                     "MemberType": "Property",
                     "Name": "Anchored",
                     "Security": {
@@ -46373,7 +47431,7 @@
                     }
                 },
                 {
-                    "Category": "Behavior",
+                    "Category": "Collision",
                     "MemberType": "Property",
                     "Name": "CanCollide",
                     "Security": {
@@ -46409,7 +47467,7 @@
                     }
                 },
                 {
-                    "Category": "Behavior",
+                    "Category": "Collision",
                     "MemberType": "Property",
                     "Name": "CanTouch",
                     "Security": {
@@ -46445,7 +47503,7 @@
                     }
                 },
                 {
-                    "Category": "Data",
+                    "Category": "Part",
                     "MemberType": "Property",
                     "Name": "CenterOfMass",
                     "Security": {
@@ -46467,7 +47525,7 @@
                     }
                 },
                 {
-                    "Category": "Behavior",
+                    "Category": "Collision",
                     "MemberType": "Property",
                     "Name": "CollisionGroupId",
                     "Security": {
@@ -46760,7 +47818,7 @@
                     }
                 },
                 {
-                    "Category": "Behavior",
+                    "Category": "Data",
                     "MemberType": "Property",
                     "Name": "Locked",
                     "Security": {
@@ -46778,7 +47836,7 @@
                     }
                 },
                 {
-                    "Category": "Data",
+                    "Category": "Part",
                     "MemberType": "Property",
                     "Name": "Mass",
                     "Security": {
@@ -46800,7 +47858,7 @@
                     }
                 },
                 {
-                    "Category": "Behavior",
+                    "Category": "Part",
                     "MemberType": "Property",
                     "Name": "Massless",
                     "Security": {
@@ -46833,6 +47891,27 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "Material"
+                    }
+                },
+                {
+                    "Category": "Appearance",
+                    "MemberType": "Property",
+                    "Name": "MaterialVariant",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": false,
+                        "CanSave": false
+                    },
+                    "Tags": [
+                        "NotReplicated"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
                     }
                 },
                 {
@@ -46937,7 +48016,7 @@
                     }
                 },
                 {
-                    "Category": "Behavior",
+                    "Category": "Data",
                     "MemberType": "Property",
                     "Name": "ResizeIncrement",
                     "Security": {
@@ -46959,7 +48038,7 @@
                     }
                 },
                 {
-                    "Category": "Behavior",
+                    "Category": "Data",
                     "MemberType": "Property",
                     "Name": "ResizeableFaces",
                     "Security": {
@@ -49443,7 +50522,7 @@
         {
             "Members": [
                 {
-                    "Category": "Behavior",
+                    "Category": "Collision",
                     "MemberType": "Property",
                     "Name": "CollisionFidelity",
                     "Security": {
@@ -53174,7 +54253,10 @@
             ],
             "MemoryCategory": "Instances",
             "Name": "PathfindingLink",
-            "Superclass": "Instance"
+            "Superclass": "Instance",
+            "Tags": [
+                "NotBrowsable"
+            ]
         },
         {
             "Members": [
@@ -65087,6 +66169,25 @@
                 },
                 {
                     "MemberType": "Function",
+                    "Name": "GetObjectsAllOrNone",
+                    "Parameters": [
+                        {
+                            "Name": "url",
+                            "Type": {
+                                "Category": "DataType",
+                                "Name": "Content"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "DataType",
+                        "Name": "Objects"
+                    },
+                    "Security": "RobloxScriptSecurity",
+                    "ThreadSafety": "Unsafe"
+                },
+                {
+                    "MemberType": "Function",
                     "Name": "GetObjectsList",
                     "Parameters": [
                         {
@@ -72394,6 +73495,24 @@
                     }
                 },
                 {
+                    "Category": "Tools",
+                    "MemberType": "Property",
+                    "Name": "Use Bounding Box Move Handles",
+                    "Security": {
+                        "Read": "RobloxScriptSecurity",
+                        "Write": "RobloxScriptSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "bool"
+                    }
+                },
+                {
                     "Category": "Script Editor Colors",
                     "MemberType": "Property",
                     "Name": "Warning Color",
@@ -72505,27 +73624,6 @@
                     "Category": "Data",
                     "MemberType": "Property",
                     "Name": "EnableScriptCollabByDefaultOnLoad",
-                    "Security": {
-                        "Read": "RobloxScriptSecurity",
-                        "Write": "RobloxScriptSecurity"
-                    },
-                    "Serialization": {
-                        "CanLoad": true,
-                        "CanSave": true
-                    },
-                    "Tags": [
-                        "Hidden"
-                    ],
-                    "ThreadSafety": "ReadSafe",
-                    "ValueType": {
-                        "Category": "Primitive",
-                        "Name": "bool"
-                    }
-                },
-                {
-                    "Category": "Data",
-                    "MemberType": "Property",
-                    "Name": "EnableTeamCreateStreamingOnLoad",
                     "Security": {
                         "Read": "RobloxScriptSecurity",
                         "Write": "RobloxScriptSecurity"
@@ -73207,25 +74305,6 @@
                 },
                 {
                     "MemberType": "Function",
-                    "Name": "ConvertToPackageUpload",
-                    "Parameters": [
-                        {
-                            "Name": "uploadUrl",
-                            "Type": {
-                                "Category": "Primitive",
-                                "Name": "string"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Category": "Primitive",
-                        "Name": "void"
-                    },
-                    "Security": "RobloxScriptSecurity",
-                    "ThreadSafety": "Unsafe"
-                },
-                {
-                    "MemberType": "Function",
                     "Name": "CopyToClipboard",
                     "Parameters": [
                         {
@@ -73233,44 +74312,6 @@
                             "Type": {
                                 "Category": "Primitive",
                                 "Name": "string"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Category": "Primitive",
-                        "Name": "void"
-                    },
-                    "Security": "RobloxScriptSecurity",
-                    "ThreadSafety": "Unsafe"
-                },
-                {
-                    "MemberType": "Function",
-                    "Name": "DEPRECATED_SetDocumentDisplayName",
-                    "Parameters": [
-                        {
-                            "Name": "newName",
-                            "Type": {
-                                "Category": "Primitive",
-                                "Name": "string"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Category": "Primitive",
-                        "Name": "void"
-                    },
-                    "Security": "RobloxScriptSecurity",
-                    "ThreadSafety": "Unsafe"
-                },
-                {
-                    "MemberType": "Function",
-                    "Name": "DEPRECATED_SetTurnOnTeamCreateOnPublish",
-                    "Parameters": [
-                        {
-                            "Name": "turnOn",
-                            "Type": {
-                                "Category": "Primitive",
-                                "Name": "bool"
                             }
                         }
                     ],
@@ -73881,52 +74922,8 @@
                 },
                 {
                     "MemberType": "Event",
-                    "Name": "OnConvertToPackageResult",
-                    "Parameters": [
-                        {
-                            "Name": "isSuccessful",
-                            "Type": {
-                                "Category": "Primitive",
-                                "Name": "bool"
-                            }
-                        },
-                        {
-                            "Name": "errorMessage",
-                            "Type": {
-                                "Category": "Primitive",
-                                "Name": "string"
-                            }
-                        }
-                    ],
-                    "Security": "RobloxScriptSecurity",
-                    "ThreadSafety": "Unsafe"
-                },
-                {
-                    "MemberType": "Event",
                     "Name": "OnImportFromRoblox",
                     "Parameters": [
-                    ],
-                    "Security": "RobloxScriptSecurity",
-                    "ThreadSafety": "Unsafe"
-                },
-                {
-                    "MemberType": "Event",
-                    "Name": "OnOpenConvertToPackagePlugin",
-                    "Parameters": [
-                        {
-                            "Name": "instances",
-                            "Type": {
-                                "Category": "DataType",
-                                "Name": "Objects"
-                            }
-                        },
-                        {
-                            "Name": "name",
-                            "Type": {
-                                "Category": "Primitive",
-                                "Name": "string"
-                            }
-                        }
                     ],
                     "Security": "RobloxScriptSecurity",
                     "ThreadSafety": "Unsafe"
@@ -74143,8 +75140,8 @@
                     "MemberType": "Property",
                     "Name": "AlphaMode",
                     "Security": {
-                        "Read": "LocalUserSecurity",
-                        "Write": "LocalUserSecurity"
+                        "Read": "PluginSecurity",
+                        "Write": "PluginSecurity"
                     },
                     "Serialization": {
                         "CanLoad": true,
@@ -74161,8 +75158,8 @@
                     "MemberType": "Property",
                     "Name": "ColorMap",
                     "Security": {
-                        "Read": "LocalUserSecurity",
-                        "Write": "LocalUserSecurity"
+                        "Read": "PluginSecurity",
+                        "Write": "PluginSecurity"
                     },
                     "Serialization": {
                         "CanLoad": true,
@@ -74179,8 +75176,8 @@
                     "MemberType": "Property",
                     "Name": "MetalnessMap",
                     "Security": {
-                        "Read": "LocalUserSecurity",
-                        "Write": "LocalUserSecurity"
+                        "Read": "PluginSecurity",
+                        "Write": "PluginSecurity"
                     },
                     "Serialization": {
                         "CanLoad": true,
@@ -74197,8 +75194,8 @@
                     "MemberType": "Property",
                     "Name": "NormalMap",
                     "Security": {
-                        "Read": "LocalUserSecurity",
-                        "Write": "LocalUserSecurity"
+                        "Read": "PluginSecurity",
+                        "Write": "PluginSecurity"
                     },
                     "Serialization": {
                         "CanLoad": true,
@@ -74215,8 +75212,8 @@
                     "MemberType": "Property",
                     "Name": "RoughnessMap",
                     "Security": {
-                        "Read": "LocalUserSecurity",
-                        "Write": "LocalUserSecurity"
+                        "Read": "PluginSecurity",
+                        "Write": "PluginSecurity"
                     },
                     "Serialization": {
                         "CanLoad": true,
@@ -75232,6 +76229,142 @@
                 "NotCreatable",
                 "Service",
                 "NotReplicated"
+            ]
+        },
+        {
+            "Members": [
+                {
+                    "Category": "Appearance",
+                    "MemberType": "Property",
+                    "Name": "ColorMap",
+                    "Security": {
+                        "Read": "PluginSecurity",
+                        "Write": "PluginSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "DataType",
+                        "Name": "Content"
+                    }
+                },
+                {
+                    "Category": "Appearance",
+                    "MemberType": "Property",
+                    "Name": "Face",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "TerrainFace"
+                    }
+                },
+                {
+                    "Category": "Appearance",
+                    "MemberType": "Property",
+                    "Name": "MaterialPattern",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "MaterialPattern"
+                    }
+                },
+                {
+                    "Category": "Appearance",
+                    "MemberType": "Property",
+                    "Name": "MetalnessMap",
+                    "Security": {
+                        "Read": "PluginSecurity",
+                        "Write": "PluginSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "DataType",
+                        "Name": "Content"
+                    }
+                },
+                {
+                    "Category": "Appearance",
+                    "MemberType": "Property",
+                    "Name": "NormalMap",
+                    "Security": {
+                        "Read": "PluginSecurity",
+                        "Write": "PluginSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "DataType",
+                        "Name": "Content"
+                    }
+                },
+                {
+                    "Category": "Appearance",
+                    "MemberType": "Property",
+                    "Name": "RoughnessMap",
+                    "Security": {
+                        "Read": "PluginSecurity",
+                        "Write": "PluginSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "DataType",
+                        "Name": "Content"
+                    }
+                },
+                {
+                    "Category": "Appearance",
+                    "MemberType": "Property",
+                    "Name": "StudsPerTile",
+                    "Security": {
+                        "Read": "None",
+                        "Write": "None"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "float"
+                    }
+                }
+            ],
+            "MemoryCategory": "Instances",
+            "Name": "TerrainDetail",
+            "Superclass": "Instance",
+            "Tags": [
+                "NotBrowsable"
             ]
         },
         {
@@ -76705,6 +77838,28 @@
                     "ReturnType": {
                         "Category": "Class",
                         "Name": "Instance"
+                    },
+                    "Security": "None",
+                    "Tags": [
+                        "Yields"
+                    ],
+                    "ThreadSafety": "Unsafe"
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "GetFamilyInfoAsync",
+                    "Parameters": [
+                        {
+                            "Name": "assetId",
+                            "Type": {
+                                "Category": "DataType",
+                                "Name": "Content"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Category": "Group",
+                        "Name": "Dictionary"
                     },
                     "Security": "None",
                     "Tags": [
@@ -79534,6 +80689,27 @@
                 {
                     "Category": "Data",
                     "MemberType": "Property",
+                    "Name": "DefaultCameraID",
+                    "Security": {
+                        "Read": "RobloxScriptSecurity",
+                        "Write": "RobloxScriptSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "Hidden"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "Category": "Data",
+                    "MemberType": "Property",
                     "Name": "Fullscreen",
                     "Security": {
                         "Read": "RobloxScriptSecurity",
@@ -81929,6 +83105,29 @@
                 {
                     "Category": "Data",
                     "MemberType": "Property",
+                    "Name": "DidPointerHit",
+                    "Security": {
+                        "Read": "RobloxScriptSecurity",
+                        "Write": "RobloxScriptSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": false,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "Hidden",
+                        "ReadOnly",
+                        "NotReplicated"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "bool"
+                    }
+                },
+                {
+                    "Category": "Data",
+                    "MemberType": "Property",
                     "Name": "GuiInputUserCFrame",
                     "Security": {
                         "Read": "None",
@@ -81942,6 +83141,29 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "UserCFrame"
+                    }
+                },
+                {
+                    "Category": "Data",
+                    "MemberType": "Property",
+                    "Name": "PointerHitCFrame",
+                    "Security": {
+                        "Read": "RobloxScriptSecurity",
+                        "Write": "RobloxScriptSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": false,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "Hidden",
+                        "ReadOnly",
+                        "NotReplicated"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "DataType",
+                        "Name": "CFrame"
                     }
                 },
                 {
@@ -83174,6 +84396,73 @@
             ],
             "MemoryCategory": "Instances",
             "Name": "VersionControlService",
+            "Superclass": "Instance",
+            "Tags": [
+                "NotCreatable",
+                "Service"
+            ]
+        },
+        {
+            "Members": [
+                {
+                    "Category": "Data",
+                    "MemberType": "Property",
+                    "Name": "Active",
+                    "Security": {
+                        "Read": "RobloxScriptSecurity",
+                        "Write": "RobloxScriptSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "Hidden",
+                        "NotReplicated"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "bool"
+                    }
+                },
+                {
+                    "Category": "Data",
+                    "MemberType": "Property",
+                    "Name": "CameraID",
+                    "Security": {
+                        "Read": "RobloxScriptSecurity",
+                        "Write": "RobloxScriptSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": true,
+                        "CanSave": true
+                    },
+                    "Tags": [
+                        "Hidden",
+                        "NotReplicated"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "string"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "GetCameraDevices",
+                    "Parameters": [
+                    ],
+                    "ReturnType": {
+                        "Category": "Group",
+                        "Name": "Map"
+                    },
+                    "Security": "RobloxScriptSecurity",
+                    "ThreadSafety": "Unsafe"
+                }
+            ],
+            "MemoryCategory": "Instances",
+            "Name": "VideoCaptureService",
             "Superclass": "Instance",
             "Tags": [
                 "NotCreatable",
@@ -84785,7 +86074,7 @@
                 {
                     "Category": "Behavior",
                     "MemberType": "Property",
-                    "Name": "GenerateDefaultChannel",
+                    "Name": "EnableDefaultVoice",
                     "Security": {
                         "Read": "PluginSecurity",
                         "Write": "PluginSecurity"
@@ -84796,6 +86085,48 @@
                     },
                     "Tags": [
                         "NotBrowsable"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "bool"
+                    }
+                },
+                {
+                    "Category": "State",
+                    "MemberType": "Property",
+                    "Name": "VoiceChatEnabledForPlaceOnRcc",
+                    "Security": {
+                        "Read": "RobloxScriptSecurity",
+                        "Write": "RobloxScriptSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": false,
+                        "CanSave": false
+                    },
+                    "Tags": [
+                        "Hidden"
+                    ],
+                    "ThreadSafety": "ReadSafe",
+                    "ValueType": {
+                        "Category": "Primitive",
+                        "Name": "bool"
+                    }
+                },
+                {
+                    "Category": "State",
+                    "MemberType": "Property",
+                    "Name": "VoiceChatEnabledForUniverseOnRcc",
+                    "Security": {
+                        "Read": "RobloxScriptSecurity",
+                        "Write": "RobloxScriptSecurity"
+                    },
+                    "Serialization": {
+                        "CanLoad": false,
+                        "CanSave": false
+                    },
+                    "Tags": [
+                        "Hidden"
                     ],
                     "ThreadSafety": "ReadSafe",
                     "ValueType": {
@@ -86771,6 +88102,10 @@
                     "Value": 286
                 },
                 {
+                    "Name": "DisconnectModeratedGame",
+                    "Value": 287
+                },
+                {
                     "Name": "PlacelaunchErrors",
                     "Value": 512
                 },
@@ -87875,6 +89210,10 @@
                 {
                     "Name": "Ubuntu",
                     "Value": 45
+                },
+                {
+                    "Name": "Unknown",
+                    "Value": 100
                 }
             ],
             "Name": "Font"
@@ -89919,6 +91258,115 @@
         {
             "Items": [
                 {
+                    "Name": "Initialize",
+                    "Value": 1
+                },
+                {
+                    "Name": "Initialized",
+                    "Value": 2
+                },
+                {
+                    "Name": "CancelRequest",
+                    "Value": 3
+                },
+                {
+                    "Name": "TextDocument_didOpen",
+                    "Value": 4
+                },
+                {
+                    "Name": "TextDocument_didChange",
+                    "Value": 5
+                },
+                {
+                    "Name": "TextDocument_didClose",
+                    "Value": 6
+                },
+                {
+                    "Name": "TextDocument_foldingRange",
+                    "Value": 7
+                },
+                {
+                    "Name": "TextDocument_onTypeFormatting",
+                    "Value": 8
+                },
+                {
+                    "Name": "TextDocument_formatting",
+                    "Value": 9
+                },
+                {
+                    "Name": "TextDocument_rangeFormatting",
+                    "Value": 10
+                },
+                {
+                    "Name": "TextDocument_hover",
+                    "Value": 11
+                },
+                {
+                    "Name": "TextDocument_signatureHelp",
+                    "Value": 12
+                },
+                {
+                    "Name": "Workspace_DidChangeConfiguration",
+                    "Value": 13
+                },
+                {
+                    "Name": "ShutdownRequest",
+                    "Value": 14
+                },
+                {
+                    "Name": "Completion",
+                    "Value": 15
+                },
+                {
+                    "Name": "Declaration",
+                    "Value": 16
+                },
+                {
+                    "Name": "DocumentSymbols",
+                    "Value": 17
+                },
+                {
+                    "Name": "TextDocument_publishDiagnostics",
+                    "Value": 18
+                },
+                {
+                    "Name": "Window_showMessage",
+                    "Value": 19
+                },
+                {
+                    "Name": "Window_showMessageRequest",
+                    "Value": 20
+                },
+                {
+                    "Name": "Roblox_registerSyntaxCategories",
+                    "Value": 21
+                },
+                {
+                    "Name": "Roblox_signalQuiescence",
+                    "Value": 22
+                },
+                {
+                    "Name": "Roblox_syntaxHighlight",
+                    "Value": 23
+                },
+                {
+                    "Name": "Roblox_suggestExtraSelections",
+                    "Value": 24
+                },
+                {
+                    "Name": "Roblox_findExecutablePosition",
+                    "Value": 25
+                },
+                {
+                    "Name": "Roblox_findColor3",
+                    "Value": 26
+                }
+            ],
+            "Name": "LSPMethodType"
+        },
+        {
+            "Items": [
+                {
                     "Name": "Default",
                     "Value": 0
                 }
@@ -90717,27 +92165,6 @@
         {
             "Items": [
                 {
-                    "Name": "IMMEDIATE_PRIORITY",
-                    "Value": 0
-                },
-                {
-                    "Name": "HIGH_PRIORITY",
-                    "Value": 1
-                },
-                {
-                    "Name": "MEDIUM_PRIORITY",
-                    "Value": 2
-                },
-                {
-                    "Name": "LOW_PRIORITY",
-                    "Value": 3
-                }
-            ],
-            "Name": "PacketPriority"
-        },
-        {
-            "Items": [
-                {
                     "Name": "Ball",
                     "Value": 0
                 },
@@ -91251,6 +92678,23 @@
                 }
             ],
             "Name": "ProductPurchaseDecision"
+        },
+        {
+            "Items": [
+                {
+                    "Name": "Ok",
+                    "Value": 0
+                },
+                {
+                    "Name": "Warning",
+                    "Value": 1
+                },
+                {
+                    "Name": "Error",
+                    "Value": 2
+                }
+            ],
+            "Name": "PropertyStatus"
         },
         {
             "Items": [
@@ -91939,6 +93383,19 @@
         {
             "Items": [
                 {
+                    "Name": "Escape",
+                    "Value": 0
+                },
+                {
+                    "Name": "Stop",
+                    "Value": 1
+                }
+            ],
+            "Name": "SelectionBehavior"
+        },
+        {
+            "Items": [
+                {
                     "Name": "Enabled",
                     "Value": 0
                 },
@@ -92023,71 +93480,6 @@
                 }
             ],
             "Name": "SortOrder"
-        },
-        {
-            "Items": [
-                {
-                    "Name": "NoSound",
-                    "Value": 0
-                },
-                {
-                    "Name": "Boing",
-                    "Value": 1
-                },
-                {
-                    "Name": "Bomb",
-                    "Value": 2
-                },
-                {
-                    "Name": "Break",
-                    "Value": 3
-                },
-                {
-                    "Name": "Click",
-                    "Value": 4
-                },
-                {
-                    "Name": "Clock",
-                    "Value": 5
-                },
-                {
-                    "Name": "Slingshot",
-                    "Value": 6
-                },
-                {
-                    "Name": "Page",
-                    "Value": 7
-                },
-                {
-                    "Name": "Ping",
-                    "Value": 8
-                },
-                {
-                    "Name": "Snap",
-                    "Value": 9
-                },
-                {
-                    "Name": "Splat",
-                    "Value": 10
-                },
-                {
-                    "Name": "Step",
-                    "Value": 11
-                },
-                {
-                    "Name": "StepOn",
-                    "Value": 12
-                },
-                {
-                    "Name": "Swoosh",
-                    "Value": 13
-                },
-                {
-                    "Name": "Victory",
-                    "Value": 14
-                }
-            ],
-            "Name": "SoundType"
         },
         {
             "Items": [
@@ -92227,16 +93619,12 @@
                     "Value": 2
                 },
                 {
-                    "Name": "RobloxPlugin",
+                    "Name": "Standalone",
                     "Value": 3
                 },
                 {
-                    "Name": "UserPlugin",
-                    "Value": 4
-                },
-                {
                     "Name": "None",
-                    "Value": 5
+                    "Value": 4
                 }
             ],
             "Name": "StudioDataModelType"
@@ -93250,6 +94638,23 @@
         {
             "Items": [
                 {
+                    "Name": "Top",
+                    "Value": 0
+                },
+                {
+                    "Name": "Side",
+                    "Value": 1
+                },
+                {
+                    "Name": "Bottom",
+                    "Value": 2
+                }
+            ],
+            "Name": "TerrainFace"
+        },
+        {
+            "Items": [
+                {
                     "Name": "Unknown",
                     "Value": 1
                 },
@@ -93276,6 +94681,10 @@
                 {
                     "Name": "InvalidTextChannelPermissions",
                     "Value": 7
+                },
+                {
+                    "Name": "MessageTooLong",
+                    "Value": 8
                 }
             ],
             "Name": "TextChatMessageStatus"
@@ -94081,6 +95490,26 @@
                 {
                     "Name": "OuterCage",
                     "Value": 6
+                },
+                {
+                    "Name": "ReferenceMeshAfterMorph",
+                    "Value": 7
+                },
+                {
+                    "Name": "HSROuterDetail",
+                    "Value": 8
+                },
+                {
+                    "Name": "HSROuter",
+                    "Value": 9
+                },
+                {
+                    "Name": "HSRInner",
+                    "Value": 10
+                },
+                {
+                    "Name": "HSRInnerReverse",
+                    "Value": 11
                 }
             ],
             "Name": "WrapLayerDebugMode"
@@ -94118,6 +95547,10 @@
                 {
                     "Name": "Rbf",
                     "Value": 7
+                },
+                {
+                    "Name": "OuterCageDetail",
+                    "Value": 8
                 }
             ],
             "Name": "WrapTargetDebugMode"
