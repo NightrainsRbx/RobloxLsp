@@ -137,17 +137,6 @@
 				"robloxLsp.diagnostics.neededFileStatus": {
 					"markdownDescription": "%config.diagnostics.neededFileStatus%",
 					"properties": {
-						"ambiguity-1": {
-							"default": "Any",
-							"description": "%config.diagnostics.ambiguity-1%",
-							"enum": [
-								"Any",
-								"Opened",
-								"None"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
 						"circle-doc-class": {
 							"default": "Any",
 							"description": "%config.diagnostics.circle-doc-class%",
@@ -508,18 +497,6 @@
 				"robloxLsp.diagnostics.severity": {
 					"markdownDescription": "%config.diagnostics.severity%",
 					"properties": {
-						"ambiguity-1": {
-							"default": "Warning",
-							"description": "%config.diagnostics.ambiguity-1%",
-							"enum": [
-								"Error",
-								"Warning",
-								"Information",
-								"Hint"
-							],
-							"scope": "resource",
-							"type": "string"
-						},
 						"circle-doc-class": {
 							"default": "Warning",
 							"description": "%config.diagnostics.circle-doc-class%",
