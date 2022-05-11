@@ -7,9 +7,7 @@ local m = {}
 m.namespace = {
     Enum = true,
     Roact = true,
-    Rodux = true,
-    Promise = true,
-    Fusion = true
+    Rodux = true
 }
 
 m.primitiveTypes = {
