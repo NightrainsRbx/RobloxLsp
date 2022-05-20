@@ -54,7 +54,7 @@ local function isValidPath(path)
     if type(path) ~= "string" then
         return false
     end
-    if normalizePath(path):match("^%/?%w") then
+    if normalizePath(path):match("^%/?[%w_]") then
         return true
     end
 end
