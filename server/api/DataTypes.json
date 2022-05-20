@@ -3940,6 +3940,13 @@
             "Members": [
                 {
                     "MemberType": "Property",
+                    "Name": "Distance",
+                    "ValueType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
                     "Name": "Instance",
                     "ValueType": {
                         "Name": "Instance"
