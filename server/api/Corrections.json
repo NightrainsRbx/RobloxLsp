@@ -2042,13 +2042,7 @@
                     "Name": "WorldToScreenPoint",
                     "TupleReturns": [
                         {
-                            "Name": "number"
-                        },
-                        {
-                            "Name": "number"
-                        },
-                        {
-                            "Name": "number"
+                            "Name": "Vector3"
                         },
                         {
                             "Name": "boolean"
@@ -2059,13 +2053,7 @@
                     "Name": "WorldToViewportPoint",
                     "TupleReturns": [
                         {
-                            "Name": "number"
-                        },
-                        {
-                            "Name": "number"
-                        },
-                        {
-                            "Name": "number"
+                            "Name": "Vector3"
                         },
                         {
                             "Name": "boolean"
