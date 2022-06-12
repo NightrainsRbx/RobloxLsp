@@ -1156,32 +1156,46 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"robloxLsp.misc.importScriptChildren": {
-					"default": false,
-					"markdownDescription": "%config.misc.importScriptChildren%",
+				"robloxLsp.misc.serverPort": {
+					"default": 27843,
+					"markdownDescription": "%config.misc.serverPort%",
+					"scope": "resource",
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 65535
+				},
+				"robloxLsp.suggestedImports.enable": {
+					"default": true,
+					"markdownDescription": "%config.suggestedImports.enable%",
 					"scope": "resource",
 					"type": "boolean"
 				},
-				"robloxLsp.misc.importIgnore": {
+				"robloxLsp.suggestedImports.importScriptChildren": {
+					"default": false,
+					"markdownDescription": "%config.suggestedImports.importScriptChildren%",
+					"scope": "resource",
+					"type": "boolean"
+				},
+				"robloxLsp.suggestedImports.importIgnore": {
 					"default": ["**/_Index/**"],
 					"items": {
 						"type": "string"
 					},
-					"markdownDescription": "%config.misc.importIgnore%",
+					"markdownDescription": "%config.suggestedImports.importIgnore%",
 					"scope": "resource",
 					"type": "array"
 				},
-				"robloxLsp.misc.importAlwaysAbsolute": {
+				"robloxLsp.suggestedImports.importAlwaysAbsolute": {
 					"default": [],
 					"items": {
 						"type": "string"
 					},
-					"markdownDescription": "%config.misc.importAlwaysAbsolute%",
+					"markdownDescription": "%config.suggestedImports.importAlwaysAbsolute%",
 					"scope": "resource",
 					"type": "array"
 				},
-				"robloxLsp.misc.importPathType": {
-					"markdownDescription": "%config.misc.importPathType%",
+				"robloxLsp.suggestedImports.importPathType": {
+					"markdownDescription": "%config.suggestedImports.importPathType%",
 					"scope": "resource",
 					"type": "string",
 					"default": "Both",
@@ -1192,14 +1206,6 @@
 						"Absolute Only",
 						"Both"
 					]
-				},
-				"robloxLsp.misc.serverPort": {
-					"default": 27843,
-					"markdownDescription": "%config.misc.serverPort%",
-					"scope": "resource",
-					"type": "integer",
-					"minimum": 0,
-					"maximum": 65535
 				},
 				"robloxLsp.typeChecking.mode": {
 					"default": "Disabled",

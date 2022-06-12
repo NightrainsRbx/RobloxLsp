@@ -28,8 +28,8 @@ function rbximports.findMatchingScripts(name, object, matching, path, ignoreGlob
 	path = path or { object }
 
 	if not ignoreGlob then
-		if config.config.misc.importIgnore[1] then
-			ignoreGlob = glob.glob(config.config.misc.importIgnore, { ignoreCase = false })
+		if config.config.suggestedImports.importIgnore[1] then
+			ignoreGlob = glob.glob(config.config.suggestedImports.importIgnore, { ignoreCase = false })
 		else
 			ignoreGlob = function(_)
 				return false
@@ -97,7 +97,7 @@ local function getSafeIndexer(name)
 end
 
 local function canIndexObject(object)
-	if not config.config.misc.importScriptChildren then
+	if not config.config.suggestedImports.importScriptChildren then
 		if object.value[1]:match("Script$") then
 			return false
 		end
@@ -174,7 +174,7 @@ function rbximports.getAbsoluteRequireArg(path)
 end
 
 local function isRelativePathSupported(uri, alwaysAbsoluteGlob)
-	if config.config.misc.importPathType == "Absolute Only" then
+	if config.config.suggestedImports.importPathType == "Absolute Only" then
 		return false
 	end
 
@@ -186,12 +186,12 @@ local function isRelativePathSupported(uri, alwaysAbsoluteGlob)
 end
 
 local function isAbsolutePathSupported()
-	return config.config.misc.importPathType ~= "Relative Only"
+	return config.config.suggestedImports.importPathType ~= "Relative Only"
 end
 
 local function getAlwaysAbsoluteGlob()
-	if config.config.misc.importAlwaysAbsolute[1] then
-		return glob.glob(config.config.misc.importAlwaysAbsolute, { ignoreCase = false })
+	if config.config.suggestedImports.importAlwaysAbsolute[1] then
+		return glob.glob(config.config.suggestedImports.importAlwaysAbsolute, { ignoreCase = false })
 	else
 		return function(_)
 			return false

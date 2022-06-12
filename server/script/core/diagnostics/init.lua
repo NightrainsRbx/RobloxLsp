@@ -5,9 +5,8 @@ local await  = require 'await'
 local vm     = require "vm.vm"
 
 -- 把耗时最长的诊断放到最后面
-local diagSort = {
-    ['deprecated'] = 98,
-    ['redundant-parameter'] = 100,
+local diagPriority = {
+    ['suggested-import'] = true,
 }
 
 local diagList = {}
@@ -15,7 +14,7 @@ for k in pairs(define.DiagnosticDefaultSeverity) do
     diagList[#diagList+1] = k
 end
 table.sort(diagList, function (a, b)
-    return (diagSort[a] or 0) < (diagSort[b] or 0)
+    return diagPriority[a]
 end)
 
 local function check(uri, name, results)
@@ -60,6 +59,29 @@ local function check(uri, name, results)
     end
 end
 
+local function checkSuggestedImports(uri)
+    local results = {}
+
+    local name = 'suggested-import'
+    local level =  config.config.diagnostics.severity[name]
+    or define.DiagnosticDefaultSeverity[name]
+    local severity = define.DiagnosticSeverity[level]
+
+    require('core.diagnostics.' .. name)(uri, function (result)
+        if vm.isDiagDisabledAt(uri, result.start, name) then
+            return
+        end
+        if result.start == 0 then
+            return
+        end
+        result.level = severity or result.level
+        result.code  = name
+        results[#results+1] = result
+    end, name)
+
+    return results
+end
+
 return function (uri, response)
     local ast = files.getAst(uri)
     if not ast then
@@ -76,5 +98,7 @@ return function (uri, response)
             check(uri, name, results)
             response(results)
         end
+    elseif files.isOpen(uri) then
+        response(checkSuggestedImports(uri))
     end
 end

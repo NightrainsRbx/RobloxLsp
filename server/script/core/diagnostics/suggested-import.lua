@@ -31,6 +31,10 @@ local function check(src, uri, callback)
 end
 
 return function (uri, callback)
+    if not config.config.suggestedImports.enable then
+        return
+    end
+
     local ast = files.getAst(uri)
     if not ast then
         return

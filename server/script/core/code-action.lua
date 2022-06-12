@@ -204,14 +204,14 @@ local function solveSuggestedImport(uri, diag, results)
             break
         end
 
-        if config.config.misc.importPathType == "Both" then
+        if config.config.suggestedImports.importPathType == "Both" then
             if match.relativeLuaPath then
                 paths[#paths+1] = match.relativeLuaPath
             end
             if match.absoluteLuaPath then
                 paths[#paths+1] = match.absoluteLuaPath
             end
-        elseif config.config.misc.importPathType == "Shortest First" then
+        elseif config.config.suggestedImports.importPathType == "Shortest First" then
             if match.relativeLuaPath and match.absoluteLuaPath then
                 if #match.relativeLuaPath < #match.absoluteLuaPath then
                     paths[#paths+1] = match.relativeLuaPath
@@ -226,7 +226,7 @@ local function solveSuggestedImport(uri, diag, results)
         end
     end
 
-    if config.config.misc.importPathType == "Shortest First" then
+    if config.config.suggestedImports.importPathType == "Shortest First" then
         table.sort(paths)
 
         -- In the case of "Both", we don't want to separate the relative- and
@@ -425,7 +425,10 @@ local function solveDiagnostic(uri, diag, start, results)
     elseif diag.code == 'trailing-space' then
         solveTrailingSpace(uri, diag, results)
     end
-    disableDiagnostic(uri, diag.code, start, results)
+
+    if config.config.diagnostics.enable then
+        disableDiagnostic(uri, diag.code, start, results)
+    end
 end
 
 local function checkQuickFix(results, uri, start, diagnostics)

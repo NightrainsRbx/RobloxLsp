@@ -212,6 +212,13 @@ local ConfigTemplate = {
         serviceAutoImport = {true,      Boolean},
         serverPort        = {27843,       Integer},
     },
+    suggestedImports = {
+        enable            = {true,  Boolean},
+        importScriptChildren = {false,  Boolean},
+        importIgnore      = {{},        Array(String)},
+        importAlwaysAbsolute = {{},     Array(String)},
+        importPathType    = {"Both", String},
+    },
     typeChecking = {
         mode            = {'Disabled', String},
         options         = {
