@@ -429,6 +429,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "toHSV",
+                    "Deprecated": true,
                     "Parameters": [
                         {
                             "Name": "color",
@@ -2308,6 +2309,22 @@
                 },
                 {
                     "MemberType": "Function",
+                    "Name": "ToHex",
+                    "Parameters": [],
+                    "TupleReturns": [
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        },
+                        {
+                            "Name": "number"
+                        }
+                    ]
+                },
+                {
+                    "MemberType": "Function",
                     "Name": "Lerp",
                     "Parameters": [
                         {
@@ -3535,6 +3552,14 @@
                     ],
                     "ReturnType": {
                         "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "NextUnitVector",
+                    "Parameters": [],
+                    "ReturnType": {
+                        "Name": "Vector3"
                     }
                 },
                 {
