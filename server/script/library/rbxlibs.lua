@@ -471,6 +471,19 @@ local function parseMembers(data, isObject)
 end
 
 local function parseEnums()
+
+
+    local typeofEnums = {}
+    for tp in pairs(m.object) do
+        if tp == "Instance" or not m.ClassNames[tp] and tp ~= "any" then
+            typeofEnums[#typeofEnums+1] = {
+                text = "\"" .. tp .. "\"",
+                label = "\"" .. tp .. "\""
+            }
+        end
+    end
+    m.global["typeof"].value.enums = typeofEnums
+
     local enums = m.object["Enums"]
     for _, enum in pairs(m.Api.Enums) do
         local items = {
@@ -562,7 +575,10 @@ function m.getClassNames()
     if not m.ClassNames then
         m.ClassNames = {}
         m.Services = {
-            ["UserGameSettings"] = true
+            ["UserGameSettings"] = true,
+            ["DebugSettings"] = true,
+            ["LuaSettings"] = true,
+            ["PhysicsSettings"] = true
         }
         m.CreatableInstances = {}
         m.Enums = {}
@@ -949,25 +965,7 @@ local function buildDataModel()
     replicateToPlayer(game.value.child)
 end
 
-local function loadMeta()
-    local parser = require("parser")
-    local state = parser:compile(util.loadFile(ROOT / "def" / "meta.luau"), "lua")
-    for _, object in ipairs(state.ast.types[1].value) do
-        m.object[object.key[1]].meta = {
-            type = "metatable",
-            value = object.value
-        }
-    end
-end
-
-function m.init()
-    defaultlibs = defaultlibs or require("library.defaultlibs")
-    if not defaultlibs.initialized then
-        defaultlibs.init()
-    end
-    m.global = util.deepCopy(defaultlibs.global)
-    m.object = util.deepCopy(defaultlibs.object)
-    local api = m.loadApi()
+local function parseClasses(api)
     local classNames = m.getClassNames()
     m.FunctionEnums = {
         ["ServiceProvider.GetService"] = generateEnums("className", 2),
@@ -987,29 +985,19 @@ function m.init()
             }
         end
     end
-    buildDataModel()
     for class, superClass in pairs(classNames) do
         if m.object[class] then
             addSuperMembers(class, superClass)
         end
     end
+end
+
+local function parseDataTypes(api)
     for _, dataType in ipairs(api.DataTypes) do
         m.object[dataType.Name] = {
             child = parseMembers(dataType, true)
         }
     end
-    loadMeta()
-    local typeofEnums = {}
-    for tp in pairs(m.object) do
-        if tp == "Instance" or not m.ClassNames[tp] and tp ~= "any" then
-            typeofEnums[#typeofEnums+1] = {
-                text = "\"" .. tp .. "\"",
-                label = "\"" .. tp .. "\""
-            }
-        end
-    end
-    m.global["typeof"].value.enums = typeofEnums
-    parseEnums()
     for _, constructor in ipairs(api.Constructors) do
         local value = {
             type = "type.table"
@@ -1028,7 +1016,35 @@ function m.init()
         }
         util.setTypeParent(m.global[constructor.Name])
     end
+end
+
+local function loadMeta()
+    local state = require("parser"):compile(util.loadFile(ROOT / "def" / "meta.luau"), "lua")
+    if state then
+        for _, object in ipairs(state.ast.types[1].value) do
+            m.object[object.key[1]].meta = {
+                type = "metatable",
+                value = object.value
+            }
+        end
+    end
+end
+
+function m.init()
+    defaultlibs = require("library.defaultlibs")
+    defaultlibs.init()
+
+    m.global = util.deepCopy(defaultlibs.global)
+    m.object = util.deepCopy(defaultlibs.object)
+
+    local api = m.loadApi()
+    parseClasses(api)
+    parseDataTypes(api)
+    loadMeta()
+    parseEnums()
     parseDocumentaion()
+    buildDataModel()
+
     require("vm").flushCache()
 end
 

@@ -383,6 +383,9 @@ local function loadLibLocale(langID, result)
 end
 
 function m.init()
+    if m.initialized then
+        return
+    end
     local libDoc = loadLibLocale('en-US')
 	if lang.id ~= 'en-US' then
 		loadLibLocale(lang.id, libDoc)
@@ -392,30 +395,32 @@ function m.init()
     m.testez = {}
     for tbl, file in pairs({[m.global] = "env.luau", [m.testez] = "3rd/testez.luau"}) do
         local state = parser:compile(util.loadFile(ROOT / "def" / file), "lua")
-        state.ast.uri = tostring(ROOT / "def" / file)
-        local env
-        for _, alias in ipairs(state.ast.types) do
-            if alias.name[1] == "ENV" then
-                env = alias
-                break
+        if state then
+            state.ast.uri = tostring(ROOT / "def" / file)
+            local env
+            for _, alias in ipairs(state.ast.types) do
+                if alias.name[1] == "ENV" then
+                    env = alias
+                    break
+                end
             end
-        end
-        for _, g in ipairs(env.value) do
-            tbl[g.key[1]] = {
-                name = g.key[1],
-                description = libDoc[g.key],
-                kind = "global",
-                type = "type.library",
-                value = g.value,
-                deprecated = deprecated[g.key[1]]
-            }
-            if g.key[1] == "setmetatable" then
-                g.value.argCount = 2
-            end
-            g.value.parent = tbl[g.key[1]]
-            if g.value.type == "type.table" then
-                for _, field in ipairs(g.value) do
-                    field.description = libDoc[g.key[1] .. "." .. field.key[1]]
+            for _, g in ipairs(env.value) do
+                tbl[g.key[1]] = {
+                    name = g.key[1],
+                    description = libDoc[g.key],
+                    kind = "global",
+                    type = "type.library",
+                    value = g.value,
+                    deprecated = deprecated[g.key[1]]
+                }
+                if g.key[1] == "setmetatable" then
+                    g.value.argCount = 2
+                end
+                g.value.parent = tbl[g.key[1]]
+                if g.value.type == "type.table" then
+                    for _, field in ipairs(g.value) do
+                        field.description = libDoc[g.key[1] .. "." .. field.key[1]]
+                    end
                 end
             end
         end
@@ -438,11 +443,13 @@ function m.init()
     end
     for libPath in fs.pairs(ROOT / "def" / "3rd") do
         local state = parser:compile(util.loadFile(libPath), "lua")
-        state.ast.uri = tostring(libPath)
-        if state.ast.types then
-            for _, alias in ipairs(state.ast.types) do
-                if alias.export then
-                    m.customType[alias.name[1]] = alias
+        if state then
+            state.ast.uri = tostring(libPath)
+            if state.ast.types then
+                for _, alias in ipairs(state.ast.types) do
+                    if alias.export then
+                        m.customType[alias.name[1]] = alias
+                    end
                 end
             end
         end
