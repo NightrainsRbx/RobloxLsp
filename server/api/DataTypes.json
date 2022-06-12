@@ -1165,13 +1165,6 @@
                     "ValueType": {
                         "Name": "CFrame"
                     }
-                },
-                {
-                    "MemberType": "Property",
-                    "Name": "Rotation",
-                    "ValueType": {
-                        "Name": "CFrame"
-                    }
                 }
             ],
             "Name": "CFrame"
@@ -2662,6 +2655,13 @@
                     "Name": "Position",
                     "ValueType": {
                         "Name": "Vector3"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Rotation",
+                    "ValueType": {
+                        "Name": "CFrame"
                     }
                 },
                 {
