@@ -2,12 +2,9 @@ local json = require 'json'
 local lang = require 'language'
 local rojo = require 'library.rojo'
 local util = require 'utility'
-
 local defaultlibs
 
 local m = {}
-
-m.BrickColors = require 'library.brickcolors'
 
 local MEMBER_SECURITY = {
     None = true,
@@ -18,6 +15,13 @@ local UNSCRIPTABLE_TAGS = {
     NotScriptable = true,
     -- Deprecated = true,
     Hidden = true,
+}
+
+local REPLICATE_TO_PLAYER = {
+    StarterPack = "Backpack",
+    StarterGui = "PlayerGui",
+    StarterPlayerScripts = "PlayerScripts",
+    StarterCharacterScripts = "Character"
 }
 
 local SPECIAL_FUNCTIONS = {
@@ -40,50 +44,43 @@ local SPECIAL_FUNCTIONS = {
 }
 
 m.RELEVANT_SERVICES = {
-    ["BadgeService"] = 1,
-    ["ChangeHistoryService"] = 1,
-    ["CollectionService"] = 0,
-    ["ContentProvider"] = 0,
-    ["ContextActionService"] = 0,
-    ["DataStoreService"] = 1,
-    ["Debris"] = 0,
-    ["GuiService"] = 2,
-    ["HapticService"] = 2,
-    ["HttpService"] = 0,
-    ["Lighting"] = 0,
-    ["LocalizationService"] = 0,
-    ["MarketplaceService"] = 0,
-    ["MessagingService"] = 1,
-    ["PathfindingService"] = 0,
-    ["PhysicsService"] = 0,
-    ["Players"] = 0,
-    ["PolicyService"] = 0,
-    ["ProximityPromptService"] = 0,
-    ["ReplicatedFirst"] = 0,
-    ["ReplicatedStorage"] = 0,
-    ["RunService"] = 0,
-    ["ServerScriptService"] = 1,
-    ["ServerStorage"] = 1,
-    ["SocialService"] = 0,
-    ["SoundService"] = 0,
-    ["StarterGui"] = 0,
-    ["StarterPack"] = 0,
-    ["StarterPlayer"] = 0,
-    ["Teams"] = 0,
-    ["TeleportService"] = 0,
-    ["TextService"] = 0,
-    ["TweenService"] = 0,
-    ["UserInputService"] = 2,
-    ["VRService"] = 2,
-    ["MemoryStoreService"] = 1,
-    ["Workspace"] = 0,
-}
-
-local REPLICATE_TO_PLAYER = {
-    StarterPack = "Backpack",
-    StarterGui = "PlayerGui",
-    StarterPlayerScripts = "PlayerScripts",
-    StarterCharacterScripts = "Character"
+    ["BadgeService"] = "server",
+    ["ChangeHistoryService"] = "server",
+    ["CollectionService"] = "both",
+    ["ContentProvider"] = "both",
+    ["ContextActionService"] = "both",
+    ["DataStoreService"] = "server",
+    ["Debris"] = "both",
+    ["GuiService"] = "client",
+    ["HapticService"] = "client",
+    ["HttpService"] = "both",
+    ["Lighting"] = "both",
+    ["LocalizationService"] = "both",
+    ["MarketplaceService"] = "both",
+    ["MessagingService"] = "server",
+    ["PathfindingService"] = "both",
+    ["PhysicsService"] = "both",
+    ["Players"] = "both",
+    ["PolicyService"] = "both",
+    ["ProximityPromptService"] = "both",
+    ["ReplicatedFirst"] = "both",
+    ["ReplicatedStorage"] = "both",
+    ["RunService"] = "both",
+    ["ServerScriptService"] = "server",
+    ["ServerStorage"] = "server",
+    ["SocialService"] = "both",
+    ["SoundService"] = "both",
+    ["StarterGui"] = "both",
+    ["StarterPack"] = "both",
+    ["StarterPlayer"] = "both",
+    ["Teams"] = "both",
+    ["TeleportService"] = "both",
+    ["TextService"] = "both",
+    ["TweenService"] = "both",
+    ["UserInputService"] = "client",
+    ["VRService"] = "client",
+    ["MemoryStoreService"] = "server",
+    ["Workspace"] = "both",
 }
 
 m.instanceOrAnyIndex = {
@@ -121,6 +118,8 @@ m.instanceIndex = {
 }
 
 util.setTypeParent(m.instanceIndex.value, m.instanceIndex)
+
+m.BrickColors = require 'library.brickcolors'
 
 local function generateEnums(argName, enumType)
     local enums = {}
@@ -783,7 +782,7 @@ local function parseDocumentaion()
                             object = nil
                             if fields then
                                 fields = fields.child or fields
-                                for key, field in pairs(fields) do
+                                for key, field in ipairs(fields) do
                                     if (key == names[j])
                                     or (field.type == "type.field" and field.key[1] == names[j])
                                     or (field.type == "type.library" and field.name == names[j]) then

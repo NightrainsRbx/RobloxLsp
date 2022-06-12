@@ -189,20 +189,37 @@ local function buildFunction(results, source, oop, text, data)
     end
 end
 
-local function buildInsertGetService(ast, serviceName, importPos, quotes)
-    local start = 1
-    if importPos then
-        local uri = guide.getUri(ast.ast)
-        local text  = files.getText(uri)
-        local lines = files.getLines(uri)
-        local row = calcline.rowcol(text, importPos)
-        start = lines[row].start
+local function buildInsertGetService(ast, serviceName, importPositions, quotes)
+    local uri = guide.getUri(ast.ast)
+    local text  = files.getText(uri)
+    local lines = files.getLines(uri)
+
+    local edit = ('local %s = game:GetService(%s%s%s)\n'):format(serviceName, quotes, serviceName, quotes:gsub("%[", "]"))
+
+    local pos = 1
+    if #importPositions > 0 then
+        table.sort(importPositions, function (a, b)
+            return a.pos < b.pos
+        end)
+        for _, info in pairs(importPositions) do
+            if serviceName < info.name then
+                pos = lines[calcline.rowcol(text, info.pos)].start
+                break
+            else
+                pos = lines[math.min(calcline.rowcol(text, info.pos) + 1, #lines)].start
+            end
+        end
     end
+
+    if pos == 1 and not text:match("^%s") then
+        edit = edit .. "\n"
+    end
+
     return {
         {
-            start   = start,
-            finish  = start - 1,
-            newText = ('local %s = game:GetService(%s%s%s)\n'):format(serviceName, quotes, serviceName, quotes:gsub("%[", "]"))
+            start   = pos,
+            finish  = pos - 1,
+            newText = edit
         }
     }
 end
@@ -312,36 +329,40 @@ end
 local function checkRobloxService(ast, word, offset, results)
     local locals = guide.getVisibleLocals(ast.ast, offset)
     local ignoreServices = {}
-    local importPos = nil
+    local importPositions = {}
     local quotes = '"'
     guide.eachSourceType(ast.ast, 'callargs', function (source)
         if guide.getSimpleName(source.parent.node) == "GetService" then
             local parentBlock = guide.getParentBlock(source)
             if offset <= parentBlock.finish and offset >= source.finish and guide.getParentType(source, "local") then
-                if parentBlock == ast.ast then
-                    importPos = importPos or source.start
-                end
                 for _, arg in ipairs(source) do
                     if arg.type == "string" then
                         quotes = arg[2] or quotes
                         ignoreServices[arg[1]] = true
+                        if parentBlock == ast.ast then
+                            importPositions[#importPositions+1] = {
+                                name = arg[1],
+                                pos  = source.start
+                            }
+                        end
                         break
                     end
                 end
             end
         end
     end)
-    local side = 0
+    local side = "both"
     if ast.uri:match("%.server%.lua[u]?$") then
-        side = 1
+        side = "server"
     elseif ast.uri:match("%.client%.lua[u]?$") then
-        side = 2
+        side = "client"
     end
     for serviceName, serviceSide in pairs(rbxlibs.RELEVANT_SERVICES) do
-        if (serviceSide * side == 0 or serviceSide == side)
-        and not ignoreServices[serviceName]
-        and not locals[serviceName]
-        and matchKey(word, serviceName) then
+        if (side == "both" or serviceSide == "both" or serviceSide == side)
+            and not ignoreServices[serviceName]
+            and not locals[serviceName]
+            and matchKey(word, serviceName)
+        then
             results[#results+1] = {
                 label = serviceName,
                 kind = define.CompletionItemKind.Class,
@@ -353,7 +374,7 @@ local function checkRobloxService(ast, word, offset, results)
                 id = stack(function ()
                     await.delay()
                     return {
-                        additionalTextEdits = buildInsertGetService(ast, serviceName, importPos, quotes),
+                        additionalTextEdits = buildInsertGetService(ast, serviceName, importPositions, quotes),
                     }
                 end)
             }
