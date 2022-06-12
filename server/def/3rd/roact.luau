@@ -47,7 +47,7 @@ export type Roact.Component = {
     getDerivedStateFromProps: (nextProps: table, lastState: table) -> table,
 }
 
-export type Roact = Readonly<{
+export type Roact = {
     ---@special Roact.createElement
     createElement: (
         component:
@@ -88,4 +88,4 @@ export type Roact = Readonly<{
     Component: Roact.Component,
     PureComponent: Roact.Component,
     Portal: Roact.Component
-}>
+}

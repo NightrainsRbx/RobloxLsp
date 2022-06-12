@@ -384,23 +384,11 @@ local vmMap = {
         end
     end,
     ['type.field'] = function (obj)
-        if obj.value and obj.value[1] == "readonly" and obj.value.generics then
-            local optional = obj.value.optional
-            obj.value = obj.value.generics[1]
-            obj.readOnly = true
-            obj.optional = obj.optional or optional
-        end
         Compile(obj.key, obj)
         Compile(obj.value, obj)
         obj.value.special = Text:sub(1, obj.key.start - 1):match("%-%-%-@special%s+([%w_%.]+)%s+$")
     end,
     ['type.index'] = function (obj)
-        if obj.value and obj.value[1] == "readonly" and obj.value.generics then
-            local optional = obj.value.optional
-            obj.value = obj.value.generics[1]
-            obj.readOnly = true
-            obj.optional = obj.optional or optional
-        end
         Compile(obj.key, obj)
         Compile(obj.value, obj)
     end,

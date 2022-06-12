@@ -456,10 +456,6 @@
 					]
 				},
 				{
-					"match": "\\b(readonly)\\b",
-					"name": "storage.modifier.readonly.lua"
-				},
-				{
 					"match": "\\btrue\\b",
 					"name": "constant.language.boolean.true.lua"
 				},
