@@ -2311,17 +2311,9 @@
                     "MemberType": "Function",
                     "Name": "ToHex",
                     "Parameters": [],
-                    "TupleReturns": [
-                        {
-                            "Name": "number"
-                        },
-                        {
-                            "Name": "number"
-                        },
-                        {
-                            "Name": "number"
-                        }
-                    ]
+                    "ReturnType": {
+                        "Name": "string"
+                    }
                 },
                 {
                     "MemberType": "Function",
