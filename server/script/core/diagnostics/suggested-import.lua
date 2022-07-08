@@ -3,7 +3,7 @@ local vm      = require 'vm'
 local lang    = require 'language'
 local config  = require 'config'
 local guide   = require 'core.guide'
-local rbximports = require 'library.rbximports'
+local rbximports = require 'core.module-import'
 
 local function check(src, uri, callback)
     local key = guide.getKeyName(src)

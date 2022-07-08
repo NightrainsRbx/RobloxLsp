@@ -211,9 +211,9 @@ local function buildInsertGetService(ast, serviceName, importPositions, quotes)
         end
     end
 
-    if pos == 1 and not text:match("^%s") then
-        edit = edit .. "\n"
-    end
+    -- if pos == 1 and not text:match("^%s") then
+    --     edit = edit .. "\n"
+    -- end
 
     return {
         {

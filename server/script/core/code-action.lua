@@ -4,7 +4,7 @@ local guide   = require 'core.guide'
 local util    = require 'utility'
 local sp      = require 'bee.subprocess'
 local vm      = require 'vm'
-local rbximports = require 'library.rbximports'
+local rbximports = require 'core.module-import'
 local config  = require 'config'
 local calcline = require 'parser.calcline'
 
@@ -139,14 +139,23 @@ local function changeVersion(uri, version, results)
     }
 end
 
-local function findBestRequireLocation(ast, offset)
-    local importPos = nil
+local function buildInsertRequire(ast, offset, name, path)
+    local minPos = 1
+    local firstNode = path:match("^[%w_]+")
+    if firstNode ~= "game" and firstNode ~= "script" then
+        for localName, loc in pairs(guide.getVisibleLocals(ast.ast, offset)) do
+            if localName == firstNode then
+                minPos = loc.start
+            end
+        end
+    end
+    local importPos = minPos
     guide.eachSourceType(ast.ast, 'callargs', function (source)
         if guide.getSimpleName(source.parent.node) == "require" then
             local parentBlock = guide.getParentBlock(source)
             if offset <= parentBlock.finish and offset >= source.finish and guide.getParentType(source, "local") then
-                if parentBlock == ast.ast then
-                    importPos = importPos or source.start
+                if parentBlock == ast.ast and source.start > minPos then
+                    importPos = math.max(importPos, source.start)
                 end
             end
         end
@@ -158,25 +167,25 @@ local function findBestRequireLocation(ast, offset)
         local text  = files.getText(uri)
         local lines = files.getLines(uri)
         local row = calcline.rowcol(text, importPos)
-        start = lines[row + 1].start
+        start = lines[math.min(row + 1, #lines)].start
     end
 
-    return start
+    return {
+        {
+            start   = start,
+            finish  = start - 1,
+            newText = ('local %s = require(%s)\n'):format(name, path),
+        }
+    }
 end
 
-local function suggestImport(uri, name, path, start, results)
+local function suggestImport(uri, path, edit, results)
     results[#results + 1] = {
         title = lang.script('ACTION_IMPORT_SUGGESTED', path),
         kind = 'quickfix',
         edit = {
             changes = {
-                [uri] = {
-                    {
-                        start   = start,
-                        finish  = start - 1,
-                        newText = ('local %s = require(%s)\n'):format(name, path),
-                    },
-                }
+                [uri] = edit
             }
         }
     }
@@ -193,9 +202,7 @@ local function solveSuggestedImport(uri, diag, results)
         return guide.getKeyName(source)
     end)
 
-    local matches = rbximports.findPotentialImportsSorted(uri, name)
-
-    local requireLocation = findBestRequireLocation(ast, offset)
+    local matches = rbximports.findPotentialImportsSorted(uri, name, ast, offset)
 
     local paths = {}
     for index, match in ipairs(matches) do
@@ -205,11 +212,11 @@ local function solveSuggestedImport(uri, diag, results)
         end
 
         if config.config.suggestedImports.importPathType == "Both" then
-            if match.relativeLuaPath then
-                paths[#paths+1] = match.relativeLuaPath
-            end
             if match.absoluteLuaPath then
                 paths[#paths+1] = match.absoluteLuaPath
+            end
+            if match.relativeLuaPath then
+                paths[#paths+1] = match.relativeLuaPath
             end
         elseif config.config.suggestedImports.importPathType == "Shortest First" then
             if match.relativeLuaPath and match.absoluteLuaPath then
@@ -237,7 +244,8 @@ local function solveSuggestedImport(uri, diag, results)
     end
 
     for _, path in ipairs(paths) do
-        suggestImport(uri, name, path, requireLocation, results)
+        local edit = buildInsertRequire(ast, offset, name, path)
+        suggestImport(uri, path, edit, results)
     end
 end
 

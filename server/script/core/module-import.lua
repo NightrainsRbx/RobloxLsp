@@ -3,6 +3,8 @@ local config = require("config")
 local glob = require("glob")
 local furi = require("file-uri")
 local util = require("utility")
+local guide = require("core.guide")
+local vm = require("vm")
 
 local rbximports = {}
 
@@ -157,19 +159,62 @@ end
 
 ---@param path PathItem[] @ The path to the target script we're adding the require statement for
 ---@return string @ The text used for the first arg to `require`, for example, `"game.ReplicatedStorage.Example"`
-function rbximports.getAbsoluteRequireArg(path)
-	local builder = { path[1].name }
+-- function rbximports.getAbsoluteRequireArg(path)
+-- 	local builder = { path[1].name }
 
+-- 	for index, node in ipairs(path) do
+-- 		if index ~= 1 then
+-- 			if index ~= #path and not canIndexObject(node) then
+-- 				return
+-- 			end
+
+-- 			table.insert(builder, getSafeIndexer(node.name))
+-- 		end
+-- 	end
+
+-- 	return table.concat(builder)
+-- end
+
+function rbximports.checkAbsoluteRequireArg(path)
 	for index, node in ipairs(path) do
 		if index ~= 1 then
 			if index ~= #path and not canIndexObject(node) then
-				return
+				return false
 			end
-
-			table.insert(builder, getSafeIndexer(node.name))
 		end
 	end
 
+	return true
+end
+
+function rbximports.getAbsoluteRequireArg(path, ast, offset)
+	local locals = {}
+	for localName, loc in pairs(guide.getVisibleLocals(ast.ast, offset)) do
+		if localName ~= "@fenv" then
+			for _, def in ipairs(vm.getDefs(loc.value)) do
+				if def.type == "type.name" then
+					for _, node in ipairs(path) do
+						if node.value == def or (rbxlibs.Services[def[1]] and node.value[1] == def[1]) then
+							locals[node] = localName
+							break
+						end
+					end
+				end
+			end
+		end
+	end
+	local builder = {}
+	for i = #path, 1, -1 do
+		local node = path[i]
+		if locals[node] then
+			table.insert(builder, 1, locals[node])
+			break
+		elseif i == 1 then
+			table.insert(builder, 1, node.name)
+		else
+			table.insert(builder, 1, getSafeIndexer(node.name))
+		end
+	end
 	return table.concat(builder)
 end
 
@@ -216,7 +261,7 @@ function rbximports.hasPotentialImports(sourceUri, targetName)
 		if match.object.uri ~= sourceUri then
 			local targetPath = match.path
 			local relativeLuaPath = isRelativePathSupported(match.object.uri, alwaysAbsoluteGlob) and sourcePath and rbximports.findRelativeRequireArg(sourcePath, targetPath)
-			local absoluteLuaPath = isAbsolutePathSupported() and rbximports.getAbsoluteRequireArg(targetPath)
+			local absoluteLuaPath = isAbsolutePathSupported() and rbximports.checkAbsoluteRequireArg(targetPath)
 			-- If the path tries to index into a script and that's disallowed,
 			-- it won't have any paths available
 			if relativeLuaPath or absoluteLuaPath then
@@ -231,7 +276,7 @@ end
 ---@param sourceUri string @ The source file we're trying to add imports to
 ---@param targetName string @ The target file name we're trying to add imports for
 ---@return ImportMatch[] @ The potential imports
-function rbximports.findPotentialImportsSorted(sourceUri, targetName)
+function rbximports.findPotentialImportsSorted(sourceUri, targetName, ast, offset)
 	local rawMatches = rbximports.findMatchingScripts(targetName)
 	if #rawMatches == 0 then
 		return {}
@@ -246,7 +291,7 @@ function rbximports.findPotentialImportsSorted(sourceUri, targetName)
 		if match.object.uri ~= sourceUri then
 			local targetPath = match.path
 			match.relativeLuaPath = isRelativePathSupported(match.object.uri, alwaysAbsoluteGlob) and sourcePath and rbximports.findRelativeRequireArg(sourcePath, targetPath) or nil
-			match.absoluteLuaPath = isAbsolutePathSupported() and rbximports.getAbsoluteRequireArg(targetPath) or nil
+			match.absoluteLuaPath = isAbsolutePathSupported() and rbximports.getAbsoluteRequireArg(targetPath, ast, offset) or nil
 			-- If the path tries to index into a script and that's disallowed,
 			-- it won't have any paths available
 			if match.relativeLuaPath or match.absoluteLuaPath then
