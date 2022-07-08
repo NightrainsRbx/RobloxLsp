@@ -414,7 +414,7 @@ local function parseMembers(data, isObject)
                         returns = #params == 1 and params[1] or params
                     }
                 }
-                for _, key in ipairs({"Connect", "ConnectParallel"}) do
+                for _, key in ipairs({"Connect", "ConnectParallel", "Once"}) do
                     child[#child+1] = {
                         name = key,
                         type = "type.library",

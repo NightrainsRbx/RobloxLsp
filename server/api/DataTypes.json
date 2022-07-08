@@ -3686,6 +3686,21 @@
                 },
                 {
                     "MemberType": "Function",
+                    "Name": "Once",
+                    "Parameters": [
+                        {
+                            "Name": "callback",
+                            "Type": {
+                                "Name": "function"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "RBXScriptConnection"
+                    }
+                },
+                {
+                    "MemberType": "Function",
                     "Name": "ConnectParallel",
                     "Parameters": [
                         {
