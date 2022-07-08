@@ -464,7 +464,7 @@ GenericPackType
             <-  Sp (Name DOTS)
             ->  GenericPackType
 SingletonType
-            <-  (String / Boolean)
+            <-  ((String / Boolean) Optional?)
             ->  SingletonType
 
 FieldType   <-  Sp ({} Name COLON Type {}) 

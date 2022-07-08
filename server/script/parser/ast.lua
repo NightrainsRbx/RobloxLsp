@@ -268,6 +268,7 @@ local Defs = {
             type   = 'comment.long',
             start  = start,
             finish = finish - 1,
+            eqs    = afterEq-beforeEq,
             text   = str,
         }
         if not close then
@@ -967,8 +968,9 @@ local Defs = {
         name.dots = dots
         return name
     end,
-    SingletonType = function (obj)
+    SingletonType = function (obj, optional)
         obj.type = "type.singleton." .. obj.type
+        obj.optional = optional
         return obj
     end,
     NamedType = function (key, colon, value)
@@ -1181,7 +1183,7 @@ local Defs = {
         local wantType = true
         local lastStart = start + 1
         local generics = {}
-        local hasGenericPack = false
+        -- local hasGenericPack = false
         for i = 1, #list do
             local v = list[i]
             if v.type == "," then
@@ -1204,17 +1206,17 @@ local Defs = {
                         }
                     }
                 end
-                if v.type == "type.genericpack"
-                or v.type == "type.variadic"
-                or v.type == "type.list" then
-                    hasGenericPack = true
-                elseif hasGenericPack then
-                    PushError {
-                        type = 'TYPE_AFTER_PACK',
-                        start = v.start,
-                        finish = v.finish,
-                    }
-                end
+                -- if v.type == "type.genericpack"
+                -- or v.type == "type.variadic"
+                -- or v.type == "type.list" then
+                --     hasGenericPack = true
+                -- elseif hasGenericPack then
+                --     PushError {
+                --         type = 'TYPE_AFTER_PACK',
+                --         start = v.start,
+                --         finish = v.finish,
+                --     }
+                -- end
                 generics[#generics+1] = v
                 wantType = false
             end
