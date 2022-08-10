@@ -363,7 +363,7 @@ function rojo:loadRojoProject()
     for _, project in pairs(self.RojoProject) do
         local tree = {value = {child = {}}}
         rojo.getChildren(tree, nil, project.tree, "")
-        mainTree = util.mergeTable(mainTree, tree)
+        mainTree = util.mergeTable(tree, mainTree)
     end
     if mainTree.value[1] == "DataModel" then
         for _, child in pairs(mainTree.value.child) do
