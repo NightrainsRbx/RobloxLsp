@@ -190,7 +190,7 @@ end
 function rbximports.getAbsoluteRequireArg(path, ast, offset)
 	local locals = {}
 	for localName, loc in pairs(guide.getVisibleLocals(ast.ast, offset)) do
-		if localName ~= "@fenv" then
+		if localName ~= "@fenv" and loc.value then
 			for _, def in ipairs(vm.getDefs(loc.value)) do
 				if def.type == "type.name" then
 					for _, node in ipairs(path) do
