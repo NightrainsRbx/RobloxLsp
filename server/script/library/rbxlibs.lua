@@ -8,7 +8,8 @@ local m = {}
 
 local MEMBER_SECURITY = {
     None = true,
-    PluginSecurity = true
+    PluginSecurity = true,
+    LocalUserSecurity = true,
 }
 
 local UNSCRIPTABLE_TAGS = {
