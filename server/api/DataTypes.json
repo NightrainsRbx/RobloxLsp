@@ -3946,13 +3946,6 @@
                 },
                 {
                     "MemberType": "Property",
-                    "Name": "IgnoreWater",
-                    "ValueType": {
-                        "Name": "boolean"
-                    }
-                },
-                {
-                    "MemberType": "Property",
                     "Name": "CollisionGroup",
                     "ValueType": {
                         "Name": "string"
