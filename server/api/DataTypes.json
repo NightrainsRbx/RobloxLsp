@@ -847,7 +847,8 @@
                             "Name": "vZ",
                             "Type": {
                                 "Name": "Vector3"
-                            }
+                            },
+                            "Default": "nil"
                         }
                     ],
                     "ReturnType": {
