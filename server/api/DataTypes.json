@@ -847,7 +847,8 @@
                             "Name": "vZ",
                             "Type": {
                                 "Name": "Vector3"
-                            }
+                            },
+                            "Default": "nil"
                         }
                     ],
                     "ReturnType": {
@@ -3942,13 +3943,6 @@
                     "ValueType": {
                         "Category": "Enum",
                         "Name": "RaycastFilterType"
-                    }
-                },
-                {
-                    "MemberType": "Property",
-                    "Name": "IgnoreWater",
-                    "ValueType": {
-                        "Name": "boolean"
                     }
                 },
                 {
