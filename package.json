@@ -139,7 +139,7 @@
 					"properties": {
 						"circle-doc-class": {
 							"default": "Any",
-							"description": "%config.diagnostics.circle-doc-class%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -150,7 +150,7 @@
 						},
 						"deprecated": {
 							"default": "Opened",
-							"description": "%config.diagnostics.deprecated%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -161,7 +161,7 @@
 						},
 						"doc-field-no-class": {
 							"default": "Any",
-							"description": "%config.diagnostics.doc-field-no-class%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -172,7 +172,7 @@
 						},
 						"duplicate-doc-class": {
 							"default": "Any",
-							"description": "%config.diagnostics.duplicate-doc-class%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -183,7 +183,7 @@
 						},
 						"duplicate-doc-field": {
 							"default": "Any",
-							"description": "%config.diagnostics.duplicate-doc-field%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -194,7 +194,7 @@
 						},
 						"duplicate-doc-param": {
 							"default": "Any",
-							"description": "%config.diagnostics.duplicate-doc-param%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -205,7 +205,7 @@
 						},
 						"duplicate-index": {
 							"default": "Any",
-							"description": "%config.diagnostics.duplicate-index%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -216,7 +216,7 @@
 						},
 						"duplicate-set-field": {
 							"default": "Any",
-							"description": "%config.diagnostics.duplicate-set-field%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -227,7 +227,7 @@
 						},
 						"empty-block": {
 							"default": "Opened",
-							"description": "%config.diagnostics.empty-block%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -238,7 +238,7 @@
 						},
 						"global-in-nil-env": {
 							"default": "Any",
-							"description": "%config.diagnostics.global-in-nil-env%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -249,7 +249,7 @@
 						},
 						"lowercase-global": {
 							"default": "Any",
-							"description": "%config.diagnostics.lowercase-global%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -260,7 +260,7 @@
 						},
 						"newfield-call": {
 							"default": "Any",
-							"description": "%config.diagnostics.newfield-call%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -271,7 +271,7 @@
 						},
 						"newline-call": {
 							"default": "Any",
-							"description": "%config.diagnostics.newline-call%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -282,7 +282,7 @@
 						},
 						"no-implicit-any": {
 							"default": "None",
-							"description": "%config.diagnostics.no-implicit-any%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -293,7 +293,7 @@
 						},
 						"redefined-local": {
 							"default": "Opened",
-							"description": "%config.diagnostics.redefined-local%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -304,7 +304,7 @@
 						},
 						"redundant-parameter": {
 							"default": "Opened",
-							"description": "%config.diagnostics.redundant-parameter%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -315,7 +315,7 @@
 						},
 						"redundant-value": {
 							"default": "Opened",
-							"description": "%config.diagnostics.redundant-value%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -326,7 +326,7 @@
 						},
 						"trailing-space": {
 							"default": "Opened",
-							"description": "%config.diagnostics.trailing-space%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -337,7 +337,7 @@
 						},
 						"unbalanced-assignments": {
 							"default": "Any",
-							"description": "%config.diagnostics.unbalanced-assignments%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -348,7 +348,7 @@
 						},
 						"undefined-doc-class": {
 							"default": "Any",
-							"description": "%config.diagnostics.undefined-doc-class%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -359,7 +359,7 @@
 						},
 						"undefined-doc-name": {
 							"default": "Any",
-							"description": "%config.diagnostics.undefined-doc-name%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -370,7 +370,7 @@
 						},
 						"undefined-doc-module": {
 							"default": "Any",
-							"description": "%config.diagnostics.undefined-doc-module%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -381,7 +381,7 @@
 						},
 						"undefined-doc-param": {
 							"default": "Any",
-							"description": "%config.diagnostics.undefined-doc-param%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -392,7 +392,7 @@
 						},
 						"undefined-env-child": {
 							"default": "Any",
-							"description": "%config.diagnostics.undefined-env-child%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -403,7 +403,7 @@
 						},
 						"undefined-global": {
 							"default": "Any",
-							"description": "%config.diagnostics.undefined-global%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -414,7 +414,7 @@
 						},
 						"unknown-diag-code": {
 							"default": "Any",
-							"description": "%config.diagnostics.unknown-diag-code%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -425,7 +425,7 @@
 						},
 						"unused-function": {
 							"default": "Opened",
-							"description": "%config.diagnostics.unused-function%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -436,7 +436,7 @@
 						},
 						"unused-local": {
 							"default": "Opened",
-							"description": "%config.diagnostics.unused-local%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -447,7 +447,7 @@
 						},
 						"unused-vararg": {
 							"default": "Opened",
-							"description": "%config.diagnostics.unused-vararg%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -458,7 +458,7 @@
 						},
 						"invalid-class-name": {
 							"default": "Any",
-							"description": "%config.diagnostics.invalid-class-name%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -469,7 +469,7 @@
 						},
 						"undefined-type": {
 							"default": "Any",
-							"description": "%config.diagnostics.undefined-type%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -480,7 +480,7 @@
 						},
 						"redefined-type": {
 							"default": "Any",
-							"description": "%config.diagnostics.redefined-type%",
+							"description": "config.blank",
 							"enum": [
 								"Any",
 								"Opened",
@@ -499,7 +499,7 @@
 					"properties": {
 						"circle-doc-class": {
 							"default": "Warning",
-							"description": "%config.diagnostics.circle-doc-class%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -511,7 +511,7 @@
 						},
 						"deprecated": {
 							"default": "Hint",
-							"description": "%config.diagnostics.deprecated%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -523,7 +523,7 @@
 						},
 						"doc-field-no-class": {
 							"default": "Warning",
-							"description": "%config.diagnostics.doc-field-no-class%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -535,7 +535,7 @@
 						},
 						"duplicate-doc-class": {
 							"default": "Warning",
-							"description": "%config.diagnostics.duplicate-doc-class%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -547,7 +547,7 @@
 						},
 						"duplicate-doc-field": {
 							"default": "Warning",
-							"description": "%config.diagnostics.duplicate-doc-field%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -559,7 +559,7 @@
 						},
 						"duplicate-doc-param": {
 							"default": "Warning",
-							"description": "%config.diagnostics.duplicate-doc-param%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -571,7 +571,7 @@
 						},
 						"duplicate-index": {
 							"default": "Warning",
-							"description": "%config.diagnostics.duplicate-index%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -583,7 +583,7 @@
 						},
 						"duplicate-set-field": {
 							"default": "Warning",
-							"description": "%config.diagnostics.duplicate-set-field%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -595,7 +595,7 @@
 						},
 						"empty-block": {
 							"default": "Hint",
-							"description": "%config.diagnostics.empty-block%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -607,7 +607,7 @@
 						},
 						"global-in-nil-env": {
 							"default": "Warning",
-							"description": "%config.diagnostics.global-in-nil-env%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -619,7 +619,7 @@
 						},
 						"lowercase-global": {
 							"default": "Information",
-							"description": "%config.diagnostics.lowercase-global%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -631,7 +631,7 @@
 						},
 						"newfield-call": {
 							"default": "Warning",
-							"description": "%config.diagnostics.newfield-call%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -643,7 +643,7 @@
 						},
 						"newline-call": {
 							"default": "Information",
-							"description": "%config.diagnostics.newline-call%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -655,7 +655,7 @@
 						},
 						"no-implicit-any": {
 							"default": "Information",
-							"description": "%config.diagnostics.no-implicit-any%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -667,7 +667,7 @@
 						},
 						"redefined-local": {
 							"default": "Hint",
-							"description": "%config.diagnostics.redefined-local%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -679,7 +679,7 @@
 						},
 						"redundant-parameter": {
 							"default": "Hint",
-							"description": "%config.diagnostics.redundant-parameter%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -691,7 +691,7 @@
 						},
 						"redundant-value": {
 							"default": "Hint",
-							"description": "%config.diagnostics.redundant-value%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -703,7 +703,7 @@
 						},
 						"trailing-space": {
 							"default": "Hint",
-							"description": "%config.diagnostics.trailing-space%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -715,7 +715,7 @@
 						},
 						"unbalanced-assignments": {
 							"default": "Warning",
-							"description": "%config.diagnostics.unbalanced-assignments%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -727,7 +727,7 @@
 						},
 						"undefined-doc-class": {
 							"default": "Warning",
-							"description": "%config.diagnostics.undefined-doc-class%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -739,7 +739,7 @@
 						},
 						"undefined-doc-name": {
 							"default": "Warning",
-							"description": "%config.diagnostics.undefined-doc-name%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -751,7 +751,7 @@
 						},
 						"undefined-doc-module": {
 							"default": "Warning",
-							"description": "%config.diagnostics.undefined-doc-module%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -763,7 +763,7 @@
 						},
 						"undefined-doc-param": {
 							"default": "Warning",
-							"description": "%config.diagnostics.undefined-doc-param%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -775,7 +775,7 @@
 						},
 						"undefined-env-child": {
 							"default": "Information",
-							"description": "%config.diagnostics.undefined-env-child%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -787,7 +787,7 @@
 						},
 						"undefined-field": {
 							"default": "Warning",
-							"description": "%config.diagnostics.undefined-field%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -799,7 +799,7 @@
 						},
 						"undefined-global": {
 							"default": "Warning",
-							"description": "%config.diagnostics.undefined-global%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -811,7 +811,7 @@
 						},
 						"unknown-diag-code": {
 							"default": "Waiting",
-							"description": "%config.diagnostics.unknown-diag-code%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -823,7 +823,7 @@
 						},
 						"unused-function": {
 							"default": "Hint",
-							"description": "%config.diagnostics.unused-function%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -835,7 +835,7 @@
 						},
 						"unused-local": {
 							"default": "Hint",
-							"description": "%config.diagnostics.unused-local%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -847,7 +847,7 @@
 						},
 						"unused-vararg": {
 							"default": "Hint",
-							"description": "%config.diagnostics.unused-vararg%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -859,7 +859,7 @@
 						},
 						"invalid-class-name": {
 							"default": "Warning",
-							"description": "%config.diagnostics.invalid-class-name%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -871,7 +871,7 @@
 						},
 						"undefined-type": {
 							"default": "Warning",
-							"description": "%config.diagnostics.undefined-type%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
@@ -883,7 +883,7 @@
 						},
 						"redefined-type": {
 							"default": "Warning",
-							"description": "%config.diagnostics.redefined-type%",
+							"description": "config.blank",
 							"enum": [
 								"Error",
 								"Warning",
