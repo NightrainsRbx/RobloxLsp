@@ -1994,7 +1994,7 @@
                                 "Category": "Enum",
                                 "Name": "Font"
                             }
-                        },
+                        }
                     ],
                     "ReturnType": {
                         "Name": "Font"
@@ -2061,7 +2061,7 @@
                     "ReturnType": {
                         "Name": "Font"
                     }
-                },
+                }
             ],
             "Name": "Font"
         }
