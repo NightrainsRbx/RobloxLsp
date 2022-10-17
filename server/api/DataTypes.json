@@ -1983,6 +1983,84 @@
                     "ReturnType": {
                         "Name": "Font"
                     }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "fromEnum",
+                    "Parameters": [
+                        {
+                            "Name": "font",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "Font"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "Font"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "fromName",
+                    "Parameters": [
+                        {
+                            "Name": "name",
+                            "Type": {
+                                "Name": "string"
+                            }
+                        },
+                        {
+                            "Name": "weight",
+                            "Default": "Regular",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "FontWeight"
+                            }
+                        },
+                        {
+                            "Name": "style",
+                            "Default": "Normal",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "FontStyle"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "Font"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "fromId",
+                    "Parameters": [
+                        {
+                            "Name": "id",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "weight",
+                            "Default": "Regular",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "FontWeight"
+                            }
+                        },
+                        {
+                            "Name": "style",
+                            "Default": "Normal",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "FontStyle"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "Font"
+                    }
                 }
             ],
             "Name": "Font"
