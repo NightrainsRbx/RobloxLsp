@@ -156,6 +156,7 @@ local ConfigTemplate = {
         useGitIgnore      = {true,    Boolean},
         useFilesExclude   = {true,    Boolean},
         loadRequiredFiles = {true,    Boolean},
+        useRojoSourcemap  = {true,    Boolean},
         maxPreload        = {1000,    Integer},
         preloadFileSize   = {100,     Integer},
         library           = {{},      Array2Hash(String)},

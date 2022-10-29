@@ -6,10 +6,10 @@ local furi        = require 'file-uri'
 local json        = require 'json'
 local util        = require 'utility'
 
+local ws
+
 local rojo = {}
 
-rojo.Watch = {}
-rojo.RojoProject = {}
 rojo.LibraryCache = {}
 rojo.DataModel = nil
 rojo.Scripts = {}
@@ -46,15 +46,11 @@ local function removeLuaExtension(name)
     return name:gsub("%.server%.lua[u]?$", ""):gsub("%.client%.lua[u]?$", ""):gsub("%.lua[u]?$", "")
 end
 
-local function normalizePath(path)
-    return path:gsub("[/\\]+", "/"):gsub("/$", ""):gsub("^%.%/", "")
-end
-
 local function isValidPath(path)
     if type(path) ~= "string" then
         return false
     end
-    if normalizePath(path):match("^%/?[%w_]") then
+    if ws.normalize(path):match("^%/?[%w_]") then
         return true
     end
 end
@@ -93,8 +89,7 @@ function rojo.searchFile(parent, filePath)
         if fs.exists(path / "default.project.json") then
             local success, project = pcall(json.decode, util.loadFile(path / "default.project.json"))
             if success and project.tree then
-                local ws = require("workspace")
-                local relativePath = normalizePath(ws.getRelativePath(furi.encode(path:string()))) .. "/"
+                local relativePath = ws.normalize(ws.getRelativePath(furi.encode(path:string()))) .. "/"
                 local tree = {value = {child = {}}}
                 rojo.getChildren(tree, nil, project.tree, relativePath)
                 parent.value = tree.value
@@ -213,8 +208,7 @@ function rojo.searchFile(parent, filePath)
         elseif name:match("%.project%.json$") then
             local success, project = pcall(json.decode, util.loadFile(path))
             if success and project.tree then
-                local ws = require("workspace")
-                local relativePath = normalizePath(ws.getRelativePath(furi.encode(path:string():sub(1, #path:string() - #name)))) .. "/"
+                local relativePath = ws.normalize(ws.getRelativePath(furi.encode(path:string():sub(1, #path:string() - #name)))) .. "/"
                 local tree = {value = {child = {}}}
                 rojo.getChildren(tree, nil, project.tree, relativePath)
                 parent.value = tree.value
@@ -244,8 +238,7 @@ function rojo.getChildren(parent, name, tree, path)
         }
     }
     if tree["$path"] and isValidPath(tree["$path"]) then
-        local filePath = path .. normalizePath(tree["$path"])
-        rojo.Watch[#rojo.Watch+1] = filePath
+        local filePath = path .. ws.normalize(tree["$path"])
         rojo.searchFile(obj, filePath)
     end
     if tree["$className"] then
@@ -315,14 +308,7 @@ function rojo:projectChanged(change)
 end
 
 function rojo:findScriptInProject(uri)
-    if not self.RojoProject then
-        return true
-    end
-    for _, path in pairs(self.Watch) do
-        if uri:match(path) then
-            return true
-        end
-    end
+    return self.Scripts[uri]
 end
 
 function rojo:parseDatamodel()
@@ -331,38 +317,84 @@ function rojo:parseDatamodel()
     end
 end
 
+local scriptClasses = {
+    ["Script"] = true,
+    ["LocalScript"] = true,
+    ["ModuleScript"] = true
+}
+
+function rojo:buildInstanceTree(tree)
+    local node = {
+        type = "type.library",
+        name = tree.name,
+        kind = "child",
+        value = {
+            type = "type.name",
+            [1] = tree.className
+        }
+    }
+    if tree.filePaths and scriptClasses[tree.className] then
+        node.value.uri = furi.encode(ws.getAbsolutePath(tree.filePaths[1]))
+        rojo.Scripts[node.value.uri] = node.value
+    end
+    if tree.children then
+        node.value.child = {}
+        for _, child in ipairs(tree.children) do
+            node.value.child[child.name] = self:buildInstanceTree(child)
+        end
+    end
+    return node
+end
+
+function rojo:parseProject(projectPath)
+    if config.config.workspace.useRojoSourcemap then
+        local success, sourceMap = pcall(function()
+            projectPath = ws.getRelativePath(furi.encode(projectPath:string()))
+            local process  = io.popen(string.format("rojo sourcemap %s --include-non-scripts", projectPath))
+            if not process then
+                return false
+            end
+            local sourceMap = json.decode(process:read("a"))
+            process:close()
+            return sourceMap
+        end)
+        if success and sourceMap then
+            return {
+                value = self:buildInstanceTree(sourceMap).value
+            }
+        end
+    else
+        local success, project = pcall(json.decode, util.loadFile(projectPath:string()))
+        if success and project.tree then
+            local tree = {value = {child = {}}}
+            rojo.getChildren(tree, nil, project.tree, "")
+            return tree
+        end
+    end
+end
+
 function rojo:loadRojoProject()
+    ws = require("workspace")
     self.LibraryCache = {}
-    self.RojoProject = {}
-    self.Watch = {}
     self.Scripts = {}
+    local rojoProjects = {}
     if config.config.workspace.rojoProjectFile ~= "" then
         local filename = config.config.workspace.rojoProjectFile .. ".project.json"
         if fs.exists(fs.current_path() / filename) then
-            local success, project = pcall(json.decode, util.loadFile((fs.current_path() / filename):string()))
-            if success and project.tree then
-                self.RojoProject = {project}
-            else
-                return
-            end
+            rojoProjects[#rojoProjects+1] = self:parseProject(fs.current_path() / filename)
         end
     else
         for path in fs.pairs(fs.current_path()) do
             if path:string():match("%.project%.json") then
-                local success, project = pcall(json.decode, util.loadFile(path:string()))
-                if success and project.tree then
-                    self.RojoProject[#self.RojoProject+1] = project
-                end
+                rojoProjects[#rojoProjects+1] = self:parseProject(path)
             end
         end
     end
-    if #self.RojoProject == 0 then
+    if #rojoProjects == 0 then
         return
     end
     local mainTree = {}
-    for _, project in pairs(self.RojoProject) do
-        local tree = {value = {child = {}}}
-        rojo.getChildren(tree, nil, project.tree, "")
+    for _, tree in pairs(rojoProjects) do
         mainTree = util.mergeTable(tree, mainTree)
     end
     if mainTree.value[1] == "DataModel" then
@@ -380,9 +412,6 @@ function rojo:loadRojoProject()
             end
         end
     end
-    table.sort(self.Watch, function(a, b)
-        return #a > #b
-    end)
     return mainTree
 end
 

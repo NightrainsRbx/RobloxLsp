@@ -462,6 +462,10 @@ function m.getRelativePath(uri)
     end
 end
 
+function m.getAbsolutePath(path)
+    return fs.absolute(fs.path(m.normalize(path))):string()
+end
+
 function m.isWorkspaceUri(uri)
     if not m.uri then
         return false

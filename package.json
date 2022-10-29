@@ -1128,6 +1128,12 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
+				"robloxLsp.workspace.useRojoSourcemap": {
+					"default": true,
+					"markdownDescription": "%config.workspace.useRojoSourcemap%",
+					"scope": "resource",
+					"type": "boolean"
+				},
 				"robloxLsp.runtime.fileEncoding": {
 					"default": "utf8",
 					"enum": [
