@@ -314,20 +314,6 @@ function activate(context) {
             ], null);
             return;
         }
-        // Files outside a folder can't be handled. This might depend on the language.
-        // Single file languages like JSON might handle files outside the workspace folders.
-        if (!folder) {
-            return;
-        }
-        // If we have nested workspace folders we only start a server on the outer most workspace folder.
-        folder = getOuterMostWorkspaceFolder(folder);
-        if (!clients.has(folder.uri.toString())) {
-            let pattern = folder.uri.fsPath.replace(/(\[|\])/g, '[$1]') + '/**/*';
-            let client = start(context, [
-                { scheme: 'file', language: 'lua', pattern: pattern }
-            ], folder);
-            clients.set(folder.uri.toString(), client);
-        }
     }
     function didCloseTextDocument(document) {
         let uri = document.uri;
@@ -339,6 +325,16 @@ function activate(context) {
             }
         }
     }
+    vscode_1.workspace.workspaceFolders.forEach(folder => {
+        folder = getOuterMostWorkspaceFolder(folder);
+        if (!clients.has(folder.uri.toString())) {
+            let pattern = folder.uri.fsPath.replace(/(\[|\])/g, '[$1]') + '/**/*';
+            let client = start(context, [
+                { scheme: 'file', language: 'lua', pattern: pattern }
+            ], folder);
+            clients.set(folder.uri.toString(), client);
+        }
+    });
     vscode_1.workspace.onDidOpenTextDocument(didOpenTextDocument);
     //Workspace.onDidCloseTextDocument(didCloseTextDocument);
     vscode_1.workspace.textDocuments.forEach(didOpenTextDocument);

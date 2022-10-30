@@ -1,6 +1,7 @@
 {
 	"activationEvents": [
-		"onLanguage:lua"
+		"onLanguage:lua",
+		"workspaceContains:/*.project.json"
 	],
 	"author": "Nightrains",
 	"capabilities": {
