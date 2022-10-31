@@ -209,32 +209,43 @@ local function parseType(data, tbl)
                 [1] = "any",
             }
         }
-    end
-    local tp = tbl or {}
-    tp.type = "type.name"
-    tp[1] = name
-    local generic = data.Generic
-    if name == "Objects" then
-        tp[1] = "Array"
-        tp.typeAlias = defaultlibs.customType.Array
-        generic = generic or "Instance"
     elseif name == "Array" then
-        tp.typeAlias = defaultlibs.customType.Array
-        generic = generic or "any"
-    elseif name == "Dictionary" then
-        tp.typeAlias = defaultlibs.customType.Dictionary
-        generic = generic or "any"
-    end
-    if generic then
-        tp.generics = {
-            type = "type.generics",
+        return {
+            type = "type.table",
             {
                 type = "type.name",
-                [1] = generic
+                [1] = data.Generic or "any"
             }
         }
+    elseif name == "Objects" then
+        return {
+            type = "type.table",
+            {
+                type = "type.name",
+                [1] = data.Generic or "Instance"
+            }
+        }
+    elseif name == "Dictionary" then
+        return {
+            type = "type.table",
+            {
+                type = "type.index",
+                key = {
+                    type = "type.name",
+                    [1] = "string"
+                },
+                value = {
+                    type = "type.name",
+                    [1] = data.Generic or "any"
+                }
+            }
+        }
+    else
+        local tp = tbl or {}
+        tp.type = "type.name"
+        tp[1] = name
+        return tp
     end
-    return tp
 end
 
 local function parseParameters(data)
@@ -503,15 +514,10 @@ local function parseEnums()
                         }
                     },
                     returns = {
-                        [1] = "Array",
-                        type = "type.name",
-                        typeAlias = defaultlibs.customType.Array,
-                        generics = {
-                            type = "type.generics",
-                            {
-                                [1] = "Enum." .. enum.Name,
-                                type = "type.name"
-                            }
+                        type = "type.table",
+                        {
+                            type = "type.name",
+                            [1] = "Enum." .. enum.Name
                         }
                     }
                 }

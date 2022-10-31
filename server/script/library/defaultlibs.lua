@@ -16,7 +16,6 @@ m.primitiveTypes = {
     ["boolean"] = true,
     ["number"] = true,
     ["thread"] = true,
-    ["userdata"] = true,
     ["any"] = true,
     ["nil"] = true,
     ["function"] = true,
@@ -208,62 +207,6 @@ m.playerChild = {
 }
 
 m.customType = {
-    Array = {
-        type = "type.alias",
-        name = {
-            type = "type.alias.name",
-            [1] = "Array"
-        },
-        generics = {
-            type = "type.generics",
-            {
-                type = "type.parameter",
-                [1] = "T",
-            }
-        },
-        value = {
-            type = "type.table",
-            {
-                type = "type.index",
-                key = {
-                    type = "type.name",
-                    [1] = "number"
-                },
-                value = {
-                    type = "type.name",
-                    [1] = "T"
-                }
-            }
-        }
-    },
-    Dictionary = {
-        type = "type.alias",
-        name = {
-            type = "type.alias.name",
-            [1] = "Dictionary"
-        },
-        generics = {
-            type = "type.generics",
-            {
-                type = "type.parameter",
-                [1] = "T"
-            }
-        },
-        value = {
-            type = "type.table",
-            {
-                type = "type.index",
-                key = {
-                    type = "type.name",
-                    [1] = "string"
-                },
-                value = {
-                    type = "type.name",
-                    [1] = "T"
-                }
-            }
-        }
-    },
     WithMeta = {
         type = "type.alias",
         name = {
@@ -295,8 +238,6 @@ m.customType = {
     }
 }
 
-m.customType.Array.generics[1].replace = {m.customType.Array.value[1].value}
-m.customType.Dictionary.generics[1].replace = {m.customType.Dictionary.value[1].value}
 m.customType.WithMeta.generics[1].replace = {m.customType.WithMeta.value[1]}
 m.customType.WithMeta.generics[2].replace = {m.customType.WithMeta.value[2]}
 
