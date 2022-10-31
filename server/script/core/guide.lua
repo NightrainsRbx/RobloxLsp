@@ -1628,6 +1628,8 @@ function m.status(parentStatus, main, interface, deep, options)
         results    = {},
         sets       = {},
     }
+    status.options.searchAll = true
+    status.options.onlyDef = false
     if status.options.searchAll then
         status.main = nil
     end
