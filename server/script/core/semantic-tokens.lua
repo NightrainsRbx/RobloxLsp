@@ -194,7 +194,7 @@ Care['type.typeof'] = function (source, results)
     }
 end
 Care['call'] = function (source, results)
-    if not source.node then
+    if not source.node or source.nocheck then
         return
     end
     if source.node.type == "getlocal"

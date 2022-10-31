@@ -3600,25 +3600,25 @@ local function getTableAndIndexIfIsForPairsKeyOrValue(ref)
         return
     end
     local rootCallObj = rootSelectObj.vararg
+    if not rootCallObj.node then
+        return
+    end
 
-    if rootCallObj.node and rootCallObj.node.special == "next" then
+    if rootCallObj.node.special == "next" then
         local tableObj = rootCallObj.args[1]
         return tableObj, rootSelectObj.index, rootCallObj.node.special
     end
 
-    if not rootCallObj.node or rootCallObj.node.type ~= 'call' then
-        return
-    end
     local pairsCallObj = rootCallObj.node
 
-    if not pairsCallObj.node
-        or (pairsCallObj.node.special ~= 'pairs' and pairsCallObj.node.special ~= 'ipairs') then
-        return
+    if not pairsCallObj.node or (pairsCallObj.node.special ~= 'pairs' and pairsCallObj.node.special ~= 'ipairs') then
+        return rootCallObj.node, rootSelectObj.index, "pairs"
     end
 
     if not pairsCallObj.args or not pairsCallObj.args[1] then
         return
     end
+
     local tableObj = pairsCallObj.args[1]
 
     return tableObj, rootSelectObj.index, pairsCallObj.node.special
