@@ -1628,8 +1628,10 @@ function m.status(parentStatus, main, interface, deep, options)
         results    = {},
         sets       = {},
     }
-    status.options.searchAll = true
-    status.options.onlyDef = false
+    if config.config.typeChecking.mode == "Disabled" then
+        status.options.searchAll = true
+        status.options.onlyDef = false
+    end
     if status.options.searchAll then
         status.main = nil
     end
