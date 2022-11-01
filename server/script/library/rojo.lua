@@ -372,7 +372,7 @@ function rojo:parseProject(projectPath)
         local success, sourceMap = pcall(function()
             local ws = require("workspace")
             projectPath = ws.getRelativePath(furi.encode(projectPath:string()))
-            local process  = io.popen(string.format("rojo sourceap %s --include-non-scripts", projectPath))
+            local process  = io.popen(string.format("rojo sourcemap %s --include-non-scripts", projectPath))
             if not process then
                 return false
             end
