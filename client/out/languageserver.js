@@ -314,6 +314,18 @@ function activate(context) {
             ], null);
             return;
         }
+        if (!folder) {
+            return;
+        }
+        // If we have nested workspace folders we only start a server on the outer most workspace folder.
+        folder = getOuterMostWorkspaceFolder(folder);
+        if (!clients.has(folder.uri.toString())) {
+            let pattern = folder.uri.fsPath.replace(/(\[|\])/g, '[$1]') + '/**/*';
+            let client = start(context, [
+                { scheme: 'file', language: 'lua', pattern: pattern }
+            ], folder);
+            clients.set(folder.uri.toString(), client);
+        }
     }
     function didCloseTextDocument(document) {
         let uri = document.uri;
