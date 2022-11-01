@@ -5,8 +5,7 @@ local fs          = require 'bee.filesystem'
 local furi        = require 'file-uri'
 local json        = require 'json'
 local util        = require 'utility'
-
-local ws
+local platform    = require 'bee.platform'
 
 local rojo = {}
 
@@ -47,11 +46,15 @@ local function removeLuaExtension(name)
     return name:gsub("%.server%.lua[u]?$", ""):gsub("%.client%.lua[u]?$", ""):gsub("%.lua[u]?$", "")
 end
 
+local function normalizePath(path)
+    return path:gsub("[/\\]+", "/"):gsub("/$", ""):gsub("^%.%/", "")
+end
+
 local function isValidPath(path)
     if type(path) ~= "string" then
         return false
     end
-    if ws.normalize(path):match("^%/?[%w_]") then
+    if normalizePath(path):match("^%/?[%w_]") then
         return true
     end
 end
@@ -90,7 +93,8 @@ function rojo.searchFile(parent, filePath)
         if fs.exists(path / "default.project.json") then
             local success, project = pcall(json.decode, util.loadFile(path / "default.project.json"))
             if success and project.tree then
-                local relativePath = ws.normalize(ws.getRelativePath(furi.encode(path:string()))) .. "/"
+                local ws = require("workspace")
+                local relativePath = normalizePath(ws.getRelativePath(furi.encode(path:string()))) .. "/"
                 local tree = {value = {child = {}}}
                 rojo.getChildren(tree, nil, project.tree, relativePath)
                 parent.value = tree.value
@@ -209,7 +213,8 @@ function rojo.searchFile(parent, filePath)
         elseif name:match("%.project%.json$") then
             local success, project = pcall(json.decode, util.loadFile(path))
             if success and project.tree then
-                local relativePath = ws.normalize(ws.getRelativePath(furi.encode(path:string():sub(1, #path:string() - #name)))) .. "/"
+                local ws = require("workspace")
+                local relativePath = normalizePath(ws.getRelativePath(furi.encode(path:string():sub(1, #path:string() - #name)))) .. "/"
                 local tree = {value = {child = {}}}
                 rojo.getChildren(tree, nil, project.tree, relativePath)
                 parent.value = tree.value
@@ -239,7 +244,7 @@ function rojo.getChildren(parent, name, tree, path)
         }
     }
     if tree["$path"] and isValidPath(tree["$path"]) then
-        local filePath = path .. ws.normalize(tree["$path"])
+        local filePath = path .. normalizePath(tree["$path"])
         rojo.searchFile(obj, filePath)
     end
     if tree["$className"] then
@@ -349,6 +354,7 @@ function rojo:buildInstanceTree(tree)
         }
     }
     if tree.filePaths and scriptClasses[tree.className] then
+        local ws = require("workspace")
         node.value.uri = furi.encode(ws.getAbsolutePath(tree.filePaths[1]))
         rojo.Scripts[node.value.uri] = node.value
     end
@@ -362,10 +368,11 @@ function rojo:buildInstanceTree(tree)
 end
 
 function rojo:parseProject(projectPath)
-    if config.config.workspace.useRojoSourcemap then
+    if config.config.workspace.useRojoSourcemap and platform.OS == "Windows" then
         local success, sourceMap = pcall(function()
+            local ws = require("workspace")
             projectPath = ws.getRelativePath(furi.encode(projectPath:string()))
-            local process  = io.popen(string.format("rojo sourcemap %s --include-non-scripts", projectPath))
+            local process  = io.popen(string.format("rojo sourceap %s --include-non-scripts", projectPath))
             if not process then
                 return false
             end
@@ -389,7 +396,6 @@ function rojo:parseProject(projectPath)
 end
 
 function rojo:loadRojoProject()
-    ws = require("workspace")
     self.LibraryCache = {}
     self.Scripts = {}
     self.SourceMap = {}
