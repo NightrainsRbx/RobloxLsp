@@ -1338,7 +1338,7 @@
 	"description": "Roblox Luau Language Server.",
 	"displayName": "Roblox LSP",
 	"engines": {
-		"vscode": "^1.23.0"
+		"vscode": "^1.60.0"
 	},
 	"icon": "images/logo.png",
 	"keywords": [
