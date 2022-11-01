@@ -13,6 +13,7 @@ local rojo = {}
 rojo.LibraryCache = {}
 rojo.DataModel = nil
 rojo.Scripts = {}
+rojo.SourceMap = {}
 
 local librariesTypes = {
     ["Roact"] = {
@@ -317,6 +318,20 @@ function rojo:parseDatamodel()
     end
 end
 
+function rojo:getSourceMap(sourceMap, node, path)
+    if not node.value.child then
+        return sourceMap
+    end
+    for _, child in pairs(node.value.child) do
+        local path = path .. child.name
+        if child.value.uri then
+            sourceMap[path] = furi.decode(child.value.uri)
+        end
+        rojo:getSourceMap(sourceMap, child, path .. ".")
+    end
+    return sourceMap
+end
+
 local scriptClasses = {
     ["Script"] = true,
     ["LocalScript"] = true,
@@ -377,6 +392,7 @@ function rojo:loadRojoProject()
     ws = require("workspace")
     self.LibraryCache = {}
     self.Scripts = {}
+    self.SourceMap = {}
     local rojoProjects = {}
     if config.config.workspace.rojoProjectFile ~= "" then
         local filename = config.config.workspace.rojoProjectFile .. ".project.json"
@@ -412,6 +428,7 @@ function rojo:loadRojoProject()
             end
         end
     end
+    self.SourceMap = self:SourceMap({}, mainTree, "")
     return mainTree
 end
 

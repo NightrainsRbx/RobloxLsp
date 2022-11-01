@@ -21,6 +21,7 @@ local calcline     = require 'parser.calcline'
 local glob         = require 'glob'
 local furi         = require 'file-uri'
 local client       = require 'provider.client'
+local plugin       = require 'plugin'
 
 local DiagnosticModes = {
     'disable-next-line',
@@ -1178,6 +1179,27 @@ local function isAfterFunction(text, start)
     local pos = lookBackward.skipSpace(text, start-1)
     local word = lookBackward.findWord(text, pos)
     return word == 'function'
+end
+
+local function tryPlugin(ast, text, offset, results)
+    if not ast.uri then
+        return
+    end
+    local suc, result = plugin.dispatch('OnCompletion', ast.uri, text, offset)
+    if not suc then
+        if DEVELOP and result then
+            util.saveFile(LOGPATH .. '/diffed.lua', tostring(result))
+        end
+        return
+    end
+    if type(result) == "table" then
+        for _, item in ipairs(result) do
+            if type(item.kind) == "string" then
+                item.kind = define.CompletionItemKind[item.kind]
+            end
+            results[#results+1] = item
+        end
+    end
 end
 
 local function trySpecial(ast, text, offset, results)
@@ -2480,6 +2502,7 @@ local function completion(uri, offset, triggerCharacter)
             trySymbol(ast, text, offset, results)
             tryFieldEnum(ast, text, offset, results)
         end
+        tryPlugin(ast, text, offset, results)
     else
         local word = lookBackward.findWord(text, offset)
         if word then
