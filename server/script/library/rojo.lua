@@ -428,7 +428,7 @@ function rojo:loadRojoProject()
             end
         end
     end
-    self.SourceMap = self:SourceMap({}, mainTree, "")
+    self.SourceMap = self:getSourceMap({}, mainTree, "")
     return mainTree
 end
 
