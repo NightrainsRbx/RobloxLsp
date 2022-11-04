@@ -424,7 +424,7 @@ function rojo:parseProject(projectPath, forceDisable)
             message = 'Roblox LSP: Could not run rojo executable at "'
                 .. (config.config.workspace.rojoExecutablePath ~= ""
                 and config.config.workspace.rojoExecutablePath
-                or "PATH") .. '" ' .. tostring(sourceMap)
+                or "PATH") .. '", using project file. (' .. tostring(sourceMap):match("(.-)%s*$") .. ")"
         })
         return self:parseProject(projectPath, true)
     else
