@@ -355,8 +355,12 @@ function rojo:buildInstanceTree(tree)
     }
     if tree.filePaths and scriptClasses[tree.className] then
         local ws = require("workspace")
-        node.value.uri = furi.encode(ws.getAbsolutePath(tree.filePaths[1]))
-        rojo.Scripts[node.value.uri] = node.value
+        for _, path in ipairs(tree.filePaths) do
+            if path:match("%.lua[u]?$") then
+                node.value.uri = furi.encode(ws.getAbsolutePath(tree.filePaths[1]))
+                rojo.Scripts[node.value.uri] = node.value
+            end
+        end
     end
     if tree.children then
         node.value.child = {}
