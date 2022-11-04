@@ -47,36 +47,37 @@ local function enable()
             },
         }
     })
-    if config.other.semantic == 'configuredByTheme' and not dontShowAgain then
-        local item = proto.awaitRequest('window/showMessageRequest', {
-            type    = define.MessageType.Info,
-            message = lang.script.WINDOW_CHECK_SEMANTIC,
-            actions = {
-                {
-                    title = lang.script.WINDOW_APPLY_SETTING,
-                },
-                {
-                    title = lang.script.WINDOW_DONT_SHOW_AGAIN,
-                },
-            }
-        })
-        if item then
-            if item.title == lang.script.WINDOW_APPLY_SETTING then
-                proto.notify('$/command', {
-                    command   = 'lua.config',
-                    data      = {
-                        key    = 'editor.semanticHighlighting.enabled',
-                        action = 'set',
-                        value  = true,
-                        global = true,
-                    }
-                })
-            end
-            if item.title == lang.script.WINDOW_DONT_SHOW_AGAIN then
-                dontShowAgain = true
-            end
-        end
-    end
+    -- if config.other.semantic == 'configuredByTheme' and not dontShowAgain then
+    --     proto.request('window/showMessageRequest', {
+    --         type    = define.MessageType.Info,
+    --         message = lang.script.WINDOW_CHECK_SEMANTIC,
+    --         actions = {
+    --             {
+    --                 title = lang.script.WINDOW_APPLY_SETTING,
+    --             },
+    --             {
+    --                 title = lang.script.WINDOW_DONT_SHOW_AGAIN,
+    --             },
+    --         }
+    --     }, function (item)
+    --         if item then
+    --             if item.title == lang.script.WINDOW_APPLY_SETTING then
+    --                 proto.notify('$/command', {
+    --                     command   = 'lua.config',
+    --                     data      = {
+    --                         key    = 'editor.semanticHighlighting.enabled',
+    --                         action = 'set',
+    --                         value  = true,
+    --                         global = true,
+    --                     }
+    --                 })
+    --             end
+    --             if item.title == lang.script.WINDOW_DONT_SHOW_AGAIN then
+                    
+    --             end
+    --         end
+    --     end)
+    -- end
 end
 
 local function disable()
