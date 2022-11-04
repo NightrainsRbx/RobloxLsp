@@ -19,7 +19,6 @@ local function toArray(map)
     return array
 end
 
-local dontShowAgain = false
 local function enable()
     if isEnable then
         return
@@ -47,37 +46,44 @@ local function enable()
             },
         }
     })
-    -- if config.other.semantic == 'configuredByTheme' and not dontShowAgain then
-    --     proto.request('window/showMessageRequest', {
-    --         type    = define.MessageType.Info,
-    --         message = lang.script.WINDOW_CHECK_SEMANTIC,
-    --         actions = {
-    --             {
-    --                 title = lang.script.WINDOW_APPLY_SETTING,
-    --             },
-    --             {
-    --                 title = lang.script.WINDOW_DONT_SHOW_AGAIN,
-    --             },
-    --         }
-    --     }, function (item)
-    --         if item then
-    --             if item.title == lang.script.WINDOW_APPLY_SETTING then
-    --                 proto.notify('$/command', {
-    --                     command   = 'lua.config',
-    --                     data      = {
-    --                         key    = 'editor.semanticHighlighting.enabled',
-    --                         action = 'set',
-    --                         value  = true,
-    --                         global = true,
-    --                     }
-    --                 })
-    --             end
-    --             if item.title == lang.script.WINDOW_DONT_SHOW_AGAIN then
-                    
-    --             end
-    --         end
-    --     end)
-    -- end
+    if client.isVSCode() and config.other.semantic == 'configuredByTheme' then
+        proto.request('$/getState', {key = "ignoreSemantic"}, function (value)
+            if not value then
+                proto.request('window/showMessageRequest', {
+                    type    = define.MessageType.Info,
+                    message = lang.script.WINDOW_CHECK_SEMANTIC,
+                    actions = {
+                        {
+                            title = lang.script.WINDOW_APPLY_SETTING,
+                        },
+                        {
+                            title = lang.script.WINDOW_DONT_SHOW_AGAIN,
+                        },
+                    }
+                }, function (item)
+                    if item then
+                        if item.title == lang.script.WINDOW_APPLY_SETTING then
+                            proto.notify('$/command', {
+                                command   = 'lua.config',
+                                data      = {
+                                    key    = 'editor.semanticHighlighting.enabled',
+                                    action = 'set',
+                                    value  = true,
+                                    global = true,
+                                }
+                            })
+                        end
+                        if item.title == lang.script.WINDOW_DONT_SHOW_AGAIN then
+                            proto.notify('$/setState', {
+                                key = "ignoreSemantic",
+                                value = true
+                            })
+                        end
+                    end
+                end)
+            end
+        end)
+    end
 end
 
 local function disable()

@@ -157,6 +157,7 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
     client.onReady().then(() => {
         onCommand(client);
         onDecorations(client);
+        onState(client, context);
         statusBar(client);
         startPluginServer(client);
     });
@@ -239,6 +240,15 @@ function statusBar(client: LanguageClient) {
 function onCommand(client: LanguageClient) {
     client.onNotification('$/command', (params) => {
         Commands.executeCommand(params.command, params.data);
+    });
+}
+
+function onState(client: LanguageClient, context: ExtensionContext) {
+    client.onRequest('$/getState', (params) => {
+        return context.globalState.get(params.key, null);
+    });
+    client.onNotification('$/setState', (params) => {
+        context.globalState.update(params.key, params.value);
     });
 }
 

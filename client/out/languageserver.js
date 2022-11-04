@@ -111,6 +111,7 @@ function start(context, documentSelector, folder) {
     client.onReady().then(() => {
         onCommand(client);
         onDecorations(client);
+        onState(client, context);
         statusBar(client);
         startPluginServer(client);
     });
@@ -191,6 +192,14 @@ function statusBar(client) {
 function onCommand(client) {
     client.onNotification('$/command', (params) => {
         vscode_1.commands.executeCommand(params.command, params.data);
+    });
+}
+function onState(client, context) {
+    client.onRequest('$/getState', (params) => {
+        return context.globalState.get(params.key, null);
+    });
+    client.onNotification('$/setState', (params) => {
+        context.globalState.update(params.key, params.value);
     });
 }
 function isDocumentInClient(textDocuments, client) {
