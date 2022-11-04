@@ -405,9 +405,13 @@ function rojo:parseProject(projectPath, forceDisable)
                 console = "disable",
                 stdin = false,
                 stdout = true,
-                stderr = "stdout"
+                stderr = true
             })
-            return json.decode(process.stdout:read("a"))
+            local sourceMap = process.stdout:read("a")
+            if sourceMap == "" then
+                error(process.stderr:read("a"))
+            end
+            return json.decode(sourceMap)
         end)
         if success and sourceMap then
             return {
