@@ -417,10 +417,10 @@ function rojo:parseProject(projectPath, forceDisable)
         local proto = require("proto.proto")
         proto.notify('window/showMessage', {
             type    = define.MessageType.Warning,
-            message = 'Roblox LSP: Could not find rojo executable at '
+            message = 'Roblox LSP: Could not run rojo executable at "'
                 .. (config.config.workspace.rojoExecutablePath ~= ""
                 and config.config.workspace.rojoExecutablePath
-                or "PATH")
+                or "PATH") .. '" ' .. tostring(sourceMap)
         })
         return self:parseProject(projectPath, true)
     else
