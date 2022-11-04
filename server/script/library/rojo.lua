@@ -6,6 +6,7 @@ local furi        = require 'file-uri'
 local json        = require 'json'
 local util        = require 'utility'
 local platform    = require 'bee.platform'
+local sp          = require 'bee.subprocess'
 
 local rojo = {}
 
@@ -371,24 +372,57 @@ function rojo:buildInstanceTree(tree)
     return node
 end
 
-function rojo:parseProject(projectPath)
-    if config.config.workspace.useRojoSourcemap and platform.OS == "Windows" then
+function rojo:getRojoPath()
+    if config.config.workspace.rojoExecutablePath ~= "" then
+        return config.config.workspace.rojoExecutablePath
+    end
+    if self.RojoPath then
+        return self.RojoPath
+    end
+    if platform.OS == "Windows" then
+        for _, path in ipairs(util.split(os.getenv("PATH"), ";")) do
+            path = fs.path(path) / "rojo.exe"
+            if fs.exists(path) then
+                self.RojoPath = path
+                return path
+            end
+        end
+    end
+    return "rojo"
+end
+
+function rojo:parseProject(projectPath, forceDisable)
+    if config.config.workspace.useRojoSourcemap and not forceDisable then
         local success, sourceMap = pcall(function()
             local ws = require("workspace")
-            projectPath = ws.getRelativePath(furi.encode(projectPath:string()))
-            local process  = io.popen(string.format("rojo sourcemap %s --include-non-scripts", projectPath))
-            if not process then
-                return false
-            end
-            local sourceMap = json.decode(process:read("a"))
-            process:close()
-            return sourceMap
+            local projectPath = ws.getRelativePath(furi.encode(projectPath:string()))
+            local rojoPath = self:getRojoPath()
+            local process = assert(sp.spawn {
+                rojoPath,
+                "sourcemap",
+                projectPath,
+                "--include-non-scripts",
+                console = "disable",
+                stdin = false,
+                stdout = true,
+                stderr = "stdout"
+            })
+            return json.decode(process.stdout:read("a"))
         end)
         if success and sourceMap then
             return {
                 value = self:buildInstanceTree(sourceMap).value
             }
         end
+        local proto = require("proto.proto")
+        proto.notify('window/showMessage', {
+            type    = define.MessageType.Warning,
+            message = 'Roblox LSP: Could not find rojo executable at '
+                .. (config.config.workspace.rojoExecutablePath ~= ""
+                and config.config.workspace.rojoExecutablePath
+                or "PATH")
+        })
+        return self:parseProject(projectPath, true)
     else
         local success, project = pcall(json.decode, util.loadFile(projectPath:string()))
         if success and project.tree then
@@ -408,6 +442,12 @@ function rojo:loadRojoProject()
         local filename = config.config.workspace.rojoProjectFile .. ".project.json"
         if fs.exists(fs.current_path() / filename) then
             rojoProjects[#rojoProjects+1] = self:parseProject(fs.current_path() / filename)
+        else
+            local proto = require("proto.proto")
+            proto.notify('window/showMessage', {
+                type    = define.MessageType.Warning,
+                message = 'Roblox LSP: Could not find rojo project at ' .. (fs.current_path() / filename):string()
+            })
         end
     else
         for path in fs.pairs(fs.current_path()) do

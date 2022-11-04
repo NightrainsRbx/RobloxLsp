@@ -22,7 +22,7 @@ local tm        = require 'text-merger'
 local vm        = require 'vm'
 local nonil     = require 'without-check-nil'
 
-local function updateConfig()
+local function updateConfig(init)
     local diagnostics = require 'provider.diagnostic'
     local configs = proto.awaitRequest('workspace/configuration', {
         items = {
@@ -67,23 +67,23 @@ local function updateConfig()
     local newConfig = config.config
     local newOther  = config.other
 
-    if not util.equal(oldConfig.runtime, newConfig.runtime)
-    or not util.equal(oldConfig.typeChecking, newConfig.typeChecking) then
-        rbxlibs.init()
-        workspace.reload()
-        semantic.refresh()
+    if not init then
+        if not util.equal(oldConfig.workspace, newConfig.workspace)
+        or not util.equal(oldConfig.runtime, newConfig.runtime)
+        or not util.equal(oldConfig.typeChecking, newConfig.typeChecking)
+        or not util.equal(oldOther.associations, newOther.associations)
+        or not util.equal(oldOther.exclude, newOther.exclude)
+        then
+            rbxlibs.init()
+            workspace.reload()
+            semantic.refresh()
+        end
     end
+
     if not util.equal(oldConfig.diagnostics, newConfig.diagnostics) then
         diagnostics.diagnosticsAll()
     end
-    if not util.equal(oldConfig.workspace, newConfig.workspace)
-    or not util.equal(oldOther.associations, newOther.associations)
-    or not util.equal(oldOther.exclude, newOther.exclude)
-    then
-        rbxlibs.init()
-        workspace.reload()
-        semantic.refresh()
-    end
+
     if not util.equal(oldConfig.intelliSense, newConfig.intelliSense) then
         files.flushCache()
     end
@@ -107,7 +107,6 @@ end
 
 proto.on('initialize', function (params)
     client.init(params)
-    rbxlibs.init()
     workspace.init(params.rootUri)
     return {
         capabilities = cap.getIniter(),
@@ -120,7 +119,7 @@ end)
 proto.on('initialized', function (params)
     files.init()
     local _ <close> = progress.create(lang.script.WINDOW_INITIALIZING, 0.5)
-    updateConfig()
+    updateConfig(true)
     local registrations = {}
 
     nonil.enable()
@@ -155,7 +154,9 @@ proto.on('initialized', function (params)
             registrations = registrations
         })
     end
+    rbxlibs.init()
     workspace.reload()
+    semantic.refresh()
     return true
 end)
 

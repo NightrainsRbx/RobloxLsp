@@ -1135,6 +1135,12 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
+				"robloxLsp.workspace.rojoExecutablePath": {
+					"default": "",
+					"markdownDescription": "%config.workspace.rojoExecutablePath%",
+					"scope": "resource",
+					"type": "string"
+				},
 				"robloxLsp.runtime.fileEncoding": {
 					"default": "utf8",
 					"enum": [

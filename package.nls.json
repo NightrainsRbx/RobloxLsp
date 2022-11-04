@@ -44,6 +44,7 @@
     "config.workspace.loadMode.rojoProject": "Load all files found in Rojo Project.",
     "config.workspace.loadRequiredFiles": "Load files without diagnostics when they are required by other files even if they are ignored.",
     "config.workspace.useRojoSourcemap": "Generate the instance tree for a rojo project using the rojo sourcemap command.",
+    "config.workspace.rojoExecutablePath": "The absolute path to the rojo executable. Set it empty to use PATH.",
     "config.misc.color3Picker": "Enable Color Picker and Preview for Color3 functions.",
     "config.misc.serviceAutoImport": "Suggests Roblox Services that can be auto imported.",
     "config.misc.goToScriptLink": "If enabled, shows a link to the source script when requiring a module.",
