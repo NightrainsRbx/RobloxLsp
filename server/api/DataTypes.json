@@ -2064,6 +2064,72 @@
                 }
             ],
             "Name": "Font"
+        },
+        {
+            "Members": [
+                    {
+                        "MemberType": "Function",
+                        "Name": "new",
+                        "Parameters": [
+                            {
+                                "Name": "time",
+                                "Type": {
+                                    "Name": "number"
+                                }
+                            },
+                            {
+                                "Name": "value",
+                                "Type": {
+                                    "Name": "number"
+                                }
+                            },
+                            {
+                                "Name": "Interpolation",
+                                "Type": {
+                                    "Category": "Enum",
+                                    "Name": "KeyInterpolationMode"
+                                }
+                            }
+                        ],
+                        "ReturnType": {
+                            "Name": "FloatCurveKey"
+                        }
+                    }
+            ],
+            "Name": "FloatCurveKey"
+        },
+        {
+            "Members": [
+                    {
+                        "MemberType": "Function",
+                        "Name": "new",
+                        "Parameters": [
+                            {
+                                "Name": "time",
+                                "Type": {
+                                    "Name": "number"
+                                }
+                            },
+                            {
+                                "Name": "value",
+                                "Type": {
+                                    "Name": "CFrame"
+                                }
+                            },
+                            {
+                                "Name": "Interpolation",
+                                "Type": {
+                                    "Category": "Enum",
+                                    "Name": "KeyInterpolationMode"
+                                }
+                            }
+                        ],
+                        "ReturnType": {
+                            "Name": "RotationCurveKey"
+                        }
+                    }
+            ],
+            "Name": "RotationCurveKey"
         }
     ],
     "DataTypes": [
@@ -4284,6 +4350,88 @@
                 }
             ],
             "Name": "Font"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Property",
+                    "Name": "Interpolation",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "KeyInterpolationMode"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Time",
+                    "ValueType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Value",
+                    "ValueType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "RightTangent",
+                    "ValueType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "LeftTangent",
+                    "ValueType": {
+                        "Name": "number"
+                    }
+                }
+            ],
+            "Name": "FloatCurveKey"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Property",
+                    "Name": "Interpolation",
+                    "ValueType": {
+                        "Category": "Enum",
+                        "Name": "KeyInterpolationMode"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Time",
+                    "ValueType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "Value",
+                    "ValueType": {
+                        "Name": "CFrame"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "RightTangent",
+                    "ValueType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "LeftTangent",
+                    "ValueType": {
+                        "Name": "number"
+                    }
+                }
+            ],
+            "Name": "RotationCurveKey"
         }
     ]
 }
