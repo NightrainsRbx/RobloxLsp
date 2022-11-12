@@ -309,13 +309,13 @@ function rojo:projectChanged(change)
             and not filename:match("%.model%.json$") then
                 return false
             end
-            return self:findScriptInProject(change.uri)
+            return self:hasFileInProject(change.uri)
         end
     end
 end
 
-function rojo:findScriptInProject(uri)
-    return self.Scripts[uri]
+function rojo:hasFileInProject(uri)
+    return true
 end
 
 function rojo:parseDatamodel()
@@ -359,7 +359,7 @@ function rojo:buildInstanceTree(tree)
         for _, path in ipairs(tree.filePaths) do
             if path:match("%.lua[u]?$") then
                 node.value.uri = furi.encode(ws.getAbsolutePath(tree.filePaths[1]))
-                rojo.Scripts[node.value.uri] = node.value
+                self.Scripts[node.value.uri] = node.value
             end
         end
     end
