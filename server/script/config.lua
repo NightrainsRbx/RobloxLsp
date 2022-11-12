@@ -171,6 +171,7 @@ local ConfigTemplate = {
         workspaceWord      = {true,      Boolean},
         showParams         = {true,      Boolean},
         deprecatedMembers  = {false,     Boolean},
+        alwaysShowMethods  = {false,     Boolean},
     },
     signatureHelp = {
         enable          = {true,      Boolean},

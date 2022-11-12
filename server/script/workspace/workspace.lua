@@ -176,7 +176,7 @@ end
 function m.isIgnored(uri)
     local path = m.getRelativePath(uri)
     local ignore = m.getNativeMatcher()
-    if config.config.workspace.loadMode == "Rojo Project" and not rojo:findScriptInProject(uri) then
+    if config.config.workspace.loadMode == "Rojo Project" and not rojo:hasFileInProject(uri) then
         return true
     end
     if not ignore then

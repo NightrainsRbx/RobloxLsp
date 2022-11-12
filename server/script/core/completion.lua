@@ -495,7 +495,7 @@ local function checkFieldThen(name, src, word, start, offset, parent, oop, text,
     or value.type == 'doc.type.function'
     or value.type == 'type.function'
     or (value.type == "type.inter" and #guide.getAllValuesInType(value, "type.function") > 0) then
-        if not oop then
+        if not oop and not config.config.completion.alwaysShowMethods then
             if src.method or src.type == "setmethod" then
                 return
             elseif value.type == "type.function" then

@@ -95,6 +95,12 @@
 					"scope": "resource",
 					"type": "boolean"
 				},
+				"robloxLsp.completion.alwaysShowMethods": {
+					"default": false,
+					"markdownDescription": "%config.completion.alwaysShowMethods%",
+					"scope": "resource",
+					"type": "boolean"
+				},
 				"robloxLsp.develop.debuggerPort": {
 					"default": 11412,
 					"markdownDescription": "%config.develop.debuggerPort%",

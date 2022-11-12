@@ -66,9 +66,9 @@ local function getHoverAsFunction(source, oop)
     local defs = 0
     local protos = 0
     local other = 0
-    oop = oop or source.type == 'method'
-    or source.type == 'getmethod'
-    or source.type == 'setmethod'
+    -- oop = oop or source.type == 'method'
+    -- or source.type == 'getmethod'
+    -- or source.type == 'setmethod'
     local mark = {}
     for _, def in ipairs(values) do
         def = guide.getObjectValue(def) or def

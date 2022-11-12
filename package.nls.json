@@ -13,6 +13,7 @@
     "config.completion.endAutocompletion": "Enable on type `end` autocompletion like in Roblox Studio.",
     "config.completion.workspaceWord": "Shows words within the workspace.",
     "config.completion.deprecatedMembers": "Shows deprecated members (Except duplicates).",
+    "config.completion.alwaysShowMethods": "Show functions defined as methods without indexing them with colons.",
     "config.develop.debuggerPort": "Listen port of debugger.",
     "config.develop.debuggerWait": "Suspend before debugger connects.",
     "config.develop.enable": "Developer mode. Do not enable, performance will be affected.",
