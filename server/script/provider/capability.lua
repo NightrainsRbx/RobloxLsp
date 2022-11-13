@@ -73,7 +73,7 @@ function m.getIniter()
                 'refactor.rewrite',
                 'refactor.extract',
             },
-            resolveProvider = false,
+            resolveProvider = true,
         },
         signatureHelpProvider = {
             triggerCharacters = { '(', ',' },

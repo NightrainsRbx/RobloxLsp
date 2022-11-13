@@ -10,9 +10,6 @@ local function check(src, uri, callback)
     if not key then
         return
     end
-    if config.config.diagnostics.globals[key] then
-        return
-    end
     local globals = vm.getGlobalSets(key, uri)
     for i = 1, #globals do
         if globals[i] == src then

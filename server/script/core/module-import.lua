@@ -4,9 +4,13 @@ local glob = require("glob")
 local furi = require("file-uri")
 local util = require("utility")
 local guide = require("core.guide")
+local calcline = require 'parser.calcline'
+local files   = require 'files'
 local vm = require("vm")
 
 local rbximports = {}
+
+rbximports.resolveCallback = {}
 
 ---@alias PathItem table @ An object from the environment used in a path
 
@@ -159,36 +163,25 @@ end
 
 ---@param path PathItem[] @ The path to the target script we're adding the require statement for
 ---@return string @ The text used for the first arg to `require`, for example, `"game.ReplicatedStorage.Example"`
--- function rbximports.getAbsoluteRequireArg(path)
--- 	local builder = { path[1].name }
+function rbximports.getAbsoluteRequireArg(path)
+	local builder = { path[1].name }
 
--- 	for index, node in ipairs(path) do
--- 		if index ~= 1 then
--- 			if index ~= #path and not canIndexObject(node) then
--- 				return
--- 			end
-
--- 			table.insert(builder, getSafeIndexer(node.name))
--- 		end
--- 	end
-
--- 	return table.concat(builder)
--- end
-
-function rbximports.checkAbsoluteRequireArg(path)
 	for index, node in ipairs(path) do
 		if index ~= 1 then
 			if index ~= #path and not canIndexObject(node) then
-				return false
+				return
 			end
+
+			table.insert(builder, getSafeIndexer(node.name))
 		end
 	end
 
-	return true
+	return table.concat(builder)
 end
 
-function rbximports.getAbsoluteRequireArg(path, ast, offset)
+function rbximports.getAbsoluteRequireArgEdits(path, name, ast, offset)
 	local locals = {}
+	local skipService = false
 	for localName, loc in pairs(guide.getVisibleLocals(ast.ast, offset)) do
 		if localName ~= "@fenv" and loc.value then
 			for _, def in ipairs(vm.getDefs(loc.value)) do
@@ -196,12 +189,18 @@ function rbximports.getAbsoluteRequireArg(path, ast, offset)
 					for _, node in ipairs(path) do
 						if node.value == def or (rbxlibs.Services[def[1]] and node.value[1] == def[1]) then
 							locals[node] = localName
+							skipService = true
 							break
 						end
 					end
 				end
 			end
 		end
+	end
+	local edits = {}
+	if not skipService and path[1].value[1] == "DataModel" and rbxlibs.Services[path[2].value[1]] then
+		locals[path[2]] = path[2].value[1]
+		edits[#edits+1] = rbximports.buildInsertGetService(ast, offset, path[2].value[1])
 	end
 	local builder = {}
 	for i = #path, 1, -1 do
@@ -215,7 +214,20 @@ function rbximports.getAbsoluteRequireArg(path, ast, offset)
 			table.insert(builder, 1, getSafeIndexer(node.name))
 		end
 	end
-	return table.concat(builder)
+	edits[#edits+1] = rbximports.buildInsertRequire(ast, offset, name, table.concat(builder))
+	return edits
+end
+
+function rbximports.checkAbsoluteRequireArg(path)
+	for index, node in ipairs(path) do
+		if index ~= 1 then
+			if index ~= #path and not canIndexObject(node) then
+				return false
+			end
+		end
+	end
+
+	return true
 end
 
 local function isRelativePathSupported(uri, alwaysAbsoluteGlob)
@@ -282,6 +294,8 @@ function rbximports.findPotentialImportsSorted(sourceUri, targetName, ast, offse
 		return {}
 	end
 
+	rbximports.resolveCallback = {}
+
 	local sourcePath = rbximports.findPath(sourceUri)
 	local alwaysAbsoluteGlob = getAlwaysAbsoluteGlob()
 
@@ -292,6 +306,17 @@ function rbximports.findPotentialImportsSorted(sourceUri, targetName, ast, offse
 			local targetPath = match.path
 			match.relativeLuaPath = isRelativePathSupported(match.object.uri, alwaysAbsoluteGlob) and sourcePath and rbximports.findRelativeRequireArg(sourcePath, targetPath) or nil
 			match.absoluteLuaPath = isAbsolutePathSupported() and rbximports.getAbsoluteRequireArg(targetPath, ast, offset) or nil
+
+			if match.absoluteLuaPath then
+				rbximports.resolveCallback[match.absoluteLuaPath] = function ()
+					return {
+						changes = {
+							[sourceUri] = rbximports.getAbsoluteRequireArgEdits(targetPath, targetName, ast, offset)
+						}
+					}
+				end
+			end
+
 			-- If the path tries to index into a script and that's disallowed,
 			-- it won't have any paths available
 			if match.relativeLuaPath or match.absoluteLuaPath then
@@ -321,6 +346,93 @@ function rbximports.findPotentialImportsSorted(sourceUri, targetName, ast, offse
 	end)
 
 	return matches
+end
+
+function rbximports.buildInsertRequire(ast, offset, name, path)
+	local minPos
+    local firstNode = path:match("^[%w_]+")
+    if firstNode ~= "game" and firstNode ~= "script" then
+        for localName, loc in pairs(guide.getVisibleLocals(ast.ast, offset)) do
+            if localName == firstNode then
+                minPos = loc.start
+            end
+        end
+    end
+    local importPos = minPos
+    guide.eachSourceType(ast.ast, 'callargs', function (source)
+        if guide.getSimpleName(source.parent.node) == "require" then
+            local parentBlock = guide.getParentBlock(source)
+            if offset <= parentBlock.finish and offset >= source.finish and guide.getParentType(source, "local") then
+                if parentBlock == ast.ast and source.start > (minPos or 0) then
+                    importPos = math.max(importPos or 0, source.start)
+                end
+            end
+        end
+    end)
+
+    local start = 1
+    if importPos then
+        local uri = guide.getUri(ast.ast)
+        local text  = files.getText(uri)
+        local lines = files.getLines(uri)
+        local row = calcline.rowcol(text, importPos)
+        start = lines[math.min(row + 1, #lines)].start
+    end
+
+    return {
+		start   = start,
+		finish  = start - 1,
+		newText = ('local %s = require(%s)\n'):format(name, path),
+	}
+end
+
+function rbximports.buildInsertGetService(ast, offset, serviceName)
+    local uri = guide.getUri(ast.ast)
+    local text  = files.getText(uri)
+    local lines = files.getLines(uri)
+
+    local importPositions = {}
+    local quotes = '"'
+    guide.eachSourceType(ast.ast, 'callargs', function (source)
+        if guide.getSimpleName(source.parent.node) == "GetService" then
+            local parentBlock = guide.getParentBlock(source)
+            if offset <= parentBlock.finish and offset >= source.finish and guide.getParentType(source, "local") then
+                for _, arg in ipairs(source) do
+                    if arg.type == "string" then
+                        quotes = arg[2] or quotes
+                        if parentBlock == ast.ast then
+                            importPositions[#importPositions+1] = {
+                                name = arg[1],
+                                pos  = source.start
+                            }
+                        end
+                        break
+                    end
+                end
+            end
+        end
+    end)
+
+    local pos = 1
+    if #importPositions > 0 then
+        table.sort(importPositions, function (a, b)
+            return a.pos < b.pos
+        end)
+        for _, info in pairs(importPositions) do
+            if serviceName < info.name then
+                pos = lines[calcline.rowcol(text, info.pos)].start
+                break
+            else
+                pos = lines[math.min(calcline.rowcol(text, info.pos) + 1, #lines)].start
+            end
+        end
+    end
+
+    return {
+		start   = pos,
+		finish  = pos - 1,
+		newText = ('local %s = game:GetService(%s%s%s)\n'):format(serviceName, quotes, serviceName, quotes:gsub("%[", "]"))
+	}
 end
 
 return rbximports

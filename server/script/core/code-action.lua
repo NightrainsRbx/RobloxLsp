@@ -4,9 +4,8 @@ local guide   = require 'core.guide'
 local util    = require 'utility'
 local sp      = require 'bee.subprocess'
 local vm      = require 'vm'
-local rbximports = require 'core.module-import'
 local config  = require 'config'
-local calcline = require 'parser.calcline'
+local rbximports = require 'core.module-import'
 
 local function checkDisableByLuaDocExits(uri, row, mode, code)
     local lines = files.getLines(uri)
@@ -139,61 +138,20 @@ local function changeVersion(uri, version, results)
     }
 end
 
-local function buildInsertRequire(ast, offset, name, path)
-    local minPos = 1
-    local firstNode = path:match("^[%w_]+")
-    if firstNode ~= "game" and firstNode ~= "script" then
-        for localName, loc in pairs(guide.getVisibleLocals(ast.ast, offset)) do
-            if localName == firstNode then
-                minPos = loc.start
-            end
-        end
-    end
-    local importPos = minPos
-    guide.eachSourceType(ast.ast, 'callargs', function (source)
-        if guide.getSimpleName(source.parent.node) == "require" then
-            local parentBlock = guide.getParentBlock(source)
-            if offset <= parentBlock.finish and offset >= source.finish and guide.getParentType(source, "local") then
-                if parentBlock == ast.ast and source.start > minPos then
-                    importPos = math.max(importPos, source.start)
-                end
-            end
-        end
-    end)
-
-    local start = 1
-    if importPos then
-        local uri = guide.getUri(ast.ast)
-        local text  = files.getText(uri)
-        local lines = files.getLines(uri)
-        local row = calcline.rowcol(text, importPos)
-        start = lines[math.min(row + 1, #lines)].start
-    end
-
-    return {
-        {
-            start   = start,
-            finish  = start - 1,
-            newText = ('local %s = require(%s)\n'):format(name, path),
-        }
-    }
-end
-
-local function suggestImport(uri, path, edit, results)
+local function suggestImport(uri, path, results, edit)
     results[#results + 1] = {
-        title = lang.script('ACTION_IMPORT_SUGGESTED', path),
+        title = lang.script('ACTION_IMPORT_SUGGESTED', path:gsub("^game%.", "")),
         kind = 'quickfix',
-        edit = {
-            changes = {
-                [uri] = edit
-            }
+        edit = edit,
+        data = {
+            id = path
         }
     }
 end
 
 local function solveSuggestedImport(uri, diag, results)
     local ast    = files.getAst(uri)
-    local offset = files.offsetOfWord(uri, diag.range.start)
+    local offset = files.offsetOfWord(uri, diag.range["end"])
     local name = guide.eachSourceContain(ast.ast, offset, function (source)
         if source.type ~= 'getglobal' then
             return
@@ -205,12 +163,7 @@ local function solveSuggestedImport(uri, diag, results)
     local matches = rbximports.findPotentialImportsSorted(uri, name, ast, offset)
 
     local paths = {}
-    for index, match in ipairs(matches) do
-        -- Don't display too many results if we found many matches
-        if index > 10 then
-            break
-        end
-
+    for _, match in ipairs(matches) do
         if config.config.suggestedImports.importPathType == "Both" then
             if match.absoluteLuaPath then
                 paths[#paths+1] = match.absoluteLuaPath
@@ -235,17 +188,23 @@ local function solveSuggestedImport(uri, diag, results)
 
     if config.config.suggestedImports.importPathType == "Shortest First" then
         table.sort(paths)
-
-        -- In the case of "Both", we don't want to separate the relative- and
-        -- absolute- paths for each item.
-
-        -- In all other cases, the paths are already sorted by shortest path
-        -- before we received them.
     end
 
-    for _, path in ipairs(paths) do
-        local edit = buildInsertRequire(ast, offset, name, path)
-        suggestImport(uri, path, edit, results)
+    for index, path in ipairs(paths) do
+        if index > 10 then
+            break
+        end
+        if rbximports.resolveCallback[path] then
+            suggestImport(uri, path, results)
+        else
+            suggestImport(uri, path, results, {
+                changes = {
+                    [uri] = {
+                        [1] = rbximports.buildInsertRequire(ast, offset, name, path)
+                    }
+                }
+            })
+        end
     end
 end
 
@@ -434,7 +393,7 @@ local function solveDiagnostic(uri, diag, start, results)
         solveTrailingSpace(uri, diag, results)
     end
 
-    if config.config.diagnostics.enable then
+    if config.config.diagnostics.enable and diag.code ~= 'suggested-import' then
         disableDiagnostic(uri, diag.code, start, results)
     end
 end
@@ -637,7 +596,7 @@ local function checkJsonToLua(results, uri, start, finish)
     }
 end
 
-return function (uri, start, finish, diagnostics)
+local function codeAction(uri, start, finish, diagnostics)
     local ast = files.getAst(uri)
     if not ast then
         return nil
@@ -652,3 +611,14 @@ return function (uri, start, finish, diagnostics)
 
     return results
 end
+
+local function resolve(id)
+    if rbximports.resolveCallback[id] then
+        return rbximports.resolveCallback[id]()
+    end
+end
+
+return {
+    codeAction = codeAction,
+    resolve = resolve
+}

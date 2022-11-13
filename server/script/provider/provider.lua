@@ -738,7 +738,7 @@ proto.on('textDocument/codeAction', function (params)
     end
 
     local start, finish = files.unrange(uri, range)
-    local results = core(uri, start, finish, diagnostics)
+    local results = core.codeAction(uri, start, finish, diagnostics)
 
     if not results or #results == 0 then
         return nil
@@ -758,6 +758,24 @@ proto.on('textDocument/codeAction', function (params)
 
     return results
 end)
+
+proto.on('codeAction/resolve', function (codeAction)
+    local core = require 'core.code-action'
+    if codeAction.data then
+        codeAction.edit = core.resolve(codeAction.data.id)
+        if codeAction.edit then
+            for turi, changes in pairs(codeAction.edit.changes) do
+                for _, change in ipairs(changes) do
+                    change.range = files.range(turi, change.start, change.finish)
+                    change.start  = nil
+                    change.finish = nil
+                end
+            end
+        end
+    end
+    return codeAction
+end)
+
 
 proto.on('workspace/executeCommand', function (params)
     local command = params.command:gsub(':.+', '')
