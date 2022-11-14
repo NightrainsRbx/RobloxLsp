@@ -4171,6 +4171,8 @@ function m.checkSameSimple(status, simple, ref, start, force, mode, pushQueue)
                     or    m.checkSameSimpleByTypeAnn(status, ref, i, pushQueue, cmode)
                     or    m.checkSameSimpleInLiteral(status, ref, i, pushQueue, cmode)
                     or    m.checkSameSimpleInMeta(status, ref, i, pushQueue, cmode)
+        -- 检查自己作为 setmetatable 第一个参数的情况
+        m.checkSameSimpleInArg1OfSetMetaTable(status, ref, i, pushQueue)
         -- 检查自己是字符串的分支情况
         if not skipInfer and not skipSearch then
             -- 穿透 self:func 与 mt:func
@@ -4181,8 +4183,6 @@ function m.checkSameSimple(status, simple, ref, start, force, mode, pushQueue)
             end
             -- 检查自己是字面量表的情况
             m.checkSameSimpleInValueOfTable(status, ref, i, pushQueue)
-            -- 检查自己作为 setmetatable 第一个参数的情况
-            m.checkSameSimpleInArg1OfSetMetaTable(status, ref, i, pushQueue)
             -- self 的特殊处理
             m.checkSameSimpleInParamSelf(status, ref, i, pushQueue)
             -- 自己是 call 的情况
