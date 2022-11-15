@@ -1762,9 +1762,8 @@ function m.getCallValue(source)
     else
         return
     end
-    if call.node.special == 'pcall'
-    or call.node.special == 'xpcall' then
-        return call.args and call.args[1], call.args, index - 1
+    if index > 1 and call.pcallArgs then
+        return call.args[1], call.pcallArgs, index - 1
     end
     return call.node, call.args, index
 end
@@ -2959,13 +2958,13 @@ local function checkSameSimpleAndMergeLibrarySpecialReturns(status, results, sou
                 end
             end
         end
-    elseif source.special == "Clone" then
+    elseif source.special == "Clone"
+        or source.special == "assert"
+        or source.special == "table.freeze"
+        or source.special == "table.clone"
+    then
         if index == 1 and args[1] then
-            local newStatus = m.status(status)
-            m.searchRefs(newStatus, args[1], "def")
-            for _, def in ipairs(newStatus.results) do
-                results[#results+1] = m.getObjectValue(def) or def
-            end
+            results[#results+1] = args[1]
             return true
         end
     elseif source.special == "setmetatable" then

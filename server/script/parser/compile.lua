@@ -7,6 +7,7 @@ local pairs       = pairs
 local tableInsert = table.insert
 local tableUnpack = table.unpack
 local type        = type
+local select      = select
 
 local specials = {
     ['rawset']       = true,
@@ -19,7 +20,10 @@ local specials = {
     ['ipairs']       = true,
     ['next']         = true,
     ['type']         = true,
-    ['typeof']       = true
+    ['typeof']       = true,
+    ['assert']       = true,
+    ['table.freeze'] = true,
+    ['table.clone']  = true,
 }
 
 _ENV = nil
@@ -71,6 +75,12 @@ local vmMap = {
     end,
     ['getfield'] = function (obj)
         Compile(obj.node, obj)
+        if obj.node.type == "getglobal" and obj.field  then
+            local name = obj.node[1] .. "." .. obj.field[1]
+            if specials[name] then
+                addSpecial(name, obj)
+            end
+        end
     end,
     ['call'] = function (obj)
         Compile(obj.node, obj)
@@ -101,6 +111,16 @@ local vmMap = {
                     Root.requires = {}
                 end
                 Root.requires[#Root.requires+1] = obj
+            end
+        elseif obj.node and (obj.node.special == "pcall" or obj.node.special == "xpcall") then
+            if obj.args and obj.args[1] then
+                obj.pcallArgs = {
+                    select(obj.node.special == "pcall" and 2 or 3, tableUnpack(obj.args)),
+                    type = "callargs",
+                    start = obj.args.start,
+                    finish = obj.args.finish
+                }
+                Compile(obj.pcallArgs, obj)
             end
         end
     end,
