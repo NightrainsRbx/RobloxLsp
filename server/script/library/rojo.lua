@@ -305,17 +305,19 @@ function rojo:projectChanged(change)
         if path then
             local filename = fs.path(path):filename():string()
             if change.type == define.FileChangeType.Changed
-            and filename ~= "init.meta.json"
-            and not filename:match("%.model%.json$") then
+            and not filename:match("%.meta%.json$")
+            and not filename:match("%.model%.json$")
+            and not filename:match("%.project%.json$")
+            and not filename:match("%.lua[u]?$") then
                 return false
             end
-            return self:hasFileInProject(change.uri)
+            return true
         end
     end
 end
 
 function rojo:hasFileInProject(uri)
-    return true
+    return self.Scripts[uri]
 end
 
 function rojo:parseDatamodel()
@@ -418,14 +420,14 @@ function rojo:parseProject(projectPath, forceDisable)
                 value = self:buildInstanceTree(sourceMap).value
             }
         end
-        local proto = require("proto.proto")
-        proto.notify('window/showMessage', {
-            type    = define.MessageType.Warning,
-            message = 'Roblox LSP: Could not run rojo executable at "'
-                .. (config.config.workspace.rojoExecutablePath ~= ""
-                and config.config.workspace.rojoExecutablePath
-                or "PATH") .. '", using project file. (' .. tostring(sourceMap):match("(.-)%s*$") .. ")"
-        })
+        -- local proto = require("proto.proto")
+        -- proto.notify('window/showMessage', {
+        --     type    = define.MessageType.Warning,
+        --     message = 'Roblox LSP: Could not run rojo executable at "'
+        --         .. (config.config.workspace.rojoExecutablePath ~= ""
+        --         and config.config.workspace.rojoExecutablePath
+        --         or "PATH") .. '", using project file. (' .. tostring(sourceMap):match("(.-)%s*$") .. ")"
+        -- })
         return self:parseProject(projectPath, true)
     else
         local success, project = pcall(json.decode, util.loadFile(projectPath:string()))
