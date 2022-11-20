@@ -706,8 +706,7 @@ local function checkCommon(myUri, word, text, offset, results)
                 if #results >= 100 then
                     break
                 end
-                if  not used[str]
-                and str ~= word then
+                if not used[str] and str ~= word then
                     used[str] = true
                     if matchKey(word, str) then
                         results[#results+1] = {
@@ -718,26 +717,6 @@ local function checkCommon(myUri, word, text, offset, results)
                 end
             end
             ::CONTINUE::
-        end
-        for uri in files.eachDll() do
-            if #results >= 100 then
-                break
-            end
-            local words = files.getDllWords(uri) or {}
-            for _, str in ipairs(words) do
-                if #results >= 100 then
-                    break
-                end
-                if #str >= 3 and not used[str] and str ~= word then
-                    used[str] = true
-                    if matchKey(word, str) then
-                        results[#results+1] = {
-                            label = str,
-                            kind  = define.CompletionItemKind.Text,
-                        }
-                    end
-                end
-            end
         end
     end
     for str, pos in text:gmatch '([%a_][%w_]+)()' do
@@ -753,6 +732,55 @@ local function checkCommon(myUri, word, text, offset, results)
                 }
             end
         end
+    end
+end
+
+local function checkStringCommon(myUri, word, text, offset, results)
+    local used = {}
+    if config.config.completion.workspaceWord then
+        for uri in files.eachFile() do
+            if (myUri and files.eq(myUri, uri)) or workspace.isIgnored(uri) then
+                goto CONTINUE
+            end
+            local cache = files.getCache(uri)
+            if not cache.stringCommonWords then
+                cache.stringCommonWords = {}
+                local ast = files.getAst(uri)
+                if ast then
+                    guide.eachSourceType(ast.ast, "string", function (src)
+                        local str = src[1]
+                        if str:match("^[%a_][%w_]+$") and not used[str] and str ~= word then
+                            used[str] = true
+                            if word == "" or matchKey(word, str) then
+                                results[#results+1] = {
+                                    label = str,
+                                    kind  = define.CompletionItemKind.Text,
+                                }
+                            end
+                        end
+                    end)
+                end
+            end
+            ::CONTINUE::
+        end
+    end
+    if not myUri then
+        return
+    end
+    local ast = files.getAst(myUri)
+    if ast then
+        guide.eachSourceType(ast.ast, "string", function (src)
+            local str = src[1]
+            if str:match("^[%a_][%w_]+$") and not used[str] and str ~= word then
+                used[str] = true
+                if word == "" or matchKey(word, str) then
+                    results[#results+1] = {
+                        label = str,
+                        kind  = define.CompletionItemKind.Text,
+                    }
+                end
+            end
+        end)
     end
 end
 
@@ -1228,7 +1256,7 @@ local function tryWord(ast, text, offset, triggerCharacter, results)
     local finish = lookBackward.skipSpace(text, offset)
     local word, start = lookBackward.findWord(text, offset)
     if not word then
-        if triggerCharacter == nil and client.isVSCode() then
+        if (triggerCharacter == nil and client.isVSCode()) or isInString(ast, offset) then
             word = ''
             start = offset
         else
@@ -1239,7 +1267,7 @@ local function tryWord(ast, text, offset, triggerCharacter, results)
     if isInString(ast, offset) then
         if not hasSpace then
             if #results == 0 then
-                checkCommon(ast.uri, word, text, offset, results)
+                checkStringCommon(ast.uri, word, text, offset, results)
             end
         end
     else
