@@ -1,5 +1,15 @@
 local files = require 'files'
 local util  = require 'utility'
+local encoder = require 'encoder'
+local client  = require 'provider.client'
+
+local offsetEncoding
+local function getOffsetEncoding()
+    if not offsetEncoding then
+        offsetEncoding = client.getOffsetEncoding():lower():gsub('%-', '')
+    end
+    return offsetEncoding
+end
 
 local function splitRows(text)
     local rows = {}
@@ -13,15 +23,16 @@ local function getLeft(text, char)
     if not text then
         return ''
     end
+    local encoding = getOffsetEncoding()
     local left
-    local length = util.utf8Len(text)
+    local length = encoder.len(encoding, text)
 
     if char == 0 then
         left = ''
     elseif char >= length then
         left = text
     else
-        left = text:sub(1, utf8.offset(text, char + 1) - 1)
+        left = text:sub(1, encoder.offset(encoding, text, char + 1) - 1)
     end
 
     return left
@@ -31,15 +42,16 @@ local function getRight(text, char)
     if not text then
         return ''
     end
+    local encoding = getOffsetEncoding()
     local right
-    local length = util.utf8Len(text)
+    local length = encoder.len(encoding, text)
 
     if char == 0 then
         right = text
     elseif char >= length then
         right = ''
     else
-        right = text:sub(utf8.offset(text, char + 1))
+        right = text:sub(encoder.offset(encoding, text, char + 1))
     end
 
     return right
@@ -57,7 +69,7 @@ local function mergeRows(rows, change)
     local right      = getRight(rows[endLine],  endChar)
     -- 先把双方的行数调整成一致
     if endLine > #rows then
-        -- log.error('NMD, WSM `endLine > #rows` ?')
+        log.error('NMD, WSM `endLine > #rows` ?')
         for i = #rows + 1, endLine do
             rows[i] = ''
         end
