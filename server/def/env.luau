@@ -144,6 +144,7 @@ type ENV = {
 	setmetatable: (table: table, metatable: table | nil) -> table,
 	rawset: (table: table, index: any, value: any) -> table,
 	rawget: (table: table, index: any) -> any,
+	rawlen: (obj: string | table) -> number,
 	rawequal: (v1: any, v2: any) -> boolean,
 	print: (...any) -> (),
 	math: {

@@ -215,7 +215,7 @@
 					"name": "support.function.lua"
 				},
 				{
-					"match": "\\b(assert|collectgarbage|error|getfenv|getmetatable|ipairs|loadstring|newproxy|next|pairs|pcall|print|rawequal|rawset|select|setfenv|setmetatable|tonumber|tostring|type|unpack|xpcall)\\b",
+					"match": "\\b(assert|collectgarbage|error|getfenv|getmetatable|ipairs|loadstring|newproxy|next|pairs|pcall|print|rawequal|rawset|rawget|rawlen|select|setfenv|setmetatable|tonumber|tostring|type|unpack|xpcall)\\b",
 					"name": "support.function.lua"
 				},
 				{
