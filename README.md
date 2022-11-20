@@ -15,16 +15,16 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 Roblox OS Community Discord Server: https://discord.gg/c4nPcZHwFU
 
 
-## Features
+## Featuresu
 
-- [x] Exact Luau Environment
-- [x] Full Luau Typechecking and Intellisense
-- [x] Support for [Rojo](https://github.com/Roblox/rojo)
+- [x] Full Roblox Environment
+- [x] Support Luau static typing
+- [x] Full support for [Rojo](https://github.com/Roblox/rojo)
 - [x] Support for Third-Party libraries like Roact, Rodux, Promise, TestEz, etc.
-- [x] Color3 Preview and Picker
-- [x] Auto-completion of game descendants
+- [x] Auto-completion for instances in Roblox Studio
 - [x] Auto-updatable API
 - [x] Inlay Hints
+- [x] Color3 Preview and Picker
 - [x] Goto Definition
 - [x] Find All References
 - [x] Hover
@@ -38,7 +38,6 @@ Roblox OS Community Discord Server: https://discord.gg/c4nPcZHwFU
 - [x] Syntax Check
 - [x] Highlight
 - [x] Code Action
-- [x] EmmyLua Annotation
 - [x] Multi Workspace
 - [x] Semantic Tokens
 
