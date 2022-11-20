@@ -15,10 +15,10 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 Roblox OS Community Discord Server: https://discord.gg/c4nPcZHwFU
 
 
-## Featuresu
+## Features
 
 - [x] Full Roblox Environment
-- [x] Support Luau static typing
+- [x] Support for Luau static typing
 - [x] Full support for [Rojo](https://github.com/Roblox/rojo)
 - [x] Support for Third-Party libraries like Roact, Rodux, Promise, TestEz, etc.
 - [x] Auto-completion for instances in Roblox Studio
