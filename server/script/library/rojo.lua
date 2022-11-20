@@ -307,8 +307,7 @@ function rojo:projectChanged(change)
             if change.type == define.FileChangeType.Changed
             and not filename:match("%.meta%.json$")
             and not filename:match("%.model%.json$")
-            and not filename:match("%.project%.json$")
-            and not filename:match("%.lua[u]?$") then
+            and not filename:match("%.project%.json$") then
                 return false
             end
             return true

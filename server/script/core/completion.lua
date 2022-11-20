@@ -747,18 +747,25 @@ local function checkStringCommon(myUri, word, text, offset, results)
                 cache.stringCommonWords = {}
                 local ast = files.getAst(uri)
                 if ast then
+                    local mark = {}
                     guide.eachSourceType(ast.ast, "string", function (src)
                         local str = src[1]
-                        if str:match("^[%a_][%w_]+$") and not used[str] and str ~= word then
-                            used[str] = true
-                            if word == "" or matchKey(word, str) then
-                                results[#results+1] = {
-                                    label = str,
-                                    kind  = define.CompletionItemKind.Text,
-                                }
-                            end
+                        if str and not mark[str] and str:match("^[%a_][%w_]+$") then
+                            mark[str] = true
+                            cache.stringCommonWords[#cache.stringCommonWords+1] = str
                         end
                     end)
+                end
+            end
+            for _, str in ipairs(cache.stringCommonWords) do
+                if not used[str] and str ~= word then
+                    used[str] = true
+                    if word == "" or matchKey(word, str) then
+                        results[#results+1] = {
+                            label = str,
+                            kind  = define.CompletionItemKind.Text,
+                        }
+                    end
                 end
             end
             ::CONTINUE::

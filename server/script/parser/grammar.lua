@@ -562,7 +562,7 @@ Loop        <-  LoopBody
 LoopBody    <-  FOR LoopArgs NeedDo
                     {} {| (!END Action)* |}
                 NeedEnd
-LoopArgs    <-  MustName TypeAnn? AssignOrEQ
+LoopArgs    <-  MustName (TypeAnn / %nil) AssignOrEQ
                 ({} {| (COMMA / !DO !END Exp->NoNil)* |} {})
             ->  PackLoopArgs
 
