@@ -1756,8 +1756,8 @@ local Defs = {
         checkMissEnd(start)
         return blocks
     end,
-    Loop = function (forA, forB, arg, steps, doA, doB, blockStart, block, endA, endB)
-        local loc = createLocal(arg, blockStart, steps[1])
+    Loop = function (forA, forB, arg, typeAnn, steps, doA, doB, blockStart, block, endA, endB)
+        local loc = createLocal(arg, blockStart, steps[1], typeAnn)
         block.type   = 'loop'
         block.start  = forA
         block.finish = endB - 1
