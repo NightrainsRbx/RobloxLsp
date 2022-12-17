@@ -4068,6 +4068,13 @@
                     "ValueType": {
                         "Name": "string"
                     }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "RespectCanCollide",
+                    "ValueType": {
+                        "Name": "boolean"
+                    }
                 }
             ],
             "Name": "RaycastParams"
