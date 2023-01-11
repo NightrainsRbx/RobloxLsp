@@ -50,6 +50,28 @@ local function addSpecial(name, obj)
     obj.special = name
 end
 
+local function replaceTable(tbl1, tbl2)
+    for k in pairs(tbl1) do
+        tbl1[k] = nil
+    end
+    for k, v in pairs(tbl2) do
+        tbl1[k] = v
+    end
+end
+
+local function convertStrOrExp(obj, quote)
+    if type(obj) == "string" then
+        return {
+            type = "string",
+            start = 0,
+            finish = 0,
+            [1] = obj,
+            [2] = quote
+        }
+    end
+    return obj
+end
+
 local vmMap = {
     ['getname'] = function (obj)
         local loc = guide.getLocal(obj, obj[1], obj.start)
@@ -163,6 +185,47 @@ local vmMap = {
                 end
             end
         end
+    end,
+    ["interstring"] = function(obj)
+        local str = obj[1]
+        local quote = obj[2]
+        local new = {
+            type = "binary",
+            start = obj.start,
+            finish = obj.finish,
+            op = {
+                type = "..",
+                start = 0,
+                finish = 0,
+            },
+            parent = obj.parent,
+            [1] = convertStrOrExp(str[1], quote)
+        }
+        local last = new
+        for i = 2, #str do
+            if i == #str then
+                last[2] = convertStrOrExp(str[i], quote)
+            else
+                last[2] = {
+                    type = "binary",
+                    op = {
+                        type = "..",
+                        start = 0,
+                        finish = 0,
+                    },
+                    start = obj.start,
+                    finish = obj.finish,
+                    [1] = convertStrOrExp(str[i], quote)
+                }
+                last = last[2]
+            end
+        end
+        if not new[2] then
+            replaceTable(new, new[1])
+        end
+        replaceTable(obj, new)
+        Compiled[obj] = nil
+        Compile(obj, obj.parent)
     end,
     ['paren'] = function (obj)
         Compile(obj.exp, obj)

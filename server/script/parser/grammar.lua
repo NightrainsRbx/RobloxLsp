@@ -305,6 +305,7 @@ TypeAssert  <-  (ExpUnit (LABEL Type)?)
 ExpUnit     <-  Nil
             /   Boolean
             /   String
+            /   InterString
             /   Number
             /   Dots
             /   Table
@@ -399,6 +400,14 @@ ElseIfExp   <-  Sp (ELSEIF DirtyExp (THEN / {} -> MissThen) DirtyExp {})
 
 -- 纯占位，修改了 `relabel.lua` 使重复定义不抛错
 Action      <-  !END .
+
+InterString <-  Sp ({} InterStringDef {})
+            ->  InterString
+InterStringDef
+            <-  {'`'}
+                {| (InterStr / {~ (Esc / !InterStr !%nl !'`' .)+ ~})* |}
+                ('`' / {} -> MissQuote3)
+InterStr    <-  '{' DirtyExp DirtyTR
 
 -- Type Grammars
 TypeOp      <-  (Sp {} {'|'}

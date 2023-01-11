@@ -327,6 +327,19 @@
 					"name": "string.quoted.single.lua"
 				},
 				{
+					"begin": "`",
+					"end": "`",
+					"patterns": [
+						{
+							"include": "#string_escape"
+						},
+						{
+							"include": "#interpolated_string"
+						}
+					],
+					"name": "string.quoted.double.lua"
+				},
+				{
 					"begin": "\\[(=*)\\[",
 					"end": "\\]\\1\\]",
 					"name": "string.other.multiline.lua"
@@ -351,6 +364,60 @@
 				{
 					"match": "\\\\u\\{[0-9a-fA-F]*\\}",
 					"name": "constant.character.escape.lua"
+				}
+			]
+		},
+		"interpolated_string": {
+			"patterns": [
+				{
+					"begin": "\\{",
+					"beginCaptures": {
+						"0": {
+							"name": "constant.language"
+						}
+					},
+					"contentName": "source.lua",
+					"end": "(\\})",
+					"endCaptures": {
+						"0": {
+							"name": "constant.language"
+						},
+						"1": {
+							"name": "source.lua"
+						}
+					},
+					"name": "meta.embedded.line.lua",
+					"patterns": [
+						{
+							"include": "#nest_curly_and_self"
+						},
+						{
+							"include": "$self"
+						}
+					],
+					"repository": {
+						"nest_curly_and_self": {
+							"patterns": [
+								{
+									"begin": "\\{",
+									"captures": {
+										"0": {
+											"name": "constant.language"
+										}
+									},
+									"end": "\\}",
+									"patterns": [
+										{
+											"include": "#nest_curly_and_self"
+										}
+									]
+								},
+								{
+									"include": "$self"
+								}
+							]
+						}
+					}
 				}
 			]
 		},

@@ -319,6 +319,43 @@ local Defs = {
             [2]    = quote,
         }
     end,
+    InterString = function (start, quote, strs, finish)
+        local merged = {}
+        local last = nil
+        for _, str in ipairs(strs) do
+            if type(str) == "string" then
+                if last then
+                    merged[last] = merged[last] .. str
+                else
+                    merged[#merged+1] = str
+                    last = #merged
+                end
+            else
+                merged[#merged+1] = str
+                last = nil
+            end
+        end
+        strs = merged
+        local inter = false
+        if #strs == 1 and type(strs[1]) == "string" then
+            strs = strs[1]
+        elseif #strs == 0 then
+            strs = ""
+        else
+            inter = true
+        end
+        local obj = {
+            type   = 'string',
+            start  = start,
+            finish = finish - 1,
+            [1]    = strs,
+            [2]    = quote,
+        }
+        if inter then
+            obj.type = "interstring"
+        end
+        return obj
+    end,
     LongString = function (beforeEq, afterEq, str, missPos)
         if missPos then
             local endSymbol = ']' .. ('='):rep(afterEq-beforeEq) .. ']'
@@ -1925,6 +1962,16 @@ local Defs = {
             finish = pos,
             info = {
                 symbol = "'"
+            }
+        }
+    end,
+    MissQuote3 = function (pos)
+        PushError {
+            type = 'MISS_SYMBOL',
+            start = pos,
+            finish = pos,
+            info = {
+                symbol = "`"
             }
         }
     end,
