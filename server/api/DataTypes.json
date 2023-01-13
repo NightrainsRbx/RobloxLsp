@@ -112,6 +112,13 @@
                                 "Category": "Enum",
                                 "Name": "PathWaypointAction"
                             }
+                        },
+                        {
+                            "Name": "label",
+                            "Default": "",
+                            "Type": {
+                                "Name": "string"
+                            }
                         }
                     ],
                     "ReturnType": {
