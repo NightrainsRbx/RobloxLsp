@@ -109,7 +109,7 @@ function rojo.searchFile(parent, filePath)
             local childName = tostring(childPath:filename())
             if rojo:scriptClass(childName) then
                 local name = removeLuaExtension(childName)
-                if name == "init" then
+                if name == "init" or name == ".source" then
                     parent.value[1] = rojo:scriptClass(childName)
                     parent.value.uri = furi.encode(childPath:string())
                     rojo.Scripts[parent.value.uri] = parent.value
