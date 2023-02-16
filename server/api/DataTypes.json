@@ -4109,6 +4109,13 @@
                     "ValueType": {
                         "Name": "number"
                     }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "RespectCanCollide",
+                    "ValueType": {
+                        "Name": "boolean"
+                    }
                 }
             ],
             "Name": "OverlapParams"
