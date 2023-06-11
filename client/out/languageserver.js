@@ -14,6 +14,7 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs");
 const vscode = require("vscode");
+const languageClient = require("vscode-languageclient/lib/common/client");
 const vscode_1 = require("vscode");
 const node_1 = require("vscode-languageclient/node");
 const express = require("express");
@@ -108,12 +109,14 @@ function start(context, documentSelector, folder) {
     let client = new node_1.LanguageClient('Lua', 'Lua', serverOptions, clientOptions);
     // client.registerProposedFeatures();
     client.start();
-    client.onReady().then(() => {
-        onCommand(client);
-        onDecorations(client);
-        onState(client, context);
-        statusBar(client);
-        startPluginServer(client);
+    client.onDidChangeState((values) => {
+        if (values.newState == languageClient.State.Running) {
+            onCommand(client);
+            onDecorations(client);
+            onState(client, context);
+            statusBar(client);
+            startPluginServer(client);
+        }
     });
     return client;
 }
