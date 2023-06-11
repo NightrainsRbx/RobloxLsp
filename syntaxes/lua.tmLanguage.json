@@ -71,8 +71,8 @@
 					"include": "#type_literal"
 				},
 				{
-                    "include": "#hover"
-                }
+					"include": "#hover"
+				}
 			],
 			"contentName": "meta.parameters.lua",
 			"name": "meta.function.lua"
@@ -219,11 +219,11 @@
 					"name": "support.function.lua"
 				},
 				{
-					"match": "\\b(_G|_VERSION|game|plugin|shared|script|workspace|Enum(?:\\.\\w+){0,2})\\b",
+					"match": "\\b(_G|_VERSION|game|plugin|shared|SharedTable|script|workspace|Enum(?:\\.\\w+){0,2})\\b",
 					"name": "constant.language.lua"
 				},
 				{
-					"match":"\\b(bit32\\.(?:arshift|band|bnot|bor|btest|bxor|extract|lrotate|lshift|replace|rrotate|rshift)|coroutine\\.(?:create|isyieldable|resume|running|status|wrap|yield)|debug\\.(?:loadmodule|profilebegin|profileend|traceback)|math\\.(?:abs|acos|asin|atan|atan2|ceil|clamp|cos|cosh|deg|exp|floor|fmod|frexp|ldexp|log|log10|max|min|modf|noise|pow|rad|random|randomseed|round|sign|sin|sinh|sqrt|tan|tanh)|os\\.(?:clock|date|difftime|time)|string\\.(?:byte|char|find|format|gmatch|gsub|len|lower|match|pack|packsize|rep|reverse|split|sub|unpack|upper)|table\\.(?:concat|create|find|foreach|foreachi|getn|insert|maxn|move|pack|remove|sort|unpack|clear|clone|freeze|isfrozen)|task\\.(?:spawn|cancel|synchronize|desynchronize|wait|defer|delay)|utf8\\.(?:char|codepoint|codes|graphemes|len|nfcnormalize|nfdnormalize|offset))\\b",
+					"match": "\\b(bit32\\.(?:arshift|band|bnot|bor|btest|bxor|extract|lrotate|lshift|replace|rrotate|rshift)|coroutine\\.(?:create|isyieldable|resume|running|status|wrap|yield)|debug\\.(?:loadmodule|profilebegin|profileend|traceback)|math\\.(?:abs|acos|asin|atan|atan2|ceil|clamp|cos|cosh|deg|exp|floor|fmod|frexp|ldexp|log|log10|max|min|modf|noise|pow|rad|random|randomseed|round|sign|sin|sinh|sqrt|tan|tanh)|os\\.(?:clock|date|difftime|time)|string\\.(?:byte|char|find|format|gmatch|gsub|len|lower|match|pack|packsize|rep|reverse|split|sub|unpack|upper)|table\\.(?:concat|create|find|foreach|foreachi|getn|insert|maxn|move|pack|remove|sort|unpack|clear|clone|freeze|isfrozen)|task\\.(?:spawn|cancel|synchronize|desynchronize|wait|defer|delay)|utf8\\.(?:char|codepoint|codes|graphemes|len|nfcnormalize|nfdnormalize|offset))\\b",
 					"name": "support.function.lua"
 				},
 				{
@@ -314,7 +314,9 @@
 					"begin": "\"",
 					"end": "\"",
 					"patterns": [
-						{"include": "#string_escape"}
+						{
+							"include": "#string_escape"
+						}
 					],
 					"name": "string.quoted.double.lua"
 				},
@@ -322,7 +324,9 @@
 					"begin": "'",
 					"end": "'",
 					"patterns": [
-						{"include": "#string_escape"}
+						{
+							"include": "#string_escape"
+						}
 					],
 					"name": "string.quoted.single.lua"
 				},
@@ -447,7 +451,7 @@
 					}
 				},
 				{
-					"match":"\\b(self)\\b",
+					"match": "\\b(self)\\b",
 					"name": "variable.language.self.lua"
 				},
 				{

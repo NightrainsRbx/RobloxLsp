@@ -13,9 +13,9 @@
 		"vscode": "^1.60.0"
 	},
 	"dependencies": {
-		"vscode-languageclient": "^8.0.0-next.4",
-		"express": "^4.17.1",
-		"node-fetch": "^2.6.1"
+		"express": "^4.18.2",
+		"node-fetch": "^2.6.11",
+		"vscode-languageclient": "^8.0.0-next.4"
 	},
 	"devDependencies": {
 		"@types/node": "^16.4.0",

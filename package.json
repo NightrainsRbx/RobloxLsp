@@ -1196,7 +1196,9 @@
 					"type": "boolean"
 				},
 				"robloxLsp.suggestedImports.importIgnore": {
-					"default": ["**/_Index/**"],
+					"default": [
+						"**/_Index/**"
+					],
 					"items": {
 						"type": "string"
 					},
