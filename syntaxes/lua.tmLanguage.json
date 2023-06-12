@@ -219,7 +219,7 @@
 					"name": "support.function.lua"
 				},
 				{
-					"match": "\\b(_G|_VERSION|game|plugin|shared|SharedTable|script|workspace|Enum(?:\\.\\w+){0,2})\\b",
+					"match": "\\b(_G|_VERSION|game|plugin|shared|script|workspace|Enum(?:\\.\\w+){0,2})\\b",
 					"name": "constant.language.lua"
 				},
 				{
@@ -440,7 +440,7 @@
 					"name": "variable.other.property.lua"
 				},
 				{
-					"match": "\\b(Axes|BrickColor|CFrame|Color3|ColorSequence|ColorSequenceKeypoint|DateTime|DockWidgetPluginGuiInfo|Faces|Instance|NumberRange|NumberSequence|NumberSequenceKeypoint|OverlapParams|PathWaypoint|PhysicalProperties|Random|Ray|RaycastParams|Rect|Region3|Region3int16|TweenInfo|UDim|UDim2|Vector2|Vector2int16|Vector3|Vector3int16)\\b\\.?(\\b[a-zA-Z_]\\w*(?=\\())?",
+					"match": "\\b(Axes|BrickColor|CFrame|Color3|ColorSequence|ColorSequenceKeypoint|DateTime|DockWidgetPluginGuiInfo|Faces|Instance|NumberRange|NumberSequence|NumberSequenceKeypoint|OverlapParams|PathWaypoint|PhysicalProperties|Random|SharedTable|Ray|RaycastParams|Rect|Region3|Region3int16|TweenInfo|UDim|UDim2|Vector2|Vector2int16|Vector3|Vector3int16)\\b\\.?(\\b[a-zA-Z_]\\w*(?=\\())?",
 					"captures": {
 						"1": {
 							"name": "support.class.lua"
