@@ -121,16 +121,6 @@ type ENV = {
 		close: (thread: thread) -> (boolean, ...any),
 	},
 	shared: any,
-	SharedTable: {
-		new: (t: table) -> SharedTable,
-		clear: (st: SharedTable) -> (),
-		clone: (st: SharedTable, deep: boolean?) -> SharedTable,
-		cloneAndFreeze: (st: SharedTable, deep: boolean?) -> SharedTable,
-		increment: (st: SharedTable, key: string | number, delta: number) -> number,
-		isFrozen: (st: SharedTable) -> boolean,
-		size: (st: SharedTable) -> number,
-		update: (st: SharedTable, key: string | number, f: (any)) -> ()
-	}
 	typeof: (value: any) -> string,
 	spawn: (callback: function) -> (),
 	_G: table,
