@@ -561,7 +561,7 @@
                             }
                         },
                         {
-                            "Name": "elasticy",
+                            "Name": "elasticity",
                             "Type": {
                                 "Name": "number"
                             }
@@ -574,7 +574,7 @@
                             }
                         },
                         {
-                            "Name": "elasticyWeight",
+                            "Name": "elasticityWeight",
                             "Default": "nil",
                             "Type": {
                                 "Name": "number"
