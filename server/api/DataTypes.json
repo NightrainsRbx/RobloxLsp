@@ -2130,6 +2130,34 @@
                     }
             ],
             "Name": "RotationCurveKey"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [],
+                    "ReturnType": {
+                        "Name": "SharedTable"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "value",
+                            "Type": {
+                                "Name": "table"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "SharedTable"
+                    }
+                }
+            ],
+            "Name": "SharedTable"
         }
     ],
     "DataTypes": [
@@ -4446,6 +4474,154 @@
                 }
             ],
             "Name": "RotationCurveKey"
+        },
+        {
+            "Members": [
+                {
+                    "MemberType": "Function",
+                    "Name": "clear",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "void"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "clone",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        },
+                        {
+                            "Name": "deep",
+                            "Default": "nil",
+                            "Type": {
+                                "Name": "boolean"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "SharedTable"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "cloneAndFreeze",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        },
+                        {
+                            "Name": "deep",
+                            "Default": "nil",
+                            "Type": {
+                                "Name": "boolean"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "SharedTable"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "increment",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        },
+                        {
+                            "Name": "key",
+                            "Type": {
+                                "Name": "string | number"
+                            }
+                        },
+                        {
+                            "Name": "delta",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "isFrozen",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "boolean"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "size",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "update",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        },
+                        {
+                            "Name": "key",
+                            "Type": {
+                                "Name": "string | number"
+                            }
+                        },
+                        {
+                            "Name": "f",
+                            "Type": {
+                                "Name": "function"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "void"
+                    }
+                }
+            ],
+            "Name": "SharedTable"
         }
     ]
 }
