@@ -15,16 +15,24 @@ end
 
 local function findForward(text, offset, ...)
     local pos = text:match('^[ \t]*()', offset)
+    if pos == nil then
+        return
+    end
+
     for _, symbol in ipairs { ... } do
         if text:sub(pos, pos + #symbol - 1) == symbol then
             return pos, symbol
         end
     end
+
     return nil
 end
 
 local function findBackward(text, offset, ...)
     local pos = lookBackward.findAnyPos(text, offset)
+    if pos == nil then
+        return
+    end
     for _, symbol in ipairs { ... } do
         if text:sub(pos - #symbol + 1, pos) == symbol then
             return pos - #symbol + 1, symbol
