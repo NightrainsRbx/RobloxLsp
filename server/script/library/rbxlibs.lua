@@ -183,6 +183,20 @@ local function getDocumentationLink(member, className)
 end
 
 local function parseType(data, tbl)
+    if data.Union then
+        local tp = tbl or {}
+        tp.type = "type.union"
+        for _, union in ipairs(data.Union) do
+            tp[#tp+1] = parseType(union)
+        end
+        return tp
+    end
+    if data.Tuple then
+        return {
+            type = "type.variadic",
+            value = parseType(data.Tuple)
+        }
+    end
     local name = data.Name
     if data.Category == "Enum" then
         name = "Enum." .. data.Name
@@ -483,8 +497,6 @@ local function parseMembers(data, isObject)
 end
 
 local function parseEnums()
-
-
     local typeofEnums = {}
     for tp in pairs(m.object) do
         if tp == "Instance" or not m.ClassNames[tp] and tp ~= "any" then

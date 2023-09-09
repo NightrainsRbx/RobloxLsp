@@ -2385,6 +2385,40 @@
                     }
                 },
                 {
+                    "MemberType": "Function",
+                    "Name": "Max",
+                    "Parameters": [
+                        {
+                            "Name": "other",
+                            "Type": {
+                                "Tuple": {
+                                    "Name": "Vector2"
+                                }
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "Vector2"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "Min",
+                    "Parameters": [
+                        {
+                            "Name": "other",
+                            "Type": {
+                                "Tuple": {
+                                    "Name": "Vector2"
+                                }
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "Vector2"
+                    }
+                },
+                {
                     "MemberType": "Property",
                     "Name": "y",
                     "Deprecated": true,
@@ -3604,6 +3638,61 @@
                 },
                 {
                     "MemberType": "Function",
+                    "Name": "Angle",
+                    "Parameters": [
+                        {
+                            "Name": "other",
+                            "Type": {
+                                "Name": "Vector3"
+                            }
+                        },
+                        {
+                            "Name": "axis",
+                            "Type": {
+                                "Name": "Vector3"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "Max",
+                    "Parameters": [
+                        {
+                            "Name": "other",
+                            "Type": {
+                                "Tuple": {
+                                    "Name": "Vector3"
+                                }
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "Vector3"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "Min",
+                    "Parameters": [
+                        {
+                            "Name": "other",
+                            "Type": {
+                                "Tuple": {
+                                    "Name": "Vector3"
+                                }
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "Vector3"
+                    }
+                },
+                {
+                    "MemberType": "Function",
                     "Name": "lerp",
                     "Deprecated": true,
                     "Parameters": [
@@ -4103,6 +4192,35 @@
                     "ValueType": {
                         "Name": "boolean"
                     }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "BruteForceAllSlow",
+                    "ValueType": {
+                        "Name": "boolean"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "AddToFilter",
+                    "Parameters": [
+                        {
+                            "Name": "instances",
+                            "Type": {
+                                "Union": [
+                                    {
+                                        "Name": "Instance"
+                                    },
+                                    {
+                                        "Name": "Objects"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "nil"
+                    }
                 }
             ],
             "Name": "RaycastParams"
@@ -4143,6 +4261,35 @@
                     "Name": "RespectCanCollide",
                     "ValueType": {
                         "Name": "boolean"
+                    }
+                },
+                {
+                    "MemberType": "Property",
+                    "Name": "BruteForceAllSlow",
+                    "ValueType": {
+                        "Name": "boolean"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "AddToFilter",
+                    "Parameters": [
+                        {
+                            "Name": "instances",
+                            "Type": {
+                                "Union": [
+                                    {
+                                        "Name": "Instance"
+                                    },
+                                    {
+                                        "Name": "Objects"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "nil"
                     }
                 }
             ],
@@ -4549,7 +4696,14 @@
                         {
                             "Name": "key",
                             "Type": {
-                                "Name": "string | number"
+                                "Union": [
+                                    {
+                                        "Name": "string"
+                                    },
+                                    {
+                                        "Name": "number"
+                                    }
+                                ]
                             }
                         },
                         {
@@ -4606,7 +4760,14 @@
                         {
                             "Name": "key",
                             "Type": {
-                                "Name": "string | number"
+                                "Union": [
+                                    {
+                                        "Name": "string"
+                                    },
+                                    {
+                                        "Name": "number"
+                                    }
+                                ]
                             }
                         },
                         {
