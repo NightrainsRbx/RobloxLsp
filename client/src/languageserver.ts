@@ -152,9 +152,8 @@ function start(context: ExtensionContext, documentSelector: DocumentSelector, fo
         clientOptions
     );
 
-    // client.registerProposedFeatures();
-    client.start();
-    client.onReady().then(() => {
+    client.registerProposedFeatures();
+    client.start().then(() => {
         onCommand(client);
         onDecorations(client);
         onState(client, context);
@@ -382,7 +381,7 @@ export function activate(context: ExtensionContext) {
         if (folder == null && Workspace.workspaceFolders == null && !defaultClient) {
             defaultClient = start(context, [
                 { scheme: 'file', language: 'lua' }
-            ], null);
+            ], undefined);
             return;
         }
 
@@ -412,16 +411,18 @@ export function activate(context: ExtensionContext) {
         }
     }
 
-    Workspace.workspaceFolders.forEach(folder => {
-        folder = getOuterMostWorkspaceFolder(folder);
-        if (!clients.has(folder.uri.toString())) {
-            let pattern: string = folder.uri.fsPath.replace(/(\[|\])/g, '[$1]') + '/**/*';
-            let client = start(context, [
-                { scheme: 'file', language: 'lua', pattern: pattern }
-            ], folder);
-            clients.set(folder.uri.toString(), client);
-        }
-    });
+    if (Workspace.workspaceFolders != null) {
+        Workspace.workspaceFolders.forEach(folder => {
+            folder = getOuterMostWorkspaceFolder(folder);
+            if (!clients.has(folder.uri.toString())) {
+                let pattern: string = folder.uri.fsPath.replace(/(\[|\])/g, '[$1]') + '/**/*';
+                let client = start(context, [
+                    { scheme: 'file', language: 'lua', pattern: pattern }
+                ], folder);
+                clients.set(folder.uri.toString(), client);
+            }
+        });
+    }
 
     Workspace.onDidOpenTextDocument(didOpenTextDocument);
     //Workspace.onDidCloseTextDocument(didCloseTextDocument);
