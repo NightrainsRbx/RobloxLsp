@@ -7,8 +7,7 @@ type ENV = {
 			((thread: thread, level: number, options: string) -> ...any)
 			& ((functionOrLevel: function | number, options: string) -> ...any),
 		traceback:
-			((level: number?) -> string)
-			& ((message: string, level: number?) -> string)
+			((message: string, level: number?) -> string)
 			& ((thread: thread, message: string, level: number?) -> string),
 		profilebegin: (label: string) -> (),
 		profileend: () -> (),
