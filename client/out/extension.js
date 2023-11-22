@@ -1,13 +1,37 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+var __awaiter =
+  (this && this.__awaiter) ||
+  function (thisArg, _arguments, P, generator) {
+    function adopt(value) {
+      return value instanceof P
+        ? value
+        : new P(function (resolve) {
+            resolve(value);
+          });
+    }
     return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      function fulfilled(value) {
+        try {
+          step(generator.next(value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function rejected(value) {
+        try {
+          step(generator["throw"](value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function step(result) {
+        result.done
+          ? resolve(result.value)
+          : adopt(result.value).then(fulfilled, rejected);
+      }
+      step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
@@ -15,71 +39,116 @@ const languageserver = require("./languageserver");
 const fetch = require("node-fetch");
 const path = require("path");
 const fs = require("fs");
-const fetchData = (url, handler, resolve) => __awaiter(void 0, void 0, void 0, function* () {
+const fetchData = (url, handler, resolve) =>
+  __awaiter(void 0, void 0, void 0, function* () {
     try {
-        fetch.default(url)
-            .then(res => res.text())
-            .then(body => handler(body))
-            .then(resolve);
+      fetch
+        .default(url)
+        .then((res) => res.text())
+        .then((body) => handler(body))
+        .then(resolve);
+    } catch (err) {
+      vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
+      if (resolve != undefined) {
+        resolve();
+      }
     }
-    catch (err) {
-        vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
-        if (resolve != undefined) {
-            resolve();
-        }
-    }
-});
+  });
 function writeToFile(path, content) {
-    try {
-        fs.writeFileSync(path, content);
-    }
-    catch (err) {
-        vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
-    }
+  try {
+    fs.writeFileSync(path, content);
+  } catch (err) {
+    vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
+  }
 }
 function updateRobloxAPI(context) {
-    fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/version.txt', (lastVersion) => {
-        try {
-            const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'api', 'version.txt')), 'utf8');
-            if (currentVersion != lastVersion) {
-                vscode.window.withProgress({
-                    location: vscode.ProgressLocation.Notification,
-                    title: 'Roblox LSP: Updating API',
-                    cancellable: false
-                }, () => __awaiter(this, void 0, void 0, function* () {
-                    return Promise.all([
-                        new Promise(resolve => {
-                            fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/API-Dump.json', (data) => {
-                                writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Dump.json')), data);
-                            }, resolve);
-                        }),
-                        new Promise(resolve => {
-                            fetchData('https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/api-docs/en-us.json', (data) => {
-                                writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Docs.json')), data);
-                                resolve();
-                            });
-                        })
-                    ]);
-                })).then(() => {
-                    vscode.window.showInformationMessage(`Roblox LSP: Updated API (${lastVersion}). [View changes](https://maximumadhd.github.io/Roblox-API-History)`, "Reload VSCode").then((item) => __awaiter(this, void 0, void 0, function* () {
-                        if (item == "Reload VSCode") {
-                            vscode.commands.executeCommand('workbench.action.reloadWindow');
+  fetchData(
+    "https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/version.txt",
+    (lastVersion) => {
+      try {
+        const currentVersion = fs.readFileSync(
+          context.asAbsolutePath(path.join("server", "api", "version.txt")),
+          "utf8"
+        );
+        if (currentVersion != lastVersion) {
+          vscode.window
+            .withProgress(
+              {
+                location: vscode.ProgressLocation.Notification,
+                title: "Roblox LSP: Updating API",
+                cancellable: false,
+              },
+              () =>
+                __awaiter(this, void 0, void 0, function* () {
+                  return Promise.all([
+                    new Promise((resolve) => {
+                      fetchData(
+                        "https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/Full-API-Dump.json",
+                        (data) => {
+                          writeToFile(
+                            context.asAbsolutePath(
+                              path.join("server", "api", "API-Dump.json")
+                            ),
+                            data
+                          );
+                        },
+                        resolve
+                      );
+                    }),
+                    new Promise((resolve) => {
+                      fetchData(
+                        "https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/api-docs/en-us.json",
+                        (data) => {
+                          writeToFile(
+                            context.asAbsolutePath(
+                              path.join("server", "api", "API-Docs.json")
+                            ),
+                            data
+                          );
+                          resolve();
                         }
-                    }));
-                });
-                writeToFile(context.asAbsolutePath(path.join('server', 'api', 'version.txt')), lastVersion);
-            }
+                      );
+                    }),
+                  ]);
+                })
+            )
+            .then(() => {
+              vscode.window
+                .showInformationMessage(
+                  `Roblox LSP: Updated API (${lastVersion}). [View changes](https://maximumadhd.github.io/Roblox-API-History)`,
+                  "Reload VSCode"
+                )
+                .then((item) =>
+                  __awaiter(this, void 0, void 0, function* () {
+                    if (item == "Reload VSCode") {
+                      vscode.commands.executeCommand(
+                        "workbench.action.reloadWindow"
+                      );
+                    }
+                  })
+                );
+            });
+          writeToFile(
+            context.asAbsolutePath(path.join("server", "api", "version.txt")),
+            lastVersion
+          );
         }
-        catch (err) {
-            vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
-        }
-    });
+      } catch (err) {
+        vscode.window.showErrorMessage(`Roblox LSP Error: ${err}`);
+      }
+    }
+  );
 }
 function openUpdatesWindow(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (context.globalState.get("sawVersionLogNew14", false) == false) {
-            const panel = vscode.window.createWebviewPanel('robloxlspUpdates', 'Roblox LSP Updates', vscode.ViewColumn.One, {});
-            panel.webview.html = `<!DOCTYPE html>
+  return __awaiter(this, void 0, void 0, function* () {
+    if (context.globalState.get("sawVersionLogNew14", false) == false) {
+      const panel = vscode.window.createWebviewPanel(
+        "robloxlspUpdates",
+        "Roblox LSP Updates",
+        vscode.ViewColumn.One,
+        {}
+      );
+      panel.webview.html = `<!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
@@ -112,26 +181,27 @@ function openUpdatesWindow(context) {
             </div>
         </body>
         </html>`;
-            yield context.globalState.update("sawVersionLogNew14", true);
-        }
-    });
+      yield context.globalState.update("sawVersionLogNew14", true);
+    }
+  });
 }
 function activate(context) {
-    try {
-        if (vscode.extensions.getExtension("sumneko.lua") != undefined) {
-            vscode.window.showErrorMessage("The extension [Lua](https://marketplace.visualstudio.com/items?itemName=sumneko.lua) by sumneko is enabled, please disable it so that Roblox LSP can work properly.");
-        }
+  try {
+    if (vscode.extensions.getExtension("sumneko.lua") != undefined) {
+      vscode.window.showErrorMessage(
+        "The extension [Lua](https://marketplace.visualstudio.com/items?itemName=sumneko.lua) by sumneko is enabled, please disable it so that Roblox LSP can work properly."
+      );
     }
-    catch (err) {
-        vscode.window.showErrorMessage(err);
-    }
-    openUpdatesWindow(context);
-    updateRobloxAPI(context);
-    languageserver.activate(context);
+  } catch (err) {
+    vscode.window.showErrorMessage(err);
+  }
+  openUpdatesWindow(context);
+  updateRobloxAPI(context);
+  languageserver.activate(context);
 }
 exports.activate = activate;
 function deactivate() {
-    languageserver.deactivate();
+  languageserver.deactivate();
 }
 exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map
