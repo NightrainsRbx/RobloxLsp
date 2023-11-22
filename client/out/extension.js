@@ -49,7 +49,7 @@ function updateRobloxAPI(context) {
                 }, () => __awaiter(this, void 0, void 0, function* () {
                     return Promise.all([
                         new Promise(resolve => {
-                            fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/API-Dump.json', (data) => {
+                            fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/Full-API-Dump.json', (data) => {
                                 writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Dump.json')), data);
                             }, resolve);
                         }),
