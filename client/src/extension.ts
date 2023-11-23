@@ -38,7 +38,7 @@ function updateRobloxAPI(context: vscode.ExtensionContext) {
                 }, async () => {
                     return Promise.all([
                         new Promise<void>(resolve => {
-                            fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/Full-API-Dump.json', (data) => {
+                            fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/Mini-API-Dump.json', (data) => {
                                 writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Dump.json')), data);
                             }, resolve);
                         }),
