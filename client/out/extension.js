@@ -38,7 +38,7 @@ function writeToFile(path, content) {
     }
 }
 function updateRobloxAPI(context) {
-    fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/version.txt', (lastVersion) => {
+    fetchData('https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/version.txt', (lastVersion) => {
         try {
             const currentVersion = fs.readFileSync(context.asAbsolutePath(path.join('server', 'api', 'version.txt')), 'utf8');
             if (currentVersion != lastVersion) {
@@ -49,7 +49,7 @@ function updateRobloxAPI(context) {
                 }, () => __awaiter(this, void 0, void 0, function* () {
                     return Promise.all([
                         new Promise(resolve => {
-                            fetchData('https://raw.githubusercontent.com/CloneTrooper1019/Roblox-Client-Tracker/roblox/Mini-API-Dump.json', (data) => {
+                            fetchData('https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/Mini-API-Dump.json', (data) => {
                                 writeToFile(context.asAbsolutePath(path.join('server', 'api', 'API-Dump.json')), data);
                             }, resolve);
                         }),
