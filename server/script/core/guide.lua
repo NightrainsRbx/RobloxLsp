@@ -3035,7 +3035,6 @@ function m.getTypeAlias(status, source)
                             return alias
                         end
                     end
-                    break
                 end
             end
         end

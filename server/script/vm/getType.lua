@@ -45,7 +45,6 @@ function vm.getTypeAlias(source)
                             return alias
                         end
                     end
-                    break
                 end
             end
         end
