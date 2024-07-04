@@ -15,7 +15,7 @@
 				"3": {
 					"patterns": [
 						{
-							"match": "\\b(__add|__call|__concat|__div|__eq|__index|__le|__len|__lt|__metatable|__mod|__mode|__mul|__newindex|__pow|__sub|__tostring|__unm|__iter|__len|__type)\\b",
+							"match": "\\b(__add|__call|__concat|__div|__idiv|__eq|__index|__le|__len|__lt|__metatable|__mod|__mode|__mul|__newindex|__pow|__sub|__tostring|__unm|__iter|__len|__type)\\b",
 							"name": "variable.language.metamethod.lua"
 						}
 					],
@@ -255,7 +255,7 @@
 		"operators": {
 			"patterns": [
 				{
-					"match": "(\\+|-(?!-)|/|\\*|%|\\^)",
+					"match": "(\\+|-(?!-)|//|/|\\*|%|\\^)",
 					"name": "keyword.operator.arithmetic.lua"
 				},
 				{
@@ -263,7 +263,7 @@
 					"name": "keyword.operator.logical.lua keyword.operator.wordlike.lua"
 				},
 				{
-					"match": "(\\+=|-=|/=|\\*=|%=|\\^=|\\.\\.=|=)",
+					"match": "(\\+=|-=|//=|/=|\\*=|%=|\\^=|\\.\\.=|=)",
 					"name": "keyword.operator.assignment.lua"
 				},
 				{

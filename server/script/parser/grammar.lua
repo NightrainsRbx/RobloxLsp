@@ -182,7 +182,7 @@ BinaryOp    <-( Sp {} {'or'} Cut
             /   Sp {} ({} '!=' '='? {}) -> ErrUEQ
             /   Sp {} {'..'} !'.'
             /   Sp {} {'+' / '-'}
-            /   Sp {} {'*' / '/' / '%'}
+            /   Sp {} {'*' / '//' / '%' / '/'}
             /   Sp {} {'^'}
             )-> BinaryOp
 UnaryOp     <-( Sp {} {'not' Cut / '#' / '-' !'-'}
@@ -209,7 +209,7 @@ COLON       <-  Sp ({} ':' !':')
 LABEL       <-  Sp '::'
 ARROW       <-  Sp '->'
 ASSIGN      <-  Sp '=' !'='
-COMPASSIGN  <-  Sp ({} {('+' / '-' / '*' / '/' / '^' / '..' / '%')} '=' !'=' {})
+COMPASSIGN  <-  Sp ({} {('+' / '-' / '*' / '//' / '^' / '..' / '%' / '/')} '=' !'=' {})
             ->  CompOp
 AssignOrEQ  <-  Sp ({} '==' {})
             ->  ErrAssign
