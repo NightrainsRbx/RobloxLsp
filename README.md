@@ -14,32 +14,33 @@ https://devforum.roblox.com/t/roblox-lsp-full-intellisense-for-roblox-and-luau/7
 
 Roblox OS Community Discord Server: https://discord.gg/c4nPcZHwFU
 
+## Alternatives
+This project doesn't support Luau static typing and never will, you should always prefer [Luau Language Server](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.luau-lsp) for that.
 
 ## Features
 
-- [x] Full Roblox Environment
-- [x] Support for Luau static typing
-- [x] Full support for [Rojo](https://github.com/Roblox/rojo)
-- [x] Support for Third-Party libraries like Roact, Rodux, Promise, TestEz, etc.
-- [x] Auto-completion for instances in Roblox Studio
-- [x] Auto-updatable API
-- [x] Inlay Hints
-- [x] Color3 Preview and Picker
-- [x] Goto Definition
-- [x] Find All References
-- [x] Hover
-- [x] Diagnostics
-- [x] Rename
-- [x] Auto Completion
-- [x] IntelliSense
-- [x] Signature Help
-- [x] Document Symbols
-- [x] Workspace Symbols
-- [x] Syntax Check
-- [x] Highlight
-- [x] Code Action
-- [x] Multi Workspace
-- [x] Semantic Tokens
+- Full Roblox Environment
+- Full support for [Rojo](https://github.com/Roblox/rojo)
+- Built-in support for Roact, Rodux, and TestEz.
+- Auto-completion for instances in Roblox Studio
+- Auto-updatable API
+- Color3 Preview and Picker
+- Module Auto-import
+- IntelliSense
+- Inlay Hints
+- Goto Definition
+- Find All References
+- Hover
+- Diagnostics
+-  Rename
+- Signature Help
+- Document Symbols
+- Workspace Symbols
+- Syntax Check
+- Highlight
+- Code Action
+- Multi Workspace
+- Semantic Tokens
 
 ### Preview
 
