@@ -346,37 +346,37 @@
                     }
                 },
                 {
-                    "MemberType":"Function",
-                    "Name":"min",
+                    "MemberType": "Function",
+                    "Name": "min",
                     "Parameters": [
                         {
-                        "Name": "other",
-                        "Type":{
-                            "Variadic":{
-                                "Name":"Vector2"
+                            "Name": "other",
+                            "Type": {
+                                "Tuple": {
+                                    "Name": "Vector2"
+                                }
                             }
                         }
-                        }
                     ],
-                    "ReturnType":{
-                        "Name":"Vector2"
+                    "ReturnType": {
+                        "Name": "Vector2"
                     }
                 },
                 {
-                    "MemberType":"Function",
-                    "Name":"max",
+                    "MemberType": "Function",
+                    "Name": "max",
                     "Parameters": [
                         {
-                        "Name": "other",
-                        "Type":{
-                            "Variadic":{
-                                "Name":"Vector2"
+                            "Name": "other",
+                            "Type": {
+                                "Tuple": {
+                                    "Name": "Vector2"
+                                }
                             }
                         }
-                        }
                     ],
-                    "ReturnType":{
-                        "Name":"Vector2"
+                    "ReturnType": {
+                        "Name": "Vector2"
                     }
                 }
             ],
@@ -1326,8 +1326,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "new",
-                    "Parameters": [
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
                         "Name": "Rect"
                     }
@@ -1523,37 +1522,37 @@
                     }
                 },
                 {
-                    "MemberType":"Function",
-                    "Name":"min",
+                    "MemberType": "Function",
+                    "Name": "min",
                     "Parameters": [
                         {
-                        "Name": "other",
-                        "Type":{
-                            "Variadic":{
-                                "Name":"Vector3"
+                            "Name": "other",
+                            "Type": {
+                                "Tuple": {
+                                    "Name": "Vector3"
+                                }
                             }
                         }
-                        }
                     ],
-                    "ReturnType":{
-                        "Name":"Vector3"
+                    "ReturnType": {
+                        "Name": "Vector3"
                     }
                 },
                 {
-                    "MemberType":"Function",
-                    "Name":"max",
+                    "MemberType": "Function",
+                    "Name": "max",
                     "Parameters": [
                         {
-                        "Name": "other",
-                        "Type":{
-                            "Variadic":{
-                                "Name":"Vector3"
+                            "Name": "other",
+                            "Type": {
+                                "Tuple": {
+                                    "Name": "Vector3"
+                                }
                             }
                         }
-                        }
                     ],
-                    "ReturnType":{
-                        "Name":"Vector3"
+                    "ReturnType": {
+                        "Name": "Vector3"
                     }
                 }
             ],
@@ -1976,7 +1975,7 @@
                         {
                             "Name": "value",
                             "Type": {
-                                "Name":  "number"
+                                "Name": "number"
                             }
                         },
                         {
@@ -2240,67 +2239,67 @@
         },
         {
             "Members": [
-                    {
-                        "MemberType": "Function",
-                        "Name": "new",
-                        "Parameters": [
-                            {
-                                "Name": "time",
-                                "Type": {
-                                    "Name": "number"
-                                }
-                            },
-                            {
-                                "Name": "value",
-                                "Type": {
-                                    "Name": "number"
-                                }
-                            },
-                            {
-                                "Name": "Interpolation",
-                                "Type": {
-                                    "Category": "Enum",
-                                    "Name": "KeyInterpolationMode"
-                                }
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "time",
+                            "Type": {
+                                "Name": "number"
                             }
-                        ],
-                        "ReturnType": {
-                            "Name": "FloatCurveKey"
+                        },
+                        {
+                            "Name": "value",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        },
+                        {
+                            "Name": "Interpolation",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "KeyInterpolationMode"
+                            }
                         }
+                    ],
+                    "ReturnType": {
+                        "Name": "FloatCurveKey"
                     }
+                }
             ],
             "Name": "FloatCurveKey"
         },
         {
             "Members": [
-                    {
-                        "MemberType": "Function",
-                        "Name": "new",
-                        "Parameters": [
-                            {
-                                "Name": "time",
-                                "Type": {
-                                    "Name": "number"
-                                }
-                            },
-                            {
-                                "Name": "value",
-                                "Type": {
-                                    "Name": "CFrame"
-                                }
-                            },
-                            {
-                                "Name": "Interpolation",
-                                "Type": {
-                                    "Category": "Enum",
-                                    "Name": "KeyInterpolationMode"
-                                }
+                {
+                    "MemberType": "Function",
+                    "Name": "new",
+                    "Parameters": [
+                        {
+                            "Name": "time",
+                            "Type": {
+                                "Name": "number"
                             }
-                        ],
-                        "ReturnType": {
-                            "Name": "RotationCurveKey"
+                        },
+                        {
+                            "Name": "value",
+                            "Type": {
+                                "Name": "CFrame"
+                            }
+                        },
+                        {
+                            "Name": "Interpolation",
+                            "Type": {
+                                "Category": "Enum",
+                                "Name": "KeyInterpolationMode"
+                            }
                         }
+                    ],
+                    "ReturnType": {
+                        "Name": "RotationCurveKey"
                     }
+                }
             ],
             "Name": "RotationCurveKey"
         },
@@ -2328,12 +2327,169 @@
                     "ReturnType": {
                         "Name": "SharedTable"
                     }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "clear",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "void"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "clone",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        },
+                        {
+                            "Name": "deep",
+                            "Default": "nil",
+                            "Type": {
+                                "Name": "boolean"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "SharedTable"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "cloneAndFreeze",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        },
+                        {
+                            "Name": "deep",
+                            "Default": "nil",
+                            "Type": {
+                                "Name": "boolean"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "SharedTable"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "increment",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        },
+                        {
+                            "Name": "key",
+                            "Type": {
+                                "Union": [
+                                    {
+                                        "Name": "string"
+                                    },
+                                    {
+                                        "Name": "number"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Name": "delta",
+                            "Type": {
+                                "Name": "number"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "isFrozen",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "boolean"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "size",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "number"
+                    }
+                },
+                {
+                    "MemberType": "Function",
+                    "Name": "update",
+                    "Parameters": [
+                        {
+                            "Name": "st",
+                            "Type": {
+                                "Name": "SharedTable"
+                            }
+                        },
+                        {
+                            "Name": "key",
+                            "Type": {
+                                "Union": [
+                                    {
+                                        "Name": "string"
+                                    },
+                                    {
+                                        "Name": "number"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Name": "f",
+                            "Type": {
+                                "Name": "function"
+                            }
+                        }
+                    ],
+                    "ReturnType": {
+                        "Name": "void"
+                    }
                 }
             ],
             "Name": "SharedTable"
         },
         {
-            "Members":[],
+            "Members": [],
             "Name": "Secret"
         }
     ],
@@ -2431,10 +2587,10 @@
                     }
                 },
                 {
-                    "MemberType":"Property",
-                    "Name":"Label",
+                    "MemberType": "Property",
+                    "Name": "Label",
                     "Default": "nil",
-                    "ValueType":{
+                    "ValueType": {
                         "Name": "string"
                     }
                 }
@@ -2572,8 +2728,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "Abs",
-                    "Parameters": [
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
                         "Name": "Vector2"
                     }
@@ -2581,8 +2736,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "Ceil",
-                    "Parameters": [
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
                         "Name": "Vector2"
                     }
@@ -2590,8 +2744,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "Floor",
-                    "Parameters": [
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
                         "Name": "Vector2"
                     }
@@ -2599,8 +2752,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "Sign",
-                    "Parameters": [
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
                         "Name": "Vector2"
                     }
@@ -2610,15 +2762,16 @@
                     "Name": "Angle",
                     "Parameters": [
                         {
-                            "Name":"other",
-                            "Type":{
-                                "Name":"Vector2"
+                            "Name": "other",
+                            "Type": {
+                                "Name": "Vector2"
                             }
                         },
                         {
-                            "Name":"isSigned",
-                            "Type":{
-                                "Name":"bool"
+                            "Name": "isSigned",
+                            "Default": "nil",
+                            "Type": {
+                                "Name": "bool"
                             }
                         }
                     ],
@@ -3195,7 +3348,7 @@
                     "Parameters": [
                         {
                             "Name": "order",
-                            "Default":"XYZ",
+                            "Default": "XYZ",
                             "Type": {
                                 "Category": "Enum",
                                 "Name": "RotationOrder"
@@ -3885,8 +4038,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "Abs",
-                    "Parameters": [
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
                         "Name": "Vector3"
                     }
@@ -3894,8 +4046,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "Ceil",
-                    "Parameters": [
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
                         "Name": "Vector3"
                     }
@@ -3903,8 +4054,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "Floor",
-                    "Parameters": [
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
                         "Name": "Vector3"
                     }
@@ -3912,8 +4062,7 @@
                 {
                     "MemberType": "Function",
                     "Name": "Sign",
-                    "Parameters": [
-                    ],
+                    "Parameters": [],
                     "ReturnType": {
                         "Name": "Vector3"
                     }
@@ -3951,6 +4100,7 @@
                         },
                         {
                             "Name": "axis",
+                            "Default": "nil",
                             "Type": {
                                 "Name": "Vector3"
                             }
@@ -4926,169 +5076,11 @@
             "Name": "RotationCurveKey"
         },
         {
-            "Members": [
-                {
-                    "MemberType": "Function",
-                    "Name": "clear",
-                    "Parameters": [
-                        {
-                            "Name": "st",
-                            "Type": {
-                                "Name": "SharedTable"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Name": "void"
-                    }
-                },
-                {
-                    "MemberType": "Function",
-                    "Name": "clone",
-                    "Parameters": [
-                        {
-                            "Name": "st",
-                            "Type": {
-                                "Name": "SharedTable"
-                            }
-                        },
-                        {
-                            "Name": "deep",
-                            "Default": "nil",
-                            "Type": {
-                                "Name": "boolean"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Name": "SharedTable"
-                    }
-                },
-                {
-                    "MemberType": "Function",
-                    "Name": "cloneAndFreeze",
-                    "Parameters": [
-                        {
-                            "Name": "st",
-                            "Type": {
-                                "Name": "SharedTable"
-                            }
-                        },
-                        {
-                            "Name": "deep",
-                            "Default": "nil",
-                            "Type": {
-                                "Name": "boolean"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Name": "SharedTable"
-                    }
-                },
-                {
-                    "MemberType": "Function",
-                    "Name": "increment",
-                    "Parameters": [
-                        {
-                            "Name": "st",
-                            "Type": {
-                                "Name": "SharedTable"
-                            }
-                        },
-                        {
-                            "Name": "key",
-                            "Type": {
-                                "Union": [
-                                    {
-                                        "Name": "string"
-                                    },
-                                    {
-                                        "Name": "number"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "Name": "delta",
-                            "Type": {
-                                "Name": "number"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Name": "number"
-                    }
-                },
-                {
-                    "MemberType": "Function",
-                    "Name": "isFrozen",
-                    "Parameters": [
-                        {
-                            "Name": "st",
-                            "Type": {
-                                "Name": "SharedTable"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Name": "boolean"
-                    }
-                },
-                {
-                    "MemberType": "Function",
-                    "Name": "size",
-                    "Parameters": [
-                        {
-                            "Name": "st",
-                            "Type": {
-                                "Name": "SharedTable"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Name": "number"
-                    }
-                },
-                {
-                    "MemberType": "Function",
-                    "Name": "update",
-                    "Parameters": [
-                        {
-                            "Name": "st",
-                            "Type": {
-                                "Name": "SharedTable"
-                            }
-                        },
-                        {
-                            "Name": "key",
-                            "Type": {
-                                "Union": [
-                                    {
-                                        "Name": "string"
-                                    },
-                                    {
-                                        "Name": "number"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "Name": "f",
-                            "Type": {
-                                "Name": "function"
-                            }
-                        }
-                    ],
-                    "ReturnType": {
-                        "Name": "void"
-                    }
-                }
-            ],
+            "Members": [],
             "Name": "SharedTable"
         },
         {
-            "Members":[
+            "Members": [
                 {
                     "MemberType": "Function",
                     "Name": "AddPrefix",
