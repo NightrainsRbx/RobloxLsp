@@ -350,7 +350,7 @@
 			"patterns": [
 				{
 					"comment": "As it turns out, because backslashes have to be escaped in both JSON and Regex, a single backslash is represented as 4 here",
-					"match": "\\\\[abfnrtvz'\"\\\\]",
+					"match": "\\\\[abfnrtvz'\"`\\\\]",
 					"name": "constant.character.escape.lua"
 				},
 				{
@@ -369,6 +369,11 @@
 		},
 		"interpolated_string": {
 			"patterns": [
+				{
+					"begin": "\\\\{",
+					"end": "(\\})",
+					"name": "string.quoted.double.lua"
+				},
 				{
 					"begin": "\\{",
 					"beginCaptures": {
