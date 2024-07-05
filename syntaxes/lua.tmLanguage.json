@@ -559,7 +559,7 @@
 					"contentName": "meta.parameter.type.variable"
 				},
 				{
-					"match": "\\b(nil|string|number|boolean|thread|userdata|symbol|any)\\b",
+					"match": "\\b(nil|string|number|boolean|thread|userdata|symbol|unknown|never|any)\\b",
 					"name": "support.type.primitive.lua"
 				},
 				{
