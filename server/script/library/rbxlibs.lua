@@ -596,6 +596,7 @@ function m.getClassNames()
         m.Services = {
             ["UserGameSettings"] = true,
             ["DebugSettings"] = true,
+            ["GameSettings"] = true,
             ["LuaSettings"] = true,
             ["PhysicsSettings"] = true
         }
