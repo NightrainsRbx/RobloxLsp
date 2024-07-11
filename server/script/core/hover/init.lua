@@ -11,6 +11,7 @@ local findSource = require 'core.find-source'
 local lang       = require 'language'
 local markdown   = require 'provider.markdown'
 local furi       = require 'file-uri'
+local config       = require 'config'
 
 local function getPath(source)
     for _, def in ipairs(vm.getDefs(source)) do
@@ -206,6 +207,12 @@ local function getHoverAsTypeName(source)
 end
 
 local function getHover(source, oop)
+    if not config.hover.enabled then
+        return {
+            label       = "",
+            source      = source,
+        }
+    end
     if source.type == 'doc.type.name' then
         return getHoverAsDocName(source)
     elseif source.type == 'type.name' then
