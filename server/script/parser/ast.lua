@@ -213,6 +213,7 @@ local BinaryLevel = {
     ['-']   = 9,
     ['*']   = 10,
     ['/']   = 10,
+    ['//']   = 10,
     ['%']   = 10,
     ['^']   = 11,
 }
@@ -337,8 +338,14 @@ local Defs = {
         end
         strs = merged
         local inter = false
-        if #strs == 1 and type(strs[1]) == "string" then
-            strs = strs[1]
+        if #strs == 1 then
+            if type(strs[1]) == "string" then
+                strs = strs[1]
+            else
+                strs[2] = strs[1]
+                strs[1] = ""
+                inter = true
+            end
         elseif #strs == 0 then
             strs = ""
         else

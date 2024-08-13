@@ -103,6 +103,31 @@ local function updateConfig(init)
     else
         proto.notify('$/status/hide')
     end
+
+    if client.isVSCode() and newConfig.typeChecking.mode ~= "Disabled" then
+        proto.request('$/getState', {key = "typecheckWarning"}, function (value)
+            if not value then
+                proto.request('window/showMessageRequest', {
+                    type    = define.MessageType.Warning,
+                    message = lang.script.WINDOW_CHECK_TYPECHECKING,
+                    actions = {
+                        {
+                            title = lang.script.WINDOW_DONT_SHOW_AGAIN,
+                        },
+                    }
+                }, function (item)
+                    if item then
+                        if item.title == lang.script.WINDOW_DONT_SHOW_AGAIN then
+                            proto.notify('$/setState', {
+                                key = "typecheckWarning",
+                                value = true
+                            })
+                        end
+                    end
+                end)
+            end
+        end)
+    end
 end
 
 proto.on('initialize', function (params)

@@ -479,7 +479,8 @@ local LIBS = {
     ["debug"] = true,
     ["utf8"] = true,
     ["os"] = true,
-    ["package"] = true
+    ["package"] = true,
+    ["buffer"] = true,
 }
 
 local function checkFieldThen(name, src, word, start, offset, parent, oop, text, results, infer)

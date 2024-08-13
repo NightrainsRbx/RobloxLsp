@@ -262,6 +262,4 @@ Memory usage: {mem:.f}M
 ]]
 WINDOW_APPLY_SETTING             = 'Apply setting'
 WINDOW_CHECK_SEMANTIC            = 'If you are using the color theme in the market, you may need to modify `editor.semanticHighlighting.enabled` to `true` to make semantic tokens take effect.'
-WINDOW_TELEMETRY_HINT            = 'Please allow sending anonymous usage data and error reports to help us further improve this extension. Read our privacy policy [here](https://github.com/sumneko/lua-language-server/wiki/Privacy-Policy) .'
-WINDOW_TELEMETRY_ENABLE          = 'Allow'
-WINDOW_TELEMETRY_DISABLE         = 'Prohibit'
+WINDOW_CHECK_TYPECHECKING        = 'Roblox LSP\'s type-checking is incomplete and obsolete. Using [Luau LSP](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.luau-lsp) for static typing is always recommended.'

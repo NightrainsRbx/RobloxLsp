@@ -24,6 +24,12 @@ type META = {
             & ((number, Vector2) -> Vector2)
             & ((number, Vector3int16) -> Vector3int16)
             & ((number, Vector2int16) -> Vector2int16),
+        __idiv:
+            ((number, number) -> number)
+            & ((number, Vector3) -> Vector3)
+            & ((number, Vector2) -> Vector2)
+            & ((number, Vector3int16) -> Vector3int16)
+            & ((number, Vector2int16) -> Vector2int16),
         __mod: (number, number) -> number,
         __pow: (number, number) -> number,
         __lt: (number, number) -> boolean,
@@ -34,6 +40,7 @@ type META = {
         __add: (Vector3, Vector3) -> Vector3,
         __sub: (Vector3, Vector3) -> Vector3,
         __div: (Vector3, Vector3 | number) -> Vector3,
+        __idiv: (Vector3, Vector3 | number) -> Vector3,
         __mul: (Vector3, Vector3 | number) -> Vector3,
         __unm: (Vector3) -> Vector3
     },
@@ -41,6 +48,7 @@ type META = {
         __add: (Vector2, Vector2) -> Vector2,
         __sub: (Vector2, Vector2) -> Vector2,
         __div: (Vector2, Vector2 | number) -> Vector2,
+        __idiv: (Vector2, Vector2 | number) -> Vector2,
         __mul: (Vector2, Vector2 | number) -> Vector2,
         __unm: (Vector2) -> Vector2
     },
@@ -48,6 +56,7 @@ type META = {
         __add: (Vector3int16, Vector3int16) -> Vector3int16,
         __sub: (Vector3int16, Vector3int16) -> Vector3int16,
         __div: (Vector3int16, Vector3int16 | number) -> Vector3int16,
+        __idiv: (Vector3int16, Vector3int16 | number) -> Vector3int16,
         __mul: (Vector3int16, Vector3int16 | number) -> Vector3int16,
         __unm: (Vector3int16) -> Vector3int16
     },
@@ -55,6 +64,7 @@ type META = {
         __add: (Vector2int16, Vector2int16) -> Vector2int16,
         __sub: (Vector2int16, Vector2int16) -> Vector2int16,
         __div: (Vector2int16, Vector2int16 | number) -> Vector2int16,
+        __idiv: (Vector2int16, Vector2int16 | number) -> Vector2int16,
         __mul: (Vector2int16, Vector2int16 | number) -> Vector2int16,
         __unm: (Vector2int16) -> Vector2int16
     },

@@ -118,7 +118,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage(err);
     }
 
-    openUpdatesWindow(context);
+    // openUpdatesWindow(context);
 
     updateRobloxAPI(context);
 

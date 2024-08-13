@@ -125,7 +125,7 @@ function activate(context) {
     catch (err) {
         vscode.window.showErrorMessage(err);
     }
-    openUpdatesWindow(context);
+    // openUpdatesWindow(context);
     updateRobloxAPI(context);
     languageserver.activate(context);
 }
