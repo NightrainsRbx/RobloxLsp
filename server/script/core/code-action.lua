@@ -153,6 +153,9 @@ local function solveSuggestedImport(uri, diag, results)
     local ast    = files.getAst(uri)
     local offset = files.offsetOfWord(uri, diag.range["end"])
     local name = guide.eachSourceContain(ast.ast, offset, function (source)
+        if source.type == "type.name" then
+            return source[1]
+        end
         if source.type ~= 'getglobal' then
             return
         end

@@ -2,6 +2,7 @@ local buildName   = require 'core.hover.name'
 local buildArg    = require 'core.hover.arg'
 local buildReturn = require 'core.hover.return'
 local buildTable  = require 'core.hover.table'
+local buildGeneric= require 'core.hover.generic'
 local vm          = require 'vm'
 local util        = require 'utility'
 local guide       = require 'core.guide'
@@ -12,10 +13,11 @@ local files       = require 'files'
 local function asFunction(source, oop)
     local name
     name, oop   = buildName(source, oop)
+    local gen   = buildGeneric(source)
     local arg   = buildArg(source, oop)
     local rtn   = buildReturn(source)
     local lines = {}
-    lines[1] = ('function %s(%s)'):format(name, arg)
+    lines[1] = ('function %s%s(%s)'):format(name, gen, arg)
     if rtn then
         lines[2] = INV .. rtn .. INV
     end
@@ -37,10 +39,11 @@ end
 local function asFunctionType(source, oop)
     local name
     name, oop   = buildName(source.parent, oop)
+    local gen   = buildGeneric(source)
     local arg   = buildArg(source, oop)
     local rtn   = buildReturn(source)
     local lines = {}
-    lines[1] = ('function %s(%s)'):format(name, arg)
+    lines[1] = ('function %s%s(%s)'):format(name, gen, arg)
     if rtn then
         lines[2] = INV .. rtn .. INV
     end

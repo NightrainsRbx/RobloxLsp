@@ -3,6 +3,7 @@ local guide    = require 'core.guide'
 local matchKey = require 'core.match-key'
 local define   = require 'proto.define'
 local await    = require 'await'
+local workspace = require 'workspace'
 
 local function buildSource(uri, source, key, results)
     if source.dummy then
@@ -61,11 +62,13 @@ return function (key)
     local results = {}
 
     for uri in files.eachFile() do
-        searchFile(files.getOriginUri(uri), key, results)
-        if #results > 1000 then
-            break
+        if not workspace.isIgnored(uri) then
+            searchFile(files.getOriginUri(uri), key, results)
+            if #results > 1000 then
+                break
+            end
+            await.delay()
         end
-        await.delay()
     end
 
     return results

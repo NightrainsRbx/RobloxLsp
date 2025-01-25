@@ -30,13 +30,6 @@ function vm.getGlobals(key, uri, onlySet)
             end
         end
     end
-    if uri:match("%.spec%.lua[u]?$") or uri:match("%.spec%/init%.lua[u]?$") then
-        for _, lib in pairs(defaultlibs.testez) do
-            if key == "*" or lib.name == key then
-                globals[#globals+1] = lib
-            end
-        end
-    end
     local dummyCache = vm.getCache 'globalDummy'
     for name in pairs(config.config.diagnostics.globals) do
         if key == '*' or name == key then
@@ -71,6 +64,13 @@ function vm.getGlobals(key, uri, onlySet)
             end
         end
         ::CONTINUE::
+    end
+    if uri:match("%.spec%.lua[u]?$") or uri:match("%.spec%/init%.lua[u]?$") then
+        for _, lib in pairs(defaultlibs.testez) do
+            if key == "*" or lib.name == key then
+                globals[#globals+1] = lib
+            end
+        end
     end
     return globals
 end

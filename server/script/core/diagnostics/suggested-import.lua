@@ -4,8 +4,9 @@ local lang    = require 'language'
 local config  = require 'config'
 local guide   = require 'core.guide'
 local rbximports = require 'core.module-import'
+local rbxlibs = require 'library.rbxlibs'
 
-local function check(src, uri, callback)
+local function checkGlobal(src, uri, callback)
     local key = guide.getKeyName(src)
     if not key then
         return
@@ -27,6 +28,32 @@ local function check(src, uri, callback)
     end
 end
 
+local function checkType(src, uri, callback)
+    if src[1] == "" then
+        return
+    end
+    if src.typeAlias then
+        return
+    end
+    if src.typeAliasGeneric then
+        return
+    end
+    if src.parent.type == "type.module" then
+        return
+    end
+    if rbxlibs.object[src[1]] then
+        return
+    end
+    if rbximports.hasPotentialImports(uri, src[1]) then
+        callback {
+            start   = src.start,
+            finish  = src.start + #src[1] - 1,
+            message = lang.script('DIAG_SUGGESTED_IMPORT', src[1]),
+        }
+        return
+    end
+end
+
 return function (uri, callback)
     if not config.config.suggestedImports.enable then
         return
@@ -38,12 +65,16 @@ return function (uri, callback)
     end
 
     guide.eachSourceType(ast.ast, 'getglobal', function (src)
-        check(src, uri, callback)
+        checkGlobal(src, uri, callback)
     end)
 
     guide.eachSourceType(ast.ast, 'setglobal', function (src)
         if guide.getParentFunction(src) ~= guide.getRoot(src) then
-            check(src, uri, callback)
+            checkGlobal(src, uri, callback)
         end
+    end)
+
+    guide.eachSourceType(ast.ast, 'type.name', function (src)
+        checkType(src, uri, callback)
     end)
 end

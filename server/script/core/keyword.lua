@@ -310,6 +310,20 @@ end"
         end
         return true
     end},
+    {'module', function (info, results)
+            results[#results+1] = {
+                label = 'module',
+                kind  = define.CompletionItemKind.Snippet,
+                insertTextFormat = 2,
+                insertText = "\z
+local ${1:Module} = {}\
+\
+$0\
+\
+return $1"
+            }
+        return true
+    end},
 }
 
 return keyWordMap

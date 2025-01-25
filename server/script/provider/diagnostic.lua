@@ -247,14 +247,14 @@ function m.doDiagnostic(uri)
     return #ast.errs == 0
 end
 
-function m.refresh(uri)
+function m.refresh(uri, diagRequires)
     if not m._start then
         return
     end
     await.call(function ()
         await.delay()
         if uri then
-            if m.doDiagnostic(uri) and not m.diagnosingAll then
+            if m.doDiagnostic(uri) and not m.diagnosingAll and diagRequires then
                 m.diagnosticsRequires(uri)
             end
         end
@@ -445,6 +445,10 @@ files.watch(function (ev, uri)
         if files.isLibrary(uri)
         or ws.isIgnored(uri) then
             m.clear(uri)
+        end
+    elseif ev == 'save' then
+        if ws.isReady() then
+            m.refresh(uri, true)
         end
     end
 end)

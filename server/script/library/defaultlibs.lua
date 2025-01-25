@@ -20,7 +20,9 @@ m.primitiveTypes = {
     ["nil"] = true,
     ["function"] = true,
     ["symbol"] = true,
-    ["buffer"] = true
+    ["buffer"] = true,
+    ["unknown"] = true,
+    ["never"] = true
 }
 
 m.dataModelChild = {

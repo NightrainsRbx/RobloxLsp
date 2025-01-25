@@ -52,6 +52,7 @@ function m.getIniter()
             openClose = true,
             -- 文本增量更新
             change = 2,
+            save = true,
         },
 
         hoverProvider = true,

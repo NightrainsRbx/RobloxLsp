@@ -231,7 +231,7 @@ local function parseType(data, tbl)
                 [1] = data.Generic or "any"
             }
         }
-    elseif name == "Objects" then
+    elseif name == "Objects" or name == "Instances" then
         return {
             type = "type.table",
             {

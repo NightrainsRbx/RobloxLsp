@@ -6,6 +6,7 @@ local getDesc    = require 'core.hover.description'
 local buildName  = require 'core.hover.name'
 local buildArg   = require 'core.hover.arg'
 local buildReturn = require 'core.hover.return'
+local buildGeneric = require 'core.hover.generic'
 local util       = require 'utility'
 local findSource = require 'core.find-source'
 local lang       = require 'language'
@@ -142,9 +143,10 @@ local function getHoverAsTypeFunction(source, values, oop)
     for _, value in ipairs(values) do
         if value.type == "type.function" then
             defs = defs + 1
+            local gen   = buildGeneric(value)
             local arg   = buildArg(value, oop)
             local rtn   = buildReturn(value)
-            lines[#lines+1] = ('function %s(%s)'):format(name, arg)
+            lines[#lines+1] = ('function %s%s(%s)'):format(name, gen, arg)
             if value.parent.description then
                 desc[#desc+1] = value.parent.description
             end
@@ -213,7 +215,7 @@ local function getHover(source, oop)
     elseif source.type == 'type.alias.name' then
         return getHoverAsTypeAlias(source)
     else
-        local infers = vm.getInfers(source, 0)
+        local infers = vm.getInfers(source, 0, {onlyDef = true, fullType = true})
         for i = 1, #infers do
             local infer = infers[i]
             if infer.type == "function" then
