@@ -339,6 +339,7 @@ proto.on('textDocument/hover', function (params)
     local offset = files.offsetOfWord(uri, params.position)
     local hover = core.byUri(uri, offset)
     if not hover then
+        return nil
     elseif hover.source then
         local source = hover.source
         if source.type == "field" and source.parent.type == "getfield" then
